@@ -1,0 +1,51 @@
+import { type GameState, type ZoneId } from "./GameState";
+import { ZONES } from "../content/city";
+import { FACTIONS } from "../content/factions";
+import {
+  character,
+  canonicalCharacters,
+  residents,
+} from "../content/characters";
+import { initializeRelationships } from "../systems/Relationships";
+import { openingIncident } from "../content/openingIncident";
+import { BALANCE } from "../content/balance";
+export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
+  if (!ZONES[home]) throw new Error("Unknown neighborhood");
+  const p = character(
+    "player",
+    name.trim().slice(0, 28) || "Resident",
+    home,
+    null,
+    "Unaffiliated. Make a living, build trust, find your place.",
+    {
+      influence: 0,
+      wallet: { clean: BALANCE.startingCash, illicit: 0 },
+      skills: { social: 45, work: 45, recovery: 35 },
+    },
+  );
+  const s: GameState = {
+    version: 1,
+    day: 1,
+    ap: BALANCE.dailyAP,
+    rng: seed >>> 0,
+    nextId: 1,
+    playerId: "player",
+    characters: Object.fromEntries(
+      [p, ...canonicalCharacters(), ...residents()].map((c) => [c.id, c]),
+    ),
+    zones: structuredClone(ZONES),
+    factions: structuredClone(FACTIONS),
+    properties: {},
+    incidents: {},
+    events: [],
+    commitments: [],
+    crew: { members: ["flacco"], capacity: 1, successor: null },
+    assets: [],
+    ledger: [],
+    progression: { cleanEarned: 0, illicitEarned: 0, jobs: 0, retired: false },
+    end: null,
+  };
+  initializeRelationships(s);
+  openingIncident(s);
+  return s;
+}
