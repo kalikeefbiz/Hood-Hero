@@ -23,6 +23,8 @@ Implemented 2026-10-31 in `kalikeefbiz/Hood-Hero`, default branch `main`. This i
 
 ## Executed validation
 
+The [GitHub Actions validation run](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41186543742) succeeded on implementation commit `5c20b940ce70ffd7d7719821c6e0e16d1a51d504`, independently repeating the simulation suite, production build and all six browser tests on a standard runner. Its `playable-build` and `playwright-report` artifacts were uploaded successfully. Subsequent handoff changes update documentation only.
+
 - `npm test`: **44 simulation tests passed**. Covers initialization from all five homes, canon, no alliance-transitive hostility, directional relationships, cash/AP constraints, independent behavior, player and ordinary NPC crew rules, civilian recruitment, removing inactive/active Flacco, gang-count boundary, affiliation gates, end fixtures, save errors/round trips, pending commitments and exact seeded replay.
 - Automated simulation playthroughs include immediate engagement, ignoring the incident, earning lawful money first, risky recovery across four seeds, recruitment, removal, post-incident work, and Downtown/Southside starts.
 - A **160-day** lawful campaign completes without a campaign timer or arbitrary defeat. This is a bounded regression check, not a claim of unlimited performance.
@@ -54,7 +56,9 @@ POST /repos/kalikeefbiz/Hood-Hero/pages {"build_type":"workflow"}
 → 403 Resource not accessible by integration
 ```
 
-The integration can push the repository, but its token lacks permission for this Pages API mutation. The manual deployment workflow requests its own standard `pages: write` and `id-token: write` permissions and attempts `configure-pages` enablement; its result will be recorded after the first push. No live URL is claimed until successful deployment and an HTTP/browser check.
+The integration can push the repository, but its token lacks permission for this Pages API mutation. The [manual deployment run](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41186540597) also failed: `actions/configure-pages@v5` with `enablement: true` reported **Create Pages site failed: Resource not accessible by integration**. Declaring standard workflow `pages: write` and `id-token: write` permissions did not grant site-creation access. This is the confirmed deployment blocker; there is no live playable URL.
+
+The production `/Hood-Hero/` subpath build was separately loaded with Chromium through local Vite preview (with `VITE_BASE_PATH` set for both build and preview): HTTP 200, game creation and a paid work action passed, with zero page errors. A repository administrator with Pages configuration access must enable the GitHub Actions source, then rerun **Publish playable preview**. The workflow is committed and ready; no deployment success is implied.
 
 ## Incomplete systems and limits
 

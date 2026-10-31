@@ -46,6 +46,6 @@ React renders state; rules live in `core/` and `systems/`. The late-game wealth,
 
 ## Deployment
 
-The repository includes CI and a manual GitHub Pages workflow that builds with `VITE_BASE_PATH=/Hood-Hero/`. The connected integration’s attempt to enable Pages returned **HTTP 403: Resource not accessible by integration**. No public deployment is claimed.
+The repository includes CI and a manual GitHub Pages workflow that builds with `VITE_BASE_PATH=/Hood-Hero/`. The connected integration’s attempt to enable Pages returned **HTTP 403: Resource not accessible by integration**. The deployment workflow’s own site-enablement attempt was also rejected with the same error. No public deployment is claimed.
 
 A repository administrator with Pages settings permission can choose **Settings → Pages → Source: GitHub Actions**, then run **Publish playable preview** from Actions. Its successful deployment output supplies the actual live URL. CI also publishes a downloadable `playable-build` artifact when its checks succeed. For another static host, upload the contents of `dist/`; set `VITE_BASE_PATH` at build time if hosting under a subpath.
