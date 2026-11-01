@@ -1,6 +1,6 @@
 # GOAL 002 — HOOD HERO UI OVERHAUL
 
-**Status:** Approved design direction; UI implementation not yet performed.  
+**Status:** Implemented on `goal-002-hood-hero-ui-overhaul`; see [delivery and validation](GOAL_002_DELIVERY.md). Original approved handoff follows.
 **Reference package:** `hood-hero-GOAL-002-ui-overhaul.zip` supplied in the ChatGPT conversation. It includes the **exact user-approved UI image** at `reference/APPROVED_UI_DIRECTION.png`, five approved neighborhood illustrations at `assets/neighborhoods/*.webp`, an asset manifest, and the **full production GOAL** at `docs/GOAL_002_HOOD_HERO_UI_OVERHAUL.md` inside the archive. **Read that full GOAL and inspect the exact image and artwork before editing.** This file is the in-repository bootstrap.
 
 ## Mission

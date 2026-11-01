@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "scope": "Art import only; these files are not runtime action definitions or UI wiring.",
+  "preparation": {
+    "tool": "Pillow 12.3.0",
+    "encoding": "WebP, quality 92, method 6, RGB",
+    "composition": "Full supplied compositions and native dimensions retained; no cropping, resizing, upscaling, retouching, or text changes.",
+    "sourceNote": "The four chat attachments are JPEGs. sourceLabel records the requested PNG name; sourceAttachment records the actual file converted. No higher-resolution PNG source was supplied."
+  },
+  "characterIdentity": {
+    "id": "mega",
+    "name": "Mega",
+    "emotions": [
+      "confident",
+      "pleased",
+      "upset"
+    ],
+    "rule": "All three portraits depict the same character. Preserve each distinct emotional variant; do not treat them as separate characters or interchangeable generic portraits."
+  },
+  "gameplayConstraints": [
+    "Do not implement or enable the Westside Runner Job from this import.",
+    "Do not change Clock In mechanics or replace its artwork as part of this import.",
+    "Do not register new actions, rewards, boosts, eligibility rules, or emotion triggers. Future gameplay design and integration require a separate task."
+  ],
+  "assets": [
+    {
+      "sourceLabel": "Mega Hud Icon.PNG",
+      "sourceAttachment": "1-Pasted-Image-2.jpg",
+      "sourceFormat": "JPEG",
+      "sourceSize": [
+        198,
+        301
+      ],
+      "sourceBytes": 25465,
+      "sourceSha256": "a2bbf8972811d688882aaf4ddb76507d673953b452e3a28ce0ef7a22fec8d470",
+      "intendedUse": "Default Mega portrait / HUD identity icon for future UI integration.",
+      "integrationStatus": "Imported only; not connected to runtime UI or gameplay.",
+      "output": {
+        "path": "public/assets/characters/mega/mega-confident.webp",
+        "size": [
+          198,
+          301
+        ],
+        "bytes": 21514,
+        "sha256": "47e7856d15c7f76348293de7ccd3e440db601eedf272ff647b2a18baf448ef75"
+      },
+      "characterId": "mega",
+      "emotion": "confident"
+    },
+    {
+      "sourceLabel": "Mega Pleased.PNG",
+      "sourceAttachment": "2-Pasted-Image-3.jpg",
+      "sourceFormat": "JPEG",
+      "sourceSize": [
+        191,
+        307
+      ],
+      "sourceBytes": 28302,
+      "sourceSha256": "dc52bb013489ab52441d2eff381a6703e3a8a9b14998c64f7184c02e9eaebab5",
+      "intendedUse": "Mega positive emotional reaction portrait for future dialogue or feedback.",
+      "integrationStatus": "Imported only; not connected to runtime UI or gameplay.",
+      "output": {
+        "path": "public/assets/characters/mega/mega-pleased.webp",
+        "size": [
+          191,
+          307
+        ],
+        "bytes": 24310,
+        "sha256": "298b571e0de3634dac5764043a39922d1fd671ed462ba6f53a6291a424414178"
+      },
+      "characterId": "mega",
+      "emotion": "pleased"
+    },
+    {
+      "sourceLabel": "Mega Upset.PNG",
+      "sourceAttachment": "3-Pasted-Image-4.jpg",
+      "sourceFormat": "JPEG",
+      "sourceSize": [
+        198,
+        307
+      ],
+      "sourceBytes": 22327,
+      "sourceSha256": "0eb6ddf9a830595c370413d1f935d23b0b02969b95826a0f8a40488bf78f89d9",
+      "intendedUse": "Mega upset emotional reaction portrait for future dialogue or feedback.",
+      "integrationStatus": "Imported only; not connected to runtime UI or gameplay.",
+      "output": {
+        "path": "public/assets/characters/mega/mega-upset.webp",
+        "size": [
+          198,
+          307
+        ],
+        "bytes": 18174,
+        "sha256": "ac511d8992c900c5b29841328ab7c4993ed919aa62339c3ef49abbe5a58cb2af"
+      },
+      "characterId": "mega",
+      "emotion": "upset"
+    },
+    {
+      "sourceLabel": "Runner Job.PNG",
+      "sourceAttachment": "4-Pasted-Image-5.jpg",
+      "sourceFormat": "JPEG",
+      "sourceSize": [
+        226,
+        224
+      ],
+      "sourceBytes": 20107,
+      "sourceSha256": "6c7e2aaa9704c204addf71e3aa8f2e3d10d9d68c0c317aa8306ab522f51bb565",
+      "intendedUse": "Runner Job (Boost) concept artwork reserved for upcoming gameplay design; no playable action is introduced.",
+      "integrationStatus": "Imported only; not connected to runtime UI or gameplay.",
+      "output": {
+        "path": "public/assets/actions/runner-job-boost.webp",
+        "size": [
+          226,
+          224
+        ],
+        "bytes": 16734,
+        "sha256": "6e42f6555c66414a047bde621a151ed5070fb4ad32b3937a98fdc8b298d5a4e8"
+      },
+      "intendedLocation": "East Side, Rio Gabriel hood (per user art direction; design metadata only).",
+      "embeddedText": [
+        "RUNNER JOB (BOOST)",
+        "WESTSIDE EXCLUSIVE"
+      ],
+      "designNote": "The supplied artwork says WESTSIDE EXCLUSIVE while the user identifies East Side / Rio Gabriel. Preserve the original lettering and composition. Resolve this location/label mismatch in future gameplay design before integration; no availability or boost mechanic is inferred from the art or filename."
+    }
+  ]
+}

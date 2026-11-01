@@ -18,7 +18,6 @@ import {
 } from "../core/ActionEngine";
 import { visibleEvents } from "../core/EventLog";
 import { ZONES } from "../content/city";
-import { ITEMS } from "../content/economy";
 import {
   loadGame,
   saveGame,
@@ -26,21 +25,22 @@ import {
   AUTO_KEY,
 } from "../persistence/SaveSystem";
 import { CityMap } from "./CityMap";
-type Screen = "City" | "People" | "Actions" | "Set" | "Finances" | "Activity";
-const nav: Record<Screen, string> = {
-  City: "◇",
-  People: "♙",
-  Actions: "↗︎",
-  Set: "⚑",
-  Finances: "＄",
-  Activity: "≋",
+import { NewRun } from "./NewRun";
+import { GameHUD } from "./GameHUD";
+import { ActionCard, money } from "./ActionCard";
+import { Scene } from "./Scene";
+import { Icon, type IconName } from "./Icon";
+import { themeStyle } from "./theme";
+import { THEMES } from "./theme";
+import { BALANCE } from "../content/balance";
+type Screen = "City" | "People" | "Actions" | "Set" | "Finances";
+const nav: Record<Screen, IconName> = {
+  City: "City",
+  People: "People",
+  Actions: "Actions",
+  Set: "Set",
+  Finances: "Finances",
 };
-const money = (n: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(n);
 const band = (n: number, words: string[]) =>
   words[n < 20 ? 0 : n < 45 ? 1 : n < 70 ? 2 : 3];
 function Panel({
@@ -67,7 +67,15 @@ function Meter({
         <span>{label}</span>
         <strong>{description}</strong>
       </div>
-      <div className="meter-track">
+      <div
+        className="meter-track"
+        role="meter"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(Math.max(0, Math.min(100, value)))}
+        aria-valuetext={description}
+      >
         <i style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
       </div>
     </div>
@@ -75,7 +83,11 @@ function Meter({
 }
 function Portrait({ c }: { c: Character }) {
   return (
-    <span className={`portrait ${c.affiliation ?? "civilian"}`}>
+    <span
+      className="portrait"
+      style={themeStyle(c.affiliation)}
+      aria-hidden="true"
+    >
       {c.name
         .split(" ")
         .map((w) => w[0])
@@ -95,6 +107,9 @@ export function App() {
     [actionGroup, setGroup] = useState("Everyday"),
     [activityFilter, setActivityFilter] = useState("All");
   const [hasSave, setHasSave] = useState(false);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [screen, !!s]);
   useEffect(() => {
     try {
       setHasSave(
@@ -118,7 +133,7 @@ export function App() {
     setState(next);
     setSelected(home);
     setScreen("City");
-    setNotice("Your new life in The Stixx begins.");
+    setNotice("You’re home. Clock in, check on Cuzzo, or see who’s around.");
   }
   function load() {
     try {
@@ -126,6 +141,7 @@ export function App() {
       if (next) {
         setState(next);
         setSelected(player(next).home);
+        setScreen("City");
         setNotice(`Loaded day ${next.day}.`);
       } else setNotice("No saved game yet.");
     } catch (e) {
@@ -165,148 +181,32 @@ export function App() {
   );
   if (!s)
     return (
-      <div className="landing">
-        <header className="brand">
-          <span className="brand-mark">B/H</span>
-          <span>
-            BLACKHOUSE <small>INTERACTIVE</small>
-          </span>
-          <span className="edition">M1 · FIRST PLAYABLE</span>
-        </header>
-        <main className="newgame">
-          <div className="intro">
-            <p className="eyebrow">STIXX CITY · AN ONGOING SIMULATION</p>
-            <h1>
-              SYNDICATE
-              <span>
-                Everybody starts
-                <br />
-                somewhere.
-              </span>
-            </h1>
-            <p className="lede">
-              A little money. A few people you trust.
-              <br />A city that moves with or without you.
-            </p>
-            <div className="skyline" aria-hidden="true">
-              {[40, 70, 50, 100, 120, 80, 140, 90, 65, 110, 50, 75].map(
-                (height, i) => (
-                  <i key={i} style={{ height: `${height}px` }} />
-                ),
-              )}
-            </div>
-            <p className="caption">THE STIXX · FIVE ZONES · NO FIXED ENDING</p>
-          </div>
-          <form
-            className="creation panel"
-            onSubmit={(e) => {
-              e.preventDefault();
-              start();
-            }}
-          >
-            <p className="eyebrow">01 / MAKE YOUR START</p>
-            <h2>A name. A neighborhood.</h2>
-            <label htmlFor="player-name">What do people call you?</label>
-            <input
-              id="player-name"
-              maxLength={28}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              autoComplete="off"
-            />
-            <fieldset>
-              <legend>Choose your home</legend>
-              <div className="zone-choices">
-                {Object.values(ZONES).map((z) => (
-                  <label key={z.id} className={home === z.id ? "chosen" : ""}>
-                    <input
-                      type="radio"
-                      name="home"
-                      value={z.id}
-                      checked={home === z.id}
-                      onChange={() => setHome(z.id)}
-                    />
-                    <span>
-                      <strong>{z.name}</strong>
-                      <small>{z.subtitle}</small>
-                    </span>
-                    <span className="radio-dot" />
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-            <p className="muted">
-              You start unaffiliated with $125, 2 daily AP, and Flacco in your
-              personal Set.
-            </p>
-            <button className="primary" type="submit">
-              Enter The Stixx <span>↗</span>
-            </button>
-            {hasSave && (
-              <button type="button" className="secondary" onClick={load}>
-                Resume saved game
-              </button>
-            )}
-            {toast}
-          </form>
-        </main>
-        <footer className="landing-footer">
-          BLACKHOUSE / SYNDICATE <span>A FICTIONAL STRATEGY GAME</span>
-        </footer>
-      </div>
+      <NewRun
+        name={name}
+        home={home}
+        setName={setName}
+        setHome={setHome}
+        start={start}
+        load={load}
+        hasSave={hasSave}
+        feedback={toast}
+      />
     );
   const p = player(s),
     incident = s.incidents["the-chains"],
     person = s.characters[focus] ?? s.characters.mega;
+  // The Chains is the current game’s only routed storyline. Closed stories
+  // stay in history; they must not create a new call to action on City.
+  const activeStory = incident?.status === "active" ? incident : null;
   const all = availableActions(s);
-  function actionCard(a: Action) {
-    const def = ACTIONS[a.type],
-      reason = validateAction(s!, a);
-    const cost =
-      a.type === "buy"
-        ? ITEMS[a.item!].price
-        : a.type === "buyback"
-          ? incident.demand
-          : a.type === "offer"
-            ? 20
-            : a.type === "transfer"
-              ? 25
-              : 0;
-    return (
-      <article
-        className={`action-card ${a.type === "recover" || a.type === "crime" ? "danger" : ""}`}
-        key={`${a.type}-${a.target ?? a.item ?? ""}`}
-      >
-        <div className="action-top">
-          <span className="eyebrow">
-            {def.ap} AP{cost ? ` · ${money(cost)}` : ""}
-          </span>
-          <span className={`risk ${def.risk === "High" ? "high" : ""}`}>
-            {def.risk === "None"
-              ? "LOW RISK"
-              : `${def.risk.toUpperCase()} RISK`}
-          </span>
-        </div>
-        <h3>
-          {a.type === "buy"
-            ? ITEMS[a.item!].name
-            : a.type === "buyback"
-              ? `Buy back · ${money(incident.demand)}`
-              : def.label}
-        </h3>
-        <p>{a.type === "buy" ? ITEMS[a.item!].description : def.description}</p>
-        <small className="outcome">
-          {a.type === "buy"
-            ? `−${ITEMS[a.item!].relief} stress`
-            : def.outcomes.join(" / ")}
-        </small>
-        <button disabled={!!reason} onClick={() => act(a)}>
-          {reason ?? "Take action"} <span aria-hidden="true">↗</span>
-        </button>
-      </article>
-    );
-  }
+  const actionCard = (a: Action) => (
+    <ActionCard
+      key={`${a.type}-${a.target ?? a.item ?? ""}`}
+      s={s}
+      action={a}
+      onAction={act}
+    />
+  );
   const incidentTypes: ActionType[] = [
     "negotiate",
     "settlement",
@@ -335,89 +235,62 @@ export function App() {
           : ["contact", "inquire"].includes(a.type) && a.target === "mega"
         : a.target === person.id && socialTypes.includes(a.type),
   );
-  // Keep AP-gated actions visible; contextually irrelevant actions are omitted.
   displayed = displayed.filter((a) => {
-    const reason = validateAction({ ...s, ap: 2 }, a);
-    return (
-      !reason ||
-      [
-        "Insufficient cash for the current demand",
-        "You need an introduction",
-        "Requires 35 organizational standing and 35 sponsor trust",
-        "Build a trusted street connection or local standing first",
-      ].includes(reason)
-    );
+    if (actionGroup === "Everyday") return true;
+    if (actionGroup === "The Chains")
+      return (
+        ["contact", "inquire"].includes(a.type) || incident.status === "active"
+      );
+    return !["standing", "affiliate"].includes(a.type) || !!person.affiliation;
   });
   return (
-    <div className="game-shell">
+    <div
+      className={`game-shell screen-${screen.toLowerCase()}`}
+      style={themeStyle(p.affiliation)}
+      data-theme={p.affiliation ?? "independent"}
+    >
+      <a className="skip-link" href="#main-content">
+        Skip to game
+      </a>
       <aside className="desktop-brand">
-        <span className="brand-mark">B/H</span>
-        <h2>SYNDICATE</h2>
-        <p>THE STIXX</p>
+        <p className="eyebrow">BLACKHOUSE PRESENTS</p>
+        <h2>
+          HOOD
+          <br />
+          HERO
+        </h2>
+        <p className="city-label">STIXX CITY</p>
         <div className="side-note">
-          Build trust.
-          <br />
-          Make a living.
-          <br />
-          Leave a mark.
+          A city with a memory.
+          <br />A life of your own.
         </div>
+        <Scene zone={p.home} />
+        <span className="sidebar-home">
+          YOUR ROOTS / {s.zones[p.home].name}
+        </span>
       </aside>
       <div className="game-body">
-        <header className="game-header">
-          <div>
-            <span className="eyebrow">BLACKHOUSE / SYNDICATE</span>
-            <h1>
-              {p.name}{" "}
-              <span className="day">
-                DAY {s.day.toString().padStart(2, "0")}
-              </span>
-            </h1>
-          </div>
-          <div className="header-tools">
-            <button onClick={save} aria-label="Save game">
-              Save
-            </button>
-            <button onClick={load} aria-label="Load game">
-              Load
-            </button>
-          </div>
-        </header>
-        <div className="resource-strip">
-          <span>
-            <small>AVAILABLE CASH</small>
-            <strong>{money(cash(p))}</strong>
-          </span>
-          <span>
-            <small>YOUR AFFILIATION</small>
-            <strong className="affiliation">
-              {p.affiliation ? s.factions[p.affiliation].name : "Unaffiliated"}
-            </strong>
-          </span>
-          <span className="ap">
-            <small>DAILY AP</small>
-            <strong>
-              <i className={s.ap > 0 ? "lit" : ""} />
-              <i className={s.ap > 1 ? "lit" : ""} />
-              <b>{s.ap}/2</b>
-            </strong>
-          </span>
-        </div>
-        <main className="main-content">
+        <GameHUD
+          s={s}
+          selected={selected}
+          cinematic={screen === "City"}
+          save={save}
+          load={load}
+        />
+        <main className="main-content" id="main-content">
           <div className="screen-heading">
             <div>
               <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
               <h2>
                 {screen === "City"
-                  ? "The city keeps moving."
+                  ? "Know your city."
                   : screen === "People"
                     ? "People remember."
                     : screen === "Actions"
                       ? "Make your next move."
                       : screen === "Set"
                         ? "Your people. Your Set."
-                        : screen === "Finances"
-                          ? "Keep yourself afloat."
-                          : "Nothing happens in isolation."}
+                        : "Keep yourself afloat."}
               </h2>
             </div>
             <button
@@ -449,18 +322,56 @@ export function App() {
               </p>
             </Panel>
           )}
-          {toast}
+          {screen !== "City" && toast}
           {screen === "City" && (
             <>
+              {activeStory && (
+                <button
+                  className="dispatch story-alert"
+                  aria-label={`Open ${activeStory.title} in Actions`}
+                  onClick={() => {
+                    setGroup("The Chains");
+                    setScreen("Actions");
+                  }}
+                >
+                  <span className="dispatch-icon" aria-hidden="true">
+                    <Icon name="message" />
+                  </span>
+                  <span>
+                    <span className="eyebrow">WORD ON THE BLOCK</span>
+                    <strong>{activeStory.title}</strong>
+                    <span className="story-status">
+                      Demand {money(activeStory.demand)} ·{" "}
+                      {activeStory.leadershipAware
+                        ? "Leadership is considering its response"
+                        : "Awaiting your help"}
+                    </span>
+                  </span>
+                  <Icon name="arrow" />
+                </button>
+              )}
+              {toast}
               <div className="city-layout">
                 <Panel className="map-panel">
                   <div className="panel-title">
-                    <span className="eyebrow">FIVE NEIGHBORHOODS</span>
+                    <h3>Stixx City</h3>
                     <span className="map-key">● Your home</span>
                   </div>
                   <CityMap s={s} selected={selected} onSelect={setSelected} />
+                  <ul className="map-legend" aria-label="Faction colors">
+                    {Object.values(s.factions).map((f) => (
+                      <li key={f.id}>
+                        <i
+                          style={{ background: THEMES[f.id].accent }}
+                          aria-hidden="true"
+                        />
+                        {f.name}
+                      </li>
+                    ))}
+                  </ul>
                   <p className="caption">
-                    Select a neighborhood to read its politics.
+                    Select a neighborhood to read its politics. Split colors
+                    show shared presence; gray is unclaimed.
                   </p>
                 </Panel>
                 <div className="zone-details">
@@ -469,13 +380,23 @@ export function App() {
                       {s.zones[selected].subtitle}
                     </span>
                     <h3>{s.zones[selected].name}</h3>
-                    <p>{s.zones[selected].description}</p>
+                    <p>
+                      {selected === "resevoir"
+                        ? ZONES.resevoir.description
+                        : s.zones[selected].description}
+                    </p>
+                    <p className="control-label">
+                      Control:{" "}
+                      {s.zones[selected].controller
+                        ? s.factions[s.zones[selected].controller!].name
+                        : "No single controller"}
+                    </p>
                     <div className="tags">
                       {s.zones[selected].organizations.length ? (
                         s.zones[selected].organizations.map((f) => (
                           <span
                             key={f}
-                            style={{ borderColor: s.factions[f].color }}
+                            style={{ borderColor: THEMES[f].accent }}
                           >
                             {s.factions[f].name}
                           </span>
@@ -515,34 +436,6 @@ export function App() {
                       }}
                     >
                       Meet local people →
-                    </button>
-                  </Panel>
-                  <Panel className="dispatch">
-                    <span className="eyebrow">INCOMING / CUZZO</span>
-                    <h3>
-                      The Chains{" "}
-                      <span className="status-chip">{incident.status}</span>
-                    </h3>
-                    <p>
-                      {incident.status === "active"
-                        ? "“Three young Angels took my chains. They want money to give them back. Call me.”"
-                        : "The dispute has ended. Your relationships, work, Set and the rest of the city continue."}
-                    </p>
-                    <button
-                      className="text-button"
-                      onClick={() => {
-                        setGroup(
-                          incident.status === "active"
-                            ? "The Chains"
-                            : "Everyday",
-                        );
-                        setScreen("Actions");
-                      }}
-                    >
-                      {incident.status === "active"
-                        ? "See the situation"
-                        : "Find your next opportunity"}{" "}
-                      →
                     </button>
                   </Panel>
                 </div>
@@ -646,6 +539,10 @@ export function App() {
                   })}
               </div>
               <Panel className="profile">
+                <div className="profile-scene">
+                  <Scene key={person.home} zone={person.home} />
+                  <span>{s.zones[person.home].name}</span>
+                </div>
                 <Portrait c={person} />
                 <p className="eyebrow">{s.zones[person.home].name}</p>
                 <h3>
@@ -706,6 +603,17 @@ export function App() {
                     You have not shared a significant event yet.
                   </p>
                 )}
+                <h4>Events you witnessed</h4>
+                {visibleEvents(s)
+                  .filter((e) => e.actors.includes(person.id))
+                  .slice(-4)
+                  .reverse()
+                  .map((e) => (
+                    <p className="memory" key={e.id}>
+                      <small>DAY {e.day}</small>
+                      {e.text}
+                    </p>
+                  ))}
               </Panel>
             </div>
           )}
@@ -834,6 +742,15 @@ export function App() {
                         </div>
                       </div>
                       <p>{c.description}</p>
+                      <Meter
+                        label="Their trust in you"
+                        value={c.relationships[p.id]?.trust ?? 0}
+                        description={`${Math.round(c.relationships[p.id]?.trust ?? 0)} / 100`}
+                      />
+                      <p className="outcome">
+                        Paid errand: possible ${BALANCE.errandIncome} clean
+                        income on the next day; can fail.
+                      </p>
                       {(["assign", "remove"] as ActionType[]).map((type) => {
                         const a: Action = { type, actor: p.id, target: id },
                           reason = validateAction(s, a);
@@ -873,7 +790,7 @@ export function App() {
                     return (
                       <div key={id} className="recruit-row">
                         <Portrait c={c} />
-                        <span>
+                        <span className="recruit-info">
                           <strong>{c.name}</strong>
                           <small>
                             Trust{" "}
@@ -882,6 +799,9 @@ export function App() {
                               ? s.factions[c.affiliation].name
                               : "Civilian"}
                           </small>
+                          {reason && (
+                            <small className="disabled-reason">{reason}</small>
+                          )}
                         </span>
                         <button
                           disabled={!!reason}
@@ -895,7 +815,7 @@ export function App() {
                           aria-label={`Build relationship with ${c.name}`}
                           onClick={() => openPerson(id)}
                         >
-                          ↗
+                          <Icon name="arrow" />
                         </button>
                       </div>
                     );
@@ -935,12 +855,12 @@ export function App() {
                   </span>
                   <span>
                     <small>DAILY LIVING</small>
-                    <strong>$18</strong>
+                    <strong>{money(BALANCE.livingCost)}</strong>
                   </span>
                 </div>
                 <p>
-                  Full shifts earn $96 for 2 AP. Local gigs earn $38 for 1 AP.
-                  Living expenses are charged as you advance each day.
+                  {ACTIONS.work.description} {ACTIONS.gig.description} Living
+                  expenses are charged as you advance each day.
                 </p>
                 <p className="muted">
                   Clean and illicit funds keep separate provenance. Purchases
@@ -980,10 +900,30 @@ export function App() {
               </Panel>
             </>
           )}
-          {screen === "Activity" && (
-            <>
-              <Panel>
-                <p className="eyebrow">ACTIVE SITUATIONS</p>
+          {screen === "City" && (
+            <section id="city-activity" aria-labelledby="city-activity-title">
+              <h3 id="city-activity-title">Activity</h3>
+              <Panel className="city-news">
+                <div className="panel-title">
+                  <h3>Word on the block</h3>
+                </div>
+                {visibleEvents(s)
+                  .filter(
+                    (e) => e.category === "city" || e.category === "incident",
+                  )
+                  .slice(-2)
+                  .reverse()
+                  .map((e) => (
+                    <div className="news-item" key={e.id}>
+                      <small>
+                        DAY {e.day} / {e.category.toUpperCase()}
+                      </small>
+                      <p>{e.text}</p>
+                    </div>
+                  ))}
+              </Panel>
+              <details className="panel situation-history">
+                <summary>Situation history</summary>
                 {Object.values(s.incidents).map((i) => (
                   <div key={i.id}>
                     <h3>
@@ -996,15 +936,21 @@ export function App() {
                     </p>
                   </div>
                 ))}
-              </Panel>
-              <div className="segmented">
+              </details>
+              <div
+                className="segmented"
+                role="group"
+                aria-label="Activity filters"
+              >
                 <button
+                  aria-pressed={activityFilter === "All"}
                   className={activityFilter === "All" ? "active" : ""}
                   onClick={() => setActivityFilter("All")}
                 >
                   All activity
                 </button>
                 <button
+                  aria-pressed={activityFilter === "Personal"}
                   className={activityFilter === "Personal" ? "active" : ""}
                   onClick={() => setActivityFilter("Personal")}
                 >
@@ -1018,8 +964,20 @@ export function App() {
                   )
                   .slice(-80)
                   .reverse()
-                  .map((e) => (
-                    <article key={e.id}>
+                  .map((e, index, events) => (
+                    <article
+                      key={e.id}
+                      className={
+                        index === 0 || events[index - 1].day !== e.day
+                          ? "day-start"
+                          : ""
+                      }
+                    >
+                      {(index === 0 || events[index - 1].day !== e.day) && (
+                        <h3 className="timeline-day">
+                          Day {e.day.toString().padStart(2, "0")}
+                        </h3>
+                      )}
                       <span className="timeline-dot" />
                       <div>
                         <small>
@@ -1030,7 +988,7 @@ export function App() {
                     </article>
                   ))}
               </div>
-            </>
+            </section>
           )}
           <details className="game-menu">
             <summary>Game & save information</summary>
@@ -1066,7 +1024,7 @@ export function App() {
                 window.scrollTo(0, 0);
               }}
             >
-              <span aria-hidden="true">{nav[item]}</span>
+              <Icon name={nav[item]} />
               <small>{item === "Finances" ? "Wallet" : item}</small>
             </button>
           ))}

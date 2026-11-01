@@ -1,4 +1,4 @@
-# Syndicate · BlackHouse
+# Hood Hero · BLACKHOUSE
 
 M1 — Core Simulation and First Playable. An iPhone-first, persistent, turn-based street-politics strategy game in fictional Stixx City. Built with TypeScript, Vite, React, Vitest and Playwright. No backend, accounts, multiplayer, external AI, or runtime network services. Fonts ship with the build.
 
@@ -46,6 +46,10 @@ React renders state; rules live in `core/` and `systems/`. The late-game wealth,
 
 ## Deployment
 
-The repository includes CI and a manual GitHub Pages workflow that builds with `VITE_BASE_PATH=/Hood-Hero/`. The connected integration’s attempt to enable Pages returned **HTTP 403: Resource not accessible by integration**. The deployment workflow’s own site-enablement attempt was also rejected with the same error. No public deployment is claimed.
+Current visual correction: [GOAL 002B screenshots and assessment](docs/GOAL_002B_VISUAL_CORRECTION.md).
 
-A repository administrator with Pages settings permission can choose **Settings → Pages → Source: GitHub Actions**, then run **Publish playable preview** from Actions. Its successful deployment output supplies the actual live URL. CI also publishes a downloadable `playable-build` artifact when its checks succeed. For another static host, upload the contents of `dist/`; set `VITE_BASE_PATH` at build time if hosting under a subpath.
+GOAL 002 redesign details, verified artwork and historical screenshot review: [UI overhaul delivery](docs/GOAL_002_DELIVERY.md).
+
+The repository includes CI and a manual GitHub Pages workflow that builds with `VITE_BASE_PATH=/Hood-Hero/`. The original M1 setup was blocked by an integration 403; on November 1, 2026, the Pages site is configured and serves the prior playable build. The `github-pages` environment allows deployments from **main only**. A feature-branch preview cannot pass that environment rule. The GOAL 002 handoff reports the actual workflow result; an existing live M1 site is not evidence that the overhaul deployed.
+
+After the implementation is merged to main, run **Publish playable preview** from Actions. Verify its deployment output and the actual live bundle before claiming success. CI also publishes `playable-build` and `playwright-report` artifacts, including review screenshots. For another static host, upload `dist/`; set `VITE_BASE_PATH` at build time when hosting under a subpath.

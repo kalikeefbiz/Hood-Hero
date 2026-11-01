@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 1,
+  "scope": "Character and story art library; asset registration only.",
+  "ordering": "assets is ordered exactly as supplied, 01 through 10. Each entry remains a separate illustration.",
+  "preparation": {
+    "tool": "Pillow 12.3.0",
+    "runtimeFormat": "WebP",
+    "quality": 90,
+    "method": 6,
+    "colorMode": "RGB",
+    "dimensions": "Original pixel dimensions and aspect ratios retained; no resizing, cropping, or upscaling.",
+    "composition": "Complete original compositions preserved. No lettering, watermarks, borders, retouching, or generated art added.",
+    "sources": "JPEG attachments copied byte for byte under the assigned descriptive names. originalFilename records the filename supplied in the user mapping; attachmentFilename records the locally delivered attachment name.",
+    "paths": "source.path and runtime.path are stable repository-relative paths; runtime.url is the stable public path relative to the application base URL."
+  },
+  "characters": [
+    {
+      "id": "mega",
+      "name": "Mega",
+      "aliases": [
+        "Cuzzo"
+      ],
+      "identityRule": "Assets 01-05 are alternate emotional/pose and chain-presence variants of one character, never separate characters.",
+      "futureSelectionGuidance": "The stolen-chain incident may later determine the appropriate chain/no-chain variant. chainState describes the illustration only and does not set possession, incident outcomes, or runtime selection rules."
+    },
+    {
+      "id": "baby-canon",
+      "name": "Baby Canon",
+      "groupId": "gabriels-angels",
+      "appearance": "Black hoodie, yellow face covering, tattoos."
+    },
+    {
+      "id": "joker",
+      "name": "Joker",
+      "groupId": "gabriels-angels",
+      "appearance": "White tank top, khaki pants, yellow accessories."
+    },
+    {
+      "id": "dizzy",
+      "name": "Dizzy",
+      "groupId": "gabriels-angels",
+      "appearance": "Yellow windbreaker, dark fashionable clothing, curly Edgar haircut."
+    }
+  ],
+  "groups": [
+    {
+      "id": "gabriels-angels",
+      "name": "Gabriel's Angels",
+      "memberIds": [
+        "baby-canon",
+        "joker",
+        "dizzy"
+      ]
+    }
+  ],
+  "implementationBoundaries": [
+    "Store assets and design metadata only; do not automatically assign portraits to existing interface components.",
+    "Do not change gameplay, The Chains incident logic, dialogue systems, menus, or UI functionality.",
+    "These illustrations are reserved for the next content-production phase; no new UI or gameplay GOAL is started."
+  ],
+  "assetCount": 10,
+  "assets": [
+    {
+      "order": 1,
+      "name": "mega-concerned-no-chain",
+      "originalFilename": "FE6A4DFF-694C-49DE-88B9-7BFA7D35CD23.jpeg",
+      "attachmentFilename": "1-Photo-1.jpg",
+      "characterIds": [
+        "mega"
+      ],
+      "kind": "character-variant",
+      "emotionalState": "concerned",
+      "chainState": "without-chain",
+      "intendedUse": "Concerned Mega / Cuzzo without his diamond MEGA chain; future character interactions, story reactions, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/mega-concerned-no-chain.jpeg",
+        "format": "JPEG",
+        "width": 853,
+        "height": 1280,
+        "bytes": 237691,
+        "sha256": "d72c3bd332bf25bdd779b221ee36c557bda23e5b5d57574724f074745e510519"
+      },
+      "runtime": {
+        "path": "public/assets/characters/mega/mega-concerned-no-chain.webp",
+        "url": "/assets/characters/mega/mega-concerned-no-chain.webp",
+        "format": "WebP",
+        "width": 853,
+        "height": 1280,
+        "bytes": 163362,
+        "sha256": "964197749eee9bbdfbbda1753806398833f5a79e560ce8bdbc94e19ebe4961d0"
+      }
+    },
+    {
+      "order": 2,
+      "name": "mega-confident-with-chain",
+      "originalFilename": "B3DFD5A0-B723-4D15-B278-CABD483AC5DA.jpeg",
+      "attachmentFilename": "2-Photo-2.jpg",
+      "characterIds": [
+        "mega"
+      ],
+      "kind": "character-variant",
+      "emotionalState": "confident",
+      "chainState": "with-chain",
+      "intendedUse": "Confident Mega / Cuzzo wearing his diamond MEGA chain; future character interactions, story events, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/mega-confident-with-chain.jpeg",
+        "format": "JPEG",
+        "width": 960,
+        "height": 1280,
+        "bytes": 332026,
+        "sha256": "f05d2c3a1e54b9700194f2e9af142792efb5a3b5ecb3fca16f344bda2688babb"
+      },
+      "runtime": {
+        "path": "public/assets/characters/mega/mega-confident-with-chain.webp",
+        "url": "/assets/characters/mega/mega-confident-with-chain.webp",
+        "format": "WebP",
+        "width": 960,
+        "height": 1280,
+        "bytes": 246324,
+        "sha256": "508a938781abe871aaad4a08ae0e10fe3825434041191873651cc64fecc99362"
+      }
+    },
+    {
+      "order": 3,
+      "name": "mega-confident-no-chain",
+      "originalFilename": "5993EFB5-8913-4408-8D86-26F325905CE5.jpeg",
+      "attachmentFilename": "3-Photo-3.jpg",
+      "characterIds": [
+        "mega"
+      ],
+      "kind": "character-variant",
+      "emotionalState": "confident",
+      "chainState": "without-chain",
+      "intendedUse": "Confident Mega / Cuzzo without his diamond MEGA chain; future character interactions, story events, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/mega-confident-no-chain.jpeg",
+        "format": "JPEG",
+        "width": 960,
+        "height": 1280,
+        "bytes": 308713,
+        "sha256": "439ac835a9e905c5331a4ed886299eb059f0d0bf9b7ef678682c93525c5b7b95"
+      },
+      "runtime": {
+        "path": "public/assets/characters/mega/mega-confident-no-chain.webp",
+        "url": "/assets/characters/mega/mega-confident-no-chain.webp",
+        "format": "WebP",
+        "width": 960,
+        "height": 1280,
+        "bytes": 225812,
+        "sha256": "1dcff595014eaa3d2499bdf2799fa0cd2f546014c3198504248ae52a5ff0832c"
+      }
+    },
+    {
+      "order": 4,
+      "name": "mega-proposing-with-chain",
+      "originalFilename": "6DB6E23B-88EA-414B-96E4-D2C4ED241753.jpeg",
+      "attachmentFilename": "4-Photo-4.jpg",
+      "characterIds": [
+        "mega"
+      ],
+      "kind": "character-variant",
+      "emotionalState": "proposing",
+      "chainState": "with-chain",
+      "intendedUse": "Mega / Cuzzo seated and proposing an idea while wearing his diamond MEGA chain; future character interactions and story events.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/mega-proposing-with-chain.jpeg",
+        "format": "JPEG",
+        "width": 1024,
+        "height": 1280,
+        "bytes": 304430,
+        "sha256": "0610cd4248b0f9615160b072e78e7c2d86e36663e4b412fb5463a974b05d599c"
+      },
+      "runtime": {
+        "path": "public/assets/characters/mega/mega-proposing-with-chain.webp",
+        "url": "/assets/characters/mega/mega-proposing-with-chain.webp",
+        "format": "WebP",
+        "width": 1024,
+        "height": 1280,
+        "bytes": 214428,
+        "sha256": "756402740b7cb0955d78370f62bc762c102c0679e7b2b81dc7cd1ef46d6bd925"
+      }
+    },
+    {
+      "order": 5,
+      "name": "mega-strategizing-with-chain",
+      "originalFilename": "76504182-BBFD-4E02-A948-1984F5441EB4.jpeg",
+      "attachmentFilename": "5-Photo-5.jpg",
+      "characterIds": [
+        "mega"
+      ],
+      "kind": "character-variant",
+      "emotionalState": "strategizing",
+      "chainState": "with-chain",
+      "intendedUse": "Mega / Cuzzo strategizing at a desk while wearing his diamond MEGA chain; future character interactions and story events.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/mega-strategizing-with-chain.jpeg",
+        "format": "JPEG",
+        "width": 1169,
+        "height": 1280,
+        "bytes": 323434,
+        "sha256": "47ad05a052a92d5d7887518647a6a5db8dd78e4c7b9595ff85ab7e93e5cd0645"
+      },
+      "runtime": {
+        "path": "public/assets/characters/mega/mega-strategizing-with-chain.webp",
+        "url": "/assets/characters/mega/mega-strategizing-with-chain.webp",
+        "format": "WebP",
+        "width": 1169,
+        "height": 1280,
+        "bytes": 215894,
+        "sha256": "dfbedf9a66413d2b22216d3b47ba30a1bfcbb944cc98c1d1789424ce3657b2fb"
+      }
+    },
+    {
+      "order": 6,
+      "name": "mega-stolen-chain-evidence",
+      "originalFilename": "3A7D13F4-00D7-4F81-8668-788F0F6A0EBF.jpeg",
+      "attachmentFilename": "6-Photo-6.jpg",
+      "characterIds": [],
+      "kind": "incident-illustration",
+      "story": "The Chains",
+      "relatedCharacterIds": [
+        "mega"
+      ],
+      "intendedUse": "The Chains storyline and incident illustration: diamond MEGA pendant in an open jewelry box on a lowrider; future evidence or story presentation.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/mega-stolen-chain-evidence.jpeg",
+        "format": "JPEG",
+        "width": 1280,
+        "height": 961,
+        "bytes": 364163,
+        "sha256": "3fd03d0d8f17a6faea9828e45d2ee85bc8e340848c77d01e422aa664a400ad5d"
+      },
+      "runtime": {
+        "path": "public/assets/incidents/the-chains/mega-stolen-chain-evidence.webp",
+        "url": "/assets/incidents/the-chains/mega-stolen-chain-evidence.webp",
+        "format": "WebP",
+        "width": 1280,
+        "height": 961,
+        "bytes": 265976,
+        "sha256": "5e3f7cc99f836e3fa6073b6cfc232e5140e26fc9a7577a75c76bda863ae04870"
+      }
+    },
+    {
+      "order": 7,
+      "name": "baby-canon-portrait",
+      "originalFilename": "5D60A89E-0748-4596-9EED-DD42E30C5B57.jpeg",
+      "attachmentFilename": "7-Photo-7.jpg",
+      "characterIds": [
+        "baby-canon"
+      ],
+      "groupId": "gabriels-angels",
+      "kind": "character-portrait",
+      "intendedUse": "Baby Canon of Gabriel's Angels: black hoodie, yellow face covering, and tattoos; future character interactions, story events, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/baby-canon-portrait.jpeg",
+        "format": "JPEG",
+        "width": 720,
+        "height": 1280,
+        "bytes": 214934,
+        "sha256": "c25366dae52fc51bf632b74d0064a25ef66577e609d13fbbf696e5c49b6fdd5e"
+      },
+      "runtime": {
+        "path": "public/assets/characters/angels/baby-canon-portrait.webp",
+        "url": "/assets/characters/angels/baby-canon-portrait.webp",
+        "format": "WebP",
+        "width": 720,
+        "height": 1280,
+        "bytes": 151344,
+        "sha256": "00d5a9cd6ce5096e9737de0b2259034ce1ea93fba557c90a55d1f010226d9dc1"
+      }
+    },
+    {
+      "order": 8,
+      "name": "joker-portrait",
+      "originalFilename": "B0B718C9-F42E-4D4A-B766-BC1ACEAB054D.jpeg",
+      "attachmentFilename": "8-Photo-8.jpg",
+      "characterIds": [
+        "joker"
+      ],
+      "groupId": "gabriels-angels",
+      "kind": "character-portrait",
+      "intendedUse": "Joker of Gabriel's Angels: white tank top, khaki pants, and yellow accessories; future character interactions, story events, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/joker-portrait.jpeg",
+        "format": "JPEG",
+        "width": 720,
+        "height": 1280,
+        "bytes": 271831,
+        "sha256": "056566b82e616220bdc3811bb2d4b03622c3a347b7be4aa1ed0589b5f39aeae2"
+      },
+      "runtime": {
+        "path": "public/assets/characters/angels/joker-portrait.webp",
+        "url": "/assets/characters/angels/joker-portrait.webp",
+        "format": "WebP",
+        "width": 720,
+        "height": 1280,
+        "bytes": 202780,
+        "sha256": "95872ec9ee2e621fb20fb616bdf0fa8af78909408f9b33a8d429658c53bfe461"
+      }
+    },
+    {
+      "order": 9,
+      "name": "dizzy-portrait",
+      "originalFilename": "9CA6203C-BC74-4EB6-B1AC-64649F024016.jpeg",
+      "attachmentFilename": "9-Photo-9.jpg",
+      "characterIds": [
+        "dizzy"
+      ],
+      "groupId": "gabriels-angels",
+      "kind": "character-portrait",
+      "intendedUse": "Dizzy of Gabriel's Angels: yellow windbreaker, dark fashionable clothing, and curly Edgar haircut; future character interactions, story events, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/dizzy-portrait.jpeg",
+        "format": "JPEG",
+        "width": 720,
+        "height": 1280,
+        "bytes": 335728,
+        "sha256": "3224ecb298488f617edd96157628531807f994f16267253cdaec1abc0aacfe16"
+      },
+      "runtime": {
+        "path": "public/assets/characters/angels/dizzy-portrait.webp",
+        "url": "/assets/characters/angels/dizzy-portrait.webp",
+        "format": "WebP",
+        "width": 720,
+        "height": 1280,
+        "bytes": 266346,
+        "sha256": "3f25c6efb5c3cf470ceb1447082a0f741a0a33be35b49197df665f9525ec2456"
+      }
+    },
+    {
+      "order": 10,
+      "name": "gabriels-angels-trio",
+      "originalFilename": "3683CE13-65D7-45EE-9A13-6615674120C5.jpeg",
+      "attachmentFilename": "10-Photo-10.jpg",
+      "characterIds": [
+        "baby-canon",
+        "joker",
+        "dizzy"
+      ],
+      "groupId": "gabriels-angels",
+      "kind": "group-portrait",
+      "leftToRight": [
+        "baby-canon",
+        "joker",
+        "dizzy"
+      ],
+      "intendedUse": "Gabriel's Angels group portrait: Baby Canon, Joker, and Dizzy together beside a generic black sedan; future group interactions, story events, and UI integration.",
+      "integrationStatus": "Stored for future content production; not assigned to runtime UI or gameplay.",
+      "source": {
+        "path": "art/source/hood-hero/gabriels-angels-trio.jpeg",
+        "format": "JPEG",
+        "width": 1280,
+        "height": 853,
+        "bytes": 260642,
+        "sha256": "9f363013121dd44900cdf9196e40220576054880e580972d86ae175c75964931"
+      },
+      "runtime": {
+        "path": "public/assets/characters/angels/gabriels-angels-trio.webp",
+        "url": "/assets/characters/angels/gabriels-angels-trio.webp",
+        "format": "WebP",
+        "width": 1280,
+        "height": 853,
+        "bytes": 182916,
+        "sha256": "6be4d394a14da17f38050439cc909ce5acc1670a6f9353f8191b2598abdbfaac"
+      }
+    }
+  ],
+  "totals": {
+    "sourceJpegCount": 10,
+    "runtimeWebpCount": 10,
+    "sourceJpegBytes": 2953592,
+    "runtimeWebpBytes": 2135182
+  }
+}

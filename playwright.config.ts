@@ -4,7 +4,10 @@ export default defineConfig({
   fullyParallel: true,
   retries: 0,
   reporter: [["list"], ["html", { open: "never" }]],
-  use: { baseURL: "http://127.0.0.1:4173", trace: "retain-on-failure" },
+  use: {
+    baseURL: `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
+    trace: "retain-on-failure",
+  },
   projects: [
     {
       name: "chromium-mobile",
@@ -13,8 +16,12 @@ export default defineConfig({
     { name: "webkit-mobile", use: { ...devices["iPhone 13"] } },
   ],
   webServer: {
+    env: {
+      VITE_BASE_PATH:
+        process.env.PLAYWRIGHT_BASE_PATH || process.env.VITE_BASE_PATH || "/",
+    },
     command: "npm run preview -- --port 4173",
-    url: "http://127.0.0.1:4173",
+    url: `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
     reuseExistingServer: !process.env.CI,
   },
 });

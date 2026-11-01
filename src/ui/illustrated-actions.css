@@ -1,0 +1,253 @@
+/* GOAL 002C: approved scene art in a single shared graphite card system. */
+.game-shell .action-artwork,
+.game-shell .action-scene,
+.game-shell .action-art-placeholder,
+.game-shell .action-art-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.game-shell .action-scene {
+  display: block;
+  object-fit: cover;
+}
+.game-shell .action-art-placeholder,
+.game-shell .action-art-fallback {
+  background: var(--paper), linear-gradient(135deg, #303234, #151719);
+}
+.game-shell .action-art-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px;
+  color: #d4d4cd;
+  font-size: 11px;
+  text-align: center;
+}
+.game-shell .action-illustration {
+  height: auto;
+  aspect-ratio: 2.35;
+  margin-bottom: 0;
+  border-bottom: 1px solid #83857c;
+}
+.game-shell .action-illustration::after {
+  background: linear-gradient(0deg, #17191a 1%, #17191a0a 35%, transparent 75%);
+}
+.game-shell .action-scene-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 18px;
+  z-index: 1;
+  padding: 4px 7px;
+  background: #101214ed;
+  border-left: 2px solid var(--accent);
+  font-size: 8px;
+  letter-spacing: 1.3px;
+  color: #e8e5de;
+}
+.game-shell .illustrated-action .action-top {
+  padding-top: 13px;
+  margin-bottom: 7px;
+}
+.game-shell .illustrated-action h3 {
+  margin-bottom: 6px;
+  line-height: 1.05;
+}
+.game-shell .illustrated-action p {
+  margin-bottom: 10px;
+}
+.game-shell .illustrated-action .action-definition {
+  margin-bottom: 8px;
+}
+.game-shell .action-card:not(.action-tile) button {
+  min-height: 46px;
+  background: var(--paper), linear-gradient(#333638, #242729);
+  border: 1px solid #757973;
+  border-left: 3px solid var(--accent);
+}
+.game-shell .action-card:not(.action-tile) button:disabled {
+  color: #bfc1bb;
+  background: #1b1d1f;
+  border-left-color: #666963;
+}
+.game-shell .action-card.neutral-action:not(.action-tile) {
+  border-top: 1px solid #747870;
+  border-left: 3px solid var(--accent);
+  padding: 18px;
+}
+.game-shell .action-card.neutral-action:not(.action-tile) h3 {
+  font-style: italic;
+  font-size: 29px;
+}
+.game-shell .quick-moves .action-tile {
+  border-color: #6c716d;
+  border-radius: 3px 9px 3px 6px;
+}
+.game-shell .quick-moves .has-action-art {
+  border-top: 2px solid var(--accent);
+}
+.game-shell .tile-art::after {
+  background: linear-gradient(0deg, #17191a, transparent 36%);
+}
+.game-shell .action-tile.neutral-action .tile-art {
+  height: 42px;
+  border: 0;
+  margin-bottom: 4px;
+  background: transparent;
+}
+.game-shell .neutral-action .tile-art::after {
+  display: none;
+}
+.game-shell .neutral-action .tile-symbol {
+  left: 10px;
+  bottom: 4px;
+  color: #a9ada9;
+  transform: none;
+}
+.game-shell .neutral-action .tile-symbol svg {
+  width: 24px;
+  height: 24px;
+}
+.game-shell .tile-ap {
+  background: #17191af0;
+  border: 1px solid #999b8f;
+  color: #eeeae1;
+  transform: none;
+  font-size: 13px;
+}
+.game-shell[data-theme="muds"] .tile-ap {
+  background: #17191af0;
+}
+.game-shell .action-tile button {
+  font-size: 12px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #efede6;
+  background: #ffffff07;
+}
+.game-shell .action-tile.unavailable .tile-controls button span {
+  font-size: 11px;
+}
+.game-shell .action-tile .risk {
+  font-size: 9px;
+  letter-spacing: 0.6px;
+}
+.game-shell .tile-controls {
+  margin-top: auto;
+}
+.game-shell .tile-copy {
+  padding-top: 4px;
+}
+@media (max-width: 760px) {
+  .game-shell .zone-hero {
+    height: 208px;
+  }
+  .game-shell .hero-copy {
+    bottom: 38px;
+  }
+  .game-shell .quick-moves {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch;
+  }
+  .game-shell .quick-moves .has-action-art {
+    grid-column: 1 / -1;
+    min-height: 145px;
+    padding-left: 43%;
+  }
+  .game-shell .has-action-art .tile-art {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 43%;
+    height: 100%;
+    border: 0;
+  }
+  .game-shell .has-action-art .tile-art::after {
+    background: linear-gradient(90deg, transparent 70%, #17191a 100%);
+  }
+  .game-shell .has-action-art .tile-ap {
+    left: 8px;
+    right: auto;
+    top: 8px;
+  }
+  .game-shell .has-action-art .tile-copy {
+    padding: 12px 10px 8px;
+  }
+  .game-shell .action-tile h3 {
+    font-size: 26px;
+    min-height: 0;
+    line-height: 1.02;
+    margin-bottom: 5px;
+  }
+  .game-shell .action-tile .tile-copy p {
+    font-size: 11px;
+    min-height: 0;
+    line-height: 1.4;
+  }
+  .game-shell .action-tile.neutral-action .tile-art {
+    position: absolute;
+    bottom: 52px;
+    right: 9px;
+    width: 35px;
+    height: 18px;
+    margin: 0;
+  }
+  .game-shell .neutral-action .tile-symbol {
+    display: none;
+  }
+  .game-shell .neutral-action .tile-symbol svg {
+    width: 20px;
+    height: 20px;
+  }
+  .game-shell .neutral-action .tile-ap {
+    top: 0;
+    right: 0;
+    padding: 1px 5px;
+    font-size: 11px;
+  }
+  .game-shell .neutral-action .tile-copy {
+    padding: 12px 10px 10px;
+  }
+  .game-shell .neutral-action h3 {
+    font-size: 22px;
+  }
+  .game-shell .neutral-action .tile-copy p {
+    font-size: 10px;
+  }
+  .game-shell .action-tile .tile-copy .disabled-reason {
+    font-size: 10px;
+    padding-top: 4px;
+    color: #e5c7ad;
+  }
+  .game-shell .action-tile button,
+  .game-shell .action-tile.unavailable .tile-controls button span {
+    font-size: 12px;
+  }
+  .game-shell .tile-controls > button {
+    min-width: 44px;
+  }
+  .game-shell .action-illustration {
+    aspect-ratio: 2.1;
+    height: auto;
+  }
+}
+@media (max-width: 350px) {
+  .game-shell .quick-moves .has-action-art {
+    padding-left: 40%;
+  }
+  .game-shell .has-action-art .tile-art {
+    width: 40%;
+  }
+  .game-shell .action-tile h3 {
+    font-size: 24px;
+  }
+  .game-shell .neutral-action h3 {
+    font-size: 21px;
+  }
+}

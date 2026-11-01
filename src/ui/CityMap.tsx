@@ -1,4 +1,6 @@
+import { useId } from "react";
 import type { GameState, ZoneId } from "../core/GameState";
+import { THEMES } from "./theme";
 const locations: Record<
   ZoneId,
   { x: number; y: number; w: number; h: number }
@@ -18,6 +20,7 @@ export function CityMap({
   selected: ZoneId;
   onSelect: (id: ZoneId) => void;
 }) {
+  const mapId = useId();
   return (
     <svg
       className="city-map"
@@ -27,7 +30,7 @@ export function CityMap({
     >
       <defs>
         <pattern
-          id="blocks"
+          id={`${mapId}-blocks`}
           width="23"
           height="23"
           patternUnits="userSpaceOnUse"
@@ -40,8 +43,29 @@ export function CityMap({
             opacity=".1"
           />
         </pattern>
+        {Object.values(s.zones).map((z) => {
+          // Multiple organizations without a controller are shared presence,
+          // never an inferred winner or a change to saved ownership.
+          const factions = z.controller ? [z.controller] : z.organizations;
+          return (
+            <linearGradient id={`${mapId}-${z.id}`} key={z.id}>
+              {factions.flatMap((f, index) => [
+                <stop
+                  key={`${f}-start`}
+                  offset={`${(index / factions.length) * 100}%`}
+                  stopColor={THEMES[f].accent}
+                />,
+                <stop
+                  key={`${f}-end`}
+                  offset={`${((index + 1) / factions.length) * 100}%`}
+                  stopColor={THEMES[f].accent}
+                />,
+              ])}
+            </linearGradient>
+          );
+        })}
       </defs>
-      <rect width="420" height="390" fill="url(#blocks)" />
+      <rect width="420" height="390" fill={`url(#${mapId}-blocks)`} />
       <path
         d="M0 110H420M0 264H420M153 0V390M267 0V390"
         stroke="#657369"
@@ -58,7 +82,10 @@ export function CityMap({
       {Object.entries(s.zones).map(([key, z]) => {
         const id = key as ZoneId,
           l = locations[id],
-          color = z.controller ? s.factions[z.controller].color : "#a8b6aa";
+          color = z.controller ? THEMES[z.controller].accent : "#A8ADB3";
+        const presence = z.organizations
+          .map((f) => s.factions[f].name)
+          .join(" / ");
         return (
           <g
             key={id}
@@ -66,6 +93,7 @@ export function CityMap({
             tabIndex={0}
             aria-label={`Select ${z.name}`}
             aria-pressed={selected === id}
+            aria-describedby={`${mapId}-${id}-description`}
             onClick={() => onSelect(id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -74,22 +102,59 @@ export function CityMap({
               }
             }}
           >
+            <desc id={`${mapId}-${id}-description`}>
+              {z.controller
+                ? `Controlled by ${s.factions[z.controller].name}.`
+                : "No single controller."}
+              {presence ? ` Faction presence: ${presence}.` : " Unclaimed."}
+            </desc>
             <rect
+              className="zone-base"
               x={l.x}
               y={l.y}
               width={l.w}
               height={l.h}
               rx="5"
-              fill={selected === id ? "#34493b" : "#1d2a25"}
-              stroke={selected === id ? "#d6e3a1" : color}
+              fill={selected === id ? "#30343b" : "#191C20"}
+              stroke={selected === id ? "var(--accent-secondary)" : color}
               strokeWidth={selected === id ? 2 : 0.7}
             />
+            <rect
+              className="zone-presence"
+              x={l.x + 2}
+              y={l.y + 2}
+              width={l.w - 4}
+              height={l.h - 4}
+              rx="4"
+              fill={
+                z.controller || z.organizations.length
+                  ? `url(#${mapId}-${id})`
+                  : "#A8ADB3"
+              }
+              opacity={z.controller || z.organizations.length ? 0.24 : 0.06}
+            />
+            {/* A bright, narrow strip keeps each presence color legible. */}
+            {(z.organizations.length
+              ? z.organizations
+              : z.controller
+                ? [z.controller]
+                : []
+            ).map((f, index, factions) => (
+              <rect
+                key={f}
+                x={l.x + 6 + (index * (l.w - 12)) / factions.length}
+                y={l.y + l.h - 9}
+                width={(l.w - 12) / factions.length}
+                height="3"
+                fill={THEMES[f].accent}
+              />
+            ))}
             <text
               x={l.x + l.w / 2}
               y={l.y + l.h / 2 - 3}
               textAnchor="middle"
               fill="#e8eadf"
-              fontSize={id === "downtown" ? 12 : 14}
+              fontSize={id === "downtown" ? 16 : 19}
               fontWeight="600"
             >
               {z.name}
@@ -98,18 +163,23 @@ export function CityMap({
               x={l.x + l.w / 2}
               y={l.y + l.h / 2 + 16}
               textAnchor="middle"
-              fill={color}
-              fontSize="8.5"
-              letterSpacing="1"
+              fill="#D9D7D1"
+              fontSize="11"
+              letterSpacing=".2"
             >
-              {id === "downtown"
-                ? "UNCLAIMED"
-                : id === "nawf"
-                  ? "TWO ORGANIZATIONS"
-                  : z.subtitle.toUpperCase()}
+              {z.controller
+                ? s.factions[z.controller].name.toUpperCase()
+                : z.organizations.length
+                  ? "SHARED / " + z.organizations.length + " GROUPS"
+                  : "UNCLAIMED"}
             </text>
             {s.characters.player.home === id && (
-              <circle cx={l.x + 12} cy={l.y + 12} r="3" fill="#d6e3a1" />
+              <circle
+                cx={l.x + 12}
+                cy={l.y + 12}
+                r="3"
+                fill="var(--accent-secondary)"
+              />
             )}
           </g>
         );

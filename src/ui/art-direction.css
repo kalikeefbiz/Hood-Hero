@@ -1,0 +1,1738 @@
+/* GOAL 002B: scene-led composition. Base CSS retains the control/accessibility rules. */
+:root {
+  --paper: url("./patina.png");
+  --ink: #0c0e10;
+}
+body {
+  background: #090b0d;
+}
+.game-shell,
+.landing {
+  background-image: var(--paper);
+  background-color: #101113;
+}
+h2,
+h3 {
+  letter-spacing: 0.015em;
+}
+.game-shell .panel,
+.game-shell .action-card,
+.game-shell .people-list,
+.game-shell .recruit-row {
+  background-image:
+    var(--paper), linear-gradient(155deg, #28282785, #111315 64%);
+  background-color: #17191a;
+  border-color: #666861;
+  border-radius: 9px 4px 8px 3px;
+  box-shadow:
+    inset 0 1px #e4dfcb13,
+    0 5px 13px #0004;
+}
+.game-shell .panel {
+  position: relative;
+  border-top-color: #a8a79c;
+}
+.game-shell .panel::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  height: 2px;
+  top: -1px;
+  left: 8px;
+  right: 46%;
+  background: linear-gradient(90deg, var(--accent-secondary), transparent);
+  opacity: 0.65;
+}
+.game-shell .panel-title h3,
+.game-shell .screen-heading h2,
+.game-shell .timeline-day {
+  text-transform: uppercase;
+  font-style: italic;
+}
+.game-shell .screen-heading h2 {
+  text-shadow: 1px 2px #000;
+}
+.game-shell .primary {
+  box-shadow:
+    inset 0 1px #ffffff4a,
+    0 4px 8px #0005;
+  border-radius: 2px 6px 2px 5px;
+  background-image: var(--paper);
+}
+.game-shell .segmented {
+  border-radius: 2px;
+  border-width: 0 0 1px;
+  background: var(--paper), #111315;
+  padding: 0;
+  gap: 3px;
+}
+.game-shell .segmented button {
+  text-transform: uppercase;
+  font:
+    600 20px "Barlow Condensed",
+    sans-serif;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+}
+.game-shell .segmented button.active {
+  border-color: transparent;
+  border-bottom-color: var(--accent);
+  background: linear-gradient(transparent, #ffffff0b);
+}
+.game-shell .person-row {
+  background: var(--paper), linear-gradient(100deg, #252727, #131517);
+}
+.game-shell .person-row.selected {
+  box-shadow: inset 4px 0 var(--accent);
+  background-color: #343632;
+}
+.game-shell .portrait {
+  transform: rotate(-3deg);
+  background: var(--paper), #2a2c2c;
+  border: 1px solid #8b8d85;
+  border-bottom: 3px solid var(--accent);
+  border-radius: 2px;
+  text-shadow: 1px 2px #000;
+}
+.game-shell .person-row strong {
+  font:
+    600 22px "Barlow Condensed",
+    sans-serif;
+}
+.game-shell .person-row small {
+  font-size: 11px;
+}
+.game-shell .profile-scene {
+  height: 170px;
+  border-bottom: 3px solid var(--accent);
+}
+.game-shell .profile > .portrait {
+  margin-top: -48px;
+  position: relative;
+  width: 64px;
+  height: 72px;
+}
+.game-shell .cash-total {
+  font-style: italic;
+  text-shadow: 2px 3px #000;
+}
+.game-shell .memory {
+  background: var(--paper), #101214;
+  border-left-color: var(--accent);
+}
+.game-shell .finance-split {
+  border-color: #73756c;
+}
+.game-shell .ledger {
+  border-color: #55584f;
+}
+.game-shell .timeline article {
+  border-left-color: #696c62;
+}
+.game-shell .timeline-day {
+  padding: 3px 9px 4px 6px;
+  background: var(--paper), #2a2c29;
+  transform: skew(-4deg);
+}
+.game-shell .notice {
+  border-left: 2px solid var(--accent);
+  background: #101214;
+  padding: 7px 10px;
+  font-size: 11px;
+}
+.game-shell .game-menu {
+  border-color: #56594f;
+}
+/* Opening: an environmental stage and an overlapping neighborhood folio. No character likeness. */
+.landing {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 0 28px;
+  max-width: 1320px;
+}
+.new-run-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+}
+.new-run-backdrop .scene {
+  object-position: center top !important;
+}
+.landing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, #080a0c0a, #0b0d10b3 53%, #0b0c0ef5),
+    linear-gradient(0deg, #0b0d10 3%, transparent 80%);
+}
+.landing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: var(--paper);
+  opacity: 0.6;
+}
+.landing .brand {
+  min-height: 58px;
+  border: 0;
+  padding: 0 10px;
+  letter-spacing: 4px;
+  color: #eeede7;
+  text-shadow: 1px 2px #000;
+}
+.landing .brand small {
+  color: #e1e0d8;
+}
+.landing .newgame {
+  grid-template-columns: 0.9fr 1fr;
+  gap: 0;
+  padding: 10px 12px 36px;
+}
+.landing .intro {
+  border: 0;
+  height: 700px;
+  min-height: 0;
+  position: relative;
+  top: 0;
+  overflow: visible;
+}
+.landing .intro > .scene,
+.landing .intro::after {
+  display: none;
+}
+.landing .intro-copy {
+  left: 14px;
+  bottom: 90px;
+  right: 4px;
+}
+.landing .intro h1 {
+  font-size: 124px;
+  line-height: 0.76;
+  transform: rotate(-3deg);
+  text-shadow: 3px 5px 1px #000a;
+  letter-spacing: -1px;
+  margin: 24px 0 30px;
+}
+.landing .intro h1 span {
+  font-size: 13px;
+  letter-spacing: 9px;
+  transform: rotate(3deg);
+}
+.landing .intro .eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  max-width: 210px;
+}
+.landing .lede {
+  font-size: 15px;
+  color: #e3e2db;
+  text-shadow: 1px 2px #000;
+}
+.landing .creation {
+  background: var(--paper), linear-gradient(155deg, #15171aee, #0b0d10f5);
+  box-shadow:
+    -15px 20px 45px #0008,
+    inset 1px 1px #e0dfcc38;
+  padding: 22px 23px 16px;
+  position: relative;
+  border: 1px solid #77776d;
+  border-radius: 3px 11px 4px 8px;
+  transform: rotate(-0.6deg);
+}
+.landing .creation::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 10px;
+  right: 30%;
+  height: 5px;
+  background: var(--paper), #b6b5aa;
+  clip-path: polygon(
+    0 50%,
+    6% 30%,
+    12% 60%,
+    20% 0,
+    36% 35%,
+    50% 10%,
+    75% 60%,
+    90% 0,
+    100% 40%,
+    100% 100%,
+    0 100%
+  );
+}
+.landing .chapter {
+  margin: 0 0 5px;
+}
+.landing .chapter p {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #b8bab5;
+}
+.landing .creation h2 {
+  font-size: 43px;
+  font-style: italic;
+  margin-bottom: 7px;
+  text-shadow: 1px 2px #000;
+}
+.landing .creation-lede {
+  font-size: 10px;
+  margin-bottom: 12px;
+  color: #d0d1ca;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.landing fieldset {
+  margin: 0 0 14px;
+}
+.landing legend {
+  font-size: 10px;
+  margin-bottom: 9px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.landing legend span {
+  display: inline;
+  font-size: 9px;
+  margin: 0;
+}
+.landing .zone-choices {
+  gap: 9px;
+}
+.landing .zone-choices label {
+  min-height: 82px;
+  border-radius: 6px 3px 7px 3px;
+  border: 1px solid #7a7c73;
+  padding: 12px 13px;
+  box-shadow: 0 3px 7px #000a;
+}
+.landing .zone-choices label::after {
+  background:
+    linear-gradient(0deg, #080a0ef5, #080a0e50 75%, #080a0e08),
+    linear-gradient(90deg, #080a0e80, transparent 65%);
+}
+.landing .zone-choices .scene {
+  object-position: 50% 39% !important;
+}
+.landing .zone-choices label.chosen {
+  border: 2px solid #e1dfd2;
+  padding: 11px 12px;
+  box-shadow:
+    0 0 0 2px #e1dfd225,
+    inset 0 0 15px #000;
+}
+.landing .zone-choices .chosen::before {
+  content: "HOME";
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  z-index: 1;
+  font:
+    600 9px "Barlow Condensed",
+    sans-serif;
+  padding: 2px 5px;
+  letter-spacing: 1px;
+  color: #0b0d10;
+  background: #d9d7d1;
+  transform: skew(-8deg);
+}
+.landing .zone-choice-copy {
+  align-self: flex-end;
+}
+.landing .zone-choice-copy strong {
+  font-size: 29px;
+  text-shadow: 1px 2px 3px #000;
+}
+.landing .zone-choice-copy small {
+  font-size: 10px;
+  margin-top: 5px;
+  color: #f0eee8;
+  text-shadow: 1px 2px #000;
+}
+.landing .radio-dot {
+  width: 17px;
+  height: 17px;
+  font-size: 11px;
+  align-self: flex-end;
+  margin-bottom: 3px;
+}
+.landing .name-entry label {
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+.landing .name-entry input {
+  min-height: 44px;
+  padding: 9px 12px;
+  background: #090b0e;
+  border-color: #77786e;
+}
+.landing .starting-kit {
+  padding: 10px 0 12px;
+  font-size: 9px;
+}
+.landing .starting-kit strong {
+  font:
+    600 18px "Barlow Condensed",
+    sans-serif;
+}
+.landing .primary {
+  background: var(--paper), #c9c8bd;
+  color: #0c0e10;
+  min-height: 50px;
+  padding: 10px 14px;
+  font:
+    700 24px "Barlow Condensed",
+    sans-serif;
+  transform: skew(-3deg);
+  border-radius: 0;
+  box-shadow:
+    2px 4px #0008,
+    inset 0 0 0 2px #eeeadd66;
+}
+.landing .secondary {
+  min-height: 44px;
+  background: var(--paper), #1e2225;
+  border-color: #7a7d73;
+  border-radius: 0;
+  font:
+    600 20px "Barlow Condensed",
+    sans-serif;
+  text-transform: uppercase;
+  transform: skew(-3deg);
+}
+.landing .creation .notice {
+  font-size: 10px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  background: transparent;
+}
+.landing .landing-footer {
+  border-color: #66675f;
+  color: #d7d5c9;
+  font-size: 9px;
+  padding: 16px 0;
+}
+/* Cinematic HUD. Its stats overlap the scene rather than forming a detached table. */
+.game-shell .game-body {
+  background: var(--paper), #101214;
+}
+.game-shell .hud-composition {
+  position: relative;
+}
+.game-shell .game-header {
+  position: relative;
+  display: grid;
+  grid-template-columns: 57px 1fr 46px 90px;
+  gap: 8px;
+  min-height: 60px;
+  padding: 4px 18px;
+  border: 1px solid #77786e;
+  border-bottom-color: var(--accent);
+  border-radius: 4px;
+  box-shadow:
+    0 4px 14px #0009,
+    inset 0 0 0 2px #000;
+  background: var(--paper), linear-gradient(#1c1e20, #0b0d0f);
+  z-index: 3;
+}
+.game-shell .game-header .day {
+  font:
+    700 19px "Barlow Condensed",
+    sans-serif;
+  color: var(--accent-text);
+  white-space: nowrap;
+}
+.game-shell .hud-wordmark {
+  font:
+    700 25px/0.95 "Barlow Condensed",
+    sans-serif;
+  text-align: center;
+  letter-spacing: 1.5px;
+  text-shadow: 1px 2px #000;
+}
+.game-shell .hud-wordmark span {
+  display: block;
+  margin-top: 5px;
+  font:
+    600 8px "DM Sans",
+    sans-serif;
+  letter-spacing: 3px;
+  color: #babbb3;
+}
+.game-shell .game-header .ap {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.game-shell .game-header .ap svg {
+  width: 18px;
+  height: 26px;
+  color: var(--accent-text);
+  fill: var(--accent);
+}
+.game-shell .game-header .ap small {
+  display: block;
+  font:
+    600 10px "Barlow Condensed",
+    sans-serif;
+  color: #dddcd2;
+  letter-spacing: 1px;
+}
+.game-shell .game-header .ap b {
+  font:
+    700 20px "Barlow Condensed",
+    sans-serif;
+  margin: 0;
+}
+.game-shell .header-tools {
+  gap: 2px;
+}
+.game-shell .header-tools button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 46px;
+  padding: 2px;
+  gap: 1px;
+  border: 0;
+  border-radius: 0;
+  color: #d5d4ca;
+}
+.game-shell .header-tools svg {
+  width: 17px;
+  height: 17px;
+}
+.game-shell .header-tools span {
+  font-size: 8px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.game-shell .zone-hero {
+  height: 330px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  isolation: isolate;
+  overflow: hidden;
+}
+.game-shell .zone-hero > .scene {
+  height: 100%;
+  object-position: 50% 43% !important;
+}
+.game-shell .zone-hero::after {
+  background:
+    linear-gradient(
+      0deg,
+      #0b0d10 0%,
+      #0b0d10ed 13%,
+      #0b0d1066 49%,
+      #0b0d1000 90%
+    ),
+    linear-gradient(90deg, #090b0e77, transparent 70%);
+}
+.game-shell .scene-rules {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  box-shadow: inset 0 0 50px #0006;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 72%,
+      color-mix(in srgb, var(--accent) 10%, transparent)
+    ),
+    var(--paper);
+  opacity: 0.5;
+}
+.game-shell .scene-identity {
+  position: absolute;
+  top: 17px;
+  right: 24px;
+  text-align: right;
+  padding: 7px 10px;
+  border-right: 2px solid var(--accent);
+  background: linear-gradient(90deg, transparent, #080b0ecc);
+}
+.game-shell .scene-identity h1 {
+  font-size: 26px;
+  margin: 0 0 3px;
+  text-shadow: 1px 2px #000;
+  overflow-wrap: anywhere;
+}
+.game-shell .home-label {
+  display: block;
+  font-size: 10px;
+  color: #e0dfd6;
+}
+.game-shell .hero-index {
+  top: 22px;
+  left: 22px;
+  right: auto;
+  padding: 4px 6px;
+  border-width: 0 0 0 2px;
+  border-color: var(--accent);
+  font-size: 9px;
+  background: #090b0eb0;
+}
+.game-shell .hero-copy {
+  bottom: 44px;
+  left: 26px;
+  right: 20px;
+  text-align: left;
+}
+.game-shell .scene-affiliation {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+  font:
+    600 12px "Barlow Condensed",
+    sans-serif;
+  color: var(--accent-text);
+  letter-spacing: 1px;
+}
+.game-shell .scene-affiliation > span {
+  font-style: italic;
+}
+.game-shell .scene-affiliation .affiliation {
+  color: var(--accent-text);
+  font-size: 11px;
+  font-family: "DM Sans", sans-serif;
+  letter-spacing: 0;
+}
+.game-shell .hero-title {
+  font-size: 59px;
+  font-style: italic;
+  text-transform: uppercase;
+  margin: 0 0 7px;
+  max-width: 100%;
+  text-shadow: 2px 3px 1px #0009;
+}
+.game-shell:not([data-theme="independent"]) .hero-title {
+  color: var(--accent-text);
+}
+.game-shell .hero-location {
+  font:
+    600 10px "Barlow Condensed",
+    sans-serif;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  color: #e8e6da;
+}
+.game-shell .hero-flavor {
+  font-size: 12px;
+  color: #e3e1d8;
+  margin: 0;
+}
+.game-shell .hud-composition .resource-strip {
+  position: relative;
+  margin: -25px 20px 0;
+  border: 0;
+  background: none;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  gap: 9px;
+  overflow: visible;
+  z-index: 2;
+}
+.game-shell .hud-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 61px;
+  padding: 8px;
+  border: 1px solid #777970;
+  border-radius: 8px 4px 6px 3px;
+  background: var(--paper), linear-gradient(130deg, #292b28, #101214 65%);
+  box-shadow:
+    0 3px 9px #0009,
+    inset 0 1px #f0e6bd11;
+}
+.game-shell .hud-stat > svg {
+  width: 26px;
+  height: 29px;
+  color: var(--accent-text);
+}
+.game-shell .hud-stat small {
+  font:
+    600 10px "Barlow Condensed",
+    sans-serif;
+  letter-spacing: 1px;
+  color: #c6c7be;
+  margin: 0 0 3px;
+}
+.game-shell .hud-stat strong {
+  font:
+    700 29px/0.9 "Barlow Condensed",
+    sans-serif;
+}
+.game-shell .heat-resource > svg {
+  color: #f4857b;
+  fill: #f4857b22;
+}
+.game-shell .compact-identity {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px 42px;
+  background: var(--paper), linear-gradient(125deg, #242727, #101214);
+  border-bottom: 1px solid #55584e;
+}
+.game-shell .compact-identity .scene-identity {
+  position: static;
+  text-align: left;
+  padding: 0 0 0 10px;
+  border: 0;
+  border-left: 2px solid var(--accent);
+  background: none;
+}
+.game-shell .compact-identity .affiliation {
+  font:
+    700 23px "Barlow Condensed",
+    sans-serif;
+  color: var(--accent-text);
+  text-align: right;
+}
+/* Moves are illustrated plates, not uniform dashboard text boxes. */
+.game-shell .main-content {
+  padding: 22px 24px;
+}
+.game-shell.screen-city .screen-heading {
+  margin: 0 0 12px;
+  min-height: 44px;
+  align-items: center;
+}
+.game-shell.screen-city .screen-heading .eyebrow {
+  display: none;
+}
+.game-shell.screen-city .screen-heading h2 {
+  font-size: 32px;
+}
+.game-shell .advance {
+  min-height: 44px;
+  background: var(--paper), #20231f;
+  border-color: #7c7d71;
+  font:
+    600 18px "Barlow Condensed",
+    sans-serif;
+  border-radius: 2px;
+}
+.game-shell .hub-layout {
+  display: block;
+  margin-bottom: 12px;
+}
+.game-shell .quick-moves {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.game-shell .quick-moves .action-tile {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--accent) 75%, #e6e0c5);
+  border-radius: 10px 6px 10px 6px;
+  background: var(--paper), linear-gradient(155deg, #242622, #0e1012 65%);
+  box-shadow:
+    0 5px 10px #0008,
+    inset 0 1px #fff3;
+}
+.game-shell .tile-art {
+  height: 140px;
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid #d4ccb92b;
+}
+.game-shell .tile-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(0deg, #141618 0%, #0d0f1120 85%);
+}
+.game-shell .tile-art .scene {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+.game-shell .tile-work .tile-art .scene {
+  object-position: 80% 75% !important;
+  transform: scale(1.15);
+}
+.game-shell .tile-gig .tile-art .scene {
+  object-position: 15% 50% !important;
+}
+.game-shell .tile-contact .tile-art .scene {
+  object-position: 70% 64% !important;
+}
+.game-shell .tile-symbol {
+  position: absolute;
+  bottom: 2px;
+  left: 12px;
+  z-index: 1;
+  color: #e1dfd2;
+  filter: drop-shadow(2px 3px 2px #000);
+  transform: rotate(-8deg);
+}
+.game-shell .tile-symbol svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 1.4;
+}
+.game-shell .tile-ap {
+  position: absolute;
+  top: 9px;
+  right: 8px;
+  background: var(--paper), var(--accent-secondary);
+  color: #101214;
+  transform: skew(-8deg);
+  z-index: 1;
+  font:
+    700 14px "Barlow Condensed",
+    sans-serif;
+  padding: 3px 6px;
+  box-shadow: 1px 2px #0007;
+}
+.game-shell[data-theme="muds"] .tile-ap {
+  background: var(--accent-text);
+}
+.game-shell .tile-copy {
+  padding: 0 12px 7px;
+  position: relative;
+  margin-top: -2px;
+}
+.game-shell .action-tile h3 {
+  font-size: 30px;
+  font-style: italic;
+  line-height: 0.98;
+  margin: 0 0 8px;
+  text-shadow: 1px 2px #000;
+}
+.game-shell .action-tile .tile-copy p {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #e1dfd5;
+  margin: 0 0 7px;
+  min-height: 34px;
+}
+.game-shell .action-tile .risk {
+  font-size: 8px;
+  letter-spacing: 0.6px;
+}
+.game-shell .action-tile button {
+  min-height: 44px;
+  padding: 5px 12px;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  font-size: 10px;
+  text-align: left;
+  color: #dcdcd3;
+}
+.game-shell .action-tile button svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 3;
+  color: var(--accent-text);
+}
+.game-shell .action-tile button:disabled {
+  border: 0;
+  opacity: 1;
+  color: #b1b3ac;
+  background: #080a0c55;
+}
+.game-shell .action-tile.unavailable .tile-art {
+  filter: grayscale(0.65);
+}
+.game-shell .action-tile .disabled-reason {
+  margin: 0;
+  padding: 1px 10px 9px;
+  font-size: 10px;
+  color: #d1d2c8;
+}
+.game-shell .tile-details {
+  border-top: 1px solid #72756a55;
+  margin-top: auto;
+}
+.game-shell .tile-details summary {
+  min-height: 44px;
+  padding: 11px 10px;
+  font:
+    600 12px "Barlow Condensed",
+    sans-serif;
+  color: #bfc1b5;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.game-shell .tile-details small {
+  display: block;
+  font-size: 11px;
+  padding: 0 10px 12px;
+}
+.game-shell .dispatch {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 12px;
+  border: 1px solid #7e7f70;
+  border-left: 3px solid var(--accent);
+  border-radius: 6px 3px 7px 3px;
+  background: var(--paper), linear-gradient(100deg, #2b2c26, #101214 75%);
+  box-shadow:
+    0 5px 10px #0008,
+    inset 0 1px #ffffff19;
+  margin: 0;
+}
+.game-shell .dispatch-icon {
+  color: var(--accent-text);
+  display: flex;
+  justify-content: center;
+}
+.game-shell .dispatch-icon svg {
+  height: 28px;
+  width: 28px;
+}
+.game-shell .dispatch .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 2px;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.game-shell .dispatch .status-chip {
+  padding: 0;
+  border: 0;
+  font-size: 8px;
+  letter-spacing: 0.8px;
+}
+.game-shell .dispatch h3 {
+  margin: 0 0 3px;
+  text-transform: uppercase;
+  font-style: italic;
+  font-size: 25px;
+}
+.game-shell .dispatch p:not(.eyebrow) {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0;
+  color: #d5d5ca;
+}
+.game-shell .dispatch button {
+  height: 44px;
+  min-width: 44px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--accent-text);
+}
+.game-shell .dispatch button svg {
+  width: 22px;
+}
+.game-shell .city-news {
+  margin-top: 20px;
+}
+.game-shell .city-news .panel-title h3 {
+  font-size: 27px;
+}
+.game-shell .city-layout {
+  margin-top: 22px;
+}
+/* Full action cards use an illustration plate and a separate readable rules area. */
+.game-shell .illustrated-action {
+  position: relative;
+  padding: 0 20px 20px;
+  overflow: hidden;
+}
+.game-shell .action-illustration {
+  position: relative;
+  height: 125px;
+  margin: 0 -20px 14px;
+  isolation: isolate;
+}
+.game-shell .action-illustration::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #17191a, #0b0d1044 75%);
+}
+.game-shell .action-plate {
+  position: absolute;
+  left: 20px;
+  bottom: 8px;
+  z-index: 1;
+  color: var(--accent-text);
+  filter: drop-shadow(1px 2px #000);
+}
+.game-shell .action-plate svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 1.4;
+}
+.game-shell .illustrated-action h3 {
+  font-style: italic;
+  font-size: 33px;
+}
+.game-shell .illustrated-action .action-top {
+  margin-bottom: 10px;
+}
+.game-shell .illustrated-action button {
+  border-color: #75766c;
+  background: var(--paper), #252822;
+  border-radius: 2px;
+}
+/* The dock reads as a single metal control rail, including at 320px. */
+.game-shell .bottom-nav {
+  background: var(--paper), linear-gradient(#1e211f, #0b0d10 80%);
+  border: 1px solid #7b7d70;
+  border-bottom-color: #42463b;
+  border-radius: 3px 3px 0 0;
+  box-shadow:
+    0 -5px 18px #0009,
+    inset 0 2px #000,
+    inset 0 3px #dddac719;
+  padding-top: 1px;
+}
+.game-shell .bottom-nav button {
+  height: 70px;
+  color: #bcbdb3;
+}
+.game-shell .bottom-nav svg {
+  width: 27px;
+  height: 27px;
+  stroke-width: 2;
+  filter: drop-shadow(1px 2px #000);
+}
+.game-shell .bottom-nav small {
+  font-size: 15px;
+}
+.game-shell .bottom-nav .active {
+  color: var(--accent-text);
+  background: linear-gradient(
+    color-mix(in srgb, var(--accent) 17%, transparent),
+    transparent
+  );
+}
+.game-shell .bottom-nav .active::before {
+  height: 4px;
+  left: 6%;
+  right: 6%;
+  clip-path: polygon(0 0, 100% 0, 92% 100%, 8% 100%);
+}
+.game-shell .bottom-nav .active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 5px 5px 0 0;
+}
+@media (min-width: 761px) {
+  .game-shell {
+    max-width: 1280px;
+    grid-template-columns: 190px minmax(0, 1fr);
+    border: 1px solid #53574c;
+  }
+  .game-shell .desktop-brand {
+    padding: 35px 20px;
+    border-color: #51564c;
+  }
+  .game-shell .desktop-brand h2 {
+    transform: rotate(-3deg);
+    text-shadow: 3px 5px #000;
+  }
+  .game-shell .bottom-nav {
+    left: max(190px, calc((100vw - 1280px) / 2 + 190px));
+    right: max(0px, calc((100vw - 1280px) / 2));
+  }
+  .game-shell .cinematic-hud .resource-strip {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+  .game-shell .quick-moves {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .game-shell .tile-art {
+    height: 160px;
+  }
+  .game-shell .dispatch {
+    margin-top: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .landing {
+    padding: 0 12px;
+  }
+  .landing .brand {
+    min-height: 35px;
+    padding: calc(6px + env(safe-area-inset-top)) 8px 2px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    justify-content: center;
+  }
+  .landing .brand small {
+    font-size: 8px;
+  }
+  .landing .newgame {
+    padding: 0 4px 18px;
+    display: block;
+  }
+  .landing::before {
+    background: linear-gradient(
+      0deg,
+      #080b0df7 0%,
+      #0b0d1099 65%,
+      #0b0d1022 100%
+    );
+  }
+  .landing .new-run-backdrop {
+    height: 710px;
+  }
+  .landing .new-run-backdrop .scene {
+    object-position: 50% 10% !important;
+  }
+  .landing .intro {
+    height: 126px;
+    margin: 0;
+    padding: 0;
+  }
+  .landing .intro-copy {
+    left: 12px;
+    right: 0;
+    top: 13px;
+    bottom: auto;
+  }
+  .landing .intro h1 {
+    font-size: 66px;
+    line-height: 0.8;
+    margin: 0;
+    max-width: 270px;
+    letter-spacing: -0.5px;
+  }
+  .landing .intro h1 br {
+    display: none;
+  }
+  .landing .intro h1 span {
+    font-size: 10px;
+    letter-spacing: 7px;
+    margin: 15px 0 0 5px;
+  }
+  .landing .intro .eyebrow {
+    display: none;
+  }
+  .landing .intro .lede {
+    position: absolute;
+    top: 79px;
+    left: 5px;
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+  .landing .intro .lede br {
+    display: none;
+  }
+  .landing .intro .caption {
+    display: none;
+  }
+  .landing .creation {
+    padding: 16px 12px 12px;
+    transform: none;
+    border-radius: 2px 9px 2px 5px;
+  }
+  .landing .chapter {
+    margin: 0 0 4px;
+  }
+  .landing .creation h2 {
+    font-size: 36px;
+    margin: 0 0 5px;
+  }
+  .landing .creation-lede {
+    font-size: 9px;
+    margin-bottom: 10px;
+  }
+  .landing legend {
+    font-size: 10px;
+    margin-bottom: 7px;
+  }
+  .landing legend span {
+    font-size: 9px;
+  }
+  .landing .zone-choices {
+    gap: 7px;
+  }
+  .landing .zone-choices label {
+    min-height: 67px;
+    padding: 9px 11px;
+  }
+  .landing .zone-choices label.chosen {
+    padding: 8px 10px;
+  }
+  .landing .zone-choice-copy strong {
+    font-size: 27px;
+  }
+  .landing .zone-choice-copy small {
+    font-size: 9px;
+    margin-top: 3px;
+  }
+  .landing .zone-choices .scene {
+    object-position: 50% 42% !important;
+  }
+  .landing fieldset {
+    margin-bottom: 12px;
+  }
+  .landing .name-entry label {
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  .landing .starting-kit {
+    padding: 8px 0 10px;
+    font-size: 8px;
+  }
+  .landing .starting-kit strong {
+    font-size: 16px;
+  }
+  .landing .primary {
+    min-height: 48px;
+    padding: 8px 12px;
+    font-size: 23px;
+  }
+  .landing .creation .notice {
+    font-size: 9px;
+    padding: 4px 8px;
+    margin-top: 9px;
+  }
+  .landing .landing-footer {
+    font-size: 8px;
+    letter-spacing: 0.7px;
+    padding: 14px 0;
+  }
+  .game-shell .game-header {
+    min-height: 59px;
+    grid-template-columns: 48px minmax(0, 1fr) 43px 90px;
+    gap: 4px;
+    padding: 4px 10px;
+  }
+  .game-shell .game-header .day {
+    font-size: 17px;
+  }
+  .game-shell .hud-wordmark {
+    font-size: 23px;
+    letter-spacing: 1px;
+  }
+  .game-shell .hud-wordmark span {
+    font-size: 7px;
+    letter-spacing: 2.1px;
+  }
+  .game-shell .game-header .ap svg {
+    width: 16px;
+  }
+  .game-shell .game-header .ap b {
+    font-size: 20px;
+  }
+  .game-shell .zone-hero {
+    height: 264px;
+  }
+  .game-shell .scene-identity {
+    right: 14px;
+    top: 12px;
+    padding: 4px 7px;
+    max-width: 65%;
+  }
+  .game-shell .scene-identity h1 {
+    font-size: 22px;
+  }
+  .game-shell .home-label {
+    font-size: 9px;
+  }
+  .game-shell .hero-index {
+    left: 15px;
+    top: 17px;
+    font-size: 8px;
+  }
+  .game-shell .hero-copy {
+    left: 19px;
+    bottom: 42px;
+    right: 15px;
+  }
+  .game-shell .hero-title {
+    font-size: 47px;
+    margin-bottom: 6px;
+  }
+  .game-shell .scene-affiliation {
+    margin-bottom: 7px;
+    font-size: 11px;
+  }
+  .game-shell .scene-affiliation .affiliation {
+    font-size: 10px;
+  }
+  .game-shell .hero-location {
+    font-size: 9px;
+    margin: 0 0 6px;
+    letter-spacing: 1.3px;
+  }
+  .game-shell .hero-flavor {
+    font-size: 11px;
+  }
+  .game-shell .hud-composition .resource-strip {
+    margin: -26px 13px 0;
+    gap: 6px;
+  }
+  .game-shell .hud-stat {
+    min-height: 53px;
+    padding: 7px 5px;
+    gap: 5px;
+    border-radius: 6px 3px 6px 3px;
+  }
+  .game-shell .hud-stat > svg {
+    width: 22px;
+    height: 25px;
+  }
+  .game-shell .hud-stat small {
+    font-size: 9px;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+  .game-shell .hud-stat strong {
+    font-size: 24px;
+  }
+  .game-shell .compact-identity {
+    padding: 14px 14px 39px;
+    gap: 10px;
+  }
+  .game-shell .compact-identity .scene-identity {
+    max-width: 65%;
+  }
+  .game-shell .compact-identity .affiliation {
+    font-size: 21px;
+  }
+  .game-shell .main-content {
+    padding: 13px 13px 20px;
+  }
+  .game-shell.screen-city .screen-heading {
+    margin-bottom: 8px;
+  }
+  .game-shell.screen-city .screen-heading h2 {
+    font-size: 29px;
+  }
+  .game-shell .advance {
+    padding: 7px 10px;
+    font-size: 17px;
+    gap: 9px;
+  }
+  .game-shell .quick-moves {
+    gap: 9px;
+    margin-bottom: 13px;
+    align-items: start;
+  }
+  .game-shell .quick-moves .action-tile {
+    padding: 0;
+  }
+  .game-shell .tile-art {
+    height: 89px;
+  }
+  .game-shell .tile-symbol {
+    left: 9px;
+    bottom: 0;
+  }
+  .game-shell .tile-symbol svg {
+    width: 33px;
+    height: 33px;
+  }
+  .game-shell .tile-ap {
+    top: 7px;
+    right: 6px;
+    font-size: 12px;
+    padding: 2px 5px;
+  }
+  .game-shell .tile-copy {
+    padding: 0 8px 3px;
+  }
+  .game-shell .action-tile h3 {
+    font-size: 25px;
+    min-height: 49px;
+    margin-bottom: 5px;
+  }
+  .game-shell .action-tile .tile-copy p {
+    font-size: 11px;
+    min-height: 32px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .game-shell .action-tile .risk {
+    font-size: 7px;
+  }
+  .game-shell .action-tile button {
+    padding: 5px 8px;
+    font-size: 9px;
+  }
+  .game-shell .action-tile button svg {
+    width: 16px;
+  }
+  .game-shell .tile-details summary {
+    font-size: 11px;
+    padding: 13px 8px;
+  }
+  .game-shell .tile-details small {
+    font-size: 10px;
+  }
+  .game-shell .dispatch {
+    padding: 10px;
+    grid-template-columns: 26px minmax(0, 1fr) 44px;
+    gap: 8px;
+  }
+  .game-shell .dispatch h3 {
+    font-size: 24px;
+  }
+  .game-shell .dispatch p:not(.eyebrow) {
+    font-size: 10px;
+  }
+  .game-shell .dispatch-icon svg {
+    width: 25px;
+  }
+  .game-shell .city-news {
+    margin-top: 19px;
+  }
+  .game-shell .city-layout {
+    margin-top: 18px;
+  }
+  .game-shell .illustrated-action {
+    padding: 0 18px 18px;
+  }
+  .game-shell .action-illustration {
+    margin: 0 -18px 14px;
+    height: 116px;
+  }
+  .game-shell .illustrated-action h3 {
+    font-size: 32px;
+  }
+  .game-shell .screen-heading h2 {
+    font-size: 30px;
+  }
+  .game-shell .bottom-nav button {
+    height: 66px;
+  }
+  .game-shell .bottom-nav svg {
+    width: 24px;
+    height: 24px;
+  }
+  .game-shell .bottom-nav small {
+    font-size: 14px;
+  }
+}
+@media (max-width: 350px) {
+  .landing .brand {
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+  .landing .intro {
+    height: 116px;
+  }
+  .landing .intro h1 {
+    font-size: 57px;
+  }
+  .landing .intro .lede {
+    top: 73px;
+    font-size: 9px;
+  }
+  .landing .creation {
+    padding: 14px 10px;
+  }
+  .landing legend {
+    display: block;
+  }
+  .landing legend span {
+    margin-left: 8px;
+  }
+  .landing .zone-choice-copy strong {
+    font-size: 25px;
+  }
+  .landing .zone-choice-copy small {
+    font-size: 8px;
+  }
+  .game-shell .game-header {
+    grid-template-columns: 43px minmax(0, 1fr) 39px 88px;
+    padding: 4px 6px;
+    gap: 2px;
+  }
+  .game-shell .hud-wordmark {
+    font-size: 20px;
+  }
+  .game-shell .hud-wordmark span {
+    font-size: 6px;
+    letter-spacing: 1.5px;
+  }
+  .game-shell .game-header .day {
+    font-size: 16px;
+  }
+  .game-shell .hero-title {
+    font-size: 41px;
+  }
+  .game-shell .hud-stat {
+    gap: 4px;
+    padding: 6px 4px;
+  }
+  .game-shell .hud-stat > svg {
+    width: 17px;
+  }
+  .game-shell .hud-stat strong {
+    font-size: 23px;
+  }
+  .game-shell .hud-stat small {
+    font-size: 8px;
+    letter-spacing: 0.3px;
+  }
+  .game-shell .quick-moves {
+    gap: 6px;
+  }
+  .game-shell .action-tile h3 {
+    font-size: 22px;
+    min-height: 44px;
+  }
+  .game-shell .action-tile .tile-copy p {
+    font-size: 10px;
+  }
+  .game-shell .tile-copy {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+  .game-shell .action-tile button {
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 8px;
+  }
+  .game-shell .action-tile .disabled-reason {
+    font-size: 9px;
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+  .game-shell .tile-symbol svg {
+    width: 29px;
+    height: 29px;
+  }
+  .game-shell .bottom-nav small {
+    font-size: 13px;
+  }
+  .game-shell .bottom-nav svg {
+    width: 23px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-shell *,
+  .landing * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* A shared 44px footer keeps the expanded outcome disclosure accessible without a fourth tile row. */
+.game-shell .tile-controls {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid #72756a55;
+}
+.game-shell .tile-controls > button {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  gap: 2px;
+}
+.game-shell .tile-controls .tile-details {
+  width: 44px;
+  margin: 0;
+  border: 0;
+}
+.game-shell .tile-controls .tile-details summary {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  font-size: 0;
+  display: grid;
+  place-content: center;
+}
+.game-shell .tile-controls .tile-details summary::-webkit-details-marker {
+  display: none;
+}
+.game-shell .tile-controls .tile-details summary::after {
+  content: "i";
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-content: center;
+  border: 1px solid #b9bbaf;
+  border-radius: 50%;
+  font:
+    600 13px "DM Sans",
+    sans-serif;
+  color: #d1d2c7;
+}
+.game-shell .tile-controls .tile-details[open] {
+  width: 100%;
+  border-top: 1px solid #72756a55;
+}
+.game-shell .tile-controls .tile-details[open] summary {
+  width: 100%;
+  font-size: 12px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.game-shell .action-tile .tile-copy .disabled-reason {
+  min-height: 32px;
+  padding: 0;
+  font-size: 10px;
+  margin: 0 0 4px;
+  line-height: 1.4;
+}
+.game-shell .action-tile.unavailable .tile-controls button span {
+  font-size: 0;
+}
+.game-shell .tile-art {
+  overflow: hidden;
+}
+.game-shell .tile-gig .tile-art .scene {
+  height: 175%;
+  width: 175%;
+  top: -65%;
+  left: -25%;
+}
+.game-shell .tile-contact .tile-art .scene {
+  height: 150%;
+  width: 150%;
+  top: -10%;
+  left: -30%;
+}
+
+.game-shell .purchase-ticket {
+  border-radius: 2px 8px 2px 7px;
+  border-style: solid;
+  border-left: 4px solid var(--accent);
+  padding: 18px 18px 16px;
+  position: relative;
+}
+.game-shell .purchase-ticket::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border-left: 1px solid #8b8d7d;
+  border-bottom: 1px solid #8b8d7d;
+  background: linear-gradient(45deg, #292c26, #111315);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+.game-shell .purchase-ticket .ap-cost {
+  padding: 3px 8px;
+  background: var(--paper), #30332b;
+  border: 1px solid #8b8d7d;
+  transform: skew(-4deg);
+}
+.game-shell .purchase-ticket .action-top {
+  margin-bottom: 15px;
+}
+.game-shell .purchase-ticket h3 {
+  font-style: italic;
+  font-size: 29px;
+}
+.game-shell .purchase-ticket button {
+  border-color: #6e7363;
+  background: var(--paper), #20231e;
+  border-radius: 2px;
+}
+/* Keep the composed HUD below the iPhone cutout with viewport-fit=cover. */
+.game-shell .game-header {
+  padding-top: calc(4px + env(safe-area-inset-top));
+}
+
+/* Final City structure: compact story alert, map, city information, activity. */
+.game-shell .story-alert {
+  width: 100%;
+  margin: 0 0 14px;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  min-height: 44px;
+  cursor: pointer;
+}
+.game-shell .story-alert strong {
+  display: block;
+  font:
+    italic 700 22px "Barlow Condensed",
+    sans-serif;
+  color: #f2f1ed;
+}
+.game-shell .story-status {
+  display: block;
+  font:
+    400 11px/1.5 "DM Sans",
+    sans-serif;
+  color: #d5d5ca;
+}
+.game-shell .story-alert > svg {
+  width: 22px;
+  justify-self: center;
+}
+.game-shell .map-panel .panel-title h3 {
+  margin: 0;
+}
+.game-shell .map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  font-size: 11px;
+  color: #d5d5ca;
+}
+.game-shell .map-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.game-shell .map-legend i {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+.game-shell #city-activity {
+  margin-top: 24px;
+  scroll-margin-top: 16px;
+}
+.game-shell #city-activity .city-news {
+  margin-top: 12px;
+}
+.game-shell .situation-history summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.game-shell .situation-history summary::before {
+  content: "+";
+  margin-right: 10px;
+}
+.game-shell .situation-history[open] summary::before {
+  content: "−";
+}
