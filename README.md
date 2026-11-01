@@ -46,7 +46,9 @@ React renders state; rules live in `core/` and `systems/`. The late-game wealth,
 
 ## Deployment
 
-GOAL 002 redesign details, verified artwork and screenshot review: [UI overhaul delivery](docs/GOAL_002_DELIVERY.md).
+Current visual correction: [GOAL 002B screenshots and assessment](docs/GOAL_002B_VISUAL_CORRECTION.md).
+
+GOAL 002 redesign details, verified artwork and historical screenshot review: [UI overhaul delivery](docs/GOAL_002_DELIVERY.md).
 
 The repository includes CI and a manual GitHub Pages workflow that builds with `VITE_BASE_PATH=/Hood-Hero/`. The original M1 setup was blocked by an integration 403; on November 1, 2026, the Pages site is configured and serves the prior playable build. The `github-pages` environment allows deployments from **main only**. A feature-branch preview cannot pass that environment rule. The GOAL 002 handoff reports the actual workflow result; an existing live M1 site is not evidence that the overhaul deployed.
 

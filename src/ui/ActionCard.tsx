@@ -6,6 +6,8 @@ import {
 } from "../core/ActionEngine";
 import type { GameState } from "../core/GameState";
 import { ITEMS } from "../content/economy";
+import { Scene } from "./Scene";
+import { BALANCE } from "../content/balance";
 import { Icon } from "./Icon";
 export const money = (n: number) =>
   new Intl.NumberFormat("en-US", {
@@ -22,10 +24,12 @@ export function ActionCard({
   s,
   action: a,
   onAction,
+  compact = false,
 }: {
   s: GameState;
   action: Action;
   onAction: (a: Action) => void;
+  compact?: boolean;
 }) {
   const chance = actionSuccessChance(s, a);
   const def = ACTIONS[a.type],
@@ -47,8 +51,87 @@ export function ActionCard({
         ? `Buy back · ${money(cost)}`
         : (labels[a.type as keyof typeof labels] ?? def.label);
   const identity = `${a.type}-${a.target ?? a.item ?? "default"}`;
+  const zone =
+    a.type === "work"
+      ? "downtown"
+      : a.target
+        ? s.characters[a.target].home
+        : s.characters[a.actor].home;
+  const brief =
+    a.type === "work"
+      ? `$${BALANCE.workIncome} clean. Full shift.`
+      : a.type === "gig"
+        ? `$${BALANCE.gigIncome} clean. Local work.`
+        : a.target
+          ? `Check in with ${s.characters[a.target].alias ?? s.characters[a.target].name}.`
+          : def.description;
+  if (compact)
+    return (
+      <article
+        className={`action-card action-tile tile-${a.type} ${reason ? "unavailable" : ""}`}
+      >
+        <div className="tile-art">
+          <Scene zone={zone} eager />
+          <span className="tile-symbol">
+            <Icon
+              name={
+                a.type === "work"
+                  ? "cash"
+                  : a.type === "gig"
+                    ? "Finances"
+                    : "People"
+              }
+            />
+          </span>
+          <span className="tile-ap">{def.ap} AP</span>
+        </div>
+        <div className="tile-copy">
+          <h3>{title}</h3>
+          {reason ? (
+            <p className="disabled-reason" id={`${identity}-reason`}>
+              {reason}
+            </p>
+          ) : (
+            <p>{brief}</p>
+          )}
+          <small className="risk">
+            {def.risk === "None" ? "NO RISK" : `${def.risk.toUpperCase()} RISK`}
+          </small>
+        </div>
+        <div className="tile-controls">
+          <button
+            disabled={!!reason}
+            aria-describedby={reason ? `${identity}-reason` : undefined}
+            onClick={() => onAction(a)}
+          >
+            <span>{reason ? "Unavailable" : "Go"}</span>
+            <Icon name="arrow" />
+          </button>
+          <details className="tile-details">
+            <summary>Outcomes</summary>
+            <small>
+              {def.description} {def.outcomes.join(" / ")}
+            </small>
+          </details>
+        </div>
+      </article>
+    );
   return (
-    <article className={`action-card ${def.risk === "High" ? "danger" : ""}`}>
+    <article
+      className={`action-card ${a.type === "buy" ? "purchase-ticket" : "illustrated-action"} ${def.risk === "High" ? "danger" : ""}`}
+    >
+      {a.type !== "buy" && (
+        <div className="action-illustration">
+          <Scene zone={zone} />
+          <span className="action-plate">
+            <Icon
+              name={
+                a.type === "work" ? "cash" : a.target ? "People" : "Actions"
+              }
+            />
+          </span>
+        </div>
+      )}
       <div className="action-top">
         <span className="ap-cost">
           {def.ap} AP{cost ? ` · ${money(cost)}` : ""}

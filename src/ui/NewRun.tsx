@@ -27,6 +27,9 @@ export function NewRun({
 }) {
   return (
     <div className="landing" style={themeStyle(null)} data-theme="independent">
+      <div className="new-run-backdrop" aria-hidden="true">
+        <Scene key={home} zone={home} eager />
+      </div>
       <header className="brand">
         <span>
           BLACKHOUSE <small>PRESENTS</small>
@@ -35,7 +38,6 @@ export function NewRun({
       </header>
       <main className="newgame" id="main-content">
         <section className="intro">
-          <Scene key={home} zone={home} eager />
           <div className="intro-copy">
             <p className="eyebrow">FIVE NEIGHBORHOODS. YOUR STORY.</p>
             <h1>
@@ -43,9 +45,7 @@ export function NewRun({
               HERO<span>STIXX CITY</span>
             </h1>
             <p className="lede">
-              A little bread. A few real ones.
-              <br />
-              What you do next is on you.
+              A little bread. A few real ones. What you do next is on you.
             </p>
             <p className="caption">A PERSISTENT STREET-LIFE SIMULATION</p>
           </div>
@@ -58,26 +58,13 @@ export function NewRun({
           }}
         >
           <div className="chapter">
-            <span>01</span>
-            <p className="eyebrow">NEW RUN / YOUR ROOTS</p>
+            <p className="eyebrow">NEW RUN / STIXX CITY</p>
           </div>
           <h2>Pick your block.</h2>
-          <p className="creation-lede">
-            Where you start is home. Who you become is earned.
-          </p>
-          <label htmlFor="player-name">What do people call you?</label>
-          <input
-            id="player-name"
-            maxLength={28}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your name (or start as Resident)"
-            autoComplete="off"
-          />
+          <p className="creation-lede">Where you start shapes your story.</p>
           <fieldset>
             <legend>
-              Choose your home{" "}
-              <span>Start independent in every neighborhood</span>
+              Choose your home <span>Every home starts independent.</span>
             </legend>
             <div className="zone-choices">
               {Object.values(ZONES).map((z, i) => (
@@ -101,6 +88,17 @@ export function NewRun({
               ))}
             </div>
           </fieldset>
+          <div className="name-entry">
+            <label htmlFor="player-name">What do people call you?</label>
+            <input
+              id="player-name"
+              maxLength={28}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name (or Resident)"
+              autoComplete="off"
+            />
+          </div>
           <div className="starting-kit">
             <span>
               <strong>${BALANCE.startingCash}</strong> clean cash

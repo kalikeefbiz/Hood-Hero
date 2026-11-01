@@ -26,13 +26,13 @@ import {
 } from "../persistence/SaveSystem";
 import { CityMap } from "./CityMap";
 import { NewRun } from "./NewRun";
+import { GameHUD } from "./GameHUD";
 import { ActionCard, money } from "./ActionCard";
 import { Scene } from "./Scene";
 import { Icon, type IconName } from "./Icon";
 import { themeStyle } from "./theme";
 import { THEMES } from "./theme";
 import { BALANCE } from "../content/balance";
-import { NEIGHBORHOODS } from "./neighborhoods";
 type Screen = "City" | "People" | "Actions" | "Set" | "Finances" | "Activity";
 const nav: Record<Screen, IconName> = {
   City: "City",
@@ -243,7 +243,7 @@ export function App() {
   });
   return (
     <div
-      className="game-shell"
+      className={`game-shell screen-${screen.toLowerCase()}`}
       style={themeStyle(p.affiliation)}
       data-theme={p.affiliation ?? "independent"}
     >
@@ -268,62 +268,20 @@ export function App() {
         </span>
       </aside>
       <div className="game-body">
-        <header className="game-header">
-          <div className="header-identity">
-            <span className="eyebrow">HOOD HERO / STIXX CITY</span>
-            <h1>{p.name}</h1>
-            <span className="home-label">
-              {s.zones[p.home].name} · {p.status}
-            </span>
-          </div>
-          <div className="header-tools">
-            <button onClick={save} aria-label="Save game">
-              Save
-            </button>
-            <button onClick={load} aria-label="Load game">
-              Load
-            </button>
-          </div>
-        </header>
-        <div className="resource-strip">
-          <span className="day-resource">
-            <small>DAY</small>
-            <strong className="day">
-              DAY {s.day.toString().padStart(2, "0")}
-            </strong>
-          </span>
-          <span className="cash-resource">
-            <small>
-              <Icon name="cash" /> CASH
-            </small>
-            <strong>{money(cash(p))}</strong>
-          </span>
-          <span className="ap">
-            <small>
-              <Icon name="ap" /> AP
-            </small>
-            <strong>
-              <i className={s.ap > 0 ? "lit" : ""} />
-              <i className={s.ap > 1 ? "lit" : ""} />
-              <b>
-                {s.ap}/{BALANCE.dailyAP}
-              </b>
-            </strong>
-          </span>
-          <span className="affiliation-resource">
-            <small>AFFILIATION</small>
-            <strong className="affiliation">
-              {p.affiliation ? s.factions[p.affiliation].name : "Independent"}
-            </strong>
-          </span>
-        </div>
+        <GameHUD
+          s={s}
+          selected={selected}
+          cinematic={screen === "City"}
+          save={save}
+          load={load}
+        />
         <main className="main-content" id="main-content">
           <div className="screen-heading">
             <div>
               <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
               <h2>
                 {screen === "City"
-                  ? "Your city. Your move."
+                  ? "Today’s moves"
                   : screen === "People"
                     ? "People remember."
                     : screen === "Actions"
@@ -364,65 +322,51 @@ export function App() {
               </p>
             </Panel>
           )}
-          {toast}
+          {screen !== "City" && toast}
           {screen === "City" && (
             <>
-              <section
-                className="zone-hero"
-                aria-label={`View of ${s.zones[selected].name}`}
-              >
-                <Scene key={selected} zone={selected} eager />
-                <div className="hero-copy">
-                  <p className="eyebrow">
-                    {selected === p.home ? "YOUR HOME" : "NEIGHBORHOOD VIEW"} /{" "}
-                    {s.zones[selected].subtitle}
-                  </p>
-                  <h3>{s.zones[selected].name}</h3>
-                  <p>{NEIGHBORHOODS[selected].flavor}</p>
-                </div>
-                <span className="hero-index">
-                  STIXX CITY / 0{Object.keys(ZONES).indexOf(selected) + 1}
-                </span>
-              </section>
               <div className="hub-layout">
                 <section className="today-moves">
-                  <div className="panel-title">
-                    <h3>Today’s moves</h3>
-                    <span className="eyebrow">{s.ap} AP LEFT</span>
-                  </div>
                   <div className="quick-moves">
                     {all
-                      .filter((a) => ["work", "gig"].includes(a.type))
-                      .map(actionCard)}
+                      .filter(
+                        (a) =>
+                          ["work", "gig"].includes(a.type) ||
+                          (a.type === "contact" && a.target === "mega"),
+                      )
+                      .map((a) => (
+                        <ActionCard
+                          key={a.type}
+                          s={s}
+                          action={a}
+                          onAction={act}
+                          compact
+                        />
+                      ))}
                   </div>
-                  <button
-                    className="text-button"
-                    onClick={() => {
-                      setGroup("Everyday");
-                      setScreen("Actions");
-                    }}
-                  >
-                    All available actions <Icon name="arrow" />
-                  </button>
                 </section>
-                <Panel className="dispatch">
-                  <div className="panel-title">
-                    <span className="eyebrow">INCOMING / CUZZO</span>
-                    <span className="status-chip">{incident.status}</span>
-                  </div>
-                  <h3>The Chains</h3>
-                  <p>
-                    {incident.status === "active"
-                      ? "“Three young Angels got my chains. They want bread to give ’em back. Hit me.”"
-                      : "The dispute is over. The city keeps moving, and so do you."}
-                  </p>
-                  {incident.status === "active" && (
-                    <p className="demand">
-                      Current demand <strong>{money(incident.demand)}</strong>
+                <section className="dispatch" aria-label="Current situation">
+                  <span className="dispatch-icon">
+                    <Icon name="message" />
+                  </span>
+                  <div>
+                    <p className="eyebrow">
+                      CUZZO /{" "}
+                      <span className="status-chip">{incident.status}</span>
                     </p>
-                  )}
+                    <h3>The Chains</h3>
+                    <p>
+                      {incident.status === "active"
+                        ? `“They want bread for my chains. Hit me.” Demand ${money(incident.demand)}.`
+                        : "The dispute is over. Life in the city continues."}
+                    </p>
+                  </div>
                   <button
-                    className="secondary"
+                    aria-label={
+                      incident.status === "active"
+                        ? "See the situation"
+                        : "Find your next move"
+                    }
                     onClick={() => {
                       setGroup(
                         incident.status === "active"
@@ -432,13 +376,11 @@ export function App() {
                       setScreen("Actions");
                     }}
                   >
-                    {incident.status === "active"
-                      ? "See the situation"
-                      : "Find your next move"}
                     <Icon name="arrow" />
                   </button>
-                </Panel>
+                </section>
               </div>
+              {toast}
               <Panel className="city-news">
                 <div className="panel-title">
                   <h3>Word on the block</h3>

@@ -1,4 +1,8 @@
 const paths = {
+  save: "M4 3h13l3 3v15H4zM8 3v6h8V3M8 21v-8h8v8",
+  load: "M5 5h14v16H5zM8 12l4-4 4 4m-4-4v9M9 2h6",
+  pulse: "M2 12h5l3-8 4 16 3-8h5",
+  message: "M3 4h18v13H9l-6 4zM7 8h10m-10 5h7",
   City: "m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9",
   People:
     "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m8-7.87a4 4 0 0 1 0 7.75",

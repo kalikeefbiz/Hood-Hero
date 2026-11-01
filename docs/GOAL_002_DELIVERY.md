@@ -1,5 +1,7 @@
 # GOAL 002 delivery — Hood Hero M1
 
+> Visual acceptance for GOAL 002 was rejected by the user. Engineering validation below is historical. See [GOAL 002B visual correction and current screenshots](GOAL_002B_VISUAL_CORRECTION.md) for the focused correction and candid visual status.
+
 Implemented on `goal-002-hood-hero-ui-overhaul`, based on main `caaa0cbe375f67da00f1111cf8d0bf9910c2be0e`.
 
 The approved package and exact reference board were read and visually inspected before editing. The full production specification is preserved in [design/GOAL_002_IMPLEMENTATION_SPEC.md](design/GOAL_002_IMPLEMENTATION_SPEC.md). The master board is not shipped as runtime UI. No new art, character likenesses, emblems, factions or gameplay features were introduced.
