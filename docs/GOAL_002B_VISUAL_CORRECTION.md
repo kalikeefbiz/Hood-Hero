@@ -19,7 +19,7 @@ The attached board was visually inspected, along with the exact master board ret
 
 ## Exactly what changed
 
-- `GameHUD.tsx` composes the day/AP header, genuine player identity, selected neighborhood scene, saved affiliation and overlapping cash/influence/stress/heat plates. "Heat" displays the real player's police-attention value; no aggregate reputation/trust stat was invented.
+- `GameHUD.tsx` composes the day/AP header (with the iPhone top safe-area inset), genuine player identity, selected neighborhood scene, saved affiliation and overlapping cash/influence/stress/heat plates. "Heat" displays the real player's police-attention value; no aggregate reputation/trust stat was invented.
 - `App.tsx` uses the shared HUD, removes redundant City headings above the scene, places three existing validated actions in the home hub, and presents The Chains as an actionable compact situation strip with the current demand/status. Feedback remains an actual live status region, placed below the City's primary moves/situation rather than pushing them below the fold.
 - `ActionCard.tsx` adds a compact illustrated variant using approved scene crops, a line symbol and real AP badge. The same `validateAction` and `performAction` paths apply. Disabled reasons remain visible and linked; native outcome disclosures open and close. Full Actions cards use illustration plates. Wallet purchases use folded purchase tickets with price/AP labels, rather than repeating unrelated street art for groceries or clothing.
 - `NewRun.tsx` combines the chosen environment with a layered selection folio. All five homes remain native radio choices; the player name and start/resume remain real controls. There is no player portrait.

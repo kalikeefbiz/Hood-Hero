@@ -1659,3 +1659,7 @@ h3 {
   background: var(--paper), #20231e;
   border-radius: 2px;
 }
+/* Keep the composed HUD below the iPhone cutout with viewport-fit=cover. */
+.game-shell .game-header {
+  padding-top: calc(4px + env(safe-area-inset-top));
+}
