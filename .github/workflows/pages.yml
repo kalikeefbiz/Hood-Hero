@@ -3,6 +3,9 @@ name: Publish playable preview
 # cannot create the site directly; configure-pages also attempts enablement.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - goal-003-living-encounters
 permissions:
   contents: read
   pages: write
