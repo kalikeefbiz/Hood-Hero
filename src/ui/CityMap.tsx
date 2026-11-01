@@ -170,7 +170,11 @@ export function CityMap({
               {z.controller
                 ? s.factions[z.controller].name.toUpperCase()
                 : z.organizations.length
-                  ? "SHARED / " + z.organizations.length + " GROUPS"
+                  ? z.organizations
+                      .map((f) =>
+                        f === "muds" ? "Mudgang" : s.factions[f].name,
+                      )
+                      .join("/")
                   : "UNCLAIMED"}
             </text>
             {s.characters.player.home === id && (
