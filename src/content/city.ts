@@ -41,7 +41,7 @@ export const ZONES: Record<ZoneId, Zone> = {
     name: "The Resevoir",
     subtitle: "Westside",
     description:
-      "Fashion, luxury goods and money. Block Boys have deep local support and a violent rivalry with the Angels.",
+      "Boarded houses, vacant lots and deep neighborhood roots. Block Boys have strong local support and a violent rivalry with the Angels.",
     police: 50,
     commerce: 75,
     support: 80,

@@ -12,7 +12,7 @@ async function start(
   await page.goto("/");
   await page.getByLabel("What do people call you?").fill("Morgan");
   await page.getByRole("radio", { name: home, exact: false }).check();
-  await page.getByRole("button", { name: "Enter The Stixx" }).click();
+  await page.getByRole("button", { name: "Enter Stixx City" }).click();
   await expect(page.getByRole("heading", { name: "Morgan" })).toBeVisible();
 }
 async function action(page: import("@playwright/test").Page, title: string) {
@@ -41,13 +41,13 @@ test("phone gameplay: contact, lawful income, days, save and load", async ({
   await action(page, "Reach out");
   await expect(page.getByRole("status")).toContainText("Trust grew");
   await page.getByRole("button", { name: "Everyday", exact: true }).click();
-  await action(page, "Take a local gig");
+  await action(page, "Pick up a gig");
   await expect(page.locator(".ap b")).toHaveText("0/2");
   await page.getByRole("button", { name: "End day" }).click();
   await expect(page.locator(".day")).toHaveText("DAY 02");
   await page.getByLabel("Save game", { exact: true }).click();
   await expect(page.getByRole("status")).toContainText("Saved day 2");
-  await action(page, "Work a full shift");
+  await action(page, "Clock in");
   await page.getByRole("button", { name: "End day" }).click();
   await expect(page.locator(".day")).toHaveText("DAY 03");
   await page.getByLabel("Load game", { exact: true }).click();
@@ -78,7 +78,7 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
 }) => {
   await start(page);
   await nav(page, "Actions");
-  await action(page, "Work a full shift");
+  await action(page, "Clock in");
   await page.getByRole("button", { name: "End day" }).click();
   await page.getByRole("button", { name: "The Chains", exact: true }).click();
   await action(page, "Reach out");
@@ -86,7 +86,7 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
   await expect(page.locator(".situation .status-chip")).toHaveText("resolved");
   await page.getByRole("button", { name: "End day" }).click();
   await page.getByRole("button", { name: "Everyday", exact: true }).click();
-  await action(page, "Work a full shift");
+  await action(page, "Clock in");
   await expect(page.getByRole("status")).toContainText("$96");
   await nav(page, "Set");
   await page.getByRole("button", { name: "End day" }).click();
@@ -108,7 +108,7 @@ test("mobile city and new game remain readable at narrow widths", async ({
   await page
     .getByLabel("What do people call you?")
     .fill("A long player name for testing");
-  await page.getByRole("button", { name: "Enter The Stixx" }).click();
+  await page.getByRole("button", { name: "Enter Stixx City" }).click();
   await noOverflow(page);
   await page.getByRole("button", { name: "Select The Nawf" }).click();
   await expect(page.locator(".zone-details")).toContainText("The Blips");

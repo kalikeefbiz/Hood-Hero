@@ -1,4 +1,5 @@
 import type { GameState, ZoneId } from "../core/GameState";
+import { THEMES } from "./theme";
 const locations: Record<
   ZoneId,
   { x: number; y: number; w: number; h: number }
@@ -58,7 +59,7 @@ export function CityMap({
       {Object.entries(s.zones).map(([key, z]) => {
         const id = key as ZoneId,
           l = locations[id],
-          color = z.controller ? s.factions[z.controller].color : "#a8b6aa";
+          color = z.controller ? THEMES[z.controller].accent : "#A8ADB3";
         return (
           <g
             key={id}
@@ -80,8 +81,8 @@ export function CityMap({
               width={l.w}
               height={l.h}
               rx="5"
-              fill={selected === id ? "#34493b" : "#1d2a25"}
-              stroke={selected === id ? "#d6e3a1" : color}
+              fill={selected === id ? "#30343b" : "#191C20"}
+              stroke={selected === id ? "var(--accent-secondary)" : color}
               strokeWidth={selected === id ? 2 : 0.7}
             />
             <text
@@ -89,7 +90,7 @@ export function CityMap({
               y={l.y + l.h / 2 - 3}
               textAnchor="middle"
               fill="#e8eadf"
-              fontSize={id === "downtown" ? 12 : 14}
+              fontSize={id === "downtown" ? 16 : 19}
               fontWeight="600"
             >
               {z.name}
@@ -99,17 +100,22 @@ export function CityMap({
               y={l.y + l.h / 2 + 16}
               textAnchor="middle"
               fill={color}
-              fontSize="8.5"
-              letterSpacing="1"
+              fontSize="11"
+              letterSpacing=".2"
             >
-              {id === "downtown"
-                ? "UNCLAIMED"
-                : id === "nawf"
-                  ? "TWO ORGANIZATIONS"
-                  : z.subtitle.toUpperCase()}
+              {z.controller
+                ? s.factions[z.controller].name.toUpperCase()
+                : z.organizations.length
+                  ? "SHARED / " + z.organizations.length + " GROUPS"
+                  : "UNCLAIMED"}
             </text>
             {s.characters.player.home === id && (
-              <circle cx={l.x + 12} cy={l.y + 12} r="3" fill="#d6e3a1" />
+              <circle
+                cx={l.x + 12}
+                cy={l.y + 12}
+                r="3"
+                fill="var(--accent-secondary)"
+              />
             )}
           </g>
         );

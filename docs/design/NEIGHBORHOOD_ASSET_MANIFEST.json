@@ -1,0 +1,67 @@
+{
+  "downtown": {
+    "filename": "downtown.webp",
+    "canonicalZone": "downtown",
+    "description": "Commercial/political core; towers, docks, high police presence, contested money and influence",
+    "sourceOriginal": "rainy_downtown_stixx_city_at_dusk.png",
+    "sizePx": [
+      1448,
+      1086
+    ],
+    "bytes": 524408,
+    "sha256": "34885ff325dac432736a7455a71425899456dee65ca253c0ca2c9af392bae1ad",
+    "destinationInRepo": "public/assets/neighborhoods/downtown.webp"
+  },
+  "rio": {
+    "filename": "rio.webp",
+    "canonicalZone": "rio",
+    "description": "Eastside Rio Gabriel; lowriders, warm neighborhood street life, Gabriel’s Angels",
+    "sourceOriginal": "golden_hour_eastside_lowrider_street.png",
+    "sizePx": [
+      1448,
+      1086
+    ],
+    "bytes": 436476,
+    "sha256": "fcdef5c334114eda8b27b9469e60f89ec40aed6b591ac2965010461145b6ded0",
+    "destinationInRepo": "public/assets/neighborhoods/rio.webp"
+  },
+  "south": {
+    "filename": "south.webp",
+    "canonicalZone": "south",
+    "description": "Southside; Chicago-inspired central project housing block, older buildings, real grime and old loyalties",
+    "sourceOriginal": "gritty_chicago_housing_project_at_dusk.png",
+    "sizePx": [
+      1448,
+      1086
+    ],
+    "bytes": 431828,
+    "sha256": "c48019cace6cac81bf76c65f64254d1d0312897eb73641fd882f1f17f4f7151e",
+    "destinationInRepo": "public/assets/neighborhoods/south.webp"
+  },
+  "resevoir": {
+    "filename": "resevoir.webp",
+    "canonicalZone": "resevoir",
+    "description": "The Resevoir; Detroit-inspired older boarded homes, vacant lots, low-rise residential fabric; Block Boys",
+    "sourceOriginal": "sunset_over_the_reservoir_neighborhood.png",
+    "sizePx": [
+      1448,
+      1086
+    ],
+    "bytes": 488912,
+    "sha256": "a8950a376284e54a1ba19aee33d86f78312332f0963fee419833da651d06dd2b",
+    "destinationInRepo": "public/assets/neighborhoods/resevoir.webp"
+  },
+  "nawf": {
+    "filename": "nawf.webp",
+    "canonicalZone": "nawf",
+    "description": "The Nawf; Bronx-inspired bodega and elevated train, Afro-Latino and Black culture, shared Blips/Mudgang rivalry, defaced memorial",
+    "sourceOriginal": "golden_hour_bronx_memorial_mural.png",
+    "sizePx": [
+      1448,
+      1086
+    ],
+    "bytes": 507972,
+    "sha256": "91088fdd1ab1f706cdfa99252d857d0d3fe5843efe7f74cc623f0a6f5e088fd6",
+    "destinationInRepo": "public/assets/neighborhoods/nawf.webp"
+  }
+}

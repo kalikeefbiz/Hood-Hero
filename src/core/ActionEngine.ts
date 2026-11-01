@@ -319,11 +319,38 @@ export function validateAction(s: GameState, a: Action): string | null {
   }
   return null;
 }
+// Shared with the interface so displayed odds use the resolver's exact current-state calculation.
+// This does not validate eligibility or draw randomness.
+export function actionSuccessChance(s: GameState, a: Action): number | null {
+  const c = s.characters[a.actor];
+  if (!c) return null;
+  if (a.type === "negotiate")
+    return clamp(0.35 + c.skills.social / 150 - c.stress / 500, 0.1, 0.85);
+  if (a.type === "recover") {
+    const i = a.incidentId ? s.incidents[a.incidentId] : undefined;
+    return i
+      ? clamp(
+          0.22 +
+            c.skills.recovery / 200 +
+            recoverySupport(s, c.id, i.organization) -
+            c.stress / 500 -
+            i.escalation / 400,
+          0.12,
+          0.8,
+        )
+      : null;
+  }
+  // Illicit trade checks success after its existing +9 stress cost.
+  if (a.type === "crime")
+    return 0.65 + c.skills.recovery / 500 - clamp(c.stress + 9) / 600;
+  return null;
+}
 // Mutates only an owned simulation snapshot. UI calls performAction for transactional validation.
 export function resolveAction(s: GameState, a: Action) {
   const c = s.characters[a.actor],
     t = a.target ? s.characters[a.target] : undefined,
     i = a.incidentId ? s.incidents[a.incidentId] : undefined;
+  const successChance = actionSuccessChance(s, a);
   if (c.id === s.playerId) s.ap -= ACTIONS[a.type].ap;
   else c.lastActionDay = s.day;
   let text = "";
@@ -380,10 +407,7 @@ export function resolveAction(s: GameState, a: Action) {
     }
     case "negotiate":
       i!.negotiated = true;
-      if (
-        random(s) <
-        clamp(0.35 + c.skills.social / 150 - c.stress / 500, 0.1, 0.85)
-      ) {
+      if (random(s) < successChance!) {
         i!.demand = Math.max(i!.minimumDemand, i!.demand - 30);
         text = `The group lowered its demand to $${i!.demand}.`;
       } else {
@@ -408,21 +432,11 @@ export function resolveAction(s: GameState, a: Action) {
       break;
     }
     case "recover": {
-      const support = recoverySupport(s, c.id, i!.organization);
-      const chance = clamp(
-        0.22 +
-          c.skills.recovery / 200 +
-          support -
-          c.stress / 500 -
-          i!.escalation / 400,
-        0.12,
-        0.8,
-      );
       c.police = clamp(c.police + 18);
       c.notoriety = clamp(c.notoriety + 12);
       c.stress = clamp(c.stress + 16);
       c.rivalThreat = clamp(c.rivalThreat + 16);
-      if (random(s) < chance) {
+      if (random(s) < successChance!) {
         resolveIncident(s, i!, "recovered", c.id);
         text = "The recovery succeeded. The exposure and resentment remain.";
       } else {
@@ -454,7 +468,7 @@ export function resolveAction(s: GameState, a: Action) {
       c.notoriety = clamp(c.notoriety + 7);
       c.rivalThreat = clamp(c.rivalThreat + 5);
       c.stress = clamp(c.stress + 9);
-      if (random(s) < 0.65 + c.skills.recovery / 500 - c.stress / 600) {
+      if (random(s) < successChance!) {
         earn(
           s,
           c,
