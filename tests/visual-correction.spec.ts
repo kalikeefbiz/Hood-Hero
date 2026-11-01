@@ -37,6 +37,8 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   await capture("01-new-run-full-390", true);
   await page.getByLabel("What do people call you?").fill("Morgan");
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  // GOAL 003 introduces an opening scene. Closing it restores the GOAL 002 city.
+  await page.getByRole("button", { name: "Close conversation" }).click();
   await capture("02-independent-city-390");
   await expect(page.locator(".game-shell")).toHaveAttribute(
     "data-theme",

@@ -13,6 +13,8 @@ import { ITEMS, type ItemId } from "../content/economy";
 import { change, remember } from "../systems/Relationships";
 import { earn, expense } from "../systems/Economy";
 import { resolveIncident } from "../systems/Incidents";
+import { syncEncounters } from "../systems/EncounterLifecycle";
+import { evaluatePromises } from "../systems/Commitments";
 import { recoverySupport } from "../systems/Crew";
 import { progress } from "../systems/Progression";
 import { evaluateEnd } from "../systems/EndConditions";
@@ -514,6 +516,17 @@ export function resolveAction(s: GameState, a: Action) {
         beneficiary: c.id,
         dueDay: s.day + 1,
         kind: "errand",
+        origin: `assignment-day-${s.day}`,
+        requester: c.id,
+        createdDay: s.day,
+        evidence: [],
+        warned: false,
+        // Errands retain their existing work rewards; no requester-to-actor relationship penalty.
+        consequences: {
+          fulfilled: { trust: 0, respect: 0, grievance: 0 },
+          broken: { trust: 0, respect: 0, grievance: 0 },
+          released: { trust: 0, respect: 0, grievance: 0 },
+        },
         status: "pending",
       });
       t!.availableDay = s.day + 2;
@@ -550,6 +563,33 @@ export function resolveAction(s: GameState, a: Action) {
     [c.id, ...(t ? [t.id] : [])],
     [c.id, ...(t ? [t.id] : [])],
   );
+  if (a.type === "assign") {
+    const obligation = s.commitments.find(
+      (o) =>
+        o.kind === "errand" &&
+        o.actor === t!.id &&
+        o.createdDay === s.day &&
+        o.status === "pending",
+    );
+    if (obligation) obligation.origin = e.id;
+  }
+  if (
+    i &&
+    ["negotiate", "settlement", "buyback", "recover", "favor"].includes(a.type)
+  ) {
+    i.interventions.push({
+      actor: c.id,
+      type:
+        a.type === "recover" && i.resolution !== "recovered"
+          ? "failed-recovery"
+          : a.type,
+      eventId: e.id,
+      day: s.day,
+    });
+  }
+  // During day advancement NPC actions happen before incident progression.
+  // Only evaluate deadlines after the whole incident step, never mid-turn.
+  evaluatePromises(s, false);
   if (t) {
     remember(
       s,
@@ -578,6 +618,7 @@ export function performAction(
   if (error) return { state, error };
   const next = structuredClone(state);
   resolveAction(next, a);
+  syncEncounters(next);
   return { state: next, error: null };
 }
 export function availableActions(s: GameState): Action[] {
@@ -604,8 +645,10 @@ export function availableActions(s: GameState): Action[] {
       "assign",
       "settlement",
       "favor",
-    ] as ActionType[])
+    ] as ActionType[]) {
+      if (!incident && (type === "settlement" || type === "favor")) continue;
       list.push({ type, actor: p.id, target, incidentId });
+    }
   if (incident)
     for (const type of ["negotiate", "buyback", "recover"] as ActionType[])
       list.push({ type, actor: p.id, incidentId });

@@ -16,7 +16,24 @@ import {
   type Action,
   type ActionType,
 } from "../core/ActionEngine";
-import { visibleEvents } from "../core/EventLog";
+import { EncounterScene } from "./EncounterScene";
+import { NarrativeNotifications } from "./NarrativeNotifications";
+import { CommitmentSummary } from "./CommitmentSummary";
+import { CharacterPortrait } from "./CharacterPortrait";
+import { ANGELS_TRIO, CHAIN_EVIDENCE, artURL } from "./characterArt";
+import {
+  currentEncounter,
+  dismissEncounter,
+  openEncounter,
+  respondEncounter,
+} from "../systems/Encounters";
+import "./encounters.css";
+import {
+  acknowledgeEvent,
+  importantEvents,
+  unseenEvents,
+  visibleEvents,
+} from "../core/EventLog";
 import { ZONES } from "../content/city";
 import {
   loadGame,
@@ -107,6 +124,7 @@ export function App() {
     [actionGroup, setGroup] = useState("Everyday"),
     [activityFilter, setActivityFilter] = useState("All");
   const [hasSave, setHasSave] = useState(false);
+  const [conversationScreen, setConversationScreen] = useState<Screen>("City");
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [screen, !!s]);
@@ -133,15 +151,19 @@ export function App() {
     setState(next);
     setSelected(home);
     setScreen("City");
+    setConversationScreen("City");
     setNotice("You’re home. Clock in, check on Cuzzo, or see who’s around.");
   }
-  function load() {
+  function load(resume = false) {
     try {
-      const next = loadGame(localStorage) || loadGame(localStorage, AUTO_KEY);
+      const next = resume
+        ? loadGame(localStorage, AUTO_KEY) || loadGame(localStorage)
+        : loadGame(localStorage) || loadGame(localStorage, AUTO_KEY);
       if (next) {
         setState(next);
         setSelected(player(next).home);
         setScreen("City");
+        setConversationScreen("City");
         setNotice(`Loaded day ${next.day}.`);
       } else setNotice("No saved game yet.");
     } catch (e) {
@@ -164,13 +186,49 @@ export function App() {
     if (result.error) setNotice(result.error);
     else {
       setState(result.state);
+      if (
+        currentEncounter(result.state)?.sourceEventId !==
+        currentEncounter(s)?.sourceEventId
+      )
+        setConversationScreen(screen);
       setNotice(
         visibleEvents(result.state).at(-1)?.text ?? "Action completed.",
       );
     }
   }
+  function respond(id: string, response: string) {
+    if (!s) return;
+    const result = respondEncounter(s, id, response);
+    if (result.error) setNotice(result.error);
+    else setState(result.state);
+  }
+  function showConversation(id: string, destination: Screen = screen) {
+    if (!s) return;
+    setState(openEncounter(s, id));
+    setConversationScreen(destination);
+  }
+  function viewReaction(eventId: string) {
+    if (!s) return;
+    const e = s.encounters.find((e) => e.sourceEventId === eventId);
+    if (e) {
+      showConversation(e.id);
+      window.scrollTo(0, 0);
+    }
+  }
   function openPerson(id: string) {
     setFocus(id);
+    if (s && id === "mega") {
+      const e = [...s.encounters]
+        .reverse()
+        .find(
+          (e) =>
+            e.participants.includes(id) &&
+            (e.definitionId === "mega-chains-request"
+              ? s.incidents["the-chains"]?.status === "active"
+              : true),
+        );
+      if (e) showConversation(e.id, "Actions");
+    }
     setGroup("People");
     setScreen("Actions");
   }
@@ -187,7 +245,7 @@ export function App() {
         setName={setName}
         setHome={setHome}
         start={start}
-        load={load}
+        load={() => load(true)}
         hasSave={hasSave}
         feedback={toast}
       />
@@ -198,6 +256,10 @@ export function App() {
   // The Chains is the current game’s only routed storyline. Closed stories
   // stay in history; they must not create a new call to action on City.
   const activeStory = incident?.status === "active" ? incident : null;
+  const encounter = currentEncounter(s);
+  const request = s.encounters.find(
+    (e) => e.definitionId === "mega-chains-request" && e.status !== "closed",
+  );
   const all = availableActions(s);
   const actionCard = (a: Action) => (
     <ActionCard
@@ -275,7 +337,7 @@ export function App() {
           selected={selected}
           cinematic={screen === "City"}
           save={save}
-          load={load}
+          load={() => load(false)}
         />
         <main className="main-content" id="main-content">
           <div className="screen-heading">
@@ -298,6 +360,8 @@ export function App() {
               onClick={() => {
                 const next = advanceDay(s);
                 setState(next);
+                if (currentEncounter(next)?.id !== currentEncounter(s)?.id)
+                  setConversationScreen(screen);
                 setNotice(
                   `Day ${next.day}: living costs processed, the city has moved, and AP is restored.`,
                 );
@@ -307,6 +371,32 @@ export function App() {
               End day <span>→</span>
             </button>
           </div>
+          <NarrativeNotifications
+            s={s}
+            acknowledge={(id) => setState(acknowledgeEvent(s, id))}
+            view={viewReaction}
+          />
+          {encounter && screen === conversationScreen && (
+            <EncounterScene
+              s={s}
+              encounter={encounter}
+              respond={respond}
+              dismiss={(id) => setState(dismissEncounter(s, id))}
+            />
+          )}
+          {(!encounter || screen !== conversationScreen) && request && (
+            <div className="narrative-links">
+              <button
+                className="secondary"
+                onClick={() => showConversation(request.id)}
+              >
+                Talk with Cuzzo · The Chains
+              </button>
+            </div>
+          )}
+          {(screen === "City" || screen === "Actions") && (
+            <CommitmentSummary s={s} />
+          )}
           {s.end && (
             <Panel className="ending">
               <h3>
@@ -543,7 +633,7 @@ export function App() {
                   <Scene key={person.home} zone={person.home} />
                   <span>{s.zones[person.home].name}</span>
                 </div>
-                <Portrait c={person} />
+                <CharacterPortrait s={s} id={person.id} />
                 <p className="eyebrow">{s.zones[person.home].name}</p>
                 <h3>
                   {person.name}
@@ -658,6 +748,50 @@ export function App() {
                     relationships, or end the day at any time.
                   </p>
                 </Panel>
+              )}
+              {actionGroup === "The Chains" && incident?.informed && (
+                <div className="story-evidence">
+                  <figure>
+                    <img
+                      src={artURL(CHAIN_EVIDENCE.path)}
+                      alt={CHAIN_EVIDENCE.alt}
+                      width={CHAIN_EVIDENCE.width}
+                      height={CHAIN_EVIDENCE.height}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.hidden = true;
+                      }}
+                    />
+                    <figcaption>
+                      Mega’s missing jewelry. Item reference; current custody
+                      follows the incident.
+                    </figcaption>
+                  </figure>
+                  <figure>
+                    <img
+                      src={artURL(ANGELS_TRIO.path)}
+                      alt={ANGELS_TRIO.alt}
+                      width={ANGELS_TRIO.width}
+                      height={ANGELS_TRIO.height}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.hidden = true;
+                      }}
+                    />
+                    <figcaption>
+                      Baby Canon · Joker · Dizzy. The three young Angels Mega
+                      identified.
+                    </figcaption>
+                  </figure>
+                </div>
+              )}
+              {actionGroup === "People" && focus === "mega" && request && (
+                <button
+                  className="secondary"
+                  onClick={() => showConversation(request.id)}
+                >
+                  Talk about the chains · No AP
+                </button>
               )}
               {actionGroup === "People" && (
                 <label className="person-selector">
@@ -821,8 +955,10 @@ export function App() {
                     );
                   })}
               </div>
-              <h3>Commitments</h3>
+              <CommitmentSummary s={s} />
+              <h3>Set errands</h3>
               {s.commitments
+                .filter((c) => c.kind === "errand")
                 .slice(-5)
                 .reverse()
                 .map((o) => (
@@ -911,8 +1047,14 @@ export function App() {
                   .filter(
                     (e) => e.category === "city" || e.category === "incident",
                   )
-                  .slice(-2)
+                  .slice()
                   .reverse()
+                  .sort(
+                    (a, b) =>
+                      Number(b.importance === "major") -
+                      Number(a.importance === "major"),
+                  )
+                  .slice(0, 2)
                   .map((e) => (
                     <div className="news-item" key={e.id}>
                       <small>
@@ -934,8 +1076,48 @@ export function App() {
                         ? `Demand ${money(i.demand)} · ${i.leadershipAware ? "Leadership is considering its response" : "No leadership intervention yet"}`
                         : `${i.resolution}. Life in The Stixx continues.`}
                     </p>
+                    <details>
+                      <summary>Incident record</summary>
+                      {visibleEvents(s)
+                        .filter(
+                          (e) =>
+                            e.incidentId === i.id ||
+                            e.id === i.resolvedEventId ||
+                            i.interventions.some((x) => x.eventId === e.id),
+                        )
+                        .map((e) => (
+                          <p key={e.id}>
+                            <small>DAY {e.day}</small> · {e.text}
+                          </p>
+                        ))}
+                    </details>
                   </div>
                 ))}
+              </details>
+              <details className="panel outcome-history">
+                <summary>
+                  Important outcomes · {unseenEvents(s).length} unseen
+                </summary>
+                {importantEvents(s)
+                  .slice()
+                  .reverse()
+                  .map((e) => (
+                    <article key={e.id}>
+                      <h3>{e.title ?? "Important development"}</h3>
+                      <p>
+                        DAY {e.day} · {e.text}
+                      </p>
+                      {s.encounters.some((x) => x.sourceEventId === e.id) && (
+                        <button
+                          className="text-button"
+                          onClick={() => viewReaction(e.id)}
+                        >
+                          Revisit Cuzzo’s reaction
+                        </button>
+                      )}
+                    </article>
+                  ))}
+                {!importantEvents(s).length && <p>No major outcomes yet.</p>}
               </details>
               <div
                 className="segmented"
@@ -960,10 +1142,21 @@ export function App() {
               <div className="timeline">
                 {visibleEvents(s)
                   .filter(
-                    (e) => activityFilter === "All" || e.category !== "city",
+                    (e) =>
+                      e.importance !== "routine" &&
+                      (activityFilter === "All" || e.category !== "city"),
                   )
                   .slice(-80)
                   .reverse()
+                  .sort(
+                    (a, b) =>
+                      Number(
+                        b.importance === "major" || b.importance === "critical",
+                      ) -
+                      Number(
+                        a.importance === "major" || a.importance === "critical",
+                      ),
+                  )
                   .map((e, index, events) => (
                     <article
                       key={e.id}
@@ -988,14 +1181,53 @@ export function App() {
                     </article>
                   ))}
               </div>
+              <details className="panel routine-reports">
+                <summary>
+                  Daily city reports ·{" "}
+                  {
+                    visibleEvents(s).filter((e) => e.importance === "routine")
+                      .length
+                  }{" "}
+                  routine updates
+                </summary>
+                {[
+                  ...new Set(
+                    visibleEvents(s)
+                      .filter((e) => e.importance === "routine")
+                      .map((e) => e.day),
+                  ),
+                ]
+                  .reverse()
+                  .map((day) => (
+                    <details key={day}>
+                      <summary>
+                        Day {day} ·{" "}
+                        {
+                          visibleEvents(s).filter(
+                            (e) => e.day === day && e.importance === "routine",
+                          ).length
+                        }{" "}
+                        reports
+                      </summary>
+                      {visibleEvents(s)
+                        .filter(
+                          (e) => e.day === day && e.importance === "routine",
+                        )
+                        .map((e) => (
+                          <p key={e.id}>{e.text}</p>
+                        ))}
+                    </details>
+                  ))}
+              </details>
             </section>
           )}
           <details className="game-menu">
             <summary>Game & save information</summary>
             <p>
               Automatic progress saves after each move. Save creates a manual
-              checkpoint; Load and Resume prefer that checkpoint, then autosave.
-              Saves stay in this browser on this device.
+              checkpoint. Load restores that checkpoint, then falls back to
+              autosave. Resume opens your latest automatic progress, including
+              acknowledged outcomes. Saves stay in this browser on this device.
             </p>
             <p>
               Version 0.1 · Seed state {s.rng} · No maximum campaign length.
@@ -1021,6 +1253,7 @@ export function App() {
               aria-current={screen === item ? "page" : undefined}
               onClick={() => {
                 setScreen(item);
+                setConversationScreen("City");
                 window.scrollTo(0, 0);
               }}
             >

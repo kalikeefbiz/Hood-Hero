@@ -1,4 +1,4 @@
-name: Validate M1
+name: Validate Hood Hero
 on:
   push:
     branches: [main]
@@ -22,7 +22,7 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE_PATH: /Hood-Hero/
-      - run: npm run test:e2e -- tests/illustrated.spec.ts tests/city-menu.spec.ts --timeout=90000
+      - run: npm run test:e2e -- tests/illustrated.spec.ts tests/city-menu.spec.ts tests/encounters.spec.ts --timeout=90000
         env:
           PLAYWRIGHT_BASE_PATH: /Hood-Hero/
           PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/pages

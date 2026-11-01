@@ -178,8 +178,10 @@ test("story notification uses the active demand and opens its existing Actions l
   ).toBeVisible();
   await expect(page.locator(".ap b")).toHaveText("2/2");
   for (const status of ["resolved", "abandoned", "missing"] as const) {
-    if (status === "missing") delete state.incidents["the-chains"];
-    else {
+    if (status === "missing") {
+      delete state.incidents["the-chains"];
+      state.encounters = [];
+    } else {
       state.incidents["the-chains"].status = status;
       state.incidents["the-chains"].resolution = "sold";
     }
