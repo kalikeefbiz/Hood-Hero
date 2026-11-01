@@ -68,11 +68,7 @@ test("approved art maps to real actions and resolves under the production base",
     if (r.status() >= 400) failures.push(`${r.status()} ${r.url()}`);
   });
   await seed(page, newGame("Morgan", "south"));
-  await expect(page.locator(".tile-work .action-scene")).toHaveAttribute(
-    "src",
-    `${base}assets/actions/clock-in-480.webp`,
-  );
-  await expect(page.locator(".tile-gig img, .tile-contact img")).toHaveCount(0);
+  await expect(page.locator(".action-card")).toHaveCount(0);
   await nav(page, "Actions");
   for (const id of ["work", "rest", "crime"] as const) {
     const card = await loaded(page, id);
@@ -112,8 +108,7 @@ test("action art loads near the viewport, and failed art preserves layout and ga
     if (r.url().includes("/assets/actions/")) requested.push(r.url());
   });
   await seed(page, newGame("Morgan", "south"));
-  await expect(page.locator(".tile-work .action-scene")).toBeVisible();
-  expect(requested.every((url) => url.includes("clock-in"))).toBe(true);
+  expect(requested).toEqual([]);
   const before = requested.length;
   await nav(page, "Actions");
   await expect(
@@ -129,13 +124,14 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   await loaded(page, "rest");
   expect(requested.some((url) => url.includes("quiet-afternoon"))).toBe(true);
 
-  await nav(page, "City");
-  const loadedSize = (await page.locator(".tile-work").boundingBox())!;
+  const loadedWork = await loaded(page, "work");
+  const loadedSize = (await loadedWork.boundingBox())!;
   await page.route("**/assets/actions/**", (route) => route.abort());
   // A new document discards the image cache as well as the UI's loaded state.
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
-  const work = page.locator(".tile-work");
+  await nav(page, "Actions");
+  const work = page.locator('[data-action="work"]');
   await expect(work.locator(".action-art-fallback")).toBeVisible();
   const size = await work.boundingBox();
   expect(size!.height).toBe(loadedSize.height);
@@ -207,20 +203,19 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     ),
   ).toBe(true);
   for (const control of await page
-    .locator(".quick-moves button, .quick-moves summary, .bottom-nav button")
+    .locator(".story-alert, .bottom-nav button")
     .all()) {
     const box = (await control.boundingBox())!;
     expect(box.width).toBeGreaterThanOrEqual(44);
     expect(box.height).toBeGreaterThanOrEqual(44);
   }
-  await page.evaluate(() => scrollTo(0, 190));
-  for (const control of await page.locator(".quick-moves button").all()) {
-    const box = (await control.boundingBox())!;
-    expect(box.y).toBeGreaterThanOrEqual(0);
-    expect(box.y + box.height).toBeLessThanOrEqual(
-      (await page.locator(".bottom-nav").boundingBox())!.y,
-    );
-  }
+  const neighborhood = page.getByRole("button", {
+    name: "Select The Nawf",
+    exact: true,
+  });
+  await neighborhood.scrollIntoViewIfNeeded();
+  await neighborhood.click();
+  await expect(neighborhood).toHaveAttribute("aria-pressed", "true");
   await capture("04b-city-controls-320", false, false);
   // Review a real membership result restored from a compatible save.
   const s = newGame("Morgan", "nawf");
@@ -276,7 +271,9 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
         .evaluate((el) => parseFloat(getComputedStyle(el).paddingBottom)),
     ).toBe(34);
     await capture("06-city-safe-area-390");
-    const control = page.locator(".tile-gig button");
+    await nav(page, "Actions");
+    await page.getByRole("button", { name: "Everyday", exact: true }).click();
+    const control = page.locator('[data-action="gig"] button');
     await control.scrollIntoViewIfNeeded();
     const box = (await control.boundingBox())!;
     expect(box.y + box.height).toBeLessThanOrEqual(

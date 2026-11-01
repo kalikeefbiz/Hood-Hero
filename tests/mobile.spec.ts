@@ -56,14 +56,7 @@ test("phone gameplay: contact, lawful income, days, save and load", async ({
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
   await expect(page.locator(".day")).toHaveText("DAY 02");
-  for (const name of [
-    "City",
-    "People",
-    "Actions",
-    "Set",
-    "Wallet",
-    "Activity",
-  ]) {
+  for (const name of ["City", "People", "Actions", "Set", "Wallet"]) {
     await nav(page, name);
     await noOverflow(page);
   }

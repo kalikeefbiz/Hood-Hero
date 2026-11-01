@@ -66,7 +66,7 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
   await page.setViewportSize({ width: 320, height: 700 });
   await capture("03-city-320");
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const screen of ["People", "Actions", "Set", "Wallet", "Activity"]) {
+  for (const screen of ["People", "Actions", "Set", "Wallet"]) {
     await page
       .getByRole("navigation")
       .getByRole("button", { name: screen, exact: true })

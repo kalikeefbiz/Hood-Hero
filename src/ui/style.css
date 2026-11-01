@@ -808,7 +808,7 @@ legend span {
 .city-map g {
   cursor: pointer;
 }
-.city-map g:hover rect {
+.city-map g:hover .zone-base {
   fill: #30343b;
 }
 .map-panel .caption {
@@ -1263,7 +1263,7 @@ legend span {
   right: max(0px, calc((100vw - 1440px) / 2));
   z-index: 10;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   padding: 0 16px env(safe-area-inset-bottom);
   background: #121417f5;
   border-top: 1px solid #555b65;

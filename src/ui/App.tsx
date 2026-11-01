@@ -33,14 +33,13 @@ import { Icon, type IconName } from "./Icon";
 import { themeStyle } from "./theme";
 import { THEMES } from "./theme";
 import { BALANCE } from "../content/balance";
-type Screen = "City" | "People" | "Actions" | "Set" | "Finances" | "Activity";
+type Screen = "City" | "People" | "Actions" | "Set" | "Finances";
 const nav: Record<Screen, IconName> = {
   City: "City",
   People: "People",
   Actions: "Actions",
   Set: "Set",
   Finances: "Finances",
-  Activity: "Activity",
 };
 const band = (n: number, words: string[]) =>
   words[n < 20 ? 0 : n < 45 ? 1 : n < 70 ? 2 : 3];
@@ -196,6 +195,9 @@ export function App() {
   const p = player(s),
     incident = s.incidents["the-chains"],
     person = s.characters[focus] ?? s.characters.mega;
+  // The Chains is the current game’s only routed storyline. Closed stories
+  // stay in history; they must not create a new call to action on City.
+  const activeStory = incident?.status === "active" ? incident : null;
   const all = availableActions(s);
   const actionCard = (a: Action) => (
     <ActionCard
@@ -281,16 +283,14 @@ export function App() {
               <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
               <h2>
                 {screen === "City"
-                  ? "Today’s moves"
+                  ? "Know your city."
                   : screen === "People"
                     ? "People remember."
                     : screen === "Actions"
                       ? "Make your next move."
                       : screen === "Set"
                         ? "Your people. Your Set."
-                        : screen === "Finances"
-                          ? "Keep yourself afloat."
-                          : "Word on the block."}
+                        : "Keep yourself afloat."}
               </h2>
             </div>
             <button
@@ -325,96 +325,53 @@ export function App() {
           {screen !== "City" && toast}
           {screen === "City" && (
             <>
-              <div className="hub-layout">
-                <section className="today-moves">
-                  <div className="quick-moves">
-                    {all
-                      .filter(
-                        (a) =>
-                          ["work", "gig"].includes(a.type) ||
-                          (a.type === "contact" && a.target === "mega"),
-                      )
-                      .map((a) => (
-                        <ActionCard
-                          key={a.type}
-                          s={s}
-                          action={a}
-                          onAction={act}
-                          compact
-                        />
-                      ))}
-                  </div>
-                </section>
-                <section className="dispatch" aria-label="Current situation">
-                  <span className="dispatch-icon">
+              {activeStory && (
+                <button
+                  className="dispatch story-alert"
+                  aria-label={`Open ${activeStory.title} in Actions`}
+                  onClick={() => {
+                    setGroup("The Chains");
+                    setScreen("Actions");
+                  }}
+                >
+                  <span className="dispatch-icon" aria-hidden="true">
                     <Icon name="message" />
                   </span>
-                  <div>
-                    <p className="eyebrow">
-                      CUZZO /{" "}
-                      <span className="status-chip">{incident.status}</span>
-                    </p>
-                    <h3>The Chains</h3>
-                    <p>
-                      {incident.status === "active"
-                        ? `“They want bread for my chains. Hit me.” Demand ${money(incident.demand)}.`
-                        : "The dispute is over. Life in the city continues."}
-                    </p>
-                  </div>
-                  <button
-                    aria-label={
-                      incident.status === "active"
-                        ? "See the situation"
-                        : "Find your next move"
-                    }
-                    onClick={() => {
-                      setGroup(
-                        incident.status === "active"
-                          ? "The Chains"
-                          : "Everyday",
-                      );
-                      setScreen("Actions");
-                    }}
-                  >
-                    <Icon name="arrow" />
-                  </button>
-                </section>
-              </div>
+                  <span>
+                    <span className="eyebrow">WORD ON THE BLOCK</span>
+                    <strong>{activeStory.title}</strong>
+                    <span className="story-status">
+                      Demand {money(activeStory.demand)} ·{" "}
+                      {activeStory.leadershipAware
+                        ? "Leadership is considering its response"
+                        : "Awaiting your help"}
+                    </span>
+                  </span>
+                  <Icon name="arrow" />
+                </button>
+              )}
               {toast}
-              <Panel className="city-news">
-                <div className="panel-title">
-                  <h3>Word on the block</h3>
-                  <button
-                    className="text-button"
-                    onClick={() => setScreen("Activity")}
-                  >
-                    Open log <Icon name="arrow" />
-                  </button>
-                </div>
-                {visibleEvents(s)
-                  .filter(
-                    (e) => e.category === "city" || e.category === "incident",
-                  )
-                  .slice(-2)
-                  .reverse()
-                  .map((e) => (
-                    <div className="news-item" key={e.id}>
-                      <small>
-                        DAY {e.day} / {e.category.toUpperCase()}
-                      </small>
-                      <p>{e.text}</p>
-                    </div>
-                  ))}
-              </Panel>
               <div className="city-layout">
                 <Panel className="map-panel">
                   <div className="panel-title">
-                    <span className="eyebrow">FIVE NEIGHBORHOODS</span>
+                    <h3>Stixx City</h3>
                     <span className="map-key">● Your home</span>
                   </div>
                   <CityMap s={s} selected={selected} onSelect={setSelected} />
+                  <ul className="map-legend" aria-label="Faction colors">
+                    {Object.values(s.factions).map((f) => (
+                      <li key={f.id}>
+                        <i
+                          style={{ background: THEMES[f.id].accent }}
+                          aria-hidden="true"
+                        />
+                        {f.name}
+                      </li>
+                    ))}
+                  </ul>
                   <p className="caption">
-                    Select a neighborhood to read its politics.
+                    Select a neighborhood to read its politics. Split colors
+                    show shared presence; gray is unclaimed.
                   </p>
                 </Panel>
                 <div className="zone-details">
@@ -943,10 +900,30 @@ export function App() {
               </Panel>
             </>
           )}
-          {screen === "Activity" && (
-            <>
-              <Panel>
-                <p className="eyebrow">ACTIVE SITUATIONS</p>
+          {screen === "City" && (
+            <section id="city-activity" aria-labelledby="city-activity-title">
+              <h3 id="city-activity-title">Activity</h3>
+              <Panel className="city-news">
+                <div className="panel-title">
+                  <h3>Word on the block</h3>
+                </div>
+                {visibleEvents(s)
+                  .filter(
+                    (e) => e.category === "city" || e.category === "incident",
+                  )
+                  .slice(-2)
+                  .reverse()
+                  .map((e) => (
+                    <div className="news-item" key={e.id}>
+                      <small>
+                        DAY {e.day} / {e.category.toUpperCase()}
+                      </small>
+                      <p>{e.text}</p>
+                    </div>
+                  ))}
+              </Panel>
+              <details className="panel situation-history">
+                <summary>Situation history</summary>
                 {Object.values(s.incidents).map((i) => (
                   <div key={i.id}>
                     <h3>
@@ -959,8 +936,12 @@ export function App() {
                     </p>
                   </div>
                 ))}
-              </Panel>
-              <div className="segmented">
+              </details>
+              <div
+                className="segmented"
+                role="group"
+                aria-label="Activity filters"
+              >
                 <button
                   aria-pressed={activityFilter === "All"}
                   className={activityFilter === "All" ? "active" : ""}
@@ -1007,7 +988,7 @@ export function App() {
                     </article>
                   ))}
               </div>
-            </>
+            </section>
           )}
           <details className="game-menu">
             <summary>Game & save information</summary>

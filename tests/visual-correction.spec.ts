@@ -43,26 +43,17 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
     "independent",
   );
   const dock = (await page.getByRole("navigation").boundingBox())!;
-  for (const tile of await page.locator(".quick-moves .action-tile").all()) {
-    const bounds = (await tile.getByRole("button").boundingBox())!;
-    expect(bounds.y + bounds.height).toBeLessThanOrEqual(dock.y);
-    expect(bounds.width).toBeGreaterThanOrEqual(44);
-    expect(bounds.height).toBeGreaterThanOrEqual(44);
-    if ((await tile.getAttribute("data-action")) === "work") {
-      await expect(tile.locator(".tile-art img")).toBeVisible();
-    } else {
-      // GOAL 002C: no approved scene for gigs or Reach out.
-      await expect(tile).toHaveClass(/neutral-action/);
-      await expect(tile.locator(".tile-art img")).toHaveCount(0);
-    }
-  }
-  const situation = (await page.locator(".dispatch").boundingBox())!;
+  await expect(page.locator(".action-card")).toHaveCount(0);
+  const situation = (await page.locator(".story-alert").boundingBox())!;
   expect(situation.y + situation.height).toBeLessThanOrEqual(dock.y);
-  const outcomes = page.locator(".tile-work summary");
-  await outcomes.click();
-  await expect(page.locator(".tile-work details")).toHaveAttribute("open", "");
-  await expect(page.locator(".tile-work details")).toContainText("+8 stress");
-  await outcomes.click();
+  await page
+    .getByRole("button", { name: "Open The Chains in Actions" })
+    .click();
+  await expect(page.locator(".situation")).toContainText("The Chains");
+  await page.getByRole("button", { name: "Everyday", exact: true }).click();
+  const work = page.locator('[data-action="work"]');
+  await expect(work.locator(".action-scene")).toBeVisible();
+  await expect(work).toContainText("+8 stress");
   const s = newGame("Morgan", "nawf");
   const p = player(s),
     sponsor = Object.values(s.characters).find(

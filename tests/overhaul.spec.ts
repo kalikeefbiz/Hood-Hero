@@ -171,14 +171,7 @@ test("all destinations fit 320/375/390/430 and desktop, including long names and
   await seed(page, newGame("A long player name for testing", "resevoir"));
   for (const width of [320, 375, 390, 430, 1440]) {
     await page.setViewportSize({ width, height: 844 });
-    for (const screen of [
-      "City",
-      "People",
-      "Actions",
-      "Set",
-      "Wallet",
-      "Activity",
-    ]) {
+    for (const screen of ["City", "People", "Actions", "Set", "Wallet"]) {
       await nav(page, screen);
       await noOverflow(page);
       const dock = page.getByRole("navigation");
@@ -201,15 +194,18 @@ test("all destinations fit 320/375/390/430 and desktop, including long names and
   }
 });
 
-test("real hub actions update cash/AP, explain disabled prerequisites, and autosave", async ({
+test("Actions update cash/AP, explain disabled prerequisites, and autosave", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await seed(page, newGame("Morgan", "rio"));
+  await expect(page.locator(".action-card")).toHaveCount(0);
+  await nav(page, "Actions");
   const card = page.locator(".action-card").filter({
     has: page.getByRole("heading", { name: "Pick up a gig", exact: true }),
   });
   const button = card.getByRole("button");
+  await button.scrollIntoViewIfNeeded();
   const actionBox = (await button.boundingBox())!;
   const dockBox = (await page.getByRole("navigation").boundingBox())!;
   expect(actionBox.y + actionBox.height).toBeLessThanOrEqual(dockBox.y);
@@ -267,7 +263,7 @@ test("directional trust, witnessed events, activity filters and day grouping pre
     page.getByRole("meter", { name: "Your trust in them" }),
   ).toHaveAttribute("aria-valuenow", "23");
   await expect(page.locator("main")).not.toContainText("PRIVATE NPC ONLY");
-  await nav(page, "Activity");
+  await nav(page, "City");
   await expect(
     page.getByRole("heading", { name: "Day 01", exact: true }),
   ).toBeVisible();
