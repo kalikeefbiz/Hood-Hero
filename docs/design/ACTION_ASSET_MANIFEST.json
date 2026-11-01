@@ -1,0 +1,160 @@
+{
+  "goal": "002C",
+  "preparation": "Pillow 12.3.0; RGB; LANCZOS resize; WebP quality 82, method 6. Full 4:3 composition retained; display crops are CSS only.",
+  "assets": [
+    {
+      "actionId": "work",
+      "source": "6-Clock-in-.PNG",
+      "sourceSize": [
+        1448,
+        1086
+      ],
+      "sourceSha256": "d19fe81334e949b62b6dd59017d4c536f0c5d6e5e21b7fa4ccc22c50b6e5bf44",
+      "outputs": [
+        {
+          "path": "public/assets/actions/clock-in-480.webp",
+          "size": [
+            480,
+            360
+          ],
+          "bytes": 40964,
+          "sha256": "0fa18200a978738babd8ee853d1761b163c717e783e93b54318d090bbd454d58"
+        },
+        {
+          "path": "public/assets/actions/clock-in-960.webp",
+          "size": [
+            960,
+            720
+          ],
+          "bytes": 136694,
+          "sha256": "7d26cfae8f0ae87babf9c96cdced6cc662d20f920617a3c9b974e7922d4a2ebf"
+        }
+      ]
+    },
+    {
+      "actionId": "standing",
+      "source": "1-Build-connection.PNG",
+      "sourceSize": [
+        1448,
+        1086
+      ],
+      "sourceSha256": "faf3832a6388561cdd2b30a27e457cb7acdf09fe7ccf53ccbbe32f3c3ac1928b",
+      "outputs": [
+        {
+          "path": "public/assets/actions/build-local-connection-480.webp",
+          "size": [
+            480,
+            360
+          ],
+          "bytes": 44266,
+          "sha256": "f73fbed3cf610506a888f19b20ad49cc76b0490ed310d59f2c92107e068a12ad"
+        },
+        {
+          "path": "public/assets/actions/build-local-connection-960.webp",
+          "size": [
+            960,
+            720
+          ],
+          "bytes": 149438,
+          "sha256": "554155a1dd665a08fe0f72e29fb4448a08863f5544f3bd21c5eb870ae6afaa4d"
+        }
+      ]
+    },
+    {
+      "actionId": "rest",
+      "source": "5-Quiet-afternoon.PNG",
+      "sourceSize": [
+        1448,
+        1086
+      ],
+      "sourceSha256": "eaf4671a06a2d40a8cbc7ce2c44cef8a58c8f0117b2b4494cde289dba132ca63",
+      "outputs": [
+        {
+          "path": "public/assets/actions/quiet-afternoon-480.webp",
+          "size": [
+            480,
+            360
+          ],
+          "bytes": 40988,
+          "sha256": "9de3ffdfbc7620c4932b3814507d6faad426eaa90f4e35586d240174eb79b36a"
+        },
+        {
+          "path": "public/assets/actions/quiet-afternoon-960.webp",
+          "size": [
+            960,
+            720
+          ],
+          "bytes": 142306,
+          "sha256": "5a9ffe95e24dd0c4b5a199ddc379937ea78a6de84534d3eb2e46a2750228fde2"
+        }
+      ]
+    },
+    {
+      "actionId": "crime",
+      "source": "3-Move-pack-.PNG",
+      "sourceSize": [
+        1448,
+        1086
+      ],
+      "sourceSha256": "78b7b10f472bdad4adb3560246346fe311b2e976150a46b58b631e565730410d",
+      "outputs": [
+        {
+          "path": "public/assets/actions/black-market-opportunity-480.webp",
+          "size": [
+            480,
+            360
+          ],
+          "bytes": 37284,
+          "sha256": "5ca7012b65789f5afff4ca91b50019a39c93b0758ce826cb79a698bc7d0f2c23"
+        },
+        {
+          "path": "public/assets/actions/black-market-opportunity-960.webp",
+          "size": [
+            960,
+            720
+          ],
+          "bytes": 121638,
+          "sha256": "194e849962d42ae841a81151c77e86e43759d00e66f96a49a34ceb35c756f278"
+        }
+      ]
+    },
+    {
+      "actionId": "inquire",
+      "source": "2-ask-around.PNG",
+      "sourceSize": [
+        1448,
+        1086
+      ],
+      "sourceSha256": "f66a52cbd98543260df4a29f9720198fc5ddb1f7aba8fa7faf898b076463f72c",
+      "outputs": [
+        {
+          "path": "public/assets/actions/ask-around-480.webp",
+          "size": [
+            480,
+            360
+          ],
+          "bytes": 35514,
+          "sha256": "bf0c24c9aab2042488a4dc46df49428cd790fc300e197183b0a140426c208b78"
+        },
+        {
+          "path": "public/assets/actions/ask-around-960.webp",
+          "size": [
+            960,
+            720
+          ],
+          "bytes": 121698,
+          "sha256": "4019a81a2a9f3a9ba603747ef7636d31b7ef27ab1bf9b8635e17f6d97a39666f"
+        }
+      ]
+    }
+  ],
+  "reference": {
+    "source": "4-Hood-UI.png",
+    "size": [
+      1170,
+      768
+    ],
+    "sha256": "5a1cb9f0781f1aded676f598d41b2a0adb6e7a2b3fa7eecf83783906626ae0c7",
+    "use": "Visual reference only; no runtime raster UI, badges, text or icons extracted."
+  }
+}

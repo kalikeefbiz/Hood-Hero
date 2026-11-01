@@ -48,7 +48,13 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
     expect(bounds.y + bounds.height).toBeLessThanOrEqual(dock.y);
     expect(bounds.width).toBeGreaterThanOrEqual(44);
     expect(bounds.height).toBeGreaterThanOrEqual(44);
-    await expect(tile.locator(".tile-art img")).toBeVisible();
+    if ((await tile.getAttribute("data-action")) === "work") {
+      await expect(tile.locator(".tile-art img")).toBeVisible();
+    } else {
+      // GOAL 002C: no approved scene for gigs or Reach out.
+      await expect(tile).toHaveClass(/neutral-action/);
+      await expect(tile.locator(".tile-art img")).toHaveCount(0);
+    }
   }
   const situation = (await page.locator(".dispatch").boundingBox())!;
   expect(situation.y + situation.height).toBeLessThanOrEqual(dock.y);

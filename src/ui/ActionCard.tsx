@@ -6,7 +6,8 @@ import {
 } from "../core/ActionEngine";
 import type { GameState } from "../core/GameState";
 import { ITEMS } from "../content/economy";
-import { Scene } from "./Scene";
+import { ActionIllustration } from "./ActionIllustration";
+import { ACTION_ART } from "./actionArt";
 import { BALANCE } from "../content/balance";
 import { Icon } from "./Icon";
 export const money = (n: number) =>
@@ -51,12 +52,7 @@ export function ActionCard({
         ? `Buy back · ${money(cost)}`
         : (labels[a.type as keyof typeof labels] ?? def.label);
   const identity = `${a.type}-${a.target ?? a.item ?? "default"}`;
-  const zone =
-    a.type === "work"
-      ? "downtown"
-      : a.target
-        ? s.characters[a.target].home
-        : s.characters[a.actor].home;
+  const hasArt = !!ACTION_ART[a.type];
   const brief =
     a.type === "work"
       ? `$${BALANCE.workIncome} clean. Full shift.`
@@ -68,31 +64,33 @@ export function ActionCard({
   if (compact)
     return (
       <article
-        className={`action-card action-tile tile-${a.type} ${reason ? "unavailable" : ""}`}
+        className={`action-card action-tile tile-${a.type} ${hasArt ? "has-action-art" : "neutral-action"} ${reason ? "unavailable" : ""}`}
+        data-action={a.type}
       >
         <div className="tile-art">
-          <Scene zone={zone} eager />
-          <span className="tile-symbol">
-            <Icon
-              name={
-                a.type === "work"
-                  ? "cash"
-                  : a.type === "gig"
-                    ? "Finances"
-                    : "People"
-              }
-            />
-          </span>
+          {hasArt && <ActionIllustration key={a.type} type={a.type} compact />}
+          {!hasArt && (
+            <span className="tile-symbol">
+              <Icon
+                name={
+                  a.type === "work"
+                    ? "cash"
+                    : a.type === "gig"
+                      ? "Finances"
+                      : "People"
+                }
+              />
+            </span>
+          )}
           <span className="tile-ap">{def.ap} AP</span>
         </div>
         <div className="tile-copy">
           <h3>{title}</h3>
-          {reason ? (
+          <p>{brief}</p>
+          {reason && (
             <p className="disabled-reason" id={`${identity}-reason`}>
               {reason}
             </p>
-          ) : (
-            <p>{brief}</p>
           )}
           <small className="risk">
             {def.risk === "None" ? "NO RISK" : `${def.risk.toUpperCase()} RISK`}
@@ -118,17 +116,14 @@ export function ActionCard({
     );
   return (
     <article
-      className={`action-card ${a.type === "buy" ? "purchase-ticket" : "illustrated-action"} ${def.risk === "High" ? "danger" : ""}`}
+      className={`action-card ${a.type === "buy" ? "purchase-ticket" : hasArt ? "illustrated-action" : "neutral-action"} ${def.risk === "High" ? "danger" : ""}`}
+      data-action={a.type}
     >
-      {a.type !== "buy" && (
+      {hasArt && (
         <div className="action-illustration">
-          <Scene zone={zone} />
-          <span className="action-plate">
-            <Icon
-              name={
-                a.type === "work" ? "cash" : a.target ? "People" : "Actions"
-              }
-            />
+          <ActionIllustration key={a.type} type={a.type} />
+          <span className="action-scene-caption" aria-hidden="true">
+            STIXX CITY / EVERY MOVE MATTERS
           </span>
         </div>
       )}
