@@ -49,6 +49,7 @@ The build writes `build-info.json` containing the actual checked-out commit and 
 - Production `/Hood-Hero/` browser suite: **34 passed** — 17 Chromium and 17 WebKit.
 - Final viewport-feedback adjustment: **28 additional browser checks passed** — 14 per engine under `/Hood-Hero/`, including scrolled-card result visibility, mobile regressions, and both 40-day paths.
 - TypeScript/Vite build, formatting checks, and `git diff --check`: passed.
+- [GitHub CI for the exact deployed implementation](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41378065840): **passed**, including the full root and production-path browser suites after the visible-feedback adjustment.
 
 [Recorded root browser output](validation/GOAL_003_CORRECTION_ROOT.txt) · [Production-base browser output](validation/GOAL_003_CORRECTION_PAGES.txt) · [Final viewport-feedback checks](validation/GOAL_003_CORRECTION_FEEDBACK.txt). Required browser checks cover the opening modal, blocked background clicks, focus containment, clarification/portrait change, acceptance, refusal, postponement, dismissal, queue sequencing, history without effects, City-only routing, action feedback, day transitions, 40-day non-repetition, chronological severity/faction rendering, all starting homes/affiliation themes, and 320/375/390/430px layouts with axe accessibility checks.
 
@@ -79,12 +80,12 @@ Publication uses the repository's existing public GitHub Pages playtest infrastr
 ## Verified public deployment
 
 - **Play:** https://kalikeefbiz.github.io/Hood-Hero/
-- **Deployed implementation commit:** `2ff6ef5449c5346787fb30c907ccbaaab8c6d727`.
-- **Deployment:** [existing playtest workflow, successful attempt 2](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41362061215/attempts/2). That workflow runs from its previously approved main configuration and checks out `goal-003-living-encounters`; no new main commit, workflow permission, environment rule, or merge was needed.
+- **Deployed implementation commit:** `147ef9c750ba6294848f9360db3c07c61f522ad6`.
+- **Deployment:** [existing playtest workflow, successful attempt 3](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41362061215/attempts/3). That workflow runs from its previously approved main configuration and checks out `goal-003-living-encounters`; no new main commit, workflow permission, environment rule, or merge was needed.
 - **Fingerprint:** [public build metadata](https://kalikeefbiz.github.io/Hood-Hero/build-info.json) returned the exact implementation commit and schema 3.
 - **Live gameplay verification:** Chromium and WebKit both passed the complete public-site check: opening modal/art, clarification, accepted promise auto-close, gig feedback, End Day returning to City, reload without reopening, actual gameplay buyback, returned-chain portrait, acknowledgment, and another reload remaining closed. Neither engine reported asset failures or uncaught page errors.
 - **Evidence:** [machine-readable live verification](validation/GOAL_003_CORRECTION_LIVE.json), [live Chromium modal](screenshots/goal-003-correction/live-chromium-modal.png), [live Chromium City](screenshots/goal-003-correction/live-chromium-city.png), [live WebKit modal](screenshots/goal-003-correction/live-webkit-modal.png), [live WebKit City](screenshots/goal-003-correction/live-webkit-city.png).
 
-Live checks completed at 6:24 p.m. Pacific on 1 November 2026. The follow-up evidence commit adds this deployment record and live captures only; runtime code remains the deployed implementation commit above. The public URL is the existing shared playtest site serving the unmerged feature build, not a separate production merge.
+Live checks completed at 7:04 PM Pacific on 1 November 2026. The follow-up evidence commit adds this deployment record and live captures only; runtime code remains the deployed implementation commit above. The public URL is the existing shared playtest site serving the unmerged feature build, not a separate production merge.
 
 Current Test saves from schema 2 require a new test run. Physical iPhone Safari validation remains with the creator; all browser results above are real automated browser executions, not physical-device claims.
