@@ -1,3 +1,4 @@
+import { connects, honest } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { dismissEncounter } from "./helpers";
 import { newGame } from "../src/core/Simulation";
@@ -22,8 +23,8 @@ test.beforeEach(async ({ page }) => {
     expect(r.ok()).toBe(true);
     const info = await r.json();
     expect(info.commit).toBe(process.env.PLAYWRIGHT_EXPECTED_COMMIT);
-    expect(info.milestone).toBe("GOAL 006");
-    expect(info.saveSchema).toBe(6);
+    expect(info.milestone).toBe("GOAL 006.1");
+    expect(info.saveSchema).toBe(7);
   }
 });
 async function state(page: Page) {
@@ -42,7 +43,7 @@ async function day(page: Page) {
 }
 async function snap(page: Page, name: string) {
   const prefix = process.env.PLAYWRIGHT_PUBLIC_URL ? "live-" : "";
-  const path = `docs/screenshots/goal-006/${prefix}${test.info().project.name}-${name}.png`;
+  const path = `docs/screenshots/goal-006-1/${prefix}${test.info().project.name}-${name}.png`;
   if (name.startsWith("03-") || name.startsWith("04-")) {
     await page.locator(".action-feedback").screenshot({ path, scale: "css" });
     return;
@@ -61,7 +62,15 @@ async function snap(page: Page, name: string) {
       timeout: 7000,
     });
     await page
-      .locator(".street-work")
+      .locator(
+        name.startsWith("02-")
+          ? ".inventory-panel"
+          : name.startsWith("05-") || name === "07-default"
+            ? ".obligations-panel"
+            : name === "07-accumulated-attention"
+              ? ".street-work"
+              : ".transaction-history",
+      )
       .screenshot({ path, scale: "css", animations: "disabled" });
     return;
   }
@@ -149,6 +158,7 @@ test("supplier to inventory to multiple real sales and repayment through normal 
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
   await dismissEncounter(page);
   await nav(page, "Actions");
+  await connects(page, "mega");
   await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
   const modal = page.getByRole("dialog", { name: "Character encounter" });
   await expect(modal).toContainText("$102");
@@ -162,8 +172,9 @@ test("supplier to inventory to multiple real sales and repayment through normal 
   expect((await state(page)).characters.player.wallet.clean).toBe(125);
   await nav(page, "Wallet");
   await page
-    .getByRole("heading", { name: "Inventory and supplier obligations" })
+    .getByRole("heading", { name: "Inventory", exact: true })
     .scrollIntoViewIfNeeded();
+  await page.locator(".inventory-slot summary").first().click();
   await snap(page, "02-inventory-and-obligation");
   let successes = 0,
     failures = 0;
@@ -194,17 +205,18 @@ test("supplier to inventory to multiple real sales and repayment through normal 
   expect((await state(page)).street.transactions.length).toBeGreaterThan(1);
   await nav(page, "Wallet");
   await page
-    .getByRole("heading", { name: "Inventory and supplier obligations" })
+    .getByRole("heading", { name: "Inventory", exact: true })
     .scrollIntoViewIfNeeded();
   await snap(page, "05-outstanding-balance");
-  await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
+  await page.getByRole("button", { name: "Discuss repayment" }).click();
   await modal.getByRole("button", { name: /Repay full balance/ }).click();
   await dismissEncounter(page);
   expect((await state(page)).street.agreements[0].balance).toBe(0);
   await nav(page, "Wallet");
   await page
-    .getByRole("heading", { name: "Inventory and supplier obligations" })
+    .getByRole("heading", { name: "Inventory", exact: true })
     .scrollIntoViewIfNeeded();
+  await page.getByText("Supplier and lot records", { exact: true }).click();
   await snap(page, "06-repaid");
   const saved = await state(page);
   console.log(
@@ -264,10 +276,12 @@ test("seeded real-play arrest serves every day and releases into continued gamep
   expect(after.end).toBeNull();
   expect(after.street.custody.at(-1).status).toBe("released");
   await nav(page, "Actions");
+  await honest(page);
   await page.locator('[data-action="gig"]').getByRole("button").click();
   expect((await state(page)).ap).toBe(1);
   await nav(page, "Wallet");
-  await expect(page.locator(".street-work")).toContainText(
+  await page.getByText("Custody history", { exact: true }).click();
+  await expect(page.locator(".transaction-history")).toContainText(
     "Custody record · released",
   );
   await snap(page, "09-release");
@@ -283,16 +297,17 @@ test("default reaction and accumulated heat are rendered from real simulated con
   await resume(page, s);
   await nav(page, "Wallet");
   await page
-    .getByRole("heading", { name: "Inventory and supplier obligations" })
+    .getByRole("heading", { name: "Inventory", exact: true })
     .scrollIntoViewIfNeeded();
-  await expect(page.locator(".street-work")).toContainText("overdue");
+  await expect(page.locator(".obligations-panel")).toContainText("overdue");
   await snap(page, "07-default");
   const hot = campaign("custody");
   await resume(page, hot);
   await nav(page, "Wallet");
   await page
-    .getByRole("heading", { name: "Inventory and supplier obligations" })
+    .getByRole("heading", { name: "Inventory", exact: true })
     .scrollIntoViewIfNeeded();
+  await nav(page, "Actions");
   await snap(page, "07-accumulated-attention");
 });
 test("crew-assisted street work uses an earned willing partner and actual inventory", async ({
@@ -301,10 +316,7 @@ test("crew-assisted street work uses an earned willing partner and actual invent
   const s = campaign("crew");
   await resume(page, s);
   await nav(page, "Wallet");
-  await page
-    .locator(".street-work")
-    .getByText("Transaction history", { exact: true })
-    .click();
+
   await page
     .getByText(/with Flacco/)
     .last()
@@ -322,6 +334,7 @@ for (const width of [320, 375, 390, 430])
     const s = newGame("Mobile", "south");
     await resume(page, s);
     await nav(page, "Actions");
+    await connects(page, "mega");
     await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),

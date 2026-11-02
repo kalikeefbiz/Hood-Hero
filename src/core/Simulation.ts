@@ -26,7 +26,7 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     },
   );
   const s: GameState = {
-    version: 6,
+    version: 7,
     street: newStreetState(),
     day: 1,
     ap: BALANCE.dailyAP,

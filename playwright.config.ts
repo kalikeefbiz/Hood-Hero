@@ -19,7 +19,15 @@ export default defineConfig({
       name: "chromium-mobile",
       use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
     },
-    { name: "webkit-mobile", use: { ...devices["iPhone 13"] } },
+    {
+      name: "webkit-mobile",
+      use: {
+        ...devices["iPhone 13"],
+        ...(process.env.WEBKIT_SOFTWARE_SCALE
+          ? { deviceScaleFactor: Number(process.env.WEBKIT_SOFTWARE_SCALE) }
+          : {}),
+      },
+    },
   ],
   webServer: process.env.PLAYWRIGHT_PUBLIC_URL
     ? undefined

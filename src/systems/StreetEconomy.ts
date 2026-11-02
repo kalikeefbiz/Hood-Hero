@@ -1,3 +1,4 @@
+import { arrest } from "./Incarceration";
 import {
   cash,
   clamp,
@@ -14,7 +15,11 @@ import { random } from "../core/Random";
 import { earn, expense } from "./Economy";
 import { change, remember } from "./Relationships";
 import { finishCommitment } from "./Commitments";
-import { addExposure, exposureScore } from "./CriminalExposure";
+import {
+  addExposure,
+  exposureScore,
+  transactionArrestChance,
+} from "./CriminalExposure";
 import { availability, cooperation } from "./CrewAgency";
 export function newStreetState(): StreetState {
   return {
@@ -75,7 +80,7 @@ export function marketAccess(
   const local = suppliers(s).some(
     (n) =>
       n.home === zone &&
-      c.known.includes(n.id) &&
+      c.connections.includes(n.id) &&
       (n.relationships[actor]?.trust ?? 0) >= B.trust,
   );
   const connectedCrew =
@@ -99,14 +104,14 @@ export function marketAccess(
           (n) =>
             s.characters[n]?.home === zone &&
             s.characters[n]?.affiliation &&
-            c.known.includes(n) &&
+            c.connections.includes(n) &&
             (s.characters[n].relationships[actor]?.trust ?? 0) >= 10,
         )
       );
     });
   if (zone === "downtown")
     return c.neighborhoodStanding.downtown >= B.downtownStanding &&
-      c.known.some((id) => s.characters[id]?.home === zone) &&
+      c.connections.some((id) => s.characters[id]?.home === zone) &&
       c.skills.social >= 50
       ? null
       : "Downtown needs 15 local standing, a local contact and practiced connections (50 social).";
@@ -132,7 +137,7 @@ export function supplierError(
   if (
     !n ||
     !suppliers(s).some((c) => c.id === supplier) ||
-    !p.known.includes(supplier)
+    !p.connections.includes(supplier)
   )
     return "Meet an eligible supplier first.";
   if (n.availableDay > s.day) return "Supplier is committed elsewhere today.";
@@ -371,6 +376,7 @@ export function transact(
   const l = saleLot(s, actor)!,
     c = s.characters[actor],
     m = s.street.markets[zone];
+  const policeChance = transactionArrestChance(s, actor, zone);
   const chance = transactionChance(s, actor, zone, partner),
     roll = random(s);
   if (m.usedDay !== s.day) {
@@ -430,10 +436,17 @@ export function transact(
   }
   c.stress = clamp(c.stress + 7);
   c.rivalThreat = clamp(c.rivalThreat + 2 + m.competition / 25);
-  addExposure(s, actor, zone);
+  const weight = lost
+    ? B.goodsLossExposure
+    : loss
+      ? B.moneyLossExposure
+      : sold
+        ? B.actionExposure
+        : B.noBuyerExposure;
+  addExposure(s, actor, zone, weight);
   if (partner) {
     const n = s.characters[partner];
-    addExposure(s, partner, zone, 8);
+    addExposure(s, partner, zone, weight * B.crewExposureShare, lost > 0);
     n.stress = clamp(n.stress + 7);
     n.rivalThreat = clamp(n.rivalThreat + 3);
   }
@@ -471,6 +484,10 @@ export function transact(
     outcome,
     eventId: e.id,
   });
+  if (random(s) < policeChance)
+    arrest(s, actor, "police intervention during street work", 1);
+  if (partner && random(s) < transactionArrestChance(s, partner, zone))
+    arrest(s, partner, "participating in street work", 1);
   return e;
 }
 export function paymentError(

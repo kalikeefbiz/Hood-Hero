@@ -18,11 +18,11 @@ export function exposureScore(s: GameState, id: string, zone: ZoneId) {
       0,
     ) ?? 0;
   return clamp(
-    c.police * 0.35 +
-      c.notoriety * 0.1 +
-      s.zones[zone].police * 0.15 +
-      history * 0.55 +
-      (x?.investigation ?? 0) * 0.3,
+    c.police * B.policeWeight +
+      c.notoriety * B.notorietyWeight +
+      s.zones[zone].police * B.neighborhoodWeight +
+      history * B.historyWeight +
+      (x?.investigation ?? 0) * B.investigationWeight,
   );
 }
 export function addExposure(
@@ -30,14 +30,16 @@ export function addExposure(
   id: string,
   zone: ZoneId,
   weight = B.actionExposure,
+  significant = weight >= B.significantExposure,
 ) {
   const c = s.characters[id],
     x = exposure(s, id);
   x.recent.push({ day: s.day, zone, weight });
   x.recent = x.recent.filter((h) => s.day - h.day < B.historyDays).slice(-30);
-  x.investigation = clamp(x.investigation + weight * 0.55);
-  c.police = clamp(c.police + weight + s.zones[zone].police / 25);
-  c.notoriety = clamp(c.notoriety + weight / 4);
+  if (significant)
+    x.investigation = clamp(x.investigation + weight * B.investigationGain);
+  c.police = clamp(c.police + weight * (0.8 + s.zones[zone].police / 150));
+  c.notoriety = clamp(c.notoriety + weight / 6);
   const band = Math.floor(exposureScore(s, id, zone) / 25);
   if (id === s.playerId && band > x.warningBand && band >= 2)
     record(
@@ -62,3 +64,25 @@ export function decayExposure(s: GameState) {
 }
 export const heatDescription = (n: number) =>
   n < 20 ? "Quiet" : n < 45 ? "Noticed" : n < 70 ? "Watched" : "Heavy scrutiny";
+
+// Baseline police risk belongs to the attempted transaction, not to lawful days.
+export function transactionArrestChance(
+  s: GameState,
+  id: string,
+  zone: ZoneId,
+) {
+  const scrutiny = exposureScore(s, id, zone) / 100;
+  return Math.min(
+    B.maxTransactionArrest,
+    B.baselineArrestChance + scrutiny * scrutiny * B.transactionArrestScale,
+  );
+}
+export function ongoingArrestChance(s: GameState, id: string) {
+  const c = s.characters[id],
+    x = s.street.exposure[id];
+  if (!x || (!x.recent.length && x.investigation < 5)) return 0;
+  return Math.min(
+    B.maxArrestChance,
+    Math.max(0, (exposureScore(s, id, c.home) - B.arrestThreshold) / 220),
+  );
+}

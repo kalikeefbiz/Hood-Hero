@@ -1,3 +1,4 @@
+import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page, type Dialog } from "@playwright/test";
 import { AUTO_KEY, SAVE_KEY, serialize } from "../src/persistence/SaveSystem";
 import { newGame } from "../src/core/Simulation";
@@ -9,11 +10,14 @@ import type { GameState } from "../src/core/GameState";
 const root = process.env.PLAYWRIGHT_BASE_PATH || "/";
 const modal = (page: Page) =>
   page.getByRole("dialog", { name: "Character encounter", exact: true });
-const nav = async (page: Page, name: string) =>
-  page
+const nav = async (page: Page, name: string) => {
+  await page
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
+  if (name === "Actions")
+    await page.getByRole("button", { name: "Honest", exact: true }).click();
+};
 const state = async (page: Page): Promise<GameState> =>
   page.evaluate(
     (key) => JSON.parse(localStorage.getItem(key)!).state,
@@ -59,6 +63,16 @@ async function capture(page: Page, name: string) {
   await test.info().attach(name, { path, contentType: "image/png" });
 }
 async function click(page: Page, type: string) {
+  if (type === "rest") {
+    await page
+      .getByRole("navigation")
+      .getByRole("button", { name: "Actions", exact: true })
+      .click();
+  }
+  if (["buyback", "negotiate", "recover", "settlement"].includes(type)) {
+    await storyAction(page, type);
+    return;
+  }
   await page
     .locator(`[data-action="${type}"]`)
     .first()
@@ -86,7 +100,7 @@ test("hire, scheduled wages, save and a thirty-day employment playthrough", asyn
   expect((await state(page)).characters.player.wallet.clean).toBe(125);
   await nav(page, "Actions");
   await expect(page.locator(".employment-summary")).toContainText("Unemployed");
-  await expect(page.locator('[data-action="work"] button')).toBeDisabled();
+  await expect(page.locator('[data-action="work"]')).toHaveCount(0);
   await capture(page, "01-job-search");
   await click(page, "apply");
   await click(page, "acceptJob");
@@ -271,11 +285,14 @@ test("employment competes with The Chains through actual AP, wages, attendance a
       .getByRole("button", { name: /Skip scene/ })
       .click();
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
-  await expect(page.locator('[data-action="buyback"] button')).toBeDisabled();
+  await storyline(page);
+  await expect(
+    modal(page).getByRole("button", { name: /Pay to return the chains/ }),
+  ).toBeDisabled();
+  await close(page);
   await endDay(page);
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
+  await storyline(page);
   await click(page, "buyback");
   const worked = await state(page);
   expect(worked.incidents["the-chains"].resolution).toBe("buyback");
@@ -286,8 +303,9 @@ test("employment competes with The Chains through actual AP, wages, attendance a
   await seed(page, base);
   await nav(page, "Actions");
   await click(page, "gig");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
+  await storyline(page);
   await click(page, "buyback");
+  await close(page);
   await endDay(page);
   const helped = await state(page);
   expect(helped.employment[0].attendance[0].status).toBe("missed");

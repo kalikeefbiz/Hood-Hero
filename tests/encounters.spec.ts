@@ -1,3 +1,4 @@
+import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { newGame } from "../src/core/Simulation";
@@ -18,6 +19,8 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
+  if (name === "Actions")
+    await page.getByRole("button", { name: "Honest", exact: true }).click();
 }
 async function seed(page: Page, s = newGame("Test(3)", "south")) {
   await page.goto(root);
@@ -125,23 +128,16 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
   await nav(page, "Actions");
   await page.locator('[data-action="gig"]').getByRole("button").click();
   await expect(page.getByRole("status")).toContainText("$38");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
-  await page.locator('[data-action="buyback"]').getByRole("button").click();
-  await expect(modal(page)).toHaveCount(0);
+  await storyline(page);
+  await page
+    .getByRole("dialog", { name: "Character encounter" })
+    .getByRole("button", { name: /Pay to return the chains/ })
+    .click();
   expect(
     unseenEvents(await saved(page)).filter(
       (e) => e.incidentId === "the-chains",
     ),
   ).toHaveLength(1);
-  await expect(page.getByRole("status")).toContainText("paid $150");
-  await expect(page.locator(".action-feedback")).toBeVisible();
-  const feedbackBox = (await page.locator(".action-feedback").boundingBox())!;
-  expect(feedbackBox.y).toBeGreaterThanOrEqual(0);
-  expect(feedbackBox.y + feedbackBox.height).toBeLessThanOrEqual(
-    (await page.getByRole("navigation").boundingBox())!.y,
-  );
-  await capture(page, "04-actions-feedback-no-scene");
-  await nav(page, "City");
   await expect(modal(page)).toContainText("You came through for me");
   await expect(modal(page).locator("img")).toHaveAttribute(
     "src",
@@ -204,6 +200,7 @@ test("refusing, postponing, Escape and backdrop leave no accidental obligation o
   expect((await saved(page)).commitments).toHaveLength(0);
   await expect(page.getByRole("status")).toContainText("No promise");
   await endDay(page);
+  await declineCrewOffer(page);
   await expect(modal(page)).toHaveCount(0);
 });
 
@@ -214,17 +211,17 @@ for (const outcome of ["fulfilled", "broken"] as const)
     test.setTimeout(180000);
     await seed(
       page,
-      newGame("Test(3)", "south", outcome === "broken" ? 15 : 2026),
+      newGame("Test(3)", "south", outcome === "broken" ? 13 : 2026),
     );
     await reply(page, "I’ll help you").click();
     if (outcome === "fulfilled") {
       await nav(page, "Actions");
       await page.locator('[data-action="gig"]').getByRole("button").click();
+      await storyline(page);
       await page
-        .getByRole("button", { name: "The Chains", exact: true })
+        .getByRole("dialog", { name: "Character encounter" })
+        .getByRole("button", { name: /Pay to return the chains/ })
         .click();
-      await page.locator('[data-action="buyback"]').getByRole("button").click();
-      await nav(page, "City");
     } else {
       for (let day = 2; day <= 9; day++) {
         await endDay(page);

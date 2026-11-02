@@ -43,6 +43,7 @@ export interface Character {
   relationships: Record<ID, Relationship>;
   memories: Memory[];
   known: ID[];
+  connections: ID[];
   stress: number;
   notoriety: number;
   police: number;
@@ -211,7 +212,7 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 6;
+  version: 7;
   street: import("../systems/StreetTypes").StreetState;
   assignments: CrewAssignment[];
   crewOffers: CrewOffer[];

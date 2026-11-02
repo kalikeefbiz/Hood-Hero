@@ -1,5 +1,9 @@
 import { arrest } from "./Incarceration";
-import { decayExposure, exposureScore } from "./CriminalExposure";
+import {
+  decayExposure,
+  exposureScore,
+  ongoingArrestChance,
+} from "./CriminalExposure";
 import { STREET_BALANCE as B } from "../content/street";
 import { clamp, type GameState } from "../core/GameState";
 import { random } from "../core/Random";
@@ -10,8 +14,8 @@ export function advancePressure(s: GameState) {
     // Danger is contingent on accumulated exposure, never elapsed campaign time.
     const score = exposureScore(s, c.id, c.home);
     if (
-      score > B.arrestThreshold &&
-      random(s) < Math.min(B.maxArrestChance, (score - B.arrestThreshold) / 180)
+      ongoingArrestChance(s, c.id) > 0 &&
+      random(s) < ongoingArrestChance(s, c.id)
     ) {
       arrest(s, c.id, "accumulated criminal exposure", score > 80 ? 2 : 1);
     } else if (c.rivalThreat > 70 && random(s) < (c.rivalThreat - 65) / 240) {
@@ -30,7 +34,7 @@ export function advancePressure(s: GameState) {
           : {},
       );
     }
-    c.police = clamp(c.police - 4);
+    c.police = clamp(c.police - B.policeDecay);
     c.rivalThreat = clamp(c.rivalThreat - 2);
     c.stress = clamp(c.stress - 2);
   }

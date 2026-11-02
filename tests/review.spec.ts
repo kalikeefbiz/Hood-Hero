@@ -77,6 +77,10 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
     await audit();
     if (screen === "People") await capture("04-people-390", true);
     if (screen === "Actions") {
+      for (const group of ["Honest", "Connects", "Streets"]) {
+        await page.getByRole("button", { name: group, exact: true }).click();
+        await audit();
+      }
       await page.setViewportSize({ width: 430, height: 932 });
       await capture("05-actions-430", true);
     }
@@ -96,6 +100,7 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
       (c) => c.affiliation === faction && c.status === "active",
     )!;
     p.known = [...new Set([...p.known, sponsor.id])];
+    p.connections = [...new Set([...p.connections, sponsor.id])];
     p.organizationStanding[faction] = 35;
     sponsor.relationships[p.id] = {
       trust: 35,

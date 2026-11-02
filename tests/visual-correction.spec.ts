@@ -1,3 +1,4 @@
+import { honest } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
@@ -50,15 +51,16 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   await expect(page.locator(".action-card")).toHaveCount(0);
   const situation = (await page.locator(".story-alert").boundingBox())!;
   expect(situation.y + situation.height).toBeLessThanOrEqual(dock.y);
-  await page
-    .getByRole("button", { name: "Open The Chains in Actions" })
-    .click();
-  await expect(page.locator(".situation")).toContainText("The Chains");
-  await page.getByRole("button", { name: "Everyday", exact: true }).click();
-  const work = page.locator('[data-action="work"]');
+  await page.getByRole("button", { name: "Open The Chains storyline" }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Character encounter" }),
+  ).toContainText("Cuzzo");
+  await dismissEncounter(page);
+  await honest(page);
+  const work = page.locator('[data-action="gig"]');
   await work.scrollIntoViewIfNeeded();
-  await expect(work.locator(".action-scene")).toBeVisible();
-  await expect(work).toContainText("+8 stress");
+  await expect(work).toBeVisible();
+  await expect(work).toContainText("$38");
   const s = newGame("Morgan", "nawf");
   const p = player(s),
     sponsor = Object.values(s.characters).find(

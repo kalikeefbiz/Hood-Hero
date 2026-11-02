@@ -62,6 +62,7 @@ const character = z.object({
     }),
   ),
   known: z.array(id),
+  connections: z.array(id),
   stress: n,
   notoriety: n,
   police: n,
@@ -76,7 +77,7 @@ const character = z.object({
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(6),
+  version: z.literal(7),
   street: streetSchema,
   day: integer.min(1),
   ap: integer.max(2),
@@ -354,7 +355,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 6, state: s });
+  return JSON.stringify({ format: "syndicate", version: 7, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -368,13 +369,13 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(6),
+      version: z.literal(7),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Hood Hero save version 6. Start a new test run from the new game menu.",
+      "Incompatible or damaged save. Expected Hood Hero save version 7. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];
@@ -465,7 +466,12 @@ export function deserialize(raw: string): GameState {
     new Set(s.crew.members).size !== s.crew.members.length ||
     s.crew.members.length > s.crew.capacity ||
     !s.crew.members.every(exists) ||
-    Object.values(s.characters).some((c) => !c.known.every(exists)) ||
+    Object.values(s.characters).some(
+      (c) =>
+        !c.known.every(exists) ||
+        new Set(c.connections).size !== c.connections.length ||
+        !c.connections.every((id) => exists(id) && c.known.includes(id)),
+    ) ||
     Object.values(s.incidents).some(
       (i) =>
         !exists(i.victim) ||

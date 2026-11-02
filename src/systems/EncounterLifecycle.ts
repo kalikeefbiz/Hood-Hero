@@ -125,3 +125,38 @@ export function openCrewConversation(
   });
   return s;
 }
+
+// A manual revisit of an active situation reuses its existing narrative definition.
+export function openStoryline(state: GameState, incidentId: string): GameState {
+  if (state.end || state.incidents[incidentId]?.status !== "active")
+    return state;
+  const s = structuredClone(state);
+  for (const e of s.encounters)
+    if (e.status === "active") {
+      e.status = "pending";
+      e.deferred = true;
+    }
+  let e = s.encounters.find(
+    (e) =>
+      e.incidentId === incidentId &&
+      e.definitionId === "mega-chains-request" &&
+      ["pending", "active"].includes(e.status),
+  );
+  if (!e) {
+    e = {
+      id: `story-conversation-${s.nextId++}`,
+      definitionId: "mega-chains-request",
+      incidentId,
+      participants: ["mega", s.playerId],
+      createdDay: s.day,
+      status: "pending",
+      selectedResponses: [],
+      followUpPending: false,
+      deferred: false,
+    };
+    s.encounters.push(e);
+  }
+  e.status = "active";
+  e.deferred = false;
+  return s;
+}

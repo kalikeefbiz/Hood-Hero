@@ -150,7 +150,10 @@ describe("complete inventory economy", () => {
       if (home === "south") expect(marketAccess(s, "player", home)).toBeNull();
       else expect(marketAccess(s, "player", home)).not.toBeNull();
       if (local.length) {
-        s = act(s, "contact", local[0].id);
+        if (home === "rio") {
+          s = act(s, "introduce", "resident-rio");
+          s = act(s, "contact", "dizzy");
+        } else s = act(s, "contact", local[0].id);
         expect(marketAccess(s, "player", home)).toBeNull();
       }
       expect(marketAccess(s, "player", "downtown")).not.toBeNull();
@@ -203,7 +206,7 @@ describe("exposure, custody and city continuity", () => {
     const outcomes = new Set<string>();
     for (let seed = 1; seed < 100; seed++) {
       const t = newGame("Chance", "south", seed * 98713);
-      for (let i = 0; i < 6; i++) addExposure(t, "player", "south");
+      for (let i = 0; i < 12; i++) addExposure(t, "player", "south", 18);
       advancePressure(t);
       outcomes.add(player(t).status);
     }

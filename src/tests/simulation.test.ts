@@ -215,8 +215,8 @@ describe("actions, economy, AP and persistence", () => {
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
     raw.version = 99;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 6/);
-    raw.version = 6;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 7/);
+    raw.version = 7;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });
@@ -314,6 +314,7 @@ describe("living simulation and personal Set", () => {
   });
   it("gates affiliation through a member’s trust and organizational standing", () => {
     let s = fresh();
+    s = doAction(s, "introduce", "mega");
     expect(
       validateAction(s, {
         type: "affiliate",

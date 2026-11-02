@@ -16,7 +16,12 @@ import {
   validateAction,
 } from "../core/ActionEngine";
 import { earn, expense } from "./Economy";
-import { change, remember } from "./Relationships";
+import {
+  change,
+  remember,
+  connect,
+  introductionCandidates,
+} from "./Relationships";
 import { currentEmployment } from "./Employment";
 import { weekday } from "../content/jobs";
 
@@ -361,14 +366,9 @@ export function requestActivity(
 function shareInformation(s: GameState, a: CrewAssignment) {
   const c = s.characters[a.member],
     p = player(s);
-  const contact = c.known.find(
-    (id) =>
-      id !== p.id &&
-      !p.known.includes(id) &&
-      s.characters[id]?.status === "active",
-  );
+  const contact = introductionCandidates(s, p.id, c.id)[0];
   if (contact) {
-    p.known.push(contact);
+    connect(s, p.id, contact);
     change(s.characters[contact], p.id, { trust: 2 });
     return `${c.name} introduced you to ${s.characters[contact].name}, someone they actually know.`;
   }

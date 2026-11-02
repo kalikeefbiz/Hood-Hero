@@ -1,3 +1,4 @@
+import { honest, connects, storyline, storyAction } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
@@ -16,6 +17,8 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
+  if (name === "Actions")
+    await page.getByRole("button", { name: "Honest", exact: true }).click();
 }
 async function seed(page: Page, state: GameState) {
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
@@ -119,6 +122,7 @@ for (const faction of [
     // Prepared eligible world, not a production debug path. The UI still must execute affiliate.
     const p = player(state);
     p.known = [...new Set([...p.known, sponsor.id])];
+    p.connections = [...new Set([...p.connections, sponsor.id])];
     p.organizationStanding[faction] = 35;
     sponsor.relationships[p.id] = {
       trust: 35,
@@ -134,7 +138,7 @@ for (const faction of [
     );
     await nav(page, "Actions");
     await page
-      .getByRole("button", { name: "People", exact: true })
+      .getByRole("button", { name: "Connects", exact: true })
       .filter({ hasNot: page.locator("svg") })
       .click();
     await page.getByRole("combobox").selectOption(sponsor.id);
@@ -216,14 +220,11 @@ test("Actions update cash/AP, explain disabled prerequisites, and autosave", asy
   await button.click();
   await expect(page.locator(".cash-resource strong")).toHaveText("$163");
   await expect(page.locator(".ap b")).toHaveText("1/2");
-  const work = page.locator(".action-card").filter({
-    has: page.getByRole("heading", { name: "Clock in", exact: true }),
-  });
-  await expect(work.getByRole("button")).toBeDisabled();
-  await expect(work.locator(".disabled-reason")).toHaveText(
-    "Not enough AP or availability",
+  await expect(card.getByRole("button")).toBeDisabled();
+  await expect(card.locator(".disabled-reason")).toContainText(
+    "Today's local gig is complete",
   );
-  await expect(work.getByRole("button")).toHaveAttribute(
+  await expect(card.getByRole("button")).toHaveAttribute(
     "aria-describedby",
     /reason/,
   );
@@ -290,18 +291,13 @@ test("negotiated demand comes from state; ended and damaged saves remain inspect
   s.incidents["the-chains"].negotiated = true;
   await seed(page, s);
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
+  await storyline(page);
   await expect(
-    page.getByRole("heading", { name: "Buy back · $105" }),
-  ).toBeVisible();
+    page.getByRole("dialog", { name: "Character encounter" }),
+  ).toContainText("$105");
   await expect(
-    page.locator(".action-card").filter({
-      has: page.getByRole("heading", {
-        name: "Negotiate buyback",
-        exact: true,
-      }),
-    }),
-  ).toContainText("This demand has already been negotiated");
+    page.getByRole("button", { name: /Talk down the demand/ }),
+  ).toHaveCount(0);
   s.end = "arrested";
   await seed(page, s);
   await expect(

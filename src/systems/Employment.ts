@@ -4,7 +4,7 @@ import { random } from "../core/Random";
 import { BALANCE } from "../content/balance";
 import { JOBS, jobDefinition, weekday } from "../content/jobs";
 import { earn } from "./Economy";
-import { change, remember } from "./Relationships";
+import { change, remember, connect } from "./Relationships";
 const B = BALANCE.employment;
 export const currentEmployment = (s: GameState, actor = s.playerId) =>
   s.employment.find((e) => e.actor === actor && e.status === "employed");
@@ -51,7 +51,7 @@ export function jobError(
   if (
     j.id.startsWith("retail") &&
     c.home !== j.location &&
-    !c.known.includes(j.employer)
+    !c.connections.includes(j.employer)
   )
     return "A local contact or local address is required";
   if (s.characters[j.employer].status !== "active")
@@ -63,7 +63,7 @@ export const jobOpportunities = (s: GameState, actor = s.playerId) =>
     (j) =>
       !j.id.startsWith("retail") ||
       s.characters[actor].home === j.location ||
-      s.characters[actor].known.includes(j.employer),
+      s.characters[actor].connections.includes(j.employer),
   );
 export function applyForJob(s: GameState, actor: string, jobId: string) {
   const search = (s.employmentSearch[actor] ??= { eligibleDay: 1 });
@@ -72,6 +72,7 @@ export function applyForJob(s: GameState, actor: string, jobId: string) {
   const j = jobDefinition(jobId),
     c = s.characters[actor],
     employer = s.characters[j.employer];
+  connect(s, actor, employer.id);
   c.known = [...new Set([...c.known, employer.id])];
   employer.known = [...new Set([...employer.known, actor])];
   change(employer, actor, {});

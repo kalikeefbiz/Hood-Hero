@@ -1,3 +1,4 @@
+import { honest, connects, storyAction, storyline } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
 async function nav(page: import("@playwright/test").Page, name: string) {
@@ -18,7 +19,12 @@ async function start(
   await expect(page.getByRole("heading", { name: "Morgan" })).toBeVisible();
 }
 async function action(page: import("@playwright/test").Page, title: string) {
-  await nav(page, "Actions");
+  if (title.includes("Buy back")) {
+    await storyAction(page, "buyback");
+    return;
+  }
+  if (title === "Reach out") await connects(page, "mega");
+  else await honest(page);
   await page
     .locator(".action-card")
     .filter({ has: page.getByRole("heading", { name: title, exact: true }) })
@@ -41,11 +47,11 @@ test("phone gameplay: contact, lawful income, days, save and load", async ({
   await noOverflow(page);
   await nav(page, "Actions");
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
+
   await action(page, "Reach out");
   await expect(page.getByRole("status")).toContainText("Trust grew");
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "Everyday", exact: true }).click();
+  await page.getByRole("button", { name: "Honest", exact: true }).click();
   await action(page, "Pick up a gig");
   await expect(page.locator(".ap b")).toHaveText("0/2");
   await page.getByRole("button", { name: "End day" }).click();
@@ -86,14 +92,17 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "The Chains", exact: true }).click();
+
   await action(page, "Reach out");
   await action(page, "Buy back · $150");
-  await expect(page.locator(".situation .status-chip")).toHaveText("resolved");
+  await dismissEncounter(page);
+  await nav(page, "City");
+  await page.getByText("Completed storylines", { exact: true }).click();
+  await expect(page.locator(".situation-history")).toContainText("resolved");
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
   await nav(page, "Actions");
-  await page.getByRole("button", { name: "Everyday", exact: true }).click();
+  await page.getByRole("button", { name: "Honest", exact: true }).click();
   await action(page, "Pick up a gig");
   await expect(page.getByRole("status")).toContainText("$38");
   await nav(page, "Set");

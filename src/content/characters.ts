@@ -29,6 +29,7 @@ export function character(
     relationships: {},
     memories: [],
     known: [],
+    connections: [],
     stress: 10,
     notoriety: 0,
     police: 0,

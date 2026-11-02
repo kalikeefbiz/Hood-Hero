@@ -18,7 +18,13 @@ import { record } from "./EventLog";
 import { random } from "./Random";
 import { BALANCE } from "../content/balance";
 import { ITEMS, type ItemId } from "../content/economy";
-import { change, remember } from "../systems/Relationships";
+import {
+  change,
+  remember,
+  connect,
+  contactError,
+  introductionCandidates,
+} from "../systems/Relationships";
 import { earn, expense } from "../systems/Economy";
 import { resolveIncident } from "../systems/Incidents";
 import { syncEncounters } from "../systems/EncounterLifecycle";
@@ -310,6 +316,26 @@ export function validateAction(s: GameState, a: Action): string | null {
   if (targeted.includes(a.type) && (!t || t.id === c.id))
     return "Choose another person";
   if (t) {
+    const storyAccess =
+      a.type === "settlement" &&
+      i?.status === "active" &&
+      i.informed &&
+      i.organization === t.affiliation;
+    if (a.type !== "remove" && !storyAccess) {
+      const error = contactError(s, c.id, t.id);
+      if (error) return error;
+      if (
+        a.type === "socialize" &&
+        (t.relationships[c.id]?.trust ?? 0) < 15 &&
+        (t.relationships[c.id]?.affection ?? 0) < 15
+      )
+        return "Build a connection before inviting them to spend time together.";
+      if (
+        a.type === "introduce" &&
+        !introductionCandidates(s, c.id, t.id).length
+      )
+        return "No appropriate new introduction is available through this contact.";
+    }
     if (!c.known.includes(t.id)) return "You need an introduction";
     if (t.status !== "active" && a.type !== "remove")
       return "This person is unavailable";
@@ -488,18 +514,15 @@ export function resolveAction(s: GameState, a: Action) {
     }
     case "inquire":
     case "introduce": {
-      c.known = [
-        ...new Set([
-          ...c.known,
-          ...t!.known,
-          ...Object.values(s.characters)
-            .filter((x) => x.home === t!.home)
-            .map((x) => x.id),
-        ]),
-      ].filter((id) => id !== c.id);
+      if (a.type === "introduce")
+        for (const id of introductionCandidates(s, c.id, t!.id))
+          connect(s, c.id, id);
+      c.known = [...new Set([...c.known, ...t!.known])].filter(
+        (id) => id !== c.id,
+      );
       if (i) i.informed = true;
       change(t!, c.id, { trust: 4 });
-      text = `${t!.name} shared local contacts${i ? " and confirmed that the robbery was unauthorized. The property is held by the group, not a known individual" : ""}.`;
+      text = `${t!.name} ${a.type === "introduce" ? "made an appropriate introduction" : "shared what they know"}${i ? " and confirmed that the robbery was unauthorized. The property is held by the group, not a known individual" : ""}.`;
       break;
     }
     case "favor":

@@ -30,6 +30,13 @@ export function EncounterScene({
   const concerned =
     promise?.status === "broken" ||
     (!promise && s.incidents[e.incidentId ?? ""]?.status === "active");
+  const responses = d.responses(s, e);
+  const counts = new Map<string, number>();
+  if (d.id === "street-supplier")
+    for (const r of responses) {
+      const error = responseError(s, e, r);
+      if (error) counts.set(error, (counts.get(error) ?? 0) + 1);
+    }
   return (
     <section
       className="encounter-scene"
@@ -110,12 +117,19 @@ export function EncounterScene({
         role="group"
         aria-label="Your response"
       >
+        {[...counts.entries()]
+          .filter(([, n]) => n > 1)
+          .map(([reason]) => (
+            <p className="disabled-reason" key={reason}>
+              {reason}
+            </p>
+          ))}
         {historical ? (
           <button className="encounter-response" onClick={() => dismiss(e.id)}>
             Return to City
           </button>
         ) : (
-          d.responses(s, e).map((r) => {
+          responses.map((r) => {
             const reason = responseError(s, e, r),
               action = r.effect.type === "action" ? r.effect.action : null;
             const chance = action ? actionSuccessChance(s, action) : null;
@@ -135,7 +149,9 @@ export function EncounterScene({
                         ? "Personal request · costs and conditions above; refusal costs no AP"
                         : "Conversation · No AP")}
                 </small>
-                {reason && <small className="disabled-reason">{reason}</small>}
+                {reason && (counts.get(reason) ?? 0) < 2 && (
+                  <small className="disabled-reason">{reason}</small>
+                )}
               </button>
             );
           })

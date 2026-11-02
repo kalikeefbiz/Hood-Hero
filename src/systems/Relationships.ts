@@ -76,4 +76,84 @@ export function initializeRelationships(s: GameState) {
     });
     if (!s.characters[a].known.includes(b)) s.characters[a].known.push(b);
   }
+  for (const c of chars) {
+    c.connections = c.known.filter(
+      (id) =>
+        c.id !== s.playerId ||
+        ["mega", "flacco"].includes(id) ||
+        id.startsWith("resident-") ||
+        id.startsWith("contact-"),
+    );
+  }
+  const p = s.characters[s.playerId];
+  for (const c of chars)
+    if (c.id !== p.id && !p.connections.includes(c.id))
+      c.connections = c.connections.filter((id) => id !== p.id);
+}
+
+// Awareness is not a means of contact. Trust remains directional and independent.
+export function connect(s: GameState, actor: string, target: string) {
+  for (const [a, b] of [
+    [actor, target],
+    [target, actor],
+  ]) {
+    const c = s.characters[a];
+    relationship(c, b);
+    if (!c.known.includes(b)) c.known.push(b);
+    if (!c.connections.includes(b)) c.connections.push(b);
+  }
+}
+export function accessStatus(s: GameState, actor: string, target: string) {
+  const c = s.characters[actor],
+    n = s.characters[target];
+  if (!c?.known.includes(target)) return "Unknown";
+  if (!c.connections.includes(target)) return "Known of";
+  return (n?.relationships[actor]?.trust ?? 0) >= 35 &&
+    (n?.relationships[actor]?.grievance ?? 0) < 40
+    ? "Trusted"
+    : "Connected";
+}
+export function contactError(
+  s: GameState,
+  actor: string,
+  target: string,
+): string | null {
+  const c = s.characters[actor],
+    n = s.characters[target];
+  if (!n || !c?.known.includes(target))
+    return "You need to learn who this person is first.";
+  if (!c.connections.includes(target))
+    return "Known of, not connected. Ask an established contact for an introduction.";
+  if (n.status !== "active") return `This person is unavailable (${n.status}).`;
+  if (n.availableDay > s.day)
+    return `Committed until day ${n.availableDay}. Use the member conversation to review commitments.`;
+  if (
+    (n.relationships[actor]?.trust ?? 0) < -10 ||
+    (n.relationships[actor]?.grievance ?? 0) > 55
+  )
+    return "They aren't willing to talk. Your relationship needs repair.";
+  return null;
+}
+export function introductionCandidates(
+  s: GameState,
+  actor: string,
+  sponsor: string,
+) {
+  const c = s.characters[actor],
+    n = s.characters[sponsor];
+  if (!n || contactError(s, actor, sponsor)) return [];
+  return n.connections.filter((id) => {
+    const x = s.characters[id];
+    const leader = Object.values(s.factions).some((f) =>
+      f.leaders.includes(id),
+    );
+    return (
+      id !== actor &&
+      x?.status === "active" &&
+      !c.connections.includes(id) &&
+      (!leader ||
+        (n.affiliation === x.affiliation &&
+          (n.relationships[actor]?.trust ?? 0) >= 35))
+    );
+  });
 }

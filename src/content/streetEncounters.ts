@@ -5,6 +5,7 @@ import {
   paymentError,
   supplierError,
   unitPrice,
+  suppliers,
 } from "../systems/StreetEconomy";
 export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
   id: "street-supplier",
@@ -16,6 +17,7 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
     player(s).status === "active" &&
     !s.end &&
     s.characters[e.participants[0]]?.status === "active" &&
+    player(s).connections.includes(e.participants[0]) &&
     !["closed", "acknowledged"].includes(e.status),
   expression: () => "proposing",
   dialogue: (s, e) => {
@@ -126,7 +128,8 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
 };
 export function openSupplier(state: GameState, supplier: string): GameState {
   if (
-    !player(state).known.includes(supplier) ||
+    !suppliers(state).some((n) => n.id === supplier) ||
+    !player(state).connections.includes(supplier) ||
     player(state).status !== "active" ||
     state.end
   )
