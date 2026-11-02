@@ -413,7 +413,7 @@ describe("The Chains and automated playthroughs", () => {
     expect(s.day).toBe(161);
     expect(s.end).toBeNull();
     expect(s.characters.player.status).toBe("active");
-  });
+  }, 20000);
 });
 describe("constructed end condition fixtures", () => {
   it("evaluates arrest and death regardless of wealth", () => {

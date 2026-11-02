@@ -9,7 +9,11 @@ import {
 } from "../core/GameState";
 import { record } from "../core/EventLog";
 import { random } from "../core/Random";
-import { resolveAction, validateAction } from "../core/ActionEngine";
+import {
+  actionSuccessChance,
+  resolveAction,
+  validateAction,
+} from "../core/ActionEngine";
 import { earn, expense } from "./Economy";
 import { change, remember } from "./Relationships";
 import { currentEmployment } from "./Employment";
@@ -183,7 +187,7 @@ export function requestError(
         a.activity === activity &&
         a.status === "refused" &&
         a.createdDay === s.day &&
-        a.compensation === (activity === "work" ? compensation : 0),
+        (activity !== "work" || a.compensation === compensation),
     )
   )
     return "You already discussed this request today. Give them some space.";
@@ -226,12 +230,20 @@ function assignment(
     createdDay: s.day,
     dueDay: s.day,
     apCost: 1,
-    compensation: activity === "work" ? compensation : 0,
+    compensation:
+      activity === "work"
+        ? compensation
+        : activity === "partner-gig"
+          ? 16
+          : activity === "partner-crime"
+            ? 20
+            : 0,
     expectedBenefit:
       activity === "work"
         ? 24 + Math.floor(s.characters[member].skills.work / 6)
         : activity === "partner-gig"
-          ? 38
+          ? 38 +
+            Math.max(0, Math.floor((s.characters[member].skills.work - 25) / 8))
           : activity === "partner-crime"
             ? 72
             : 0,
@@ -241,7 +253,16 @@ function assignment(
         : activity === "partner-crime"
           ? "recovery"
           : "work",
-    chance: assignmentChance(s, s.characters[member], activity),
+    chance:
+      activity === "partner-crime"
+        ? actionSuccessChance(s, {
+            actor: s.playerId,
+            type: "crime",
+            partner: member,
+          })!
+        : ["social", "partner-gig"].includes(activity)
+          ? 1
+          : assignmentChance(s, s.characters[member], activity),
     risk:
       activity === "partner-crime"
         ? "Police, rival exposure and financial loss for both"
