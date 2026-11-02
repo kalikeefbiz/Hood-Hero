@@ -5,32 +5,34 @@
 
  RUN  v3.2.7 /workspace/Hood-Hero
 
- ✓ src/tests/simulation.test.ts (44 tests) 9304ms
-   ✓ The Chains and automated playthroughs > ignores the incident while continuing repeatable legitimate work  542ms
-   ✓ The Chains and automated playthroughs > has no fixed turn limit and no arbitrary defeat timer  7101ms
- ✓ src/tests/employment.test.ts (20 tests) 31313ms
-   ✓ employment commitments and survival > pays once per shift, improves skill/trust/reliability and awards a modest raise  640ms
-   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 1  8839ms
-   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 7  8011ms
-   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 21  6741ms
-   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 2026  6115ms
- ✓ src/tests/crew.test.ts (21 tests) 17312ms
-   ✓ autonomous offers and extended seeded campaigns > 60 days seed 1: independent lives, occasional offers, real appointments, save/load and bounded growth  3431ms
-   ✓ autonomous offers and extended seeded campaigns > 60 days seed 7: independent lives, occasional offers, real appointments, save/load and bounded growth  2854ms
-   ✓ autonomous offers and extended seeded campaigns > 60 days seed 21: independent lives, occasional offers, real appointments, save/load and bounded growth  2342ms
-   ✓ autonomous offers and extended seeded campaigns > 60 days seed 83: independent lives, occasional offers, real appointments, save/load and bounded growth  2577ms
-   ✓ autonomous offers and extended seeded campaigns > 60 days seed 2026: independent lives, occasional offers, real appointments, save/load and bounded growth  2209ms
-   ✓ autonomous offers and extended seeded campaigns > 60 days seed 5099: independent lives, occasional offers, real appointments, save/load and bounded growth  3403ms
- ✓ src/tests/encounters.test.ts (20 tests) 3431ms
-   ✓ correction: conversations conclude independently of storylines > does not reopen a fulfilled story over 40 further days, including reload  1281ms
-   ✓ correction: conversations conclude independently of storylines > does not reopen a broken story over 40 further days, including reload  1495ms
- ✓ src/tests/actionOdds.test.ts (3 tests) 1518ms
-   ✓ odds presented to the player > negotiate predicts the actual seeded outcome without changing the world or RNG  909ms
-   ✓ odds presented to the player > recover predicts the actual seeded outcome without changing the world or RNG  369ms
- ✓ src/tests/actionArt.test.ts (2 tests) 23ms
+ ✓ src/tests/employment.test.ts (20 tests) 20153ms
+   ✓ employment commitments and survival > pays once per shift, improves skill/trust/reliability and awards a modest raise  414ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 1  5457ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 7  5210ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 21  4496ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 2026  4272ms
+ ✓ src/tests/crew.test.ts (21 tests) 11421ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 1: independent lives, occasional offers, real appointments, save/load and bounded growth  2199ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 7: independent lives, occasional offers, real appointments, save/load and bounded growth  1576ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 21: independent lives, occasional offers, real appointments, save/load and bounded growth  1887ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 83: independent lives, occasional offers, real appointments, save/load and bounded growth  1590ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 2026: independent lives, occasional offers, real appointments, save/load and bounded growth  1837ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 5099: independent lives, occasional offers, real appointments, save/load and bounded growth  1798ms
+   ✓ autonomous offers and extended seeded campaigns > replays offers and assignments deterministically  351ms
+ ✓ src/tests/simulation.test.ts (44 tests) 5486ms
+   ✓ The Chains and automated playthroughs > ignores the incident while continuing repeatable legitimate work  553ms
+   ✓ The Chains and automated playthroughs > has no fixed turn limit and no arbitrary defeat timer  4116ms
+ ✓ src/tests/encounters.test.ts (20 tests) 1697ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a fulfilled story over 40 further days, including reload  619ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a broken story over 40 further days, including reload  680ms
+ ✓ src/tests/actionOdds.test.ts (3 tests) 1189ms
+   ✓ odds presented to the player > negotiate predicts the actual seeded outcome without changing the world or RNG  417ms
+   ✓ odds presented to the player > recover predicts the actual seeded outcome without changing the world or RNG  375ms
+   ✓ odds presented to the player > crime predicts the actual seeded outcome without changing the world or RNG  391ms
+ ✓ src/tests/actionArt.test.ts (2 tests) 10ms
 
  Test Files  6 passed (6)
       Tests  110 passed (110)
-   Start at  07:43:58
-   Duration  70.60s (transform 1.33s, setup 0ms, collect 3.69s, tests 62.90s, environment 4ms, prepare 1.25s)
+   Start at  07:50:56
+   Duration  45.35s (transform 841ms, setup 0ms, collect 2.25s, tests 39.96s, environment 1ms, prepare 718ms)
 

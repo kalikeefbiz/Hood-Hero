@@ -1,9 +1,9 @@
 {
   "url": "https://kalikeefbiz.github.io/Hood-Hero/",
-  "verifiedAt": "2026-11-02T07:45:09.769Z",
+  "verifiedAt": "2026-11-02T07:55:27.728Z",
   "metadata": {
     "app": "Hood Hero",
-    "commit": "2406f29dea0125d559a92f36763967d792993199",
+    "commit": "4e4fc6fe72340d6301ab03faad3b4c8f11e15bf0",
     "saveSchema": 5,
     "milestone": "GOAL 005"
   },
@@ -35,14 +35,21 @@
         ],
         "activity": "partner-gig",
         "objective": "Partner on a local gig",
+        "conditions": [
+          "Active participants",
+          "Available time and cooperation",
+          "1 AP on participation",
+          "Daily local gig not already completed"
+        ],
+        "relationshipEffect": "Cooperation strengthened trust and respect.",
         "status": "resolved",
         "createdDay": 7,
         "dueDay": 8,
         "apCost": 1,
-        "compensation": 0,
+        "compensation": 16,
         "expectedBenefit": 38,
         "skill": "work",
-        "chance": 0.7044444444444444,
+        "chance": 1,
         "risk": "Time and relationship",
         "experience": 1,
         "eventIds": [
@@ -84,14 +91,21 @@
         ],
         "activity": "partner-gig",
         "objective": "Partner on a local gig",
+        "conditions": [
+          "Active participants",
+          "Available time and cooperation",
+          "1 AP on participation",
+          "Daily local gig not already completed"
+        ],
+        "relationshipEffect": "Cooperation strengthened trust and respect.",
         "status": "resolved",
         "createdDay": 7,
         "dueDay": 8,
         "apCost": 1,
-        "compensation": 0,
+        "compensation": 16,
         "expectedBenefit": 38,
         "skill": "work",
-        "chance": 0.7044444444444444,
+        "chance": 1,
         "risk": "Time and relationship",
         "experience": 1,
         "eventIds": [

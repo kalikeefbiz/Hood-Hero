@@ -4,7 +4,7 @@
 
 Accepted PR #3 was merged into `main` as `fc880ae889bffe5b3a721f52f4a15febda08e6d4`. Its 89 Vitest tests and production build passed before GOAL 005 began on `goal-005-crew-agency`. GOAL 005 gameplay remains on that development branch for creator review.
 
-The public build remains https://kalikeefbiz.github.io/Hood-Hero/ . Final deployment identifiers and public-browser verification are recorded below after publishing.
+The public build remains https://kalikeefbiz.github.io/Hood-Hero/ . Deployment identifiers and public-browser verification are recorded below.
 
 ## Implementation
 
@@ -75,3 +75,20 @@ Public Chromium and WebKit checks verified build metadata identifying **GOAL 005
 Validation at this stage: **110 Vitest tests passed**, including the new conflict and no-show cases, and **18 × 60-day campaigns passed**. The initial complete 84-case browser matrix passed 79 cases; four legacy cases still assumed that no independent character could initiate a conversation after The Chains, and one WebKit all-home tour hit its local timeout during concurrent validation. The four cases now decline legitimate crew offers while continuing to assert no repeated Chains scenes. Focused reruns and final production-path results are recorded with the final evidence below. The local unit run used a 20-second per-test allowance during simultaneous browser validation; the standard default test command also passed in both deployment builds.
 
 The follow-up deployment encountered a 5-second Vitest timeout in the existing 160-day simulation (5.17 seconds on that runner). Its assertions and 160-day coverage are unchanged; that long campaign now receives the same 20-second allowance used for the heavier simulation checks. All six focused browser reruns passed, covering the corrected 40-day scenarios in both engines and both all-home tours. No gameplay change was needed for those browser failures.
+
+
+## Final validation and handoff
+
+Review PR: https://github.com/kalikeefbiz/Hood-Hero/pull/4 . Gameplay commit `4e4fc6fe72340d6301ab03faad3b4c8f11e15bf0` was published by [successful run 41409020871](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41409020871). The final evidence commit republishes this same implementation; `build-info.json` identifies the served commit. The PR checks link to the complete CI runs.
+
+| Check | Result |
+| --- | --- |
+| Vitest | 110 passed; six files |
+| Complete browser coverage | All 84 distinct Chromium/WebKit scenarios passed across the initial matrix and focused reruns; initial failure details are retained |
+| Focused regression reruns | 6 passed, including both 40-day outcome paths and both all-home tours |
+| Final `/Hood-Hero/` browser suite | 20 passed: crew and employment in Chromium and WebKit, all four mobile widths, real offers, natural recruitment and 30-day employment |
+| Seeded composition campaigns | 18 passed / 1,080 additional days; plus the unit suite's six seeded 60-day campaigns |
+| Production build | TypeScript and Vite passed with the Pages base path |
+| Public site | Chromium and WebKit both passed actual work, refusal, recruitment, an autonomous day-7 offer, day-8 attendance and saved consequences; no game-script or asset failures |
+
+`GOAL_005_LIVE.json` records the final gameplay commit's public verification; `GOAL_005_BROWSER_PAGES.txt`, `GOAL_005_BROWSER_REGRESSION.txt`, `GOAL_005_VITEST.txt`, `GOAL_005_CAMPAIGNS.json` and `GOAL_005_DEPLOYMENT.json` contain reproducible evidence. The seven required screenshot subjects are available for each engine, with six additional public-site captures. GOAL 005 remains unmerged for creator playtesting.
