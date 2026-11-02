@@ -7,6 +7,7 @@ export {
   openEncounter,
   dismissEncounter,
 } from "./EncounterLifecycle";
+import { resolveWorkplace } from "./Workplace";
 import { performAction, validateAction } from "../core/ActionEngine";
 import { acknowledgeEvent, record } from "../core/EventLog";
 import { promiseHelp } from "./Commitments";
@@ -41,7 +42,15 @@ export function respondEncounter(
   const startEvent = state.events.length;
   let s = structuredClone(state);
   const effect = response.effect;
-  if (effect.type === "action") {
+  if (effect.type === "workplace") {
+    resolveWorkplace(
+      s,
+      s.encounters.find((e) => e.id === id)!,
+      effect.choice,
+    );
+    syncEncounters(s);
+    return { state: s, error: null };
+  } else if (effect.type === "action") {
     const result = performAction(s, effect.action);
     if (result.error) return { state, error: result.error };
     s = result.state;

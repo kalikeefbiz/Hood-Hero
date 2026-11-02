@@ -21,6 +21,8 @@ import { ActivityFeed } from "./ActivityFeed";
 import { syncEncounters } from "../systems/EncounterLifecycle";
 import { EncounterScene } from "./EncounterScene";
 import { NarrativeNotifications } from "./NarrativeNotifications";
+import { EmploymentSummary } from "./EmploymentSummary";
+import { absenceWarning } from "../systems/Employment";
 import { CommitmentSummary } from "./CommitmentSummary";
 import { CharacterPortrait } from "./CharacterPortrait";
 import { ANGELS_TRIO, CHAIN_EVIDENCE, artURL } from "./characterArt";
@@ -171,7 +173,7 @@ export function App() {
     setSelected(home);
     setScreen("City");
     setHistoryEncounterId(null);
-    setNotice("You’re home. Clock in, check on Cuzzo, or see who’s around.");
+    setNotice("You’re home. Find work, check on Cuzzo, or see who’s around.");
   }
   function load(resume = false) {
     setActionFeedback(null);
@@ -210,6 +212,12 @@ export function App() {
       setActionFeedback(result.error);
     } else {
       setState(result.state);
+      if (
+        result.state.encounters.some(
+          (e) => e.definitionId === "workplace" && e.status === "active",
+        )
+      )
+        setScreen("City");
       const message = result.event?.text ?? "Action completed.";
       setNotice(message);
       setActionFeedback(message);
@@ -230,7 +238,11 @@ export function App() {
               ? "You asked for time to think. The situation continues; resume the conversation from City."
               : response === "acknowledge"
                 ? "Outcome acknowledged. The city moves on; the history remains."
-                : "Cuzzo explains what happened.";
+                : s.encounters.find((e) => e.id === id)?.definitionId ===
+                    "workplace"
+                  ? (result.state.events.at(-1)?.text ??
+                    "Workplace choice recorded.")
+                  : "Cuzzo explains what happened.";
       setNotice(reply);
       if (response !== "clarify") setActionFeedback(reply);
     }
@@ -303,7 +315,7 @@ export function App() {
   const all = availableActions(s);
   const actionCard = (a: Action) => (
     <ActionCard
-      key={`${a.type}-${a.target ?? a.item ?? ""}`}
+      key={`${a.type}-${a.target ?? a.item ?? a.jobId ?? ""}`}
       s={s}
       action={a}
       onAction={act}
@@ -328,7 +340,16 @@ export function App() {
   ];
   let displayed = all.filter((a) =>
     actionGroup === "Everyday"
-      ? ["work", "gig", "rest", "crime"].includes(a.type)
+      ? [
+          "work",
+          "gig",
+          "rest",
+          "crime",
+          "apply",
+          "acceptJob",
+          "timeOff",
+          "resign",
+        ].includes(a.type)
       : actionGroup === "The Chains"
         ? incidentTypes.includes(a.type)
           ? !a.target ||
@@ -404,6 +425,9 @@ export function App() {
             <button
               className="advance"
               onClick={() => {
+                const warning = absenceWarning(s);
+                if (warning && !window.confirm(warning + " End day anyway?"))
+                  return;
                 setActionFeedback(null);
                 const next = advanceDay(s);
                 setState(next);
@@ -470,6 +494,22 @@ export function App() {
               </button>
             </div>
           )}
+          {screen === "City" &&
+            !presented &&
+            s.encounters
+              .filter(
+                (e) => e.definitionId === "workplace" && e.status === "pending",
+              )
+              .map((e) => (
+                <div className="narrative-links" key={e.id}>
+                  <button
+                    className="secondary"
+                    onClick={() => showConversation(e.id)}
+                  >
+                    Resume workplace conversation
+                  </button>
+                </div>
+              ))}
           {(screen === "City" || screen === "Actions") && (
             <CommitmentSummary s={s} />
           )}
@@ -606,6 +646,7 @@ export function App() {
                   </Panel>
                 </div>
               </div>
+              <EmploymentSummary s={s} />
               <Panel>
                 <div className="panel-title">
                   <h3>Your position</h3>
@@ -797,6 +838,7 @@ export function App() {
                   </button>
                 ))}
               </div>
+              {actionGroup === "Everyday" && <EmploymentSummary s={s} />}
               {actionGroup === "The Chains" && (
                 <Panel className="situation">
                   <div className="panel-title">
@@ -1045,6 +1087,7 @@ export function App() {
           )}
           {screen === "Finances" && (
             <>
+              <EmploymentSummary s={s} />
               <Panel>
                 <p className="eyebrow">CASH ON HAND</p>
                 <h3 className="cash-total">{money(cash(p))}</h3>

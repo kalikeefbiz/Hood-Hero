@@ -11,10 +11,15 @@ import { advanceIncidents } from "../systems/Incidents";
 import { advancePressure } from "../systems/Reputation";
 import { progress } from "../systems/Progression";
 import { evaluateEnd } from "../systems/EndConditions";
+import { settleAttendance, generateShifts } from "../systems/Employment";
+import { settleWorkplaceScenes } from "../systems/Workplace";
 export function advanceDay(state: GameState): GameState {
   if (state.end) return state;
   const s = structuredClone(state);
+  settleWorkplaceScenes(s);
+  settleAttendance(s);
   s.day++;
+  generateShifts(s);
   processCommitments(s);
   advanceNPCs(s);
   advanceFactions(s);

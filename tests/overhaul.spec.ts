@@ -18,7 +18,7 @@ async function nav(page: Page, name: string) {
     .click();
 }
 async function seed(page: Page, state: GameState) {
-  await page.goto("/");
+  await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await page.evaluate(
     ({ key, raw }) => {
       localStorage.clear();
@@ -63,7 +63,7 @@ test("all approved scenes load; every home starts independent and map selection 
     if (response.status() >= 400)
       failures.push(`${response.status()} ${response.url()}`);
   });
-  await page.goto("/");
+  await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await imagesLoaded(page);
   expect(await page.locator(".zone-choices img").count()).toBe(5);
   for (const z of Object.values(ZONES)) {

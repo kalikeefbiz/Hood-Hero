@@ -256,8 +256,8 @@ for (const outcome of ["fulfilled", "broken"] as const)
     await page.getByRole("button", { name: "Resume saved game" }).click();
     await expect(modal(page)).toHaveCount(0);
     await nav(page, "Actions");
-    await page.locator('[data-action="work"]').getByRole("button").click();
-    await expect(page.getByRole("status")).toContainText("$96");
+    await page.locator('[data-action="gig"]').getByRole("button").click();
+    await expect(page.getByRole("status")).toContainText("$38");
     await nav(page, "City");
     if (outcome === "broken") await capture(page, "07-city-after-consequences");
   });

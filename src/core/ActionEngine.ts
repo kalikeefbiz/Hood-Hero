@@ -19,7 +19,51 @@ import { evaluatePromises } from "../systems/Commitments";
 import { recoverySupport } from "../systems/Crew";
 import { progress } from "../systems/Progression";
 import { evaluateEnd } from "../systems/EndConditions";
+import {
+  currentEmployment,
+  shiftToday,
+  searchState,
+  jobError,
+  applyForJob,
+  acceptJob,
+  workShift,
+  endEmployment,
+  requestTimeOff,
+  jobOpportunities,
+} from "../systems/Employment";
 export const ACTIONS = {
+  apply: {
+    label: "Apply for work",
+    ap: 1,
+    risk: "None",
+    description:
+      "Meet the hiring contact. Review the offer before accepting; no wages for applying.",
+    outcomes: ["Job offer if eligible"],
+  },
+  acceptJob: {
+    label: "Accept employment",
+    ap: 0,
+    risk: "None",
+    description:
+      "Commit to the repeating schedule. First shift is after today.",
+    outcomes: ["Persistent employment and scheduled shifts"],
+  },
+  timeOff: {
+    label: "Request unpaid time off",
+    ap: 0,
+    risk: "None",
+    description:
+      "Ask to be excused from today's shift. One approved leave per seven days.",
+    outcomes: ["No absence, no wages"],
+  },
+  resign: {
+    label: "Resign from work",
+    ap: 0,
+    risk: "None",
+    description:
+      "End employment and future obligations. Applications pause for three days; same workplace for seven.",
+    outcomes: ["Employment ends; employer trust falls"],
+  },
   contact: {
     label: "Reach out",
     ap: 1,
@@ -103,14 +147,16 @@ export const ACTIONS = {
     label: "Work a full shift",
     ap: 2,
     risk: "None",
-    description: "Earn $96 in lawful pay. Build work skills and legitimacy.",
+    description:
+      "Attend your scheduled shift. Build work skills and legitimacy. Requires an active job and today’s obligation.",
     outcomes: ["$96 clean income; +8 stress"],
   },
   gig: {
     label: "Take a local gig",
     ap: 1,
     risk: "None",
-    description: "Earn $38 helping a local business.",
+    description:
+      "Earn $38 helping a local business in your neighborhood. One ordinary gig per day; no recurring obligation.",
     outcomes: ["$38 clean income; +3 stress"],
   },
   crime: {
@@ -182,6 +228,7 @@ export interface Action {
   target?: ID;
   incidentId?: ID;
   item?: ItemId;
+  jobId?: ID;
 }
 export function validateAction(s: GameState, a: Action): string | null {
   if (!ACTIONS[a.type]) return "Unknown action";
@@ -197,6 +244,30 @@ export function validateAction(s: GameState, a: Action): string | null {
       : c.availableDay > s.day || c.lastActionDay >= s.day
   )
     return "Not enough AP or availability";
+  if (["apply", "acceptJob"].includes(a.type)) {
+    const error = jobError(s, a.actor, a.jobId);
+    if (error) return error;
+    const search = searchState(s, a.actor);
+    if (a.type === "apply" && search.lastApplicationDay === s.day)
+      return "One formal application per day. Review your offer.";
+    if (a.type === "acceptJob" && search.offeredJob !== a.jobId)
+      return "Apply and receive an offer first";
+  }
+  if (
+    a.type === "work" &&
+    (!currentEmployment(s, a.actor) || !shiftToday(s, a.actor))
+  )
+    return "No unfulfilled scheduled shift today. Formal employment is required.";
+  if (["resign", "timeOff"].includes(a.type) && !currentEmployment(s, a.actor))
+    return "You are not employed";
+  if (a.type === "timeOff") {
+    if (!shiftToday(s, a.actor)) return "No scheduled shift to excuse today";
+    const last = currentEmployment(s, a.actor)!.timeOffDays.at(-1);
+    if (last !== undefined && s.day - last < BALANCE.employment.timeOffInterval)
+      return `Unpaid leave available again on day ${last + BALANCE.employment.timeOffInterval}`;
+  }
+  if (a.type === "gig" && searchState(s, a.actor).lastGigDay === s.day)
+    return "Today's local gig is complete. More opportunities tomorrow.";
   const targeted: ActionType[] = [
     "contact",
     "inquire",
@@ -360,6 +431,16 @@ export function resolveAction(s: GameState, a: Action) {
   let category: "social" | "money" | "crew" | "incident" | "risk" = "social";
   const socialGain = Math.max(3, 10 - Math.floor(c.stress / 25));
   switch (a.type) {
+    case "apply":
+      return applyForJob(s, a.actor, a.jobId!);
+    case "acceptJob":
+      return acceptJob(s, a.actor, a.jobId!);
+    case "timeOff":
+      return requestTimeOff(s, a.actor);
+    case "resign":
+      return endEmployment(s, currentEmployment(s, a.actor)!, false);
+    case "work":
+      return workShift(s, a.actor);
     case "contact":
     case "socialize": {
       const values = t!.traits.lawful > 60 && c.legitimacy > 20 ? 4 : 0;
@@ -451,18 +532,19 @@ export function resolveAction(s: GameState, a: Action) {
       category = "risk";
       break;
     }
-    case "work":
     case "gig": {
-      const full = a.type === "work",
-        amount = full ? BALANCE.workIncome : BALANCE.gigIncome;
-      earn(s, c, amount, "clean", full ? "Work shift" : "Local gig");
-      c.stress = clamp(c.stress + (full ? 8 : 3));
-      c.legitimacy = clamp(c.legitimacy + (full ? 4 : 1));
+      const amount = BALANCE.gigIncome;
+      (s.employmentSearch[c.id] ??= { eligibleDay: 1 }).lastGigDay = s.day;
+      earn(s, c, amount, "clean", "Local gig");
+      c.stress = clamp(c.stress + 3);
+      c.legitimacy = clamp(c.legitimacy + 1);
       c.skills.work = clamp(c.skills.work + 1);
-      c.influence += full ? 2 : 1;
-      c.neighborhoodStanding[c.home] += 1;
+      c.influence += 1;
+      c.neighborhoodStanding[c.home] = clamp(
+        c.neighborhoodStanding[c.home] + 1,
+      );
       if (c.id === s.playerId) s.progression.jobs++;
-      text = `${c.name} earned $${amount} in lawful pay.`;
+      text = `${c.name} earned $${amount} in lawful pay from today's local gig.`;
       category = "money";
       break;
     }
@@ -620,6 +702,8 @@ export function performAction(
   if (error) return { state, error };
   const next = structuredClone(state);
   const event = resolveAction(next, a);
+  progress(next);
+  next.end = evaluateEnd(next);
   syncEncounters(next);
   return { state: next, error: null, event };
 }
@@ -630,6 +714,17 @@ export function availableActions(s: GameState): Action[] {
   const list: Action[] = (["work", "gig", "rest", "crime"] as ActionType[]).map(
     (type) => ({ type, actor: p.id }),
   );
+  if (currentEmployment(s)) {
+    list.push(
+      { type: "timeOff", actor: p.id },
+      { type: "resign", actor: p.id },
+    );
+  } else {
+    for (const job of jobOpportunities(s))
+      list.push({ type: "apply", actor: p.id, jobId: job.id });
+    const offered = searchState(s, p.id).offeredJob;
+    if (offered) list.push({ type: "acceptJob", actor: p.id, jobId: offered });
+  }
   for (const item of Object.keys(ITEMS) as ItemId[])
     list.push({ type: "buy", actor: p.id, item });
   for (const target of p.known.filter((id) => id !== p.id && s.characters[id]))
@@ -654,5 +749,7 @@ export function availableActions(s: GameState): Action[] {
   if (incident)
     for (const type of ["negotiate", "buyback", "recover"] as ActionType[])
       list.push({ type, actor: p.id, incidentId });
-  return list;
+  const priority = (a: Action) =>
+    a.type === "acceptJob" ? 2 : a.type === "apply" ? 1 : 0;
+  return list.sort((a, b) => priority(b) - priority(a));
 }

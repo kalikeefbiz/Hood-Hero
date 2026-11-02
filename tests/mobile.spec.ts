@@ -10,7 +10,7 @@ async function start(
   page: import("@playwright/test").Page,
   home = "Southside",
 ) {
-  await page.goto("/");
+  await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await page.getByLabel("What do people call you?").fill("Morgan");
   await page.getByRole("radio", { name: home, exact: false }).check();
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
@@ -53,7 +53,7 @@ test("phone gameplay: contact, lawful income, days, save and load", async ({
   await expect(page.locator(".day")).toHaveText("DAY 02");
   await page.getByLabel("Save game", { exact: true }).click();
   await expect(page.getByRole("status")).toContainText("Saved day 2");
-  await action(page, "Clock in");
+  await action(page, "Pick up a gig");
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
   await expect(page.locator(".day")).toHaveText("DAY 03");
@@ -79,7 +79,10 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
 }) => {
   await start(page);
   await nav(page, "Actions");
-  await action(page, "Clock in");
+  await action(page, "Pick up a gig");
+  await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
+  await action(page, "Pick up a gig");
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
   await nav(page, "Actions");
@@ -91,8 +94,8 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
   await dismissEncounter(page);
   await nav(page, "Actions");
   await page.getByRole("button", { name: "Everyday", exact: true }).click();
-  await action(page, "Clock in");
-  await expect(page.getByRole("status")).toContainText("$96");
+  await action(page, "Pick up a gig");
+  await expect(page.getByRole("status")).toContainText("$38");
   await nav(page, "Set");
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
@@ -112,7 +115,7 @@ test("mobile city and new game remain readable at narrow widths", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 700 });
-  await page.goto("/");
+  await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await noOverflow(page);
   await page
     .getByLabel("What do people call you?")

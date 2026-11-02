@@ -57,7 +57,7 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
     });
   }
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await capture("01-new-run-390", true);
   await audit();
   await page.getByLabel("What do people call you?").fill("Morgan");

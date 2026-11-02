@@ -33,7 +33,7 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
       contentType: "image/png",
     });
   }
-  await page.goto("/");
+  await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await capture("01-new-run-390");
   await capture("01-new-run-full-390", true);
   await page.getByLabel("What do people call you?").fill("Morgan");
@@ -56,6 +56,7 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   await expect(page.locator(".situation")).toContainText("The Chains");
   await page.getByRole("button", { name: "Everyday", exact: true }).click();
   const work = page.locator('[data-action="work"]');
+  await work.scrollIntoViewIfNeeded();
   await expect(work.locator(".action-scene")).toBeVisible();
   await expect(work).toContainText("+8 stress");
   const s = newGame("Morgan", "nawf");

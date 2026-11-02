@@ -39,7 +39,7 @@ export function EncounterScene({
         <span className="eyebrow">
           {historical
             ? "RECORDED ENCOUNTER"
-            : (source?.title ?? "CUZZO HAS SOMETHING ON HIS MIND")}
+            : (source?.title ?? "A CONVERSATION IN THE CITY")}
         </span>
         <button
           className="text-button"
@@ -132,7 +132,9 @@ export function EncounterScene({
       <p className="encounter-footer">
         {historical
           ? "A recorded outcome. Viewing it changes no relationships or obligations."
-          : "Closing makes no new promise. Unfinished conversations can be resumed from City."}
+          : d.id === "workplace"
+            ? "Shift wages and attendance are recorded. Closing defers this choice; ending the day applies the Skip scene outcome."
+            : "Closing makes no new promise. Unfinished conversations can be resumed from City."}
       </p>
     </section>
   );

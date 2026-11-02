@@ -99,7 +99,7 @@ describe("character-driven Chains playthroughs", () => {
       resolveIncident(s, s.incidents["the-chains"], "buyback", "player");
       evaluatePromises(s);
       expect(serialize(s)).toBe(beforeReplay);
-      s = act(advanceDay(s), "work");
+      s = act(advanceDay(s), "gig");
       expect(s.end).toBeNull();
     },
   );
@@ -146,7 +146,7 @@ describe("character-driven Chains playthroughs", () => {
     ).toBe(true);
     expect(s.characters.mega.relationships.player.grievance).toBe(14);
     expect(characterArt(s, "mega", "concerned")?.path).toContain("no-chain");
-    expect(act(s, "work").end).toBeNull();
+    expect(act(s, "gig").end).toBeNull();
   });
   it("evaluates a final-day autonomous settlement before expiring the promise", () => {
     let s = answer(fresh(17), "promise");
@@ -336,7 +336,7 @@ describe("correction: conversations conclude independently of storylines", () =>
     const reaction = currentEncounter(s)!;
     s = respondEncounter(s, reaction.id, "acknowledge").state;
     const recorded = s.encounters.length;
-    for(let day=0;day<40;day++) { s = act(advanceDay(s), "work"); s = deserialize(serialize(s));
+    for(let day=0;day<40;day++) { s = act(advanceDay(s), "gig"); s = deserialize(serialize(s));
       expect(currentEncounter(s)).toBeUndefined(); expect(unseenEvents(s).filter(e => e.incidentId === "the-chains")).toHaveLength(0);
     }
     expect(s.encounters.length).toBe(recorded);
