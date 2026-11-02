@@ -412,3 +412,26 @@ describe("assignment boundaries and personal consequences", () => {
     expect(() => deserialize(serialize(duplicate))).toThrow(/references/);
   });
 });
+
+it("removal immediately withdraws an invitation, and re-recruitment preserves its cooldown and history", () => {
+  let s = fresh(1);
+  while (!s.crewOffers.some((o) => o.status === "pending")) s = advanceDay(s);
+  const offer = s.crewOffers.find((o) => o.status === "pending")!,
+    lastOfferDay = s.characters[offer.member].agency.lastOfferDay;
+  s = action(s, "remove", offer.member);
+  expect(s.crewOffers.find((o) => o.id === offer.id)?.status).toBe("expired");
+  expect(
+    s.encounters.filter(
+      (e) =>
+        e.crewOfferId === offer.id && ["pending", "active"].includes(e.status),
+    ),
+  ).toHaveLength(0);
+  s = action(s, "recruit", offer.member);
+  expect(s.crewOffers.find((o) => o.id === offer.id)?.status).toBe("expired");
+  expect(s.characters[offer.member].agency.lastOfferDay).toBe(lastOfferDay);
+  expect(
+    s.characters[offer.member].memories.some((m) =>
+      m.meaning.includes("Removed me"),
+    ),
+  ).toBe(true);
+});

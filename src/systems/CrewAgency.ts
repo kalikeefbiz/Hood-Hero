@@ -466,9 +466,10 @@ export function resolveAssignment(s: GameState, a: CrewAssignment) {
     promise.evidence.push(e.id);
   }
 }
-export function processCrewActivities(s: GameState) {
+export function expireCrewOffers(s: GameState) {
   for (const o of s.crewOffers.filter((o) => o.status === "pending")) {
     if (
+      s.end ||
       s.day > o.expiresDay ||
       s.day > o.activityDay ||
       !s.crew.members.includes(o.member) ||
@@ -478,6 +479,9 @@ export function processCrewActivities(s: GameState) {
     )
       o.status = "expired";
   }
+}
+export function processCrewActivities(s: GameState) {
+  expireCrewOffers(s);
   for (const a of s.assignments) {
     if (a.status === "active") resolveAssignment(s, a);
     if (a.status === "accepted" && s.day > a.dueDay) {

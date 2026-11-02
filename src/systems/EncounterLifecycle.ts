@@ -1,3 +1,4 @@
+import { expireCrewOffers } from "./CrewAgency";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { ENCOUNTERS } from "../content/encounters";
 import { record } from "../core/EventLog";
@@ -7,6 +8,7 @@ export const encounterDefinition = (e: EncounterInstance) =>
 const eligible = (s: GameState, e: EncounterInstance) =>
   encounterDefinition(e).eligible(s, e);
 export function syncEncounters(s: GameState) {
+  expireCrewOffers(s);
   if (s.end && !s.events.some((e) => e.title === `Run ended: ${s.end}`))
     record(
       s,

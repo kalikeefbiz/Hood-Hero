@@ -83,7 +83,7 @@ Review PR: https://github.com/kalikeefbiz/Hood-Hero/pull/4 . Gameplay commit `4e
 
 | Check | Result |
 | --- | --- |
-| Vitest | 110 passed; six files |
+| Vitest | 111 passed; six files |
 | Complete browser coverage | All 84 distinct Chromium/WebKit scenarios passed across the initial matrix and focused reruns; initial failure details are retained |
 | Focused regression reruns | 6 passed, including both 40-day outcome paths and both all-home tours |
 | Final `/Hood-Hero/` browser suite | 20 passed: crew and employment in Chromium and WebKit, all four mobile widths, real offers, natural recruitment and 30-day employment |
@@ -92,3 +92,6 @@ Review PR: https://github.com/kalikeefbiz/Hood-Hero/pull/4 . Gameplay commit `4e
 | Public site | Chromium and WebKit both passed actual work, refusal, recruitment, an autonomous day-7 offer, day-8 attendance and saved consequences; no game-script or asset failures |
 
 `GOAL_005_LIVE.json` records the final gameplay commit's public verification; `GOAL_005_BROWSER_PAGES.txt`, `GOAL_005_BROWSER_REGRESSION.txt`, `GOAL_005_VITEST.txt`, `GOAL_005_CAMPAIGNS.json` and `GOAL_005_DEPLOYMENT.json` contain reproducible evidence. The seven required screenshot subjects are available for each engine, with six additional public-site captures. GOAL 005 remains unmerged for creator playtesting.
+
+
+Final lifecycle review added immediate invitation expiration during encounter synchronization. Removal, incapacitation, a newly conflicting obligation or an ended run now withdraws an ineligible pending invitation immediately, so the Set cannot show an unusable invitation until the next day. A real seeded removal/re-recruitment regression verifies that the offer stays expired and its cooldown and memories persist. The resulting **111-test default Vitest run** and all **18 campaigns** passed again; the crew browser journeys were rerun against the Pages build.
