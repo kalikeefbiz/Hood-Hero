@@ -72,4 +72,18 @@ The activity screenshot is a running application capture of a deterministic pres
 
 No new jobs, storylines, character likenesses, faction systems, combat, or gameplay balancing were added. No save migration is provided for disposable Test saves. Native dialog support requires modern Safari (15.4+) or another current browser. Physical iPhone Safari confirmation remains with the creator.
 
-Publication uses the repository's existing public GitHub Pages playtest infrastructure, serving the unmerged feature branch. The final live URL, deployment run, exact deployed commit, and live browser verification are recorded below after publication; main gameplay code is not merged as part of this pass.
+Publication uses the repository's existing public GitHub Pages playtest infrastructure, serving the unmerged feature branch. The live URL, deployment run, exact deployed commit, and live browser verification are recorded below. Main gameplay code is not merged as part of this pass.
+
+
+## Verified public deployment
+
+- **Play:** https://kalikeefbiz.github.io/Hood-Hero/
+- **Deployed implementation commit:** `2ff6ef5449c5346787fb30c907ccbaaab8c6d727`.
+- **Deployment:** [existing playtest workflow, successful attempt 2](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41362061215/attempts/2). That workflow runs from its previously approved main configuration and checks out `goal-003-living-encounters`; no new main commit, workflow permission, environment rule, or merge was needed.
+- **Fingerprint:** [public build metadata](https://kalikeefbiz.github.io/Hood-Hero/build-info.json) returned the exact implementation commit and schema 3.
+- **Live gameplay verification:** Chromium and WebKit both passed the complete public-site check: opening modal/art, clarification, accepted promise auto-close, gig feedback, End Day returning to City, reload without reopening, actual gameplay buyback, returned-chain portrait, acknowledgment, and another reload remaining closed. Neither engine reported asset failures or uncaught page errors.
+- **Evidence:** [machine-readable live verification](validation/GOAL_003_CORRECTION_LIVE.json), [live Chromium modal](screenshots/goal-003-correction/live-chromium-modal.png), [live Chromium City](screenshots/goal-003-correction/live-chromium-city.png), [live WebKit modal](screenshots/goal-003-correction/live-webkit-modal.png), [live WebKit City](screenshots/goal-003-correction/live-webkit-city.png).
+
+Live checks completed at 6:24 p.m. Pacific on 1 November 2026. The follow-up evidence commit adds this deployment record and live captures only; runtime code remains the deployed implementation commit above. The public URL is the existing shared playtest site serving the unmerged feature build, not a separate production merge.
+
+Current Test saves from schema 2 require a new test run. Physical iPhone Safari validation remains with the creator; all browser results above are real automated browser executions, not physical-device claims.
