@@ -50,3 +50,14 @@ Live verification checks `build-info.json` against the deployed commit and schem
 ## Scope and remaining limitations
 
 No debt, new crime mechanics, incarceration mechanics, new factions, art, mandatory minigames, business ownership, or career hierarchy. NPC labor-market scheduling remains future work as requested. Workplace content is deliberately small and reusable; ordinary gigs are a predictable once-daily local opportunity. Approved leave is requested on the scheduled day in this first implementation. Physical iPhone creator testing remains the next human review step; automated WebKit emulation does not claim physical-device testing.
+
+## Delivery evidence
+
+- Vitest: **89/89 passed**, including the 700-day strategy/replay matrix.
+- Final local production-path browser run: **20/20 passed**, Chromium and WebKit, using `/Hood-Hero/`. Each engine completed day 31 with no absences and the $104 wage. Firing/cooldown/reapplication, resume/skip/scene closure, actual Chains/AP tradeoffs, artwork, City, save/load and controls also passed.
+- The preliminary full root run passed 69 cases; its WebKit long playthrough hit a 120-second fixture limit at day 28. The fixture now allows 180 seconds and the complete final WebKit playthrough passed in 2.3 minutes. The timeout was not a gameplay failure. Long simulation fixtures likewise allow CPU contention without reducing days or assertions.
+- Implementation CI: https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41394765521 . This runs the full root suite and the production-path regression/encounter/employment suite on standard Chromium and WebKit installations. The PR shows checks for the final evidence commit as well.
+- Initial deployment: https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41394778193 . The public build identified implementation `398615df2e3f12628867001e3ad2a21c86b33783`, schema 4. Both engines then drove public hiring, saved wages, three missed shifts, termination, a persisted hiring restriction, and gig income with zero script or asset errors; see `GOAL_004_LIVE.json`. The final evidence commit is republished through the same workflow, with the exact served commit independently checked again at handoff.
+- Twenty-four screenshots include job search, acceptance/schedule, first wages, reliable progression, scheduled attendance choices, firing, hiring restrictions, workplace dialogue/conclusion, Chains tradeoffs, and public-site hiring/termination in both engines. Original accepted GOAL 003 screenshot files are preserved.
+
+The live build identity can always be checked at https://kalikeefbiz.github.io/Hood-Hero/build-info.json . No outstanding gameplay blockers are known. Creator testing on a physical iPhone is still required before merging GOAL 004.
