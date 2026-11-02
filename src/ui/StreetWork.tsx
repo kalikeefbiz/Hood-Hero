@@ -144,6 +144,20 @@ export function StreetWork({
       )}
       {inventory && (
         <>
+          {s.street.custody
+            .filter((r) => r.character === p.id)
+            .map((r) => (
+              <div className="memory" key={r.id}>
+                <strong>Custody record · {r.status}</strong>
+                <p>
+                  Arrest day {r.arrestDay} · {r.cause} ·{" "}
+                  {r.status === "released" ? "Released" : "Release scheduled"}{" "}
+                  day {r.releaseDay ?? "not defined"} · Current status:{" "}
+                  {p.status}
+                </p>
+                <p>{r.conditions}</p>
+              </div>
+            ))}
           <p>
             Unmet living expenses: <strong>{money(s.street.arrears)}</strong>.
             Recorded separately from supplier debt; cash never falls below zero.

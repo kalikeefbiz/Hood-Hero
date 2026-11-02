@@ -127,8 +127,8 @@ export function GameHUD({
         <Stat label="Influence" value={Math.floor(p.influence)} icon="People" />
         <Stat label="Stress" value={Math.round(p.stress)} icon="pulse" />
         <Stat
-          label="Heat"
-          value={`${Math.round(p.police)} · ${heatDescription(p.police)}`}
+          label={`Heat · ${heatDescription(p.police)}`}
+          value={Math.round(p.police)}
           icon="heat"
           className="heat-resource"
         />

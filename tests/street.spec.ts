@@ -47,11 +47,16 @@ async function snap(page: Page, name: string) {
     await page.locator(".action-feedback").screenshot({ path, scale: "css" });
     return;
   }
-  if (
-    !name.startsWith("01-") &&
-    !name.startsWith("08-") &&
-    !name.startsWith("09-")
-  ) {
+  if (name.startsWith("08-")) {
+    await page
+      .locator(".panel")
+      .filter({
+        has: page.getByRole("heading", { name: "In custody", exact: true }),
+      })
+      .screenshot({ path, scale: "css" });
+    return;
+  }
+  if (!name.startsWith("01-") && !name.startsWith("08-")) {
     await expect(page.locator(".action-feedback")).toHaveCount(0, {
       timeout: 7000,
     });
@@ -129,7 +134,7 @@ function campaign(target: "custody" | "crew" | "default") {
 test("supplier to inventory to multiple real sales and repayment through normal mobile controls", async ({
   page,
 }) => {
-  test.setTimeout(90000);
+  test.setTimeout(test.info().project.name.includes("webkit") ? 180000 : 90000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
@@ -231,6 +236,13 @@ test("seeded real-play arrest serves every day and releases into continued gamep
   expect(after.characters.loco.status).toBe("arrested");
   expect(after.end).toBeNull();
   expect(after.street.custody.at(-1).status).toBe("released");
+  await nav(page, "Actions");
+  await page.locator('[data-action="gig"]').getByRole("button").click();
+  expect((await state(page)).ap).toBe(1);
+  await nav(page, "Wallet");
+  await expect(page.locator(".street-work")).toContainText(
+    "Custody record · released",
+  );
   await snap(page, "09-release");
   await nav(page, "Actions");
   await expect(

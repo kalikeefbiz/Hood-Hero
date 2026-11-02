@@ -9,6 +9,10 @@ export default defineConfig({
       process.env.PLAYWRIGHT_PUBLIC_URL ||
       `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
     trace: "retain-on-failure",
+    proxy:
+      process.env.PLAYWRIGHT_PUBLIC_URL && process.env.HTTPS_PROXY
+        ? { server: process.env.HTTPS_PROXY }
+        : undefined,
   },
   projects: [
     {
