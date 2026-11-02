@@ -137,6 +137,13 @@ test("supplier to inventory to multiple real sales and repayment through normal 
   test.setTimeout(test.info().project.name.includes("webkit") ? 180000 : 90000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
+  page.on("response", (r) => {
+    if (r.status() >= 400 && r.url().includes("/assets/"))
+      errors.push(`${r.status()} ${r.url()}`);
+  });
+  page.on("requestfailed", (r) => {
+    if (r.url().includes("/assets/")) errors.push(`Asset failed: ${r.url()}`);
+  });
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await page.getByLabel("What do people call you?").fill("Test(6)");
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
@@ -231,6 +238,26 @@ test("seeded real-play arrest serves every day and releases into continued gamep
   await page.getByRole("button", { name: "Serve remaining sentence" }).click();
   await dismissEncounter(page);
   const after = await state(page);
+  console.log(
+    "CUSTODY",
+    JSON.stringify({
+      engine: test.info().project.name,
+      arrestDay: before.day,
+      releaseDay: after.day,
+      cashBefore:
+        before.characters.player.wallet.clean +
+        before.characters.player.wallet.illicit,
+      cashAfter:
+        after.characters.player.wallet.clean +
+        after.characters.player.wallet.illicit,
+      debtAfter: after.street.agreements.reduce(
+        (n: number, a: { balance: number }) => n + a.balance,
+        0,
+      ),
+      loco: after.characters.loco.status,
+      campaignEnd: after.end,
+    }),
+  );
   expect(after.characters.player.status).toBe("active");
   expect(after.day).toBeGreaterThan(before.day);
   expect(after.characters.loco.status).toBe("arrested");
