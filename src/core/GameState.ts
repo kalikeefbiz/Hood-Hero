@@ -32,6 +32,12 @@ export interface Character {
   lastActionDay: number;
   traits: { loyalty: number; ambition: number; risk: number; lawful: number };
   skills: { social: number; work: number; recovery: number };
+  agency: {
+    lastAssignmentDay: number;
+    lastOfferDay: number;
+    lastRequestDay: number;
+    unreasonableRequests: number;
+  };
   goals: ("income" | "status" | "stability" | "loyalty")[];
   wallet: Wallet;
   relationships: Record<ID, Relationship>;
@@ -136,7 +142,7 @@ export interface Commitment {
   beneficiary: ID;
   createdDay: number;
   dueDay: number;
-  kind: "errand" | "recover-property" | "employment-shift";
+  kind: "errand" | "recover-property" | "employment-shift" | "crew-activity";
   employmentId?: ID;
   incidentId?: ID;
   status: CommitmentStatus;
@@ -151,6 +157,7 @@ export interface Commitment {
 export interface EncounterInstance {
   id: ID;
   definitionId: string;
+  crewOfferId?: ID;
   sourceEventId?: ID;
   incidentId?: ID;
   participants: ID[];
@@ -199,7 +206,9 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 4;
+  version: 5;
+  assignments: CrewAssignment[];
+  crewOffers: CrewOffer[];
   day: number;
   ap: number;
   rng: number;
@@ -236,3 +245,41 @@ export const player = (s: GameState) => s.characters[s.playerId];
 export const cash = (c: Character) => c.wallet.clean + c.wallet.illicit;
 export const clamp = (v: number, min = 0, max = 100) =>
   Math.max(min, Math.min(max, v));
+
+export type CrewActivity =
+  "work" | "information" | "social" | "partner-gig" | "partner-crime";
+export interface CrewAssignment {
+  id: ID;
+  participants: ID[];
+  member: ID;
+  activity: CrewActivity;
+  objective: string;
+  conditions: string[];
+  relationshipEffect: string;
+  status: "proposed" | "refused" | "accepted" | "active" | "resolved";
+  createdDay: number;
+  dueDay: number;
+  apCost: number;
+  compensation: number;
+  expectedBenefit: number;
+  skill: "work" | "social" | "recovery";
+  chance: number;
+  risk: string;
+  experience: number;
+  commitmentId?: ID;
+  offerId?: ID;
+  success?: boolean;
+  outcome?: string;
+  eventIds: ID[];
+}
+export interface CrewOffer {
+  id: ID;
+  member: ID;
+  contact: ID;
+  activity: "partner-gig" | "social" | "information";
+  createdDay: number;
+  expiresDay: number;
+  activityDay: number;
+  status: "pending" | "accepted" | "declined" | "expired";
+  assignmentId?: ID;
+}

@@ -1,12 +1,20 @@
 import type { Action } from "./ActionEngine";
 import type { EncounterInstance, GameState } from "./GameState";
 export type EncounterEffect =
+  | {
+      type: "crew";
+      choice: string;
+      activity?: import("./GameState").CrewActivity;
+      compensation?: number;
+      assignmentId?: string;
+    }
   | { type: "workplace"; choice: string }
   | { type: "clarify" | "promise" | "decline" | "delay" | "acknowledge" }
   | { type: "action"; action: Action };
 export interface EncounterResponse {
   id: string;
   label: string;
+  detail?: string;
   effect: EncounterEffect;
   requirement?: (s: GameState, encounter: EncounterInstance) => string | null;
 }

@@ -1,0 +1,4 @@
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+chromium: live work, refusal, natural recruitment, autonomous offer, attendance and saved consequences passed
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+webkit: live work, refusal, natural recruitment, autonomous offer, attendance and saved consequences passed

@@ -1,3 +1,8 @@
+import {
+  acceptCrewOffer,
+  attendCrewActivity,
+  requestActivity,
+} from "./CrewAgency";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { encounterDefinition, syncEncounters } from "./EncounterLifecycle";
 export {
@@ -42,7 +47,43 @@ export function respondEncounter(
   const startEvent = state.events.length;
   let s = structuredClone(state);
   const effect = response.effect;
-  if (effect.type === "workplace") {
+  if (effect.type === "crew") {
+    const e = s.encounters.find((e) => e.id === id)!;
+    if (effect.choice === "details") {
+      e.selectedResponses.push({ id: responseId, day: s.day, eventIds: [] });
+      return { state: s, error: null };
+    }
+    if (effect.choice === "request")
+      requestActivity(
+        s,
+        e.participants[0],
+        effect.activity!,
+        effect.compensation,
+      );
+    if (effect.choice === "attend") attendCrewActivity(s, effect.assignmentId!);
+    if (effect.choice === "accept") acceptCrewOffer(s, e.crewOfferId!);
+    if (effect.choice === "decline") {
+      const o = s.crewOffers.find((o) => o.id === e.crewOfferId)!;
+      o.status = "declined";
+      record(
+        s,
+        "crew",
+        `${s.characters[o.member].name}: “All good. I'll get on with my own plans.” You declined without a friendship penalty.`,
+        [o.member, s.playerId],
+        undefined,
+        { importance: "routine" },
+      );
+    }
+    e.status = "acknowledged";
+    e.followUpPending = false;
+    e.selectedResponses.push({
+      id: responseId,
+      day: s.day,
+      eventIds: s.events.slice(startEvent).map((e) => e.id),
+    });
+    syncEncounters(s);
+    return { state: s, error: null };
+  } else if (effect.type === "workplace") {
     resolveWorkplace(
       s,
       s.encounters.find((e) => e.id === id)!,

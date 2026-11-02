@@ -101,14 +101,15 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
   await dismissEncounter(page);
   await nav(page, "Set");
   await page
-    .getByRole("button", { name: "Assign a paid errand", exact: false })
+    .getByRole("button", { name: "Interact with Flacco", exact: true })
     .click();
+  await page.getByRole("button", { name: /^Paid local work/ }).click();
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
   await nav(page, "Set");
-  await expect(page.locator("main")).toContainText("completed");
+  await expect(page.locator("main")).toContainText("Paid local work");
   await nav(page, "Wallet");
-  await expect(page.locator("main")).toContainText("Errand by Flacco");
+  await expect(page.locator("main")).toContainText("Reserved compensation");
   await noOverflow(page);
 });
 test("mobile city and new game remain readable at narrow widths", async ({

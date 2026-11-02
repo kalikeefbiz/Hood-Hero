@@ -58,6 +58,11 @@ async function capture(page: Page, name: string) {
 async function acknowledge(page: Page) {
   await reply(page, "I hear you").click();
 }
+async function declineCrewOffer(page: Page) {
+  const e = (await saved(page)).encounters.find((e) => e.status === "active");
+  if (e?.definitionId === "crew-offer")
+    await reply(page, "Can't make it").click();
+}
 async function endDay(page: Page) {
   await page.getByRole("button", { name: "End day" }).click();
 }
@@ -203,9 +208,10 @@ test("refusing, postponing, Escape and backdrop leave no accidental obligation o
 });
 
 for (const outcome of ["fulfilled", "broken"] as const)
-  test(`40 days after ${outcome}: one reaction, then no repeated interruptions`, async ({
+  test(`40 days after ${outcome}: one storyline reaction while independent offers continue`, async ({
     page,
   }) => {
+    test.setTimeout(180000);
     await seed(
       page,
       newGame("Test(3)", "south", outcome === "broken" ? 83 : 2026),
@@ -222,9 +228,11 @@ for (const outcome of ["fulfilled", "broken"] as const)
     } else {
       for (let day = 2; day <= 9; day++) {
         await endDay(page);
+        await declineCrewOffer(page);
         if (day < 9 && (await modal(page).count())) await acknowledge(page);
       }
     }
+    await declineCrewOffer(page);
     await expect(modal(page)).toContainText(
       outcome === "broken" ? "I’m not forgetting it" : "came through",
     );
@@ -235,15 +243,21 @@ for (const outcome of ["fulfilled", "broken"] as const)
     ).toHaveLength(1);
     if (outcome === "broken") await capture(page, "06-broken-promise-once");
     await acknowledge(page);
+    await declineCrewOffer(page);
     await expect(modal(page)).toHaveCount(0);
     const past = await saved(page),
-      historyCount = past.encounters.length;
+      historyCount = past.encounters.filter(
+        (e) => !e.definitionId.startsWith("crew-"),
+      ).length;
     for (let day = 0; day < 40; day++) {
       await endDay(page);
+      await declineCrewOffer(page);
       await expect(modal(page)).toHaveCount(0);
     }
     const s = await saved(page);
-    expect(s.encounters.length).toBe(historyCount);
+    expect(
+      s.encounters.filter((e) => !e.definitionId.startsWith("crew-")).length,
+    ).toBe(historyCount);
     expect(incidentPromise(s, "the-chains")?.status).toBe(outcome);
     expect(
       s.characters.mega.memories.some((m) =>

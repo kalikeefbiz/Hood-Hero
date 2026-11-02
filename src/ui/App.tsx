@@ -1,3 +1,5 @@
+import { openCrewConversation } from "../systems/EncounterLifecycle";
+import { availability, knownCapabilities } from "../systems/CrewAgency";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   type GameState,
@@ -229,8 +231,15 @@ export function App() {
     if (result.error) setNotice(result.error);
     else {
       setState(result.state);
-      const reply =
-        response === "promise"
+      const crewResponse = s.encounters
+        .find((e) => e.id === id)
+        ?.definitionId.startsWith("crew-");
+      const reply = crewResponse
+        ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+          (response === "details"
+            ? "They shared more about their plans."
+            : "Conversation concluded."))
+        : response === "promise"
           ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
           : response === "decline"
             ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
@@ -270,6 +279,12 @@ export function App() {
       setScreen("City");
       window.scrollTo(0, 0);
     }
+  }
+  function interact(id: string) {
+    if (!s) return;
+    setState(openCrewConversation(s, id));
+    setScreen("City");
+    setHistoryEncounterId(null);
   }
   function openPerson(id: string) {
     setFocus(id);
@@ -498,7 +513,9 @@ export function App() {
             !presented &&
             s.encounters
               .filter(
-                (e) => e.definitionId === "workplace" && e.status === "pending",
+                (e) =>
+                  ["workplace", "crew-offer"].includes(e.definitionId) &&
+                  e.status === "pending",
               )
               .map((e) => (
                 <div className="narrative-links" key={e.id}>
@@ -506,7 +523,9 @@ export function App() {
                     className="secondary"
                     onClick={() => showConversation(e.id)}
                   >
-                    Resume workplace conversation
+                    {e.definitionId === "crew-offer"
+                      ? `Hear from ${s.characters[e.participants[0]].name}`
+                      : "Resume workplace conversation"}
                   </button>
                 </div>
               ))}
@@ -757,6 +776,15 @@ export function App() {
                   {person.alias && <small> / {person.alias}</small>}
                 </h3>
                 <p>{person.description}</p>
+                <p className="muted">{knownCapabilities(person)}</p>
+                {s.crew.members.includes(person.id) && (
+                  <button
+                    className="secondary"
+                    onClick={() => interact(person.id)}
+                  >
+                    Interact with {person.name}
+                  </button>
+                )}
                 <p className="muted">
                   {person.status === "active"
                     ? person.availableDay > s.day
@@ -972,7 +1000,7 @@ export function App() {
                   return (
                     <Panel key={id}>
                       <div className="person-title">
-                        <Portrait c={c} />
+                        <CharacterPortrait s={s} id={id} />
                         <div>
                           <h3>{c.name}</h3>
                           <small>
@@ -991,11 +1019,18 @@ export function App() {
                         value={c.relationships[p.id]?.trust ?? 0}
                         description={`${Math.round(c.relationships[p.id]?.trust ?? 0)} / 100`}
                       />
-                      <p className="outcome">
-                        Paid errand: possible ${BALANCE.errandIncome} clean
-                        income on the next day; can fail.
+                      <p className="muted">{knownCapabilities(c)}</p>
+                      <p>
+                        {availability(s, c) ?? "Available to discuss plans"}
                       </p>
-                      {(["assign", "remove"] as ActionType[]).map((type) => {
+                      <button
+                        className="secondary"
+                        disabled={!!s.end}
+                        onClick={() => interact(id)}
+                      >
+                        Interact with {c.name}
+                      </button>
+                      {(["remove"] as ActionType[]).map((type) => {
                         const a: Action = { type, actor: p.id, target: id },
                           reason = validateAction(s, a);
                         return (
@@ -1014,6 +1049,59 @@ export function App() {
                   );
                 })}
               </div>
+              <Panel>
+                <h3>Plans & opportunities</h3>
+                {s.crewOffers
+                  .filter((o) => o.status === "pending")
+                  .map((o) => (
+                    <p key={o.id}>
+                      {s.characters[o.member].name} · invitation for day{" "}
+                      {o.activityDay}{" "}
+                      <button
+                        className="secondary"
+                        onClick={() => {
+                          const e = s.encounters.find(
+                            (e) => e.crewOfferId === o.id,
+                          );
+                          if (e) showConversation(e.id);
+                        }}
+                      >
+                        Hear the offer
+                      </button>
+                    </p>
+                  ))}
+                {s.assignments
+                  .filter((a) => ["accepted", "active"].includes(a.status))
+                  .map((a) => (
+                    <p key={a.id}>
+                      {s.characters[a.member].name} · {a.objective} · {a.status}{" "}
+                      · day {a.dueDay}
+                      {a.status === "accepted" && (
+                        <button
+                          className="secondary"
+                          onClick={() => interact(a.member)}
+                        >
+                          Meet for scheduled activity
+                        </button>
+                      )}
+                    </p>
+                  ))}
+                {s.assignments
+                  .filter((a) => ["resolved", "refused"].includes(a.status))
+                  .slice(-3)
+                  .reverse()
+                  .map((a) => (
+                    <p className="muted" key={a.id}>
+                      {a.outcome}
+                    </p>
+                  ))}
+                {!s.assignments.length && !s.crewOffers.length && (
+                  <p className="muted">
+                    No plans yet. Talk with a member; they also bring ideas when
+                    their own lives allow.
+                  </p>
+                )}
+              </Panel>
               <h3>People you could ask</h3>
               <p className="muted">
                 Available people need 42 trust, compatible loyalties, and an
@@ -1043,6 +1131,7 @@ export function App() {
                               ? s.factions[c.affiliation].name
                               : "Civilian"}
                           </small>
+                          <small>{knownCapabilities(c)}</small>
                           {reason && (
                             <small className="disabled-reason">{reason}</small>
                           )}

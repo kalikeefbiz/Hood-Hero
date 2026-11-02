@@ -42,6 +42,12 @@ const character = z.object({
   lastActionDay: integer,
   traits: z.object({ loyalty: n, ambition: n, risk: n, lawful: n }),
   skills: z.object({ social: n, work: n, recovery: n }),
+  agency: z.object({
+    lastAssignmentDay: integer,
+    lastOfferDay: integer,
+    lastRequestDay: integer,
+    unreasonableRequests: integer,
+  }),
   goals: z.array(z.enum(["income", "status", "stability", "loyalty"])),
   wallet: z.object({ clean: nonnegative, illicit: nonnegative }),
   relationships: record(relationship),
@@ -69,7 +75,7 @@ const character = z.object({
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(4),
+  version: z.literal(5),
   day: integer.min(1),
   ap: integer.max(2),
   rng: integer.max(4294967295),
@@ -181,7 +187,12 @@ const schema = z.object({
       actor: id,
       beneficiary: id,
       dueDay: integer,
-      kind: z.enum(["errand", "recover-property", "employment-shift"]),
+      kind: z.enum([
+        "errand",
+        "recover-property",
+        "employment-shift",
+        "crew-activity",
+      ]),
       employmentId: id.optional(),
       status: z.enum([
         "pending",
@@ -209,6 +220,7 @@ const schema = z.object({
     z.object({
       id,
       definitionId: id,
+      crewOfferId: id.optional(),
       sourceEventId: id.optional(),
       incidentId: id.optional(),
       participants: z.array(id),
@@ -223,6 +235,51 @@ const schema = z.object({
     }),
   ),
   acknowledgedEvents: z.array(id),
+  assignments: z.array(
+    z.object({
+      id,
+      participants: z.array(id).length(2),
+      member: id,
+      activity: z.enum([
+        "work",
+        "information",
+        "social",
+        "partner-gig",
+        "partner-crime",
+      ]),
+      objective: z.string(),
+      conditions: z.array(z.string()),
+      relationshipEffect: z.string(),
+      status: z.enum(["proposed", "refused", "accepted", "active", "resolved"]),
+      createdDay: integer,
+      dueDay: integer,
+      apCost: integer.max(2),
+      compensation: nonnegative,
+      expectedBenefit: nonnegative,
+      skill: z.enum(["work", "social", "recovery"]),
+      chance: nonnegative.max(1),
+      risk: z.string(),
+      experience: nonnegative,
+      commitmentId: id.optional(),
+      offerId: id.optional(),
+      success: z.boolean().optional(),
+      outcome: z.string().optional(),
+      eventIds: z.array(id),
+    }),
+  ),
+  crewOffers: z.array(
+    z.object({
+      id,
+      member: id,
+      contact: id,
+      activity: z.enum(["partner-gig", "social", "information"]),
+      createdDay: integer,
+      expiresDay: integer,
+      activityDay: integer,
+      status: z.enum(["pending", "accepted", "declined", "expired"]),
+      assignmentId: id.optional(),
+    }),
+  ),
   crew: z.object({
     members: z.array(id).max(5),
     capacity: integer.min(1).max(5),
@@ -294,7 +351,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 4, state: s });
+  return JSON.stringify({ format: "syndicate", version: 5, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -308,13 +365,13 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(4),
+      version: z.literal(5),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Hood Hero save version 4. Start a new test run from the new game menu.",
+      "Incompatible or damaged save. Expected Hood Hero save version 5. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];
@@ -357,16 +414,47 @@ export function deserialize(raw: string): GameState {
           (e) => e.id === c.employmentId && e.actor === c.actor,
         ),
     ) ||
+    s.assignments.some(
+      (a) =>
+        !exists(a.member) ||
+        !a.participants.every(exists) ||
+        !a.participants.includes(a.member) ||
+        !a.participants.includes(s.playerId) ||
+        (a.commitmentId &&
+          !s.commitments.some(
+            (c) => c.id === a.commitmentId && c.kind === "crew-activity",
+          )) ||
+        (a.offerId && !s.crewOffers.some((o) => o.id === a.offerId)) ||
+        !a.eventIds.every((id) => s.events.some((e) => e.id === id)),
+    ) ||
+    s.crewOffers.some(
+      (o) =>
+        !exists(o.member) ||
+        !exists(o.contact) ||
+        (o.assignmentId && !s.assignments.some((a) => a.id === o.assignmentId)),
+    ) ||
     s.encounters.some(
       (e) =>
         !ENCOUNTERS.some((d) => d.id === e.definitionId) ||
         !e.participants.every(exists) ||
+        (e.crewOfferId && !s.crewOffers.some((o) => o.id === e.crewOfferId)) ||
         (e.sourceEventId && !s.events.some((x) => x.id === e.sourceEventId)) ||
         (e.incidentId && !s.incidents[e.incidentId]),
     ) ||
-    new Set([...s.commitments, ...s.encounters, ...s.events].map((x) => x.id))
-      .size !==
-      s.commitments.length + s.encounters.length + s.events.length
+    new Set(
+      [
+        ...s.commitments,
+        ...s.encounters,
+        ...s.events,
+        ...s.assignments,
+        ...s.crewOffers,
+      ].map((x) => x.id),
+    ).size !==
+      s.commitments.length +
+        s.encounters.length +
+        s.events.length +
+        s.assignments.length +
+        s.crewOffers.length
   )
     throw new Error("Save contains missing or invalid world references.");
   return s;

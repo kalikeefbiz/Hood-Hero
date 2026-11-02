@@ -1,0 +1,39 @@
+[WebServer] (node:11193) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 20 tests using 2 workers
+
+(node:11211) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/crew.spec.ts:43:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (10.1s)
+  ✓   3 [chromium-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 320px (1.6s)
+  ✓   4 [chromium-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 375px (1.7s)
+  ✓   5 [chromium-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 390px (1.5s)
+  ✓   6 [chromium-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 430px (1.4s)
+  ✓   2 [chromium-mobile] › tests/crew.spec.ts:130:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (21.4s)
+  ✓   8 [chromium-mobile] › tests/employment.spec.ts:140:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (4.3s)
+  ✓   9 [chromium-mobile] › tests/employment.spec.ts:189:1 › workplace scene consequence, skip, close and no replay across tabs or reload (1.7s)
+  ✓  10 [chromium-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (2.6s)
+(node:11465) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   7 [chromium-mobile] › tests/employment.spec.ts:76:1 › hire, scheduled wages, save and a thirty-day employment playthrough (36.8s)
+(node:11623) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  11 [webkit-mobile] › tests/crew.spec.ts:43:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (1.0m)
+  ✓  13 [webkit-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 320px (16.0s)
+  ✓  14 [webkit-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 375px (14.1s)
+  ✓  15 [webkit-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 390px (10.9s)
+  ✓  12 [webkit-mobile] › tests/crew.spec.ts:130:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (1.4m)
+  ✓  16 [webkit-mobile] › tests/crew.spec.ts:195:3 › crew dialogue and Set fit 430px (12.3s)
+  ✓  18 [webkit-mobile] › tests/employment.spec.ts:140:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (28.1s)
+  ✓  19 [webkit-mobile] › tests/employment.spec.ts:189:1 › workplace scene consequence, skip, close and no replay across tabs or reload (15.0s)
+  ✓  20 [webkit-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (27.3s)
+  ✓  17 [webkit-mobile] › tests/employment.spec.ts:76:1 › hire, scheduled wages, save and a thirty-day employment playthrough (1.9m)
+
+  20 passed (4.3m)

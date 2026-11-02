@@ -1,0 +1,1698 @@
+{
+  "campaigns": 18,
+  "simulatedDays": 1080,
+  "results": [
+    {
+      "seed": 1,
+      "composition": [
+        "flacco"
+      ],
+      "startDay": 1,
+      "endDay": 61,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 3,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 14,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 24,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 35,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 48,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 59,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 40
+      },
+      "chains": "abandoned",
+      "playerWallet": {
+        "clean": 1424,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 35,
+        "work": 30,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 91,
+        "work": 43,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 91,
+            "work": 43,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 60
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "composition": [
+        "flacco",
+        "resident-south"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "resident-south",
+          "activity": "partner-gig",
+          "day": 4,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 11,
+          "status": "declined"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 18,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 26,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 32,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 38,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 45,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 54,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 63,
+          "status": "pending"
+        }
+      ],
+      "assignments": {
+        "resolved": 79
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 514,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 93,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 93,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 122,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "resident-south",
+          "status": "active",
+          "skills": {
+            "social": 97,
+            "work": 83,
+            "recovery": 15
+          },
+          "trust": 100,
+          "memories": 123,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "composition": [
+        "flacco",
+        "mega"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 4,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 12,
+          "status": "declined"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 20,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 29,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 43,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 50,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 56,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 62,
+          "status": "pending"
+        }
+      ],
+      "assignments": {
+        "resolved": 89
+      },
+      "chains": "abandoned",
+      "playerWallet": {
+        "clean": 49,
+        "illicit": 707
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 94,
+        "work": 44,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 94,
+            "work": 44,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 122,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "mega",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 48,
+            "recovery": 85
+          },
+          "trust": 100,
+          "memories": 218,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 7,
+      "composition": [
+        "flacco"
+      ],
+      "startDay": 1,
+      "endDay": 61,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 8,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 29,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 39,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 40
+      },
+      "chains": "abandoned",
+      "playerWallet": {
+        "clean": 1518,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 35,
+        "work": 30,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 91,
+        "work": 46,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 91,
+            "work": 46,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 60
+        }
+      ]
+    },
+    {
+      "seed": 7,
+      "composition": [
+        "flacco",
+        "resident-south"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 3,
+          "status": "accepted"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 15,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 27,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 33,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 41,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 48,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 54,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 63,
+          "status": "pending"
+        }
+      ],
+      "assignments": {
+        "resolved": 80
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 338,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 45,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 45,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 121,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "resident-south",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 80,
+            "recovery": 15
+          },
+          "trust": 100,
+          "memories": 127,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 7,
+      "composition": [
+        "flacco",
+        "mega"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 3,
+          "status": "accepted"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 14,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 23,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 30,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 41,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 51,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 90
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 112,
+        "illicit": 648
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 121,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "mega",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 49,
+            "recovery": 85
+          },
+          "trust": 100,
+          "memories": 221,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 21,
+      "composition": [
+        "flacco"
+      ],
+      "startDay": 1,
+      "endDay": 61,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 3,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 24,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 36,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 47,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 40
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 1548,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 35,
+        "work": 30,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 91,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 91,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 60
+        }
+      ]
+    },
+    {
+      "seed": 21,
+      "composition": [
+        "flacco",
+        "resident-south"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 5,
+          "status": "accepted"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 17,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 26,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 35,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 42,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 50,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 59,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 79
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 367,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 93,
+        "work": 43,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 93,
+            "work": 43,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 122,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "resident-south",
+          "status": "active",
+          "skills": {
+            "social": 98,
+            "work": 81,
+            "recovery": 15
+          },
+          "trust": 100,
+          "memories": 124,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 21,
+      "composition": [
+        "flacco",
+        "mega"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 5,
+          "status": "accepted"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 11,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 18,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 29,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 36,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 44,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 50,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 59,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 90
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 95,
+        "illicit": 552
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 93,
+        "work": 44,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 93,
+            "work": 44,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 122,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "mega",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 48,
+            "recovery": 85
+          },
+          "trust": 100,
+          "memories": 221,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 83,
+      "composition": [
+        "flacco"
+      ],
+      "startDay": 1,
+      "endDay": 61,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 5,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 15,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 36,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 47,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 59,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 40
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 1548,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 35,
+        "work": 30,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 91,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 91,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 60
+        }
+      ]
+    },
+    {
+      "seed": 83,
+      "composition": [
+        "flacco",
+        "resident-south"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 8,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 18,
+          "status": "declined"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 27,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 33,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 44,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 63,
+          "status": "pending"
+        }
+      ],
+      "assignments": {
+        "resolved": 78
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 328,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 44,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 44,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 122,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "resident-south",
+          "status": "active",
+          "skills": {
+            "social": 97,
+            "work": 79,
+            "recovery": 15
+          },
+          "trust": 100,
+          "memories": 121,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 83,
+      "composition": [
+        "flacco",
+        "mega"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 4,
+          "status": "accepted"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 15,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 21,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 30,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 38,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 48,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 89
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 15,
+        "illicit": 526
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 45,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 45,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 122,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "mega",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 46,
+            "recovery": 85
+          },
+          "trust": 100,
+          "memories": 218,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 2026,
+      "composition": [
+        "flacco"
+      ],
+      "startDay": 1,
+      "endDay": 61,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 5,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 18,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 32,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 44,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 40
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 1548,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 35,
+        "work": 30,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 91,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 91,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 60
+        }
+      ]
+    },
+    {
+      "seed": 2026,
+      "composition": [
+        "flacco",
+        "resident-south"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 4,
+          "status": "accepted"
+        },
+        {
+          "member": "resident-south",
+          "activity": "partner-gig",
+          "day": 11,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 17,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 23,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 32,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 39,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 53,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 62,
+          "status": "pending"
+        }
+      ],
+      "assignments": {
+        "resolved": 79
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 469,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 91,
+        "work": 48,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 91,
+            "work": 48,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "resident-south",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 80,
+            "recovery": 15
+          },
+          "trust": 100,
+          "memories": 127,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 2026,
+      "composition": [
+        "flacco",
+        "mega"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 4,
+          "status": "accepted"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 12,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 18,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 24,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 30,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 44,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 50,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 89
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 15,
+        "illicit": 259
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 44,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 44,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "mega",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 47,
+            "recovery": 85
+          },
+          "trust": 100,
+          "memories": 221,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 5099,
+      "composition": [
+        "flacco"
+      ],
+      "startDay": 1,
+      "endDay": 61,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 9,
+          "status": "accepted"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 24,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 42,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 56,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 40
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 1580,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 35,
+        "work": 30,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 90,
+        "work": 48,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 90,
+            "work": 48,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 119,
+          "lastIndependentAction": 60
+        }
+      ]
+    },
+    {
+      "seed": 5099,
+      "composition": [
+        "flacco",
+        "resident-south"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 3,
+          "status": "accepted"
+        },
+        {
+          "member": "resident-south",
+          "activity": "partner-gig",
+          "day": 9,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 17,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 26,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 35,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 47,
+          "status": "expired"
+        },
+        {
+          "member": "resident-south",
+          "activity": "information",
+          "day": 53,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 60,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 80
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 397,
+        "illicit": 0
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 121,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "resident-south",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 79,
+            "recovery": 15
+          },
+          "trust": 100,
+          "memories": 128,
+          "lastIndependentAction": 63
+        }
+      ]
+    },
+    {
+      "seed": 5099,
+      "composition": [
+        "flacco",
+        "mega"
+      ],
+      "startDay": 3,
+      "endDay": 63,
+      "accepted": 1,
+      "declined": 1,
+      "attended": 1,
+      "offers": [
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 3,
+          "status": "accepted"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 9,
+          "status": "declined"
+        },
+        {
+          "member": "flacco",
+          "activity": "partner-gig",
+          "day": 20,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 27,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 38,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 44,
+          "status": "expired"
+        },
+        {
+          "member": "mega",
+          "activity": "information",
+          "day": 51,
+          "status": "expired"
+        },
+        {
+          "member": "flacco",
+          "activity": "information",
+          "day": 57,
+          "status": "expired"
+        }
+      ],
+      "assignments": {
+        "resolved": 90
+      },
+      "chains": "resolved",
+      "playerWallet": {
+        "clean": 29,
+        "illicit": 484
+      },
+      "startSkills": {
+        "social": 36,
+        "work": 31,
+        "recovery": 20
+      },
+      "finalSkills": {
+        "social": 92,
+        "work": 47,
+        "recovery": 20
+      },
+      "members": [
+        {
+          "id": "flacco",
+          "status": "active",
+          "skills": {
+            "social": 92,
+            "work": 47,
+            "recovery": 20
+          },
+          "trust": 100,
+          "memories": 121,
+          "lastIndependentAction": 63
+        },
+        {
+          "id": "mega",
+          "status": "active",
+          "skills": {
+            "social": 100,
+            "work": 47,
+            "recovery": 85
+          },
+          "trust": 100,
+          "memories": 221,
+          "lastIndependentAction": 63
+        }
+      ]
+    }
+  ]
+}

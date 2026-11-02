@@ -1,3 +1,4 @@
+import { expireCrewOffers } from "./CrewAgency";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { ENCOUNTERS } from "../content/encounters";
 import { record } from "../core/EventLog";
@@ -7,6 +8,7 @@ export const encounterDefinition = (e: EncounterInstance) =>
 const eligible = (s: GameState, e: EncounterInstance) =>
   encounterDefinition(e).eligible(s, e);
 export function syncEncounters(s: GameState) {
+  expireCrewOffers(s);
   if (s.end && !s.events.some((e) => e.title === `Run ended: ${s.end}`))
     record(
       s,
@@ -33,13 +35,16 @@ export function syncEncounters(s: GameState) {
         id,
         definitionId: definition.id,
         sourceEventId: trigger.eventId,
+        crewOfferId: definition.id === "crew-offer" ? trigger.key : undefined,
         incidentId: trigger.incidentId,
         participants:
-          definition.id === "workplace"
-            ? s.events
-                .find((x) => x.id === trigger.eventId)!
-                .actors.filter((id) => id !== s.playerId)
-            : [...definition.participants],
+          definition.id === "crew-offer"
+            ? [s.crewOffers.find((o) => o.id === trigger.key)!.member]
+            : definition.id === "workplace"
+              ? s.events
+                  .find((x) => x.id === trigger.eventId)!
+                  .actors.filter((id) => id !== s.playerId)
+              : [...definition.participants],
         createdDay: s.day,
         dueDay: incident ? incidentDueDay(incident) : undefined,
         status: "pending",
@@ -89,4 +94,34 @@ export function dismissEncounter(state: GameState, id: string): GameState {
 }
 export function currentEncounter(s: GameState) {
   return s.encounters.find((e) => e.status === "active" && eligible(s, e));
+}
+
+export function openCrewConversation(
+  state: GameState,
+  member: string,
+): GameState {
+  if (!state.crew.members.includes(member) || state.end) return state;
+  const s = structuredClone(state);
+  for (const e of s.encounters)
+    if (e.status === "active") {
+      e.status = "pending";
+      e.deferred = true;
+    }
+  for (const e of s.encounters)
+    if (
+      e.definitionId === "crew-conversation" &&
+      ["pending", "active"].includes(e.status)
+    )
+      e.status = "closed";
+  s.encounters.push({
+    id: `crew-conversation-${s.nextId++}`,
+    definitionId: "crew-conversation",
+    participants: [member],
+    createdDay: s.day,
+    status: "active",
+    selectedResponses: [],
+    followUpPending: false,
+    deferred: false,
+  });
+  return s;
 }

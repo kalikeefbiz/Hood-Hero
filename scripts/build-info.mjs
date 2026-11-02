@@ -5,5 +5,5 @@ const commit = execFileSync("git", ["rev-parse", "HEAD"], {
 }).trim();
 writeFileSync(
   "dist/build-info.json",
-  JSON.stringify({ app: "Hood Hero", commit, saveSchema: 4, milestone: "GOAL 004" }) + "\n",
+  JSON.stringify({ app: "Hood Hero", commit, saveSchema: 5, milestone: "GOAL 005" }) + "\n",
 );

@@ -1,0 +1,124 @@
+{
+  "url": "https://kalikeefbiz.github.io/Hood-Hero/",
+  "verifiedAt": "2026-11-02T07:55:27.728Z",
+  "metadata": {
+    "app": "Hood Hero",
+    "commit": "4e4fc6fe72340d6301ab03faad3b4c8f11e15bf0",
+    "saveSchema": 5,
+    "milestone": "GOAL 005"
+  },
+  "results": [
+    {
+      "browser": "chromium",
+      "day": 8,
+      "crew": {
+        "members": [
+          "flacco",
+          "resident-south"
+        ],
+        "capacity": 2,
+        "successor": null
+      },
+      "completedWork": "Flacco · Paid local work: $29 clean pay produced; Flacco received the reserved $12. +1 work experience.",
+      "refusal": "Flacco: “I'm committed until day 3.” No new obligation.",
+      "offer": {
+        "member": "flacco",
+        "createdDay": 7,
+        "activity": "partner-gig"
+      },
+      "appointment": {
+        "id": "assignment-153",
+        "member": "flacco",
+        "participants": [
+          "player",
+          "flacco"
+        ],
+        "activity": "partner-gig",
+        "objective": "Partner on a local gig",
+        "conditions": [
+          "Active participants",
+          "Available time and cooperation",
+          "1 AP on participation",
+          "Daily local gig not already completed"
+        ],
+        "relationshipEffect": "Cooperation strengthened trust and respect.",
+        "status": "resolved",
+        "createdDay": 7,
+        "dueDay": 8,
+        "apCost": 1,
+        "compensation": 16,
+        "expectedBenefit": 38,
+        "skill": "work",
+        "chance": 1,
+        "risk": "Time and relationship",
+        "experience": 1,
+        "eventIds": [
+          "event-155",
+          "event-179"
+        ],
+        "offerId": "offer-134",
+        "commitmentId": "commitment-154",
+        "success": true,
+        "outcome": "Flacco · Partner on a local gig: Shared local gig: you earned $38; Flacco earned $16. Work experience determined the extra pay. +1 work experience."
+      },
+      "scriptErrors": [],
+      "assetFailures": []
+    },
+    {
+      "browser": "webkit",
+      "day": 8,
+      "crew": {
+        "members": [
+          "flacco",
+          "resident-south"
+        ],
+        "capacity": 2,
+        "successor": null
+      },
+      "completedWork": "Flacco · Paid local work: $29 clean pay produced; Flacco received the reserved $12. +1 work experience.",
+      "refusal": "Flacco: “I'm committed until day 3.” No new obligation.",
+      "offer": {
+        "member": "flacco",
+        "createdDay": 7,
+        "activity": "partner-gig"
+      },
+      "appointment": {
+        "id": "assignment-153",
+        "member": "flacco",
+        "participants": [
+          "player",
+          "flacco"
+        ],
+        "activity": "partner-gig",
+        "objective": "Partner on a local gig",
+        "conditions": [
+          "Active participants",
+          "Available time and cooperation",
+          "1 AP on participation",
+          "Daily local gig not already completed"
+        ],
+        "relationshipEffect": "Cooperation strengthened trust and respect.",
+        "status": "resolved",
+        "createdDay": 7,
+        "dueDay": 8,
+        "apCost": 1,
+        "compensation": 16,
+        "expectedBenefit": 38,
+        "skill": "work",
+        "chance": 1,
+        "risk": "Time and relationship",
+        "experience": 1,
+        "eventIds": [
+          "event-155",
+          "event-179"
+        ],
+        "offerId": "offer-134",
+        "commitmentId": "commitment-154",
+        "success": true,
+        "outcome": "Flacco · Partner on a local gig: Shared local gig: you earned $38; Flacco earned $16. Work experience determined the extra pay. +1 work experience."
+      },
+      "scriptErrors": [],
+      "assetFailures": []
+    }
+  ]
+}

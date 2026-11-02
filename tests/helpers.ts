@@ -4,6 +4,6 @@ import { expect, type Page } from "@playwright/test";
 export async function dismissEncounter(page: Page) {
   await expect(page.locator(".game-shell")).toBeVisible();
   const modal = page.getByRole("dialog", { name: "Character encounter" });
-  if (await modal.count())
+  for (let i = 0; i < 8 && (await modal.count()); i++)
     await modal.getByRole("button", { name: "Close conversation" }).click();
 }

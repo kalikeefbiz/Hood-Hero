@@ -1,10 +1,10 @@
+import { processCrewActivities } from "../systems/CrewAgency";
 import { cash, clamp, player, type GameState } from "./GameState";
 import { record } from "./EventLog";
 import { BALANCE } from "../content/balance";
 import { earn, expense } from "../systems/Economy";
 import { evaluatePromises } from "../systems/Commitments";
 import { syncEncounters } from "../systems/EncounterLifecycle";
-import { processCommitments } from "../systems/Crew";
 import { advanceNPCs } from "../systems/NPCDecisionAI";
 import { advanceFactions } from "../systems/Factions";
 import { advanceIncidents } from "../systems/Incidents";
@@ -20,7 +20,7 @@ export function advanceDay(state: GameState): GameState {
   settleAttendance(s);
   s.day++;
   generateShifts(s);
-  processCommitments(s);
+  processCrewActivities(s);
   advanceNPCs(s);
   advanceFactions(s);
   advanceIncidents(s);
