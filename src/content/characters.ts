@@ -18,6 +18,12 @@ export function character(
     lastActionDay: 0,
     traits: { loyalty: 60, ambition: 50, risk: 35, lawful: 50 },
     skills: { social: 40, work: 45, recovery: 30 },
+    agency: {
+      lastAssignmentDay: 0,
+      lastOfferDay: 0,
+      lastRequestDay: 0,
+      unreasonableRequests: 0,
+    },
     goals: ["income"],
     wallet: { clean: 80, illicit: 0 },
     relationships: {},

@@ -1,3 +1,4 @@
+import { CREW_CONVERSATION, CREW_OFFER } from "./crewEncounters";
 import { WORKPLACE_ENCOUNTER } from "./workplaceEncounters";
 import type { EncounterDefinition, EncounterResponse } from "../core/Encounter";
 import type { EncounterInstance, GameState } from "../core/GameState";
@@ -92,6 +93,8 @@ function requestResponses(
 }
 export const ENCOUNTERS: EncounterDefinition[] = [
   WORKPLACE_ENCOUNTER,
+  CREW_CONVERSATION,
+  CREW_OFFER,
   {
     id: "mega-chains-request",
     type: "request",

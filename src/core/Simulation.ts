@@ -25,7 +25,7 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     },
   );
   const s: GameState = {
-    version: 4,
+    version: 5,
     day: 1,
     ap: BALANCE.dailyAP,
     rng: seed >>> 0,
@@ -40,6 +40,8 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     incidents: {},
     events: [],
     commitments: [],
+    assignments: [],
+    crewOffers: [],
     encounters: [],
     acknowledgedEvents: [],
     crew: { members: ["flacco"], capacity: 1, successor: null },

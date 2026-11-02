@@ -1,3 +1,5 @@
+import { considerCrewOffer } from "./CrewAgency";
+import { shiftToday } from "./Employment";
 import { cash, type GameState, type Character } from "../core/GameState";
 import { random } from "../core/Random";
 import {
@@ -10,9 +12,17 @@ function decide(s: GameState, c: Character): Action | null {
   if (
     c.status !== "active" ||
     c.availableDay > s.day ||
-    s.commitments.some((o) => o.actor === c.id && o.status === "pending")
+    s.commitments.some(
+      (o) =>
+        o.actor === c.id &&
+        o.status === "pending" &&
+        o.kind !== "employment-shift" &&
+        o.kind !== "recover-property" &&
+        (o.kind !== "crew-activity" || o.dueDay === s.day),
+    )
   )
     return null;
+  if (shiftToday(s, c.id)) return { actor: c.id, type: "work" };
   const options: { action: Action; score: number }[] = [];
   const add = (action: Action, score: number) => {
     if (!validateAction(s, action))
@@ -54,6 +64,8 @@ function decide(s: GameState, c: Character): Action | null {
 export function advanceNPCs(s: GameState) {
   for (const c of Object.values(s.characters)) {
     if (c.id === s.playerId) continue;
+    considerCrewOffer(s, c);
+    if (c.agency.lastAssignmentDay === s.day) continue;
     const action = decide(s, c);
     if (action) resolveAction(s, action);
   }

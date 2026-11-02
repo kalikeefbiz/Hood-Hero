@@ -13,6 +13,12 @@ export function advancePressure(s: GameState) {
         `${c.name} was arrested after sustained police attention.`,
         [c.id],
         ["player", c.id],
+        s.crew.members.includes(c.id)
+          ? {
+              importance: "critical",
+              title: `Set member ${c.status}: ${c.name}`,
+            }
+          : {},
       );
     } else if (c.rivalThreat > 70 && random(s) < (c.rivalThreat - 65) / 240) {
       c.status = "dead";
@@ -22,6 +28,12 @@ export function advancePressure(s: GameState) {
         `${c.name} was killed in an active rival conflict.`,
         [c.id],
         ["player", c.id],
+        s.crew.members.includes(c.id)
+          ? {
+              importance: "critical",
+              title: `Set member ${c.status}: ${c.name}`,
+            }
+          : {},
       );
     }
     c.police = clamp(c.police - 4);

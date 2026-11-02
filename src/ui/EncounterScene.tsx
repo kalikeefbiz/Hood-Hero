@@ -1,3 +1,4 @@
+import { availability, knownCapabilities } from "../systems/CrewAgency";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { encounterDefinition, responseError } from "../systems/Encounters";
 import { incidentPromise } from "../systems/Commitments";
@@ -70,6 +71,14 @@ export function EncounterScene({
             <h3>
               {c.name} <small>/ {c.alias ?? ""}</small>
             </h3>
+            {d.id.startsWith("crew-") && (
+              <p className="encounter-fact">
+                {knownCapabilities(c)}
+                <br />
+                {availability(s, c) ?? "Available to discuss plans"} · Trust{" "}
+                {Math.round(c.relationships[s.playerId]?.trust ?? 0)}
+              </p>
+            )}
             <p className="dialogue">“{d.dialogue(s, e)}”</p>
             {source && (
               <p className="encounter-fact">
@@ -119,9 +128,12 @@ export function EncounterScene({
               >
                 <span>{r.label}</span>
                 <small>
-                  {action
-                    ? `${ACTIONS[action.type].ap} AP${action.type === "buyback" ? ` · ${money(s.incidents[action.incidentId!].demand)}` : ""} · ${ACTIONS[action.type].risk} risk${chance !== null ? ` · ${Math.round(chance * 100)}% success` : ""}`
-                    : "Conversation · No AP"}
+                  {r.detail ??
+                    (action
+                      ? `${ACTIONS[action.type].ap} AP${action.type === "buyback" ? ` · ${money(s.incidents[action.incidentId!].demand)}` : ""} · ${ACTIONS[action.type].risk} risk${chance !== null ? ` · ${Math.round(chance * 100)}% success` : ""}`
+                      : r.effect.type === "crew"
+                        ? "Personal request · costs and conditions above; refusal costs no AP"
+                        : "Conversation · No AP")}
                 </small>
                 {reason && <small className="disabled-reason">{reason}</small>}
               </button>

@@ -1,3 +1,4 @@
+import { requestActivity, availability } from "../systems/CrewAgency";
 import { describe, expect, it } from "vitest";
 import { newGame } from "../core/Simulation";
 import { advanceDay } from "../core/TimeSystem";
@@ -186,7 +187,7 @@ describe("actions, economy, AP and persistence", () => {
   });
   it("stores and restores complete memories, incidents, money, RNG, commitments and progression", () => {
     let s = info(fresh());
-    s = doAction(s, "assign", "flacco");
+    requestActivity(s, "flacco", "work");
     const raw = serialize(s);
     const loaded = deserialize(raw);
     expect(loaded).toEqual(s);
@@ -214,8 +215,8 @@ describe("actions, economy, AP and persistence", () => {
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
     raw.version = 99;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 4/);
-    raw.version = 4;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 5/);
+    raw.version = 5;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });
@@ -271,15 +272,17 @@ describe("living simulation and personal Set", () => {
       validateAction(s, { actor: "player", target: "flacco", type: "assign" }),
     ).toMatch(/unavailable/);
     s.characters.flacco.status = "active";
-    s = doAction(s, "assign", "flacco");
-    expect(
-      validateAction(s, { actor: "player", target: "flacco", type: "assign" }),
-    ).toMatch(/committed/);
+    requestActivity(s, "flacco", "work");
+    expect(availability(s, s.characters.flacco)).toMatch(/committed/);
     const cashBefore = cash(player(s));
     s = advanceDay(s);
-    expect(s.commitments[0].status).toBe("completed");
-    expect(s.characters.flacco.skills.work).toBe(33);
-    expect(cash(player(s))).toBe(cashBefore + 24 - 18);
+    expect(s.commitments[0].status).toMatch(/fulfilled|failed/);
+    expect(s.characters.flacco.skills.work).toBe(
+      s.assignments[0].success ? 31 : 30,
+    );
+    expect(cash(player(s))).toBe(
+      cashBefore + (s.assignments[0].success ? 29 : 0) - 18,
+    );
   });
   it("removal preserves Flacco identity, memories and relationship history", () => {
     let s = doAction(fresh(), "socialize", "flacco");
@@ -509,7 +512,8 @@ describe("regression checks for autonomous schedules and ordinary crew members",
     expect(s.crew.members).toContain(npc.id);
   });
   it("allows removing an inactive member and logs a failed commitment", () => {
-    let s = doAction(fresh(), "assign", "flacco");
+    let s = fresh();
+    requestActivity(s, "flacco", "work");
     s.characters.flacco.status = "arrested";
     s = advanceDay(s);
     expect(s.commitments[0].status).toBe("failed");

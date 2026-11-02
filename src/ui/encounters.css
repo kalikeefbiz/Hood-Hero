@@ -480,3 +480,11 @@
   font-size: 14px;
   line-height: 1.55;
 }
+
+.person-title > .character-portrait {
+  width: 68px;
+  flex: 0 0 68px;
+}
+.recruit-info small {
+  overflow-wrap: anywhere;
+}

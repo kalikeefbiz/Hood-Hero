@@ -16,6 +16,7 @@ import { earn, expense } from "../systems/Economy";
 import { resolveIncident } from "../systems/Incidents";
 import { syncEncounters } from "../systems/EncounterLifecycle";
 import { evaluatePromises } from "../systems/Commitments";
+import { requestActivity, requestError } from "../systems/CrewAgency";
 import { recoverySupport } from "../systems/Crew";
 import { progress } from "../systems/Progression";
 import { evaluateEnd } from "../systems/EndConditions";
@@ -229,6 +230,7 @@ export interface Action {
   incidentId?: ID;
   item?: ItemId;
   jobId?: ID;
+  partner?: ID;
 }
 export function validateAction(s: GameState, a: Action): string | null {
   if (!ACTIONS[a.type]) return "Unknown action";
@@ -266,6 +268,18 @@ export function validateAction(s: GameState, a: Action): string | null {
     if (last !== undefined && s.day - last < BALANCE.employment.timeOffInterval)
       return `Unpaid leave available again on day ${last + BALANCE.employment.timeOffInterval}`;
   }
+  if (
+    a.partner &&
+    (!s.crew.members.includes(a.partner) ||
+      !s.assignments.some(
+        (x) =>
+          x.status === "active" &&
+          x.member === a.partner &&
+          x.participants.includes(a.actor) &&
+          x.activity === (a.type === "crime" ? "partner-crime" : "partner-gig"),
+      ))
+  )
+    return "Partner participation requires an active shared assignment";
   if (a.type === "gig" && searchState(s, a.actor).lastGigDay === s.day)
     return "Today's local gig is complete. More opportunities tomorrow.";
   const targeted: ActionType[] = [
@@ -355,6 +369,8 @@ export function validateAction(s: GameState, a: Action): string | null {
     c.id !== s.playerId
   )
     return "Player Set action only";
+  if (a.type === "assign")
+    return "Use the member conversation to request cooperation";
   if (a.type === "recruit") {
     if (s.crew.members.includes(t!.id)) return "Already in your Set";
     if (s.crew.members.length >= s.crew.capacity)
@@ -374,12 +390,6 @@ export function validateAction(s: GameState, a: Action): string | null {
   }
   if (["remove", "assign"].includes(a.type) && !s.crew.members.includes(t!.id))
     return "Not a member of your Set";
-  if (
-    a.type === "assign" &&
-    (t!.availableDay > s.day ||
-      s.commitments.some((o) => o.actor === t!.id && o.status === "pending"))
-  )
-    return "Member is already committed";
   if (a.type === "standing" && !t?.affiliation)
     return "Choose an organization member";
   if (a.type === "affiliate") {
@@ -416,8 +426,27 @@ export function actionSuccessChance(s: GameState, a: Action): number | null {
   }
   // Illicit trade checks success after its existing +9 stress cost.
   if (a.type === "crime")
-    return 0.65 + c.skills.recovery / 500 - clamp(c.stress + 9) / 600;
+    return clamp(
+      0.65 +
+        c.skills.recovery / 500 -
+        clamp(c.stress + 9) / 600 +
+        (a.partner ? partnerContribution(s, a.partner) : 0),
+      0.1,
+      0.95,
+    );
   return null;
+}
+export function partnerContribution(s: GameState, id: string) {
+  const c = s.characters[id],
+    r = c.relationships[s.playerId];
+  return clamp(
+    (c.skills.recovery - 35) / 250 +
+      (r?.trust ?? 0) / 1000 -
+      c.stress / 600 -
+      (r?.grievance ?? 0) / 500,
+    -0.18,
+    0.2,
+  );
 }
 // Mutates only an owned simulation snapshot. UI calls performAction for transactional validation.
 export function resolveAction(s: GameState, a: Action) {
@@ -426,7 +455,11 @@ export function resolveAction(s: GameState, a: Action) {
     i = a.incidentId ? s.incidents[a.incidentId] : undefined;
   const successChance = actionSuccessChance(s, a);
   if (c.id === s.playerId) s.ap -= ACTIONS[a.type].ap;
-  else c.lastActionDay = s.day;
+  else {
+    c.lastActionDay = s.day;
+    if (["gig", "crime", "work"].includes(a.type))
+      c.agency.lastAssignmentDay = s.day;
+  }
   let text = "";
   let category: "social" | "money" | "crew" | "incident" | "risk" = "social";
   const socialGain = Math.max(3, 10 - Math.floor(c.stress / 25));
@@ -585,37 +618,23 @@ export function resolveAction(s: GameState, a: Action) {
       text = `${t!.name} joined your personal Set. Their own loyalties and history remain.`;
       category = "crew";
       break;
-    case "remove":
+    case "remove": {
+      const promised = s.assignments.some(
+        (a) => a.member === t!.id && ["accepted", "active"].includes(a.status),
+      );
+      const closeness = t!.relationships[c.id]?.affection ?? 0;
       s.crew.members = s.crew.members.filter((id) => id !== t!.id);
       if (s.crew.successor === t!.id) s.crew.successor = null;
-      change(t!, c.id, { trust: -18, grievance: 12 });
-      text = `${t!.name} left your Set. Your shared history remains.`;
-      category = "crew";
-      break;
-    case "assign":
-      s.commitments.push({
-        id: `commitment-${s.nextId++}`,
-        actor: t!.id,
-        beneficiary: c.id,
-        dueDay: s.day + 1,
-        kind: "errand",
-        origin: `assignment-day-${s.day}`,
-        requester: c.id,
-        createdDay: s.day,
-        evidence: [],
-        warned: false,
-        // Errands retain their existing work rewards; no requester-to-actor relationship penalty.
-        consequences: {
-          fulfilled: { trust: 0, respect: 0, grievance: 0 },
-          broken: { trust: 0, respect: 0, grievance: 0 },
-          released: { trust: 0, respect: 0, grievance: 0 },
-        },
-        status: "pending",
+      change(t!, c.id, {
+        trust: -(10 + Math.round(closeness / 10) + (promised ? 6 : 0)),
+        grievance: 4 + Math.round(closeness / 10) + (promised ? 4 : 0),
       });
-      t!.availableDay = s.day + 2;
-      text = `${t!.name} committed to a paid local errand, due tomorrow.`;
+      text = `${t!.name} left your Set. ${closeness >= 50 ? "Being cut out by someone close hurt; reconciliation can take time." : "There is distance between you now."} ${promised ? "Existing promises and their consequences remain." : "Your shared history remains."}`;
       category = "crew";
       break;
+    }
+    case "assign":
+      return; // Legacy requests are rejected by validateAction.
     case "standing":
       c.organizationStanding[t!.affiliation!] = clamp(
         c.organizationStanding[t!.affiliation!] + 8,
@@ -646,16 +665,6 @@ export function resolveAction(s: GameState, a: Action) {
     [c.id, ...(t ? [t.id] : [])],
     [c.id, ...(t ? [t.id] : [])],
   );
-  if (a.type === "assign") {
-    const obligation = s.commitments.find(
-      (o) =>
-        o.kind === "errand" &&
-        o.actor === t!.id &&
-        o.createdDay === s.day &&
-        o.status === "pending",
-    );
-    if (obligation) obligation.origin = e.id;
-  }
   if (
     i &&
     ["negotiate", "settlement", "buyback", "recover", "favor"].includes(a.type)
@@ -701,6 +710,26 @@ export function performAction(
   const error = validateAction(state, a);
   if (error) return { state, error };
   const next = structuredClone(state);
+  // Existing social action entry points route Set members through the same willingness/lifecycle.
+  const crewActivity =
+    a.type === "socialize"
+      ? "social"
+      : ["inquire", "introduce"].includes(a.type)
+        ? "information"
+        : null;
+  if (
+    a.actor === state.playerId &&
+    a.target &&
+    state.crew.members.includes(a.target) &&
+    crewActivity
+  ) {
+    const error = requestError(state, a.target, crewActivity);
+    if (error) return { state, error };
+    requestActivity(next, a.target, crewActivity);
+    progress(next);
+    syncEncounters(next);
+    return { state: next, error: null, event: next.events.at(-1) };
+  }
   const event = resolveAction(next, a);
   progress(next);
   next.end = evaluateEnd(next);
@@ -739,7 +768,6 @@ export function availableActions(s: GameState): Action[] {
       "affiliate",
       "recruit",
       "remove",
-      "assign",
       "settlement",
       "favor",
     ] as ActionType[]) {
