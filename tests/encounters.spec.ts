@@ -214,7 +214,7 @@ for (const outcome of ["fulfilled", "broken"] as const)
     test.setTimeout(180000);
     await seed(
       page,
-      newGame("Test(3)", "south", outcome === "broken" ? 83 : 2026),
+      newGame("Test(3)", "south", outcome === "broken" ? 15 : 2026),
     );
     await reply(page, "I’ll help you").click();
     if (outcome === "fulfilled") {

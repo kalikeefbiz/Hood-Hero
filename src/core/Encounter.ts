@@ -2,6 +2,14 @@ import type { Action } from "./ActionEngine";
 import type { EncounterInstance, GameState } from "./GameState";
 export type EncounterEffect =
   | {
+      type: "street";
+      choice: string;
+      supplier?: string;
+      arrangement?: "cash" | "consignment";
+      agreementId?: string;
+      amount?: number;
+    }
+  | {
       type: "crew";
       choice: string;
       activity?: import("./GameState").CrewActivity;

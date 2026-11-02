@@ -54,7 +54,7 @@ export const CREW_CONVERSATION: EncounterDefinition = {
           : activity === "partner-gig"
             ? "same daily gig limit · both earn; skills affect pay"
             : activity === "partner-crime"
-              ? "existing black-market activity · both face exposure and loss"
+              ? "requires held merchandise · 15% of actual gross to partner · both face exposure and loss"
               : activity === "social"
                 ? "trust, affection and stress relief"
                 : `only their contacts and knowledge · ${chance}% chance of useful information`;

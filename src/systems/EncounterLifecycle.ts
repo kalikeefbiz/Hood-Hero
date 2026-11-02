@@ -40,7 +40,7 @@ export function syncEncounters(s: GameState) {
         participants:
           definition.id === "crew-offer"
             ? [s.crewOffers.find((o) => o.id === trigger.key)!.member]
-            : definition.id === "workplace"
+            : ["workplace", "street-reaction"].includes(definition.id)
               ? s.events
                   .find((x) => x.id === trigger.eventId)!
                   .actors.filter((id) => id !== s.playerId)

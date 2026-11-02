@@ -20,7 +20,6 @@ export const BALANCE = {
     timeOffInterval: 7,
   },
   gigIncome: 38,
-  illicitIncome: 72,
   errandIncome: 24,
   recruitTrust: 42,
   affiliationStanding: 35,

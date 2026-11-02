@@ -133,8 +133,8 @@ describe("character-driven Chains playthroughs", () => {
     expect([...outcomes].sort()).toEqual(["failure", "success"]);
   });
   it("B: deadline loss breaks a neglected promise with bounded relationship consequences and a warning", () => {
-    // Seed 83 has no successful autonomous settlement before the sale.
-    let s = answer(fresh(83), "promise");
+    // Seed 15 has no successful autonomous settlement before the sale.
+    let s = answer(fresh(15), "promise");
     while (s.day < 9) s = advanceDay(s);
     expect(s.incidents["the-chains"].resolution).toBe("sold");
     expect(incidentPromise(s, "the-chains")?.status).toBe("broken");
@@ -154,7 +154,7 @@ describe("character-driven Chains playthroughs", () => {
     expect(act(s, "gig").end).toBeNull();
   });
   it("evaluates a final-day autonomous settlement before expiring the promise", () => {
-    let s = answer(fresh(17), "promise");
+    let s = answer(fresh(8), "promise");
     while (s.day < 9) s = advanceDay(s);
     expect(s.incidents["the-chains"].resolution).toBe("settlement");
     expect(
@@ -356,7 +356,7 @@ describe("correction: conversations conclude independently of storylines", () =>
     "does not reopen a %s story over 40 further days, including reload",
     (outcome) => {
       let s =
-        outcome === "fulfilled" ? buyback() : answer(fresh(83), "promise");
+        outcome === "fulfilled" ? buyback() : answer(fresh(15), "promise");
       while (s.incidents["the-chains"].status === "active") s = advanceDay(s);
       expect(incidentPromise(s, "the-chains")?.status).toBe(outcome);
       expect(

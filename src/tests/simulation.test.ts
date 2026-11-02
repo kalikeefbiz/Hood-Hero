@@ -215,8 +215,8 @@ describe("actions, economy, AP and persistence", () => {
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
     raw.version = 99;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 5/);
-    raw.version = 5;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 6/);
+    raw.version = 6;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });
@@ -416,10 +416,10 @@ describe("The Chains and automated playthroughs", () => {
   }, 20000);
 });
 describe("constructed end condition fixtures", () => {
-  it("evaluates arrest and death regardless of wealth", () => {
+  it("ordinary arrest continues the campaign; death ends it", () => {
     const s = fresh();
     player(s).status = "arrested";
-    expect(evaluateEnd(s)).toBe("arrested");
+    expect(evaluateEnd(s)).toBeNull();
     player(s).status = "dead";
     expect(evaluateEnd(s)).toBe("killed");
   });

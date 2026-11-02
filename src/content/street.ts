@@ -1,0 +1,33 @@
+// Abstract fictional merchandise, intentionally without real-world product/procedure details.
+export const MERCHANDISE = {
+  nightgoods: {
+    name: "Night goods",
+    quantity: 6,
+    wholesale: 90,
+    consignment: 102,
+    unitPrice: 50,
+  },
+};
+export const STREET_BALANCE = {
+  deadline: 6,
+  resupplyDays: 3,
+  trust: 20,
+  downtownStanding: 15,
+  supplierExposure: 75,
+  marketDailyCapacity: 6,
+  transactionLimit: 2,
+  baseSuccess: 0.88,
+  minSuccess: 0.22,
+  maxSuccess: 0.94,
+  historyDays: 10,
+  historyDecay: 0.84,
+  investigationDecay: 0.91,
+  actionExposure: 10,
+  arrestThreshold: 42,
+  maxArrestChance: 0.32,
+  minSentence: 2,
+  maxSentence: 7,
+  residualPolice: 28,
+  crewShare: 0.15,
+  crewLoss: 6,
+};

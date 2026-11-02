@@ -1,3 +1,4 @@
+import { newStreetState } from "../systems/StreetEconomy";
 import { type GameState, type ZoneId } from "./GameState";
 import { ZONES } from "../content/city";
 import { FACTIONS } from "../content/factions";
@@ -25,7 +26,8 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     },
   );
   const s: GameState = {
-    version: 5,
+    version: 6,
+    street: newStreetState(),
     day: 1,
     ap: BALANCE.dailyAP,
     rng: seed >>> 0,

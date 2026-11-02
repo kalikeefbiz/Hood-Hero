@@ -142,7 +142,12 @@ export interface Commitment {
   beneficiary: ID;
   createdDay: number;
   dueDay: number;
-  kind: "errand" | "recover-property" | "employment-shift" | "crew-activity";
+  kind:
+    | "errand"
+    | "recover-property"
+    | "employment-shift"
+    | "crew-activity"
+    | "supplier-debt";
   employmentId?: ID;
   incidentId?: ID;
   status: CommitmentStatus;
@@ -206,7 +211,8 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 5;
+  version: 6;
+  street: import("../systems/StreetTypes").StreetState;
   assignments: CrewAssignment[];
   crewOffers: CrewOffer[];
   day: number;

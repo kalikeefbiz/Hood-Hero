@@ -488,3 +488,16 @@
 .recruit-info small {
   overflow-wrap: anywhere;
 }
+
+.street-work button {
+  margin: 0.4rem 0;
+  max-width: 100%;
+  white-space: normal;
+}
+.street-work p {
+  overflow-wrap: anywhere;
+}
+.street-work select {
+  max-width: 100%;
+  margin: 0.5rem;
+}

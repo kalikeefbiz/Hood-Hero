@@ -20,7 +20,7 @@ const state = async (page: Page): Promise<GameState> =>
     AUTO_KEY,
   );
 async function close(page: Page) {
-  if (await modal(page).count())
+  for (let i = 0; i < 8 && (await modal(page).count()); i++)
     await modal(page)
       .getByRole("button", { name: "Close conversation" })
       .click();

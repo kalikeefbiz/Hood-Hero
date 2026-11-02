@@ -1,3 +1,6 @@
+import { arrest } from "./Incarceration";
+import { decayExposure, exposureScore } from "./CriminalExposure";
+import { STREET_BALANCE as B } from "../content/street";
 import { clamp, type GameState } from "../core/GameState";
 import { random } from "../core/Random";
 import { record } from "../core/EventLog";
@@ -5,21 +8,12 @@ export function advancePressure(s: GameState) {
   for (const c of Object.values(s.characters)) {
     if (c.status !== "active") continue;
     // Danger is contingent on accumulated exposure, never elapsed campaign time.
-    if (c.police > 65 && random(s) < (c.police - 60) / 180) {
-      c.status = "arrested";
-      record(
-        s,
-        "risk",
-        `${c.name} was arrested after sustained police attention.`,
-        [c.id],
-        ["player", c.id],
-        s.crew.members.includes(c.id)
-          ? {
-              importance: "critical",
-              title: `Set member ${c.status}: ${c.name}`,
-            }
-          : {},
-      );
+    const score = exposureScore(s, c.id, c.home);
+    if (
+      score > B.arrestThreshold &&
+      random(s) < Math.min(B.maxArrestChance, (score - B.arrestThreshold) / 180)
+    ) {
+      arrest(s, c.id, "accumulated criminal exposure", score > 80 ? 2 : 1);
     } else if (c.rivalThreat > 70 && random(s) < (c.rivalThreat - 65) / 240) {
       c.status = "dead";
       record(
@@ -40,4 +34,5 @@ export function advancePressure(s: GameState) {
     c.rivalThreat = clamp(c.rivalThreat - 2);
     c.stress = clamp(c.stress - 2);
   }
+  decayExposure(s);
 }

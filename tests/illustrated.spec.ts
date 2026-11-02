@@ -73,11 +73,11 @@ test("approved art maps to real actions and resolves under the production base",
   await seed(page, newGame("Morgan", "south"));
   await expect(page.locator(".action-card")).toHaveCount(0);
   await nav(page, "Actions");
-  for (const id of ["work", "rest", "crime"] as const) {
+  for (const id of ["work", "rest"] as const) {
     const card = await loaded(page, id);
     await expect(card.locator(".ap-cost")).toHaveText(`${ACTIONS[id].ap} AP`);
     await expect(card.locator(".risk")).toHaveText(
-      id === "crime" ? "HIGH RISK" : "NO RISK",
+      "NO RISK",
     );
     await expect(card).toContainText(ACTIONS[id].description);
     if (id !== "work")
@@ -143,6 +143,7 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   await dismissEncounter(page);
   await nav(page, "Actions");
   const work = page.locator('[data-action="work"]');
+  await work.scrollIntoViewIfNeeded();
   await expect(work.locator(".action-art-fallback")).toBeVisible();
   const size = await work.boundingBox();
   expect(size!.height).toBe(loadedSize.height);
@@ -204,7 +205,7 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
   await capture("01-independent-city-390");
   await nav(page, "Actions");
   // Scroll each approved card into view so the full-page review includes loaded art.
-  for (const id of ["work", "rest", "crime"] as const) await loaded(page, id);
+  for (const id of ["work", "rest"] as const) await loaded(page, id);
   await capture("02-everyday-actions-390", true);
   await page.setViewportSize({ width: 320, height: 700 });
   await capture("04-everyday-actions-320", true);

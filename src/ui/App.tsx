@@ -1,3 +1,5 @@
+import { StreetWork } from "./StreetWork";
+import { openSupplier } from "../content/streetEncounters";
 import { openCrewConversation } from "../systems/EncounterLifecycle";
 import { availability, knownCapabilities } from "../systems/CrewAgency";
 import { useEffect, useState, type ReactNode } from "react";
@@ -9,7 +11,7 @@ import {
   cash,
 } from "../core/GameState";
 import { newGame } from "../core/Simulation";
-import { advanceDay } from "../core/TimeSystem";
+import { advanceDay, serveSentence } from "../core/TimeSystem";
 import {
   ACTIONS,
   availableActions,
@@ -234,24 +236,32 @@ export function App() {
       const crewResponse = s.encounters
         .find((e) => e.id === id)
         ?.definitionId.startsWith("crew-");
-      const reply = crewResponse
+      const streetResponse = s.encounters
+        .find((e) => e.id === id)
+        ?.definitionId.startsWith("street-");
+      const reply = streetResponse
         ? (result.state.events.slice(s.events.length).at(-1)?.text ??
-          (response === "details"
-            ? "They shared more about their plans."
-            : "Conversation concluded."))
-        : response === "promise"
-          ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
-          : response === "decline"
-            ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
-            : response === "delay"
-              ? "You asked for time to think. The situation continues; resume the conversation from City."
-              : response === "acknowledge"
-                ? "Outcome acknowledged. The city moves on; the history remains."
-                : s.encounters.find((e) => e.id === id)?.definitionId ===
-                    "workplace"
-                  ? (result.state.events.at(-1)?.text ??
-                    "Workplace choice recorded.")
-                  : "Cuzzo explains what happened.";
+          (response === "terms"
+            ? "Supplier terms clarified; no goods or debt accepted."
+            : "Supplier conversation concluded."))
+        : crewResponse
+          ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+            (response === "details"
+              ? "They shared more about their plans."
+              : "Conversation concluded."))
+          : response === "promise"
+            ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
+            : response === "decline"
+              ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
+              : response === "delay"
+                ? "You asked for time to think. The situation continues; resume the conversation from City."
+                : response === "acknowledge"
+                  ? "Outcome acknowledged. The city moves on; the history remains."
+                  : s.encounters.find((e) => e.id === id)?.definitionId ===
+                      "workplace"
+                    ? (result.state.events.at(-1)?.text ??
+                      "Workplace choice recorded.")
+                    : "Cuzzo explains what happened.";
       setNotice(reply);
       if (response !== "clarify") setActionFeedback(reply);
     }
@@ -359,7 +369,6 @@ export function App() {
           "work",
           "gig",
           "rest",
-          "crime",
           "apply",
           "acceptJob",
           "timeOff",
@@ -547,6 +556,40 @@ export function App() {
               </p>
             </Panel>
           )}
+          {p.status === "arrested" && (
+            <Panel>
+              <h3>In custody</h3>
+              <p>
+                Release day{" "}
+                {s.street.custody.find(
+                  (r) => r.character === p.id && r.status === "held",
+                )?.releaseDay ?? "not defined"}
+                . Street actions and ordinary work are unavailable. Each day
+                still resolves living costs, employment, supplier obligations,
+                crew and city activity.
+              </p>
+              <button
+                onClick={() => {
+                  setState(serveSentence(s));
+                  setScreen("City");
+                }}
+              >
+                Serve remaining sentence
+              </button>
+            </Panel>
+          )}
+          {screen === "Actions" && actionGroup === "Everyday" && (
+            <StreetWork
+              s={s}
+              open={(id) => {
+                setState(openSupplier(s, id));
+                setScreen("City");
+              }}
+              sell={(market) =>
+                act({ type: "crime", actor: s.playerId, market })
+              }
+            />
+          )}
           {screen !== "City" && toast}
           {screen === "City" && (
             <>
@@ -665,6 +708,7 @@ export function App() {
                   </Panel>
                 </div>
               </div>
+
               <EmploymentSummary s={s} />
               <Panel>
                 <div className="panel-title">
@@ -1176,6 +1220,17 @@ export function App() {
           )}
           {screen === "Finances" && (
             <>
+              <StreetWork
+                s={s}
+                inventory
+                open={(id) => {
+                  setState(openSupplier(s, id));
+                  setScreen("City");
+                }}
+                sell={(market) =>
+                  act({ type: "crime", actor: s.playerId, market })
+                }
+              />
               <EmploymentSummary s={s} />
               <Panel>
                 <p className="eyebrow">CASH ON HAND</p>

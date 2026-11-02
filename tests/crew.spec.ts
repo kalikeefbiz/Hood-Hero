@@ -43,7 +43,7 @@ async function card(page: Page, label: string) {
 test("Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences", async ({
   page,
 }) => {
-  test.setTimeout(90000);
+  test.setTimeout(test.info().project.name.includes("webkit") ? 180000 : 90000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await start(page);

@@ -1,3 +1,4 @@
+import { saleLot, transactionChance } from "./StreetEconomy";
 import {
   cash,
   clamp,
@@ -33,7 +34,7 @@ export const activityName: Record<CrewActivity, string> = {
   information: "Ask for information",
   social: "Spend time together",
   "partner-gig": "Partner on a local gig",
-  "partner-crime": "Partner on black-market opportunity",
+  "partner-crime": "Partner on street work",
 };
 export function availability(
   s: GameState,
@@ -178,6 +179,8 @@ export function requestError(
   compensation = CREW_BALANCE.compensation,
 ): string | null {
   if (s.end) return "This run has ended";
+  if (player(s).status !== "active")
+    return "You are unavailable while in custody.";
   if (!s.crew.members.includes(member)) return "Not in your Set";
   if (s.ap < 1) return "Requires 1 AP";
   if (
@@ -245,7 +248,7 @@ function assignment(
           ? 38 +
             Math.max(0, Math.floor((s.characters[member].skills.work - 25) / 8))
           : activity === "partner-crime"
-            ? 72
+            ? Math.min(saleLot(s)?.remaining ?? 0, 2) * 50
             : 0,
     skill:
       activity === "information" || activity === "social"
@@ -255,11 +258,7 @@ function assignment(
           : "work",
     chance:
       activity === "partner-crime"
-        ? actionSuccessChance(s, {
-            actor: s.playerId,
-            type: "crime",
-            partner: member,
-          })!
+        ? transactionChance(s, s.playerId, undefined, member)
         : ["social", "partner-gig"].includes(activity)
           ? 1
           : assignmentChance(s, s.characters[member], activity),
@@ -423,13 +422,9 @@ export function resolveAssignment(s: GameState, a: CrewAssignment) {
         c.stress = clamp(c.stress + 5);
         outcome = `Shared local gig: you earned $${38 + bonus}; ${c.name} earned $16. Work experience determined the extra pay.`;
       } else {
-        c.police = clamp(c.police + 14);
-        c.notoriety = clamp(c.notoriety + 7);
-        c.rivalThreat = clamp(c.rivalThreat + 5);
-        c.stress = clamp(c.stress + 9);
-        if (a.success) c.wallet.illicit += 20;
-        else expense(s, c, Math.min(12, cash(c)), "Failed shared opportunity");
-        outcome = `${a.success ? "Shared black-market opportunity succeeded" : "Shared black-market opportunity failed"}. ${c.name} ${a.success ? "received $20 illicit pay" : "lost up to $12"}; both of you gained police and rival exposure.`;
+        const transaction = s.street.transactions.at(-1);
+        a.success = !!transaction?.gross;
+        outcome = `Shared street transaction: ${transaction?.sold ?? 0} goods sold. ${c.name} received $${transaction?.crewPaid ?? 0} from actual proceeds${transaction?.crewLoss ? ` and lost $${transaction.crewLoss}` : ""}; only participants gained exposure. Supplier debt remains with the owner.`;
       }
     }
   } else if (a.activity === "social") {
