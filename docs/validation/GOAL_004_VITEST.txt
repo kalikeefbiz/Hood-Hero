@@ -1,0 +1,25 @@
+
+> syndicate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /workspace/Hood-Hero
+
+ ✓ src/tests/employment.test.ts (20 tests) 20691ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 1  5797ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 7  5737ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 21  5170ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 2026  3482ms
+ ✓ src/tests/simulation.test.ts (44 tests) 4493ms
+   ✓ The Chains and automated playthroughs > has no fixed turn limit and no arbitrary defeat timer  3450ms
+ ✓ src/tests/encounters.test.ts (20 tests) 1709ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a fulfilled story over 40 further days, including reload  682ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a broken story over 40 further days, including reload  640ms
+ ✓ src/tests/actionOdds.test.ts (3 tests) 528ms
+ ✓ src/tests/actionArt.test.ts (2 tests) 8ms
+
+ Test Files  5 passed (5)
+      Tests  89 passed (89)
+   Start at  05:32:42
+   Duration  32.21s (transform 1.14s, setup 0ms, collect 2.44s, tests 27.43s, environment 1ms, prepare 578ms)
+

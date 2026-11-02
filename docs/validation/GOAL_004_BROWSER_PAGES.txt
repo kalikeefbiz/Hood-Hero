@@ -1,0 +1,43 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test tests/employment.spec.ts tests/illustrated.spec.ts tests/city-menu.spec.ts --workers=2 --timeout=90000
+
+[WebServer] (node:15883) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 20 tests using 2 workers
+
+(node:15902) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+(node:15903) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   2 [chromium-mobile] › tests/city-menu.spec.ts:164:1 › story notification uses the active demand and opens its existing Actions location (4.9s)
+  ✓   1 [chromium-mobile] › tests/city-menu.spec.ts:28:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (6.1s)
+  ✓   3 [chromium-mobile] › tests/city-menu.spec.ts:205:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (2.9s)
+  ✓   5 [chromium-mobile] › tests/employment.spec.ts:140:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (4.4s)
+  ✓   6 [chromium-mobile] › tests/employment.spec.ts:189:1 › workplace scene consequence, skip, close and no replay across tabs or reload (1.9s)
+  ✓   7 [chromium-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (2.4s)
+  ✓   8 [chromium-mobile] › tests/illustrated.spec.ts:66:1 › approved art maps to real actions and resolves under the production base (1.5s)
+  ✓   9 [chromium-mobile] › tests/illustrated.spec.ts:106:1 › action art loads near the viewport, and failed art preserves layout and gameplay (2.1s)
+  ✓  10 [chromium-mobile] › tests/illustrated.spec.ts:162:1 › GOAL 002C mobile visual review and usable narrow controls (7.4s)
+(node:16181) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   4 [chromium-mobile] › tests/employment.spec.ts:76:1 › hire, scheduled wages, save and a thirty-day employment playthrough (32.2s)
+(node:16262) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  11 [webkit-mobile] › tests/city-menu.spec.ts:28:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (14.3s)
+  ✓  12 [webkit-mobile] › tests/city-menu.spec.ts:164:1 › story notification uses the active demand and opens its existing Actions location (12.9s)
+  ✓  13 [webkit-mobile] › tests/city-menu.spec.ts:205:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (9.8s)
+  ✓  15 [webkit-mobile] › tests/employment.spec.ts:140:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (27.3s)
+  ✓  16 [webkit-mobile] › tests/employment.spec.ts:189:1 › workplace scene consequence, skip, close and no replay across tabs or reload (14.5s)
+  ✓  17 [webkit-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (23.9s)
+  ✓  18 [webkit-mobile] › tests/illustrated.spec.ts:66:1 › approved art maps to real actions and resolves under the production base (11.1s)
+  ✓  19 [webkit-mobile] › tests/illustrated.spec.ts:106:1 › action art loads near the viewport, and failed art preserves layout and gameplay (17.0s)
+  ✓  20 [webkit-mobile] › tests/illustrated.spec.ts:162:1 › GOAL 002C mobile visual review and usable narrow controls (34.6s)
+  ✓  14 [webkit-mobile] › tests/employment.spec.ts:76:1 › hire, scheduled wages, save and a thirty-day employment playthrough (2.3m)
+
+  20 passed (3.2m)

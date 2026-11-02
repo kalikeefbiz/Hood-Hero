@@ -136,7 +136,8 @@ export interface Commitment {
   beneficiary: ID;
   createdDay: number;
   dueDay: number;
-  kind: "errand" | "recover-property";
+  kind: "errand" | "recover-property" | "employment-shift";
+  employmentId?: ID;
   incidentId?: ID;
   status: CommitmentStatus;
   evidence: ID[];
@@ -160,6 +161,36 @@ export interface EncounterInstance {
   followUpPending: boolean;
   deferred: boolean;
 }
+export interface Employment {
+  id: ID;
+  actor: ID;
+  jobId: ID;
+  employer: ID;
+  location: ZoneId;
+  status: "employed" | "resigned" | "terminated";
+  hiredDay: number;
+  endedDay?: number;
+  wage: number;
+  workdays: number[];
+  attendance: {
+    day: number;
+    status: "worked" | "missed" | "excused";
+    eventId: ID;
+  }[];
+  reliability: number;
+  performance: number;
+  warnings: number;
+  rehireDay: number;
+  timeOffDays: number[];
+  raised: boolean;
+  eventIds: ID[];
+}
+export interface EmploymentSearch {
+  eligibleDay: number;
+  offeredJob?: ID;
+  lastApplicationDay?: number;
+  lastGigDay?: number;
+}
 export interface Asset {
   id: ID;
   owner: ID;
@@ -168,7 +199,7 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 3;
+  version: 4;
   day: number;
   ap: number;
   rng: number;
@@ -184,6 +215,8 @@ export interface GameState {
   encounters: EncounterInstance[];
   acknowledgedEvents: ID[];
   crew: { members: ID[]; capacity: number; successor: ID | null };
+  employment: Employment[];
+  employmentSearch: Record<ID, EmploymentSearch>;
   assets: Asset[];
   ledger: {
     day: number;

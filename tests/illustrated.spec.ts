@@ -1,5 +1,6 @@
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
+import { advanceDay } from "../src/core/TimeSystem";
 import { newGame } from "../src/core/Simulation";
 import {
   performAction,
@@ -79,8 +80,9 @@ test("approved art maps to real actions and resolves under the production base",
       id === "crime" ? "HIGH RISK" : "NO RISK",
     );
     await expect(card).toContainText(ACTIONS[id].description);
-    for (const outcome of ACTIONS[id].outcomes)
-      await expect(card).toContainText(outcome);
+    if (id !== "work")
+      for (const outcome of ACTIONS[id].outcomes)
+        await expect(card).toContainText(outcome);
   }
   await expect(page.locator('[data-action="gig"] img')).toHaveCount(0);
   await page
@@ -109,19 +111,25 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   page.on("request", (r) => {
     if (r.url().includes("/assets/actions/")) requested.push(r.url());
   });
-  await seed(page, newGame("Morgan", "south"));
+  let employed = newGame("Morgan", "south");
+  employed = performAction(employed, {
+    type: "apply",
+    actor: "player",
+    jobId: "retail-south",
+  }).state;
+  employed = performAction(employed, {
+    type: "acceptJob",
+    actor: "player",
+    jobId: "retail-south",
+  }).state;
+  employed = advanceDay(employed);
+  await seed(page, employed);
   expect(requested).toEqual([]);
   const before = requested.length;
   await nav(page, "Actions");
-  await expect(
-    page.locator('[data-action="work"] .action-scene'),
-  ).toBeVisible();
+  await loaded(page, "work");
   expect(
-    requested
-      .slice(before)
-      .some((url) =>
-        /quiet-afternoon|black-market|ask-around|build-local/.test(url),
-      ),
+    requested.slice(before).some((url) => /ask-around|build-local/.test(url)),
   ).toBe(false);
   await loaded(page, "rest");
   expect(requested.some((url) => url.includes("quiet-afternoon"))).toBe(true);
@@ -140,8 +148,10 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   expect(size!.height).toBe(loadedSize.height);
   expect(size!.width).toBe(loadedSize.width);
   await work.getByRole("button").click();
-  await expect(page.locator(".cash-resource strong")).toHaveText("$221");
+  await expect(page.locator(".cash-resource strong")).toHaveText("$203");
   await expect(page.locator(".ap b")).toHaveText("0/2");
+  await dismissEncounter(page);
+  await nav(page, "Actions");
   await expect(work.getByRole("button")).toBeDisabled();
   await expect(work.locator(".disabled-reason")).toHaveText(
     "Not enough AP or availability",

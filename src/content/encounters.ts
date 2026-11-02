@@ -1,3 +1,4 @@
+import { WORKPLACE_ENCOUNTER } from "./workplaceEncounters";
 import type { EncounterDefinition, EncounterResponse } from "../core/Encounter";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { unseenEvents } from "../core/EventLog";
@@ -90,6 +91,7 @@ function requestResponses(
   return responses;
 }
 export const ENCOUNTERS: EncounterDefinition[] = [
+  WORKPLACE_ENCOUNTER,
   {
     id: "mega-chains-request",
     type: "request",

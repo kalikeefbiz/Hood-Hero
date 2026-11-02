@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "app": "Hood Hero",
+    "commit": "398615df2e3f12628867001e3ad2a21c86b33783",
+    "saveSchema": 4,
+    "milestone": "GOAL 004"
+  },
+  "results": [
+    {
+      "browser": "chromium",
+      "url": "https://kalikeefbiz.github.io/Hood-Hero/",
+      "commit": "398615df2e3f12628867001e3ad2a21c86b33783",
+      "day": 10,
+      "attendance": [
+        {
+          "day": 2,
+          "status": "worked"
+        },
+        {
+          "day": 4,
+          "status": "missed"
+        },
+        {
+          "day": 6,
+          "status": "missed"
+        },
+        {
+          "day": 9,
+          "status": "missed"
+        }
+      ],
+      "status": "terminated",
+      "applicationsReopen": 16,
+      "lawfulIncomeAfterGig": 134,
+      "errors": [],
+      "failures": []
+    },
+    {
+      "browser": "webkit",
+      "url": "https://kalikeefbiz.github.io/Hood-Hero/",
+      "commit": "398615df2e3f12628867001e3ad2a21c86b33783",
+      "day": 10,
+      "attendance": [
+        {
+          "day": 2,
+          "status": "worked"
+        },
+        {
+          "day": 4,
+          "status": "missed"
+        },
+        {
+          "day": 6,
+          "status": "missed"
+        },
+        {
+          "day": 9,
+          "status": "missed"
+        }
+      ],
+      "status": "terminated",
+      "applicationsReopen": 16,
+      "lawfulIncomeAfterGig": 134,
+      "errors": [],
+      "failures": []
+    }
+  ]
+}

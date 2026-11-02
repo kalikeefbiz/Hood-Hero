@@ -169,7 +169,7 @@ describe("actions, economy, AP and persistence", () => {
   it("does not mutate the input state on successful actions or day advancement", () => {
     const s = fresh(),
       copy = serialize(s);
-    doAction(s, "work");
+    doAction(s, "gig");
     expect(serialize(s)).toBe(copy);
     advanceDay(s);
     expect(serialize(s)).toBe(copy);
@@ -180,8 +180,8 @@ describe("actions, economy, AP and persistence", () => {
     player(s).stress = 100;
     s = advanceDay(s);
     expect(player(s).status).toBe("active");
-    s = doAction(s, "work");
-    expect(cash(player(s))).toBe(96);
+    s = doAction(s, "gig");
+    expect(cash(player(s))).toBe(38);
     invariants(s);
   });
   it("stores and restores complete memories, incidents, money, RNG, commitments and progression", () => {
@@ -213,9 +213,9 @@ describe("actions, economy, AP and persistence", () => {
     expect(loadGame(storage)).toEqual(s);
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
+    raw.version = 99;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 4/);
     raw.version = 4;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 3/);
-    raw.version = 3;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });
@@ -294,8 +294,8 @@ describe("living simulation and personal Set", () => {
       s.characters.flacco.memories.slice(0, before.memories.length),
     ).toEqual(before.memories);
     s = advanceDay(s);
-    s = doAction(s, "work");
-    expect(s.ap).toBe(0);
+    s = doAction(s, "gig");
+    expect(s.ap).toBe(1);
   });
   it("recruits an ordinary civilian through repeated trust building", () => {
     let s = fresh();
@@ -348,7 +348,7 @@ describe("The Chains and automated playthroughs", () => {
       s = advanceDay(s);
       s = doAction(s, "gig");
       s = advanceDay(s);
-      s = doAction(s, "work");
+      s = doAction(s, "gig");
       expect(s.progression.jobs).toBe(4);
       invariants(s);
     },
@@ -356,7 +356,7 @@ describe("The Chains and automated playthroughs", () => {
   it("ignores the incident while continuing repeatable legitimate work", () => {
     let s = fresh();
     for (let d = 0; d < 20; d++) {
-      s = doAction(s, "work");
+      s = doAction(s, "gig");
       s = advanceDay(s);
       invariants(s);
     }
@@ -365,10 +365,12 @@ describe("The Chains and automated playthroughs", () => {
     expect(cash(player(s))).toBeGreaterThan(125);
   });
   it("earns legitimate money before contacting anyone", () => {
-    let s = doAction(fresh(), "work");
-    expect(cash(player(s))).toBe(221);
+    let s = doAction(fresh(), "gig");
+    expect(cash(player(s))).toBe(163);
     s = advanceDay(s);
+    s = doAction(s, "gig");
     s = info(s);
+    s = advanceDay(s);
     s = doAction(s, "buyback");
     expect(s.incidents["the-chains"].resolution).toBe("buyback");
   });
@@ -393,7 +395,7 @@ describe("The Chains and automated playthroughs", () => {
       expect(player(s).rivalThreat).toBeGreaterThan(0);
       for (let d = 0; d < 10; d++) {
         s = advanceDay(s);
-        s = doAction(s, "work");
+        s = doAction(s, "gig");
         invariants(s);
       }
       expect(s.end).toBeNull();
@@ -402,7 +404,7 @@ describe("The Chains and automated playthroughs", () => {
   it("has no fixed turn limit and no arbitrary defeat timer", () => {
     let s = fresh();
     for (let d = 0; d < 160; d++) {
-      s = doAction(s, "work");
+      s = doAction(s, "gig");
       s = advanceDay(s);
     }
     expect(s.day).toBe(161);

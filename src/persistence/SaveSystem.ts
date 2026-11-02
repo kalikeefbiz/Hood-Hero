@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { JOBS } from "../content/jobs";
 import { ENCOUNTERS } from "../content/encounters";
 import type { GameState } from "../core/GameState";
 const id = z.string().min(1),
@@ -68,7 +69,7 @@ const character = z.object({
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(3),
+  version: z.literal(4),
   day: integer.min(1),
   ap: integer.max(2),
   rng: integer.max(4294967295),
@@ -180,7 +181,8 @@ const schema = z.object({
       actor: id,
       beneficiary: id,
       dueDay: integer,
-      kind: z.enum(["errand", "recover-property"]),
+      kind: z.enum(["errand", "recover-property", "employment-shift"]),
+      employmentId: id.optional(),
       status: z.enum([
         "pending",
         "completed",
@@ -226,6 +228,42 @@ const schema = z.object({
     capacity: integer.min(1).max(5),
     successor: id.nullable(),
   }),
+  employment: z.array(
+    z.object({
+      id,
+      actor: id,
+      jobId: id,
+      employer: id,
+      location: zone,
+      status: z.enum(["employed", "resigned", "terminated"]),
+      hiredDay: integer,
+      endedDay: integer.optional(),
+      wage: nonnegative,
+      workdays: z.array(integer.max(6)).min(1).max(7),
+      attendance: z.array(
+        z.object({
+          day: integer,
+          status: z.enum(["worked", "missed", "excused"]),
+          eventId: id,
+        }),
+      ),
+      reliability: nonnegative.max(100),
+      performance: integer,
+      warnings: integer,
+      rehireDay: integer,
+      timeOffDays: z.array(integer),
+      raised: z.boolean(),
+      eventIds: z.array(id),
+    }),
+  ),
+  employmentSearch: record(
+    z.object({
+      eligibleDay: integer,
+      offeredJob: id.optional(),
+      lastApplicationDay: integer.optional(),
+      lastGigDay: integer.optional(),
+    }),
+  ),
   assets: z.array(
     z.object({
       id,
@@ -256,7 +294,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 3, state: s });
+  return JSON.stringify({ format: "syndicate", version: 4, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -270,13 +308,13 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(3),
+      version: z.literal(4),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Hood Hero save version 3. Start a new test run from the new game menu.",
+      "Incompatible or damaged save. Expected Hood Hero save version 4. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];
@@ -298,6 +336,26 @@ export function deserialize(raw: string): GameState {
         !exists(o.beneficiary) ||
         !exists(o.requester) ||
         (o.incidentId && !s.incidents[o.incidentId]),
+    ) ||
+    s.employment.some(
+      (e) =>
+        !exists(e.actor) ||
+        !exists(e.employer) ||
+        !JOBS.some((j) => j.id === e.jobId) ||
+        new Set(e.attendance.map((a) => a.day)).size !== e.attendance.length ||
+        ![...e.eventIds, ...e.attendance.map((a) => a.eventId)].every((id) =>
+          s.events.some((x) => x.id === id),
+        ),
+    ) ||
+    new Set(
+      s.employment.filter((e) => e.status === "employed").map((e) => e.actor),
+    ).size !== s.employment.filter((e) => e.status === "employed").length ||
+    s.commitments.some(
+      (c) =>
+        c.kind === "employment-shift" &&
+        !s.employment.some(
+          (e) => e.id === c.employmentId && e.actor === c.actor,
+        ),
     ) ||
     s.encounters.some(
       (e) =>

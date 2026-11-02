@@ -11,7 +11,8 @@ export function NarrativeNotifications({
 }) {
   const unseen = unseenEvents(s);
   if (!unseen.length) return null;
-  const event = unseen.at(-1)!;
+  const event =
+    unseen.filter((e) => e.importance === "critical").at(-1) ?? unseen.at(-1)!;
   return (
     <section
       className="major-notification"

@@ -1,6 +1,6 @@
 import type { GameState } from "../core/GameState";
 export function CommitmentSummary({ s }: { s: GameState }) {
-  const promises = s.commitments.filter((c) => c.kind !== "errand");
+  const promises = s.commitments.filter((c) => c.kind === "recover-property");
   if (!promises.length) return null;
   return (
     <section className="commitment-summary panel" aria-label="Your promises">

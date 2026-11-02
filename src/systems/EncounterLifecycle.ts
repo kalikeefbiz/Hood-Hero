@@ -34,7 +34,12 @@ export function syncEncounters(s: GameState) {
         definitionId: definition.id,
         sourceEventId: trigger.eventId,
         incidentId: trigger.incidentId,
-        participants: [...definition.participants],
+        participants:
+          definition.id === "workplace"
+            ? s.events
+                .find((x) => x.id === trigger.eventId)!
+                .actors.filter((id) => id !== s.playerId)
+            : [...definition.participants],
         createdDay: s.day,
         dueDay: incident ? incidentDueDay(incident) : undefined,
         status: "pending",

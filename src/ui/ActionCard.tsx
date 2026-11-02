@@ -16,6 +16,8 @@ export const money = (n: number) =>
     currency: "USD",
     maximumFractionDigits: 0,
   }).format(n);
+import { currentEmployment } from "../systems/Employment";
+import { jobDefinition, WEEKDAYS } from "../content/jobs";
 const labels = {
   work: "Clock in",
   gig: "Pick up a gig",
@@ -32,6 +34,14 @@ export function ActionCard({
   onAction: (a: Action) => void;
   compact?: boolean;
 }) {
+  const employment = currentEmployment(s);
+  const job = a.jobId ? jobDefinition(a.jobId) : undefined;
+  const employmentCopy =
+    a.type === "work"
+      ? `${employment ? `$${employment.wage} clean · ${jobDefinition(employment.jobId).name}` : "Employment required"}. Scheduled full shift · +8 stress.`
+      : job
+        ? `${job.description} $${job.wage} / shift · 2 AP · ${job.workdays.map((d) => WEEKDAYS[d]).join(" / ")} · ${s.zones[job.location].name}.`
+        : null;
   const chance = actionSuccessChance(s, a);
   const def = ACTIONS[a.type],
     reason = validateAction(s, a);
@@ -45,17 +55,18 @@ export function ActionCard({
           : a.type === "transfer"
             ? 25
             : 0;
-  const title =
-    a.type === "buy"
+  const title = job
+    ? `${a.type === "apply" ? "Apply" : "Accept"} · ${job.name}`
+    : a.type === "buy"
       ? ITEMS[a.item!].name
       : a.type === "buyback"
         ? `Buy back · ${money(cost)}`
         : (labels[a.type as keyof typeof labels] ?? def.label);
-  const identity = `${a.type}-${a.target ?? a.item ?? "default"}`;
+  const identity = `${a.type}-${a.target ?? a.item ?? a.jobId ?? "default"}`;
   const hasArt = !!ACTION_ART[a.type];
   const brief =
     a.type === "work"
-      ? `$${BALANCE.workIncome} clean. Full shift.`
+      ? employmentCopy!
       : a.type === "gig"
         ? `$${BALANCE.gigIncome} clean. Local work.`
         : a.target
@@ -144,7 +155,13 @@ export function ActionCard({
           With {s.characters[a.target].alias ?? s.characters[a.target].name}
         </p>
       )}
-      <p>{a.type === "buy" ? ITEMS[a.item!].description : def.description}</p>
+      <p>
+        {employmentCopy
+          ? `${employmentCopy} ${def.description}`
+          : a.type === "buy"
+            ? ITEMS[a.item!].description
+            : def.description}
+      </p>
       {chance !== null && (
         <p className="chance">
           Success chance <strong>{Math.round(chance * 100)}%</strong>
@@ -160,7 +177,9 @@ export function ActionCard({
       <small className="outcome">
         {a.type === "buy"
           ? `−${ITEMS[a.item!].relief} stress`
-          : def.outcomes.join(" / ")}
+          : a.type === "work"
+            ? "Scheduled wages; +1 work skill, +3 legitimacy, +8 stress"
+            : def.outcomes.join(" / ")}
       </small>
       <button
         disabled={!!reason}
