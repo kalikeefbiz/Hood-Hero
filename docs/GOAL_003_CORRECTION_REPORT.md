@@ -24,7 +24,7 @@ Only City renders narrative modals. Actions, People, Set and Wallet retain their
 
 ## Immediate action results and day changes
 
-`resolveAction` returns its own recorded result event through `performAction`. The interface displays that event, so a later routine Set-capacity/progression update cannot hide the action's actual result. This fixes a real regression found during testing: a successful buyback could previously report only “Your influence supports a Set of 2.”
+`resolveAction` returns its own recorded result event through `performAction`. The interface displays that event in a five-second, viewport-fixed result toast above the dock as well as the normal feedback area. It remains visible when the action card was far down the page, and a later routine Set-capacity/progression update cannot hide the action's actual result. This fixes a real regression found during testing: a successful buyback could previously report only “Your influence supports a Set of 2.”
 
 End Day retains the existing simulation advancement and costs, then returns to City, resets scroll, restores AP normally, and briefly shows the new day without a confirmation screen. Only genuine new world events create new encounters. Starting/resuming a run also resets scroll before opening a modal, preventing its scroll lock from restoring an old menu position.
 
@@ -47,9 +47,10 @@ The build writes `build-info.json` containing the actual checked-out commit and 
 - Unit and simulation tests: **69 passed** across four files.
 - Full root browser suite: **64 passed** — 32 Chromium and 32 WebKit, including both 40-day continuation paths on each engine.
 - Production `/Hood-Hero/` browser suite: **34 passed** — 17 Chromium and 17 WebKit.
+- Final viewport-feedback adjustment: **28 additional browser checks passed** — 14 per engine under `/Hood-Hero/`, including scrolled-card result visibility, mobile regressions, and both 40-day paths.
 - TypeScript/Vite build, formatting checks, and `git diff --check`: passed.
 
-[Recorded root browser output](validation/GOAL_003_CORRECTION_ROOT.txt) · [Production-base browser output](validation/GOAL_003_CORRECTION_PAGES.txt). Required browser checks cover the opening modal, blocked background clicks, focus containment, clarification/portrait change, acceptance, refusal, postponement, dismissal, queue sequencing, history without effects, City-only routing, action feedback, day transitions, 40-day non-repetition, chronological severity/faction rendering, all starting homes/affiliation themes, and 320/375/390/430px layouts with axe accessibility checks.
+[Recorded root browser output](validation/GOAL_003_CORRECTION_ROOT.txt) · [Production-base browser output](validation/GOAL_003_CORRECTION_PAGES.txt) · [Final viewport-feedback checks](validation/GOAL_003_CORRECTION_FEEDBACK.txt). Required browser checks cover the opening modal, blocked background clicks, focus containment, clarification/portrait change, acceptance, refusal, postponement, dismissal, queue sequencing, history without effects, City-only routing, action feedback, day transitions, 40-day non-repetition, chronological severity/faction rendering, all starting homes/affiliation themes, and 320/375/390/430px layouts with axe accessibility checks.
 
 The broader existing browser suite explicitly dismisses the opening scene before testing ordinary gameplay. Its day-loop tests now navigate from City back to the intended destination, reflecting the corrected End Day behavior. Existing simulation/economy/relationship/progression tests remain intact, apart from expected schema-version assertions.
 

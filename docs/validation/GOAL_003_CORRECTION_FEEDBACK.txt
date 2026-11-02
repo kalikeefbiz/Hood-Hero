@@ -1,0 +1,47 @@
+[WebServer] (node:32271) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 28 tests using 2 workers
+
+(node:32290) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32289) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/encounters.spec.ts:172:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (1.8s)
+  ✓   3 [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions (3.9s)
+  ✓   2 [chromium-mobile] › tests/encounters.spec.ts:65:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (9.7s)
+  ✓   5 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 320px (1.3s)
+  ✓   4 [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions (5.3s)
+  ✓   6 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 375px (1.3s)
+  ✓   7 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 390px (1.5s)
+  ✓   9 [chromium-mobile] › tests/encounters.spec.ts:300:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (827ms)
+  ✓   8 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 430px (1.2s)
+  ✓  10 [chromium-mobile] › tests/encounters.spec.ts:369:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (1.2s)
+  ✓  12 [chromium-mobile] › tests/mobile.spec.ts:35:1 › phone gameplay: contact, lawful income, days, save and load (4.3s)
+  ✓  11 [chromium-mobile] › tests/encounters.spec.ts:411:1 › all homes and affiliation themes retain the City-only modal and normal navigation (5.7s)
+  ✓  13 [chromium-mobile] › tests/mobile.spec.ts:77:1 › buyback resolves the incident and the ordinary loop remains playable (2.2s)
+(node:32637) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  14 [chromium-mobile] › tests/mobile.spec.ts:111:1 › mobile city and new game remain readable at narrow widths (2.4s)
+(node:32668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  16 [webkit-mobile] › tests/encounters.spec.ts:172:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (7.4s)
+  ✓  15 [webkit-mobile] › tests/encounters.spec.ts:65:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (25.5s)
+  ✓  17 [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions (36.0s)
+  ✓  19 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 320px (3.8s)
+  ✓  20 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 375px (4.3s)
+  ✓  21 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 390px (4.8s)
+  ✓  22 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 430px (4.2s)
+  ✓  23 [webkit-mobile] › tests/encounters.spec.ts:300:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (3.5s)
+  ✓  24 [webkit-mobile] › tests/encounters.spec.ts:369:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (4.7s)
+  ✓  18 [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions (44.2s)
+  ✓  26 [webkit-mobile] › tests/mobile.spec.ts:35:1 › phone gameplay: contact, lawful income, days, save and load (21.0s)
+  ✓  25 [webkit-mobile] › tests/encounters.spec.ts:411:1 › all homes and affiliation themes retain the City-only modal and normal navigation (35.2s)
+  ✓  27 [webkit-mobile] › tests/mobile.spec.ts:77:1 › buyback resolves the incident and the ordinary loop remains playable (18.7s)
+  ✓  28 [webkit-mobile] › tests/mobile.spec.ts:111:1 › mobile city and new game remain readable at narrow widths (5.9s)
+
+  28 passed (2.2m)

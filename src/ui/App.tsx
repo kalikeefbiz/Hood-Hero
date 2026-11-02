@@ -131,6 +131,12 @@ export function App() {
     null,
   );
   const [dayTransition, setDayTransition] = useState<number | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  useEffect(() => {
+    if (!actionFeedback) return;
+    const timer = window.setTimeout(() => setActionFeedback(null), 5000);
+    return () => clearTimeout(timer);
+  }, [actionFeedback]);
   useEffect(() => {
     if (dayTransition === null) return;
     const timer = window.setTimeout(() => setDayTransition(null), 2200);
@@ -159,6 +165,7 @@ export function App() {
   }, [s]);
   function start() {
     window.scrollTo(0, 0);
+    setActionFeedback(null);
     const next = newGame(name, home);
     setState(next);
     setSelected(home);
@@ -167,6 +174,7 @@ export function App() {
     setNotice("You’re home. Clock in, check on Cuzzo, or see who’s around.");
   }
   function load(resume = false) {
+    setActionFeedback(null);
     try {
       const next = resume
         ? loadGame(localStorage, AUTO_KEY) || loadGame(localStorage)
@@ -184,6 +192,7 @@ export function App() {
     }
   }
   function save() {
+    setActionFeedback(null);
     if (s)
       try {
         saveGame(localStorage, s);
@@ -196,10 +205,14 @@ export function App() {
   function act(a: Action) {
     if (!s) return;
     const result = performAction(s, a);
-    if (result.error) setNotice(result.error);
-    else {
+    if (result.error) {
+      setNotice(result.error);
+      setActionFeedback(result.error);
+    } else {
       setState(result.state);
-      setNotice(result.event?.text ?? "Action completed.");
+      const message = result.event?.text ?? "Action completed.";
+      setNotice(message);
+      setActionFeedback(message);
     }
   }
   function respond(id: string, response: string) {
@@ -219,6 +232,7 @@ export function App() {
                 ? "Outcome acknowledged. The city moves on; the history remains."
                 : "Cuzzo explains what happened.";
       setNotice(reply);
+      if (response !== "clarify") setActionFeedback(reply);
     }
   }
   function showConversation(id: string) {
@@ -251,7 +265,11 @@ export function App() {
     setScreen("Actions");
   }
   const toast = (
-    <div className="notice" role="status" aria-live="polite">
+    <div
+      className="notice"
+      role={actionFeedback ? undefined : "status"}
+      aria-live={actionFeedback ? "off" : "polite"}
+    >
       {notice || "A persistent city. Every day leaves a mark."}
     </div>
   );
@@ -362,6 +380,12 @@ export function App() {
           load={() => load(false)}
         />
         <main className="main-content" id="main-content">
+          {actionFeedback && (
+            <div className="action-feedback" role="status" aria-live="polite">
+              <small>YOUR MOVE</small>
+              <p>{actionFeedback}</p>
+            </div>
+          )}
           <div className="screen-heading">
             <div>
               <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
@@ -380,6 +404,7 @@ export function App() {
             <button
               className="advance"
               onClick={() => {
+                setActionFeedback(null);
                 const next = advanceDay(s);
                 setState(next);
                 setScreen("City");

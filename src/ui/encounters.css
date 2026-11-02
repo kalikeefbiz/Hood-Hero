@@ -453,3 +453,30 @@
     line-height: 1.6;
   }
 }
+.action-feedback {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(86px + env(safe-area-inset-bottom));
+  width: min(680px, calc(100vw - 24px));
+  padding: 13px 16px;
+  border: 1px solid #c6ad75;
+  border-radius: 6px;
+  background: #19201cf7;
+  color: #f5eddd;
+  box-shadow: 0 8px 36px #000b;
+  pointer-events: none;
+}
+.action-feedback small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #dfc88c;
+  margin-bottom: 5px;
+}
+.action-feedback p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}

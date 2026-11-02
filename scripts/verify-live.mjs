@@ -82,7 +82,8 @@ for (const [name, engine] of [
     await page.getByRole("button", { name: "The Chains", exact: true }).click();
     await page.locator('[data-action="buyback"]').getByRole("button").click();
     await expect(modal).toHaveCount(0);
-    await expect(page.locator(".notice")).toContainText("paid $150");
+    await expect(page.locator(".action-feedback")).toBeVisible();
+    await expect(page.locator(".action-feedback")).toContainText("paid $150");
     await nav("City");
     await expect(modal).toContainText("came through");
     await expect(modal.locator("img")).toHaveAttribute(

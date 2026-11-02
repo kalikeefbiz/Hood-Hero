@@ -107,6 +107,10 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
   expect(incidentPromise(await saved(page), "the-chains")?.status).toBe(
     "pending",
   );
+  await expect(page.locator(".action-feedback")).toBeVisible();
+  await expect(page.locator(".action-feedback")).toHaveCount(0, {
+    timeout: 7000,
+  });
   await capture(page, "03-conversation-concluded-city");
   await page.getByLabel("Save game", { exact: true }).click();
   for (const destination of ["Actions", "People", "Set", "Wallet"]) {
@@ -125,6 +129,12 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
     ),
   ).toHaveLength(1);
   await expect(page.getByRole("status")).toContainText("paid $150");
+  await expect(page.locator(".action-feedback")).toBeVisible();
+  const feedbackBox = (await page.locator(".action-feedback").boundingBox())!;
+  expect(feedbackBox.y).toBeGreaterThanOrEqual(0);
+  expect(feedbackBox.y + feedbackBox.height).toBeLessThanOrEqual(
+    (await page.getByRole("navigation").boundingBox())!.y,
+  );
   await capture(page, "04-actions-feedback-no-scene");
   await nav(page, "City");
   await expect(modal(page)).toContainText("You came through for me");
