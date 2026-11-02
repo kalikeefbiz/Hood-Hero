@@ -1,5 +1,7 @@
 # GOAL 003 — Living encounters, commitments & narrative presentation
 
+**Correction pass:** The [correction report](GOAL_003_CORRECTION_REPORT.md) supersedes the inline presentation, lifecycle, and save-schema descriptions below.
+
 BlackHouse · Hood Hero · 1 November 2026
 
 Base audited: `main` at `c897fff92419bec48bcf0a9d0fa39bf977abf6a9`.

@@ -30,6 +30,7 @@ const fresh = (seed = 2026, zone: ZoneId = "south") =>
 const intro = (s: GameState) =>
   s.encounters.find((e) => e.definitionId === "mega-chains-request")!;
 function answer(s: GameState, response: string) {
+  if (["buyback", "recover", "settlement", "negotiate"].includes(response)) return act(s, response as ActionType, response === "settlement" ? "pablo" : undefined);
   const r = respondEncounter(s, intro(s).id, response);
   expect(r.error).toBeNull();
   return r.state;
@@ -238,11 +239,11 @@ describe("encounter boundaries and art", () => {
   it("rejects gameplay responses without AP or cash and leaves input and RNG untouched", () => {
     const s = answer(fresh(), "promise");
     const raw = serialize(s);
-    expect(respondEncounter(s, intro(s).id, "buyback").error).toMatch(/cash/);
+    expect(performAction(s, {type:"buyback", actor:s.playerId, incidentId:"the-chains"}).error).toMatch(/cash/);
     expect(serialize(s)).toBe(raw);
     s.ap = 0;
-    expect(respondEncounter(s, intro(s).id, "recover").error).toMatch(/AP/);
-    expect(respondEncounter(s, intro(s).id, "negotiate").error).toMatch(/AP/);
+    expect(performAction(s, {type:"recover", actor:s.playerId, incidentId:"the-chains"}).error).toMatch(/AP/);
+    expect(performAction(s, {type:"negotiate", actor:s.playerId, incidentId:"the-chains"}).error).toMatch(/AP/);
   });
   it("normalizes incident age to an absolute due day and uses current demand in dialogue", () => {
     let s = fresh();
@@ -262,7 +263,9 @@ describe("encounter boundaries and art", () => {
     s = openEncounter(s, intro(s).id);
     s = answer(s, "delay");
     s = advanceDay(s);
-    expect(intro(s).status).toBe("active");
+    expect(intro(s).status).toBe("pending");
+    expect(currentEncounter(s)).toBeUndefined();
+    s = openEncounter(s, intro(s).id);
     s = answer(s, "delay");
     const due = intro(s).dueDay;
     while (s.day < 10) s = advanceDay(s);
@@ -314,5 +317,43 @@ describe("encounter boundaries and art", () => {
     expect(characterArt(returned, "mega", "strategizing")?.path).toContain(
       "strategizing-with-chain",
     );
+  });
+});
+
+describe("correction: conversations conclude independently of storylines", () => {
+  it("acceptance closes the conversation while the obligation and incident continue", () => {
+    const s = answer(fresh(), "promise");
+    expect(currentEncounter(s)).toBeUndefined(); expect(intro(s).status).toBe("acknowledged");
+    expect(incidentPromise(s, "the-chains")?.status).toBe("pending");
+    expect(s.incidents["the-chains"].status).toBe("active");
+    expect(openEncounter(s, intro(s).id)).toBe(s);
+  });
+  it.each(["fulfilled", "broken"])("does not reopen a %s story over 40 further days, including reload", outcome => {
+    let s = outcome === "fulfilled" ? buyback() : answer(fresh(83), "promise");
+    while(s.incidents["the-chains"].status === "active") s = advanceDay(s);
+    expect(incidentPromise(s, "the-chains")?.status).toBe(outcome);
+    expect(unseenEvents(s).filter(e => e.incidentId === "the-chains")).toHaveLength(1);
+    const reaction = currentEncounter(s)!;
+    s = respondEncounter(s, reaction.id, "acknowledge").state;
+    const recorded = s.encounters.length;
+    for(let day=0;day<40;day++) { s = act(advanceDay(s), "work"); s = deserialize(serialize(s));
+      expect(currentEncounter(s)).toBeUndefined(); expect(unseenEvents(s).filter(e => e.incidentId === "the-chains")).toHaveLength(0);
+    }
+    expect(s.encounters.length).toBe(recorded);
+    expect(s.characters.mega.memories.some(m => m.meaning.includes(outcome === "fulfilled" ? "Kept the promise" : "left me hanging"))).toBe(true);
+    expect(s.characters.mega.status).toBe("active");
+  });
+  it("queues independent simultaneous events, allows deferral, and acknowledges one outcome once", () => {
+    let s = answer(fresh(), "decline");
+    const first = record(s,"incident","Leadership heard the request",["pablo"],["player"],{importance:"major",incidentId:"the-chains",presentationKey:"leadership"});
+    const second = record(s,"incident","Deadline approaching",["mega"],["player"],{importance:"major",incidentId:"the-chains",presentationKey:"deadline"});
+    syncEncounters(s); expect(s.encounters.filter(e=>e.status === "active")).toHaveLength(1);
+    expect(currentEncounter(s)?.sourceEventId).toBe(first.id);
+    s = dismissEncounter(s,currentEncounter(s)!.id); expect(currentEncounter(s)?.sourceEventId).toBe(second.id);
+    s = respondEncounter(s,currentEncounter(s)!.id,"acknowledge").state;
+    expect(currentEncounter(s)).toBeUndefined();
+    s = openEncounter(s,s.encounters.find(e=>e.sourceEventId===first.id)!.id);
+    s = respondEncounter(s,currentEncounter(s)!.id,"acknowledge").state;
+    syncEncounters(s); expect(currentEncounter(s)).toBeUndefined();
   });
 });

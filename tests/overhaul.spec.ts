@@ -1,3 +1,4 @@
+import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
 import {
@@ -27,6 +28,7 @@ async function seed(page: Page, state: GameState) {
   );
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
+  await dismissEncounter(page);
 }
 async function noOverflow(page: Page) {
   expect(
@@ -68,6 +70,7 @@ test("all approved scenes load; every home starts independent and map selection 
     await page.getByRole("radio", { name: new RegExp(z.name) }).check();
     await page.getByLabel("What do people call you?").fill(`From ${z.name}`);
     await page.getByRole("button", { name: "Enter Stixx City" }).click();
+    await dismissEncounter(page);
     await expect(page.locator(".game-shell")).toHaveAttribute(
       "data-theme",
       "independent",
@@ -156,6 +159,7 @@ for (const faction of [
     await page.getByRole("button", { name: "Save game", exact: true }).click();
     await page.reload();
     await page.getByRole("button", { name: "Resume saved game" }).click();
+    await dismissEncounter(page);
     await expect(page.locator(".game-shell")).toHaveAttribute(
       "data-theme",
       faction,

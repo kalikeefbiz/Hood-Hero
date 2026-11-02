@@ -116,6 +116,9 @@ export interface GameEvent {
   title?: string;
   incidentId?: ID;
   commitmentId?: ID;
+  factionId?: FactionId;
+  presentationKey?: string;
+  expiresOnIncidentClose?: boolean;
 }
 export type CommitmentStatus =
   | "pending"
@@ -155,7 +158,7 @@ export interface EncounterInstance {
   status: "pending" | "active" | "acknowledged" | "closed";
   selectedResponses: { id: string; day: number; eventIds: ID[] }[];
   followUpPending: boolean;
-  revisitDay?: number;
+  deferred: boolean;
 }
 export interface Asset {
   id: ID;
@@ -165,7 +168,7 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 2;
+  version: 3;
   day: number;
   ap: number;
   rng: number;

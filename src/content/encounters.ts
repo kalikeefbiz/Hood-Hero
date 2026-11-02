@@ -1,5 +1,6 @@
 import type { EncounterDefinition, EncounterResponse } from "../core/Encounter";
 import type { EncounterInstance, GameState } from "../core/GameState";
+import { unseenEvents } from "../core/EventLog";
 import { incidentPromise } from "../systems/Commitments";
 const chains = (s: GameState) => s.incidents["the-chains"];
 export function megaDialogue(s: GameState, e: EncounterInstance): string {
@@ -25,7 +26,7 @@ export function megaDialogue(s: GameState, e: EncounterInstance): string {
     return "Alright. I wanted your help, but I heard you. I’ll figure out what I can do.";
   if (e.selectedResponses.some((r) => r.id === "clarify"))
     return `Dizzy, Baby Canon, Joker. Three of them, trying to get a name. They want $${i.demand}. Loco’s locked up; Pablo runs things out here. This wasn’t authorized. I wasn’t badly hurt. I want my property back, not more trouble.`;
-  return `Cuzzo, I need a minute. I was out with my girl when three young Angels surrounded me — Dizzy, Baby Canon, Joker. Took my diamond chain. I’m alright, but they want $${i.demand} to give it back. ${i.leadershipAware ? "Pablo’s heard about it, but nothing’s settled. " : ""}Can you help me get it home?`;
+  return `Cuzzo, three young Angels took my diamond chain while I was out with my girl. I’m alright. They want $${i.demand} to give it back. ${i.leadershipAware ? "Pablo’s heard about it, but nothing’s settled. " : ""}Can you help me get it home?`;
 }
 function requestResponses(
   s: GameState,
@@ -99,6 +100,13 @@ export const ENCOUNTERS: EncounterDefinition[] = [
         ? [{ key: "opening", incidentId: "the-chains" }]
         : [],
     eligible: (s, e) => s.incidents[e.incidentId!]?.status === "active",
+    expression: (s, e) =>
+      incidentPromise(s, "the-chains")?.status === "broken"
+        ? "concerned"
+        : e.selectedResponses.some((r) => r.id === "clarify") ||
+            s.incidents["the-chains"]?.status === "resolved"
+          ? "confident"
+          : "concerned",
     dialogue: megaDialogue,
     responses: requestResponses,
     rules: { replay: "contextual", expiresWithIncident: true },
@@ -109,18 +117,14 @@ export const ENCOUNTERS: EncounterDefinition[] = [
     participants: ["mega", "player"],
     priority: 30,
     trigger: (s) =>
-      s.events
-        .filter(
-          (e) =>
-            e.incidentId === "the-chains" &&
-            e.observedBy.includes(s.playerId) &&
-            (e.importance === "major" || e.importance === "critical"),
-        )
-        .map((e) => ({ key: e.id, eventId: e.id, incidentId: e.incidentId })),
-    eligible: (s, e) =>
-      !!s.events.find(
-        (x) => x.id === e.sourceEventId && x.observedBy.includes(s.playerId),
-      ),
+      unseenEvents(s)
+        .filter((e) => e.incidentId === "the-chains")
+        .map((e) => ({
+          key: e.presentationKey ?? e.id,
+          eventId: e.id,
+          incidentId: e.incidentId,
+        })),
+    eligible: (s, e) => unseenEvents(s).some((x) => x.id === e.sourceEventId),
     dialogue: megaDialogue,
     responses: () => [
       {

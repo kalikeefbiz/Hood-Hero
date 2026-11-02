@@ -31,6 +31,8 @@ export function resolveIncident(
     ["player", actor, i.victim, ...i.participants],
     {
       importance: "major",
+      factionId: i.organization,
+      presentationKey: `incident:${i.id}:outcome`,
       title:
         resolution === "sold" ? "The Chains — lost" : "The Chains — resolved",
       incidentId: i.id,
@@ -138,6 +140,8 @@ export function advanceIncidents(s: GameState) {
           {
             importance: "major",
             title: "Pablo heard about the robbery",
+            factionId: i.organization,
+            expiresOnIncidentClose: true,
             incidentId: i.id,
           },
         );

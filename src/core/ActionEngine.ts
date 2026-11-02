@@ -3,6 +3,7 @@ import {
   clamp,
   player,
   type GameState,
+  type GameEvent,
   type ID,
   type FactionId,
 } from "./GameState";
@@ -609,17 +610,18 @@ export function resolveAction(s: GameState, a: Action) {
     progress(s);
     s.end = evaluateEnd(s);
   }
+  return e;
 }
 export function performAction(
   state: GameState,
   a: Action,
-): { state: GameState; error: string | null } {
+): { state: GameState; error: string | null; event?: GameEvent } {
   const error = validateAction(state, a);
   if (error) return { state, error };
   const next = structuredClone(state);
-  resolveAction(next, a);
+  const event = resolveAction(next, a);
   syncEncounters(next);
-  return { state: next, error: null };
+  return { state: next, error: null, event };
 }
 export function availableActions(s: GameState): Action[] {
   const p = player(s),

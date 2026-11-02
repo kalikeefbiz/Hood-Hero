@@ -1,3 +1,4 @@
+import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { newGame } from "../src/core/Simulation";
@@ -61,6 +62,7 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
   await audit();
   await page.getByLabel("What do people call you?").fill("Morgan");
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await dismissEncounter(page);
   await capture("02-city-390");
   await audit();
   await page.setViewportSize({ width: 320, height: 700 });
@@ -117,6 +119,7 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
     );
     await page.reload();
     await page.getByRole("button", { name: "Resume saved game" }).click();
+    await dismissEncounter(page);
     await ready();
     await audit();
     if (faction === "blips") {

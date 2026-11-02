@@ -18,6 +18,10 @@ export interface EncounterDefinition {
     s: GameState,
   ) => { key: string; eventId?: string; incidentId?: string }[];
   eligible: (s: GameState, e: EncounterInstance) => boolean;
+  expression?: (
+    s: GameState,
+    e: EncounterInstance,
+  ) => "concerned" | "confident" | "proposing" | "strategizing";
   dialogue: (s: GameState, e: EncounterInstance) => string;
   responses: (s: GameState, e: EncounterInstance) => EncounterResponse[];
   rules: { replay: "contextual" | "read-only"; expiresWithIncident: boolean };

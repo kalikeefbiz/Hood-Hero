@@ -68,7 +68,7 @@ const character = z.object({
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(2),
+  version: z.literal(3),
   day: integer.min(1),
   ap: integer.max(2),
   rng: integer.max(4294967295),
@@ -169,6 +169,9 @@ const schema = z.object({
       title: z.string().optional(),
       incidentId: id.optional(),
       commitmentId: id.optional(),
+      factionId: faction.optional(),
+      presentationKey: id.optional(),
+      expiresOnIncidentClose: z.boolean().optional(),
     }),
   ),
   commitments: z.array(
@@ -214,7 +217,7 @@ const schema = z.object({
         z.object({ id, day: integer, eventIds: z.array(id) }),
       ),
       followUpPending: z.boolean(),
-      revisitDay: integer.optional(),
+      deferred: z.boolean(),
     }),
   ),
   acknowledgedEvents: z.array(id),
@@ -253,7 +256,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 2, state: s });
+  return JSON.stringify({ format: "syndicate", version: 3, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -267,13 +270,13 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(2),
+      version: z.literal(3),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Hood Hero save version 2. Start a new test run from the new game menu.",
+      "Incompatible or damaged save. Expected Hood Hero save version 3. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];

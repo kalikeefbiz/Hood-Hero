@@ -10,11 +10,13 @@ export function EncounterScene({
   encounter: e,
   respond,
   dismiss,
+  historical = false,
 }: {
   s: GameState;
   encounter: EncounterInstance;
   respond: (id: string, response: string) => void;
   dismiss: (id: string) => void;
+  historical?: boolean;
 }) {
   const d = encounterDefinition(e),
     c = s.characters[e.participants[0]],
@@ -35,7 +37,9 @@ export function EncounterScene({
     >
       <div className="encounter-top">
         <span className="eyebrow">
-          {source?.title ?? "CUZZO HAS SOMETHING ON HIS MIND"}
+          {historical
+            ? "RECORDED ENCOUNTER"
+            : (source?.title ?? "CUZZO HAS SOMETHING ON HIS MIND")}
         </span>
         <button
           className="text-button"
@@ -45,41 +49,51 @@ export function EncounterScene({
           Close ×
         </button>
       </div>
-      <div className="encounter-composition">
-        <CharacterPortrait
-          s={s}
-          id={c.id}
-          expression={concerned ? "concerned" : "confident"}
-        />
-        <div className="encounter-copy">
-          <p className="eyebrow">
-            {c.affiliation ? s.factions[c.affiliation].name : "Resident"}
-          </p>
-          <h3>
-            {c.name} <small>/ {c.alias ?? ""}</small>
-          </h3>
-          <p className="dialogue">“{d.dialogue(s, e)}”</p>
-          {source && (
-            <p className="encounter-fact">
-              DAY {source.day} · {source.text}
+      <div
+        className="encounter-scroll"
+        tabIndex={0}
+        role="region"
+        aria-label="Dialogue"
+      >
+        <div className="encounter-composition">
+          <CharacterPortrait
+            s={s}
+            id={c.id}
+            expression={
+              d.expression?.(s, e) ?? (concerned ? "concerned" : "confident")
+            }
+          />
+          <div className="encounter-copy">
+            <p className="eyebrow">
+              {c.affiliation ? s.factions[c.affiliation].name : "Resident"}
             </p>
-          )}
-          {promise && (
-            <p className="promise-status">
-              <strong>Your word · {promise.status}</strong>
-              {promise.status === "pending" && (
-                <span>
-                  {Math.max(0, promise.dueDay - s.day)} days remaining · Before
-                  day {promise.dueDay} begins. The dispute can end sooner.
-                </span>
-              )}
-            </p>
-          )}
-          {last && resultEvents?.length && !source ? (
-            <p className="encounter-result" role="status">
-              {resultEvents.at(-1)?.text}
-            </p>
-          ) : null}
+            <h3>
+              {c.name} <small>/ {c.alias ?? ""}</small>
+            </h3>
+            <p className="dialogue">“{d.dialogue(s, e)}”</p>
+            {source && (
+              <p className="encounter-fact">
+                DAY {source.day} · {source.text}
+              </p>
+            )}
+            {promise && (
+              <p className="promise-status">
+                <strong>Your word · {promise.status}</strong>
+                {promise.status === "pending" && (
+                  <span>
+                    {Math.max(0, promise.dueDay - s.day)} days remaining ·
+                    Before day {promise.dueDay} begins. The dispute can end
+                    sooner.
+                  </span>
+                )}
+              </p>
+            )}
+            {last && resultEvents?.length && !source ? (
+              <p className="encounter-result" role="status">
+                {resultEvents.at(-1)?.text}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
       <div
@@ -87,31 +101,38 @@ export function EncounterScene({
         role="group"
         aria-label="Your response"
       >
-        {d.responses(s, e).map((r) => {
-          const reason = responseError(s, e, r),
-            action = r.effect.type === "action" ? r.effect.action : null;
-          const chance = action ? actionSuccessChance(s, action) : null;
-          return (
-            <button
-              key={r.id}
-              className="encounter-response"
-              disabled={!!reason}
-              onClick={() => respond(e.id, r.id)}
-            >
-              <span>{r.label}</span>
-              <small>
-                {action
-                  ? `${ACTIONS[action.type].ap} AP${action.type === "buyback" ? ` · ${money(s.incidents[action.incidentId!].demand)}` : ""} · ${ACTIONS[action.type].risk} risk${chance !== null ? ` · ${Math.round(chance * 100)}% success` : ""}`
-                  : "Conversation · No AP"}
-              </small>
-              {reason && <small className="disabled-reason">{reason}</small>}
-            </button>
-          );
-        })}
+        {historical ? (
+          <button className="encounter-response" onClick={() => dismiss(e.id)}>
+            Return to City
+          </button>
+        ) : (
+          d.responses(s, e).map((r) => {
+            const reason = responseError(s, e, r),
+              action = r.effect.type === "action" ? r.effect.action : null;
+            const chance = action ? actionSuccessChance(s, action) : null;
+            return (
+              <button
+                key={r.id}
+                className="encounter-response"
+                disabled={!!reason}
+                onClick={() => respond(e.id, r.id)}
+              >
+                <span>{r.label}</span>
+                <small>
+                  {action
+                    ? `${ACTIONS[action.type].ap} AP${action.type === "buyback" ? ` · ${money(s.incidents[action.incidentId!].demand)}` : ""} · ${ACTIONS[action.type].risk} risk${chance !== null ? ` · ${Math.round(chance * 100)}% success` : ""}`
+                    : "Conversation · No AP"}
+                </small>
+                {reason && <small className="disabled-reason">{reason}</small>}
+              </button>
+            );
+          })
+        )}
       </div>
       <p className="encounter-footer">
-        You can return to your day at any time. Closing this scene makes no new
-        promise.
+        {historical
+          ? "A recorded outcome. Viewing it changes no relationships or obligations."
+          : "Closing makes no new promise. Unfinished conversations can be resumed from City."}
       </p>
     </section>
   );

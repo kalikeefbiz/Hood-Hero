@@ -16,6 +16,9 @@ import {
   type Action,
   type ActionType,
 } from "../core/ActionEngine";
+import { Modal } from "./Modal";
+import { ActivityFeed } from "./ActivityFeed";
+import { syncEncounters } from "../systems/EncounterLifecycle";
 import { EncounterScene } from "./EncounterScene";
 import { NarrativeNotifications } from "./NarrativeNotifications";
 import { CommitmentSummary } from "./CommitmentSummary";
@@ -124,7 +127,15 @@ export function App() {
     [actionGroup, setGroup] = useState("Everyday"),
     [activityFilter, setActivityFilter] = useState("All");
   const [hasSave, setHasSave] = useState(false);
-  const [conversationScreen, setConversationScreen] = useState<Screen>("City");
+  const [historyEncounterId, setHistoryEncounterId] = useState<string | null>(
+    null,
+  );
+  const [dayTransition, setDayTransition] = useState<number | null>(null);
+  useEffect(() => {
+    if (dayTransition === null) return;
+    const timer = window.setTimeout(() => setDayTransition(null), 2200);
+    return () => clearTimeout(timer);
+  }, [dayTransition]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [screen, !!s]);
@@ -147,11 +158,12 @@ export function App() {
       }
   }, [s]);
   function start() {
+    window.scrollTo(0, 0);
     const next = newGame(name, home);
     setState(next);
     setSelected(home);
     setScreen("City");
-    setConversationScreen("City");
+    setHistoryEncounterId(null);
     setNotice("You’re home. Clock in, check on Cuzzo, or see who’s around.");
   }
   function load(resume = false) {
@@ -160,10 +172,11 @@ export function App() {
         ? loadGame(localStorage, AUTO_KEY) || loadGame(localStorage)
         : loadGame(localStorage) || loadGame(localStorage, AUTO_KEY);
       if (next) {
+        window.scrollTo(0, 0);
         setState(next);
         setSelected(player(next).home);
         setScreen("City");
-        setConversationScreen("City");
+        setHistoryEncounterId(null);
         setNotice(`Loaded day ${next.day}.`);
       } else setNotice("No saved game yet.");
     } catch (e) {
@@ -186,26 +199,34 @@ export function App() {
     if (result.error) setNotice(result.error);
     else {
       setState(result.state);
-      if (
-        currentEncounter(result.state)?.sourceEventId !==
-        currentEncounter(s)?.sourceEventId
-      )
-        setConversationScreen(screen);
-      setNotice(
-        visibleEvents(result.state).at(-1)?.text ?? "Action completed.",
-      );
+      setNotice(result.event?.text ?? "Action completed.");
     }
   }
   function respond(id: string, response: string) {
     if (!s) return;
     const result = respondEncounter(s, id, response);
     if (result.error) setNotice(result.error);
-    else setState(result.state);
+    else {
+      setState(result.state);
+      const reply =
+        response === "promise"
+          ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
+          : response === "decline"
+            ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
+            : response === "delay"
+              ? "You asked for time to think. The situation continues; resume the conversation from City."
+              : response === "acknowledge"
+                ? "Outcome acknowledged. The city moves on; the history remains."
+                : "Cuzzo explains what happened.";
+      setNotice(reply);
+    }
   }
-  function showConversation(id: string, destination: Screen = screen) {
+  function showConversation(id: string) {
     if (!s) return;
     setState(openEncounter(s, id));
-    setConversationScreen(destination);
+    setScreen("City");
+    setHistoryEncounterId(null);
+    window.scrollTo(0, 0);
   }
   function viewReaction(eventId: string) {
     if (!s) return;
@@ -215,20 +236,17 @@ export function App() {
       window.scrollTo(0, 0);
     }
   }
+  function replayReaction(eventId: string) {
+    if (!s) return;
+    const e = s.encounters.find((e) => e.sourceEventId === eventId);
+    if (e) {
+      setHistoryEncounterId(e.id);
+      setScreen("City");
+      window.scrollTo(0, 0);
+    }
+  }
   function openPerson(id: string) {
     setFocus(id);
-    if (s && id === "mega") {
-      const e = [...s.encounters]
-        .reverse()
-        .find(
-          (e) =>
-            e.participants.includes(id) &&
-            (e.definitionId === "mega-chains-request"
-              ? s.incidents["the-chains"]?.status === "active"
-              : true),
-        );
-      if (e) showConversation(e.id, "Actions");
-    }
     setGroup("People");
     setScreen("Actions");
   }
@@ -257,8 +275,12 @@ export function App() {
   // stay in history; they must not create a new call to action on City.
   const activeStory = incident?.status === "active" ? incident : null;
   const encounter = currentEncounter(s);
+  const historical = historyEncounterId
+    ? s.encounters.find((e) => e.id === historyEncounterId)
+    : undefined;
+  const presented = screen === "City" ? (historical ?? encounter) : undefined;
   const request = s.encounters.find(
-    (e) => e.definitionId === "mega-chains-request" && e.status !== "closed",
+    (e) => e.definitionId === "mega-chains-request" && e.status === "pending",
   );
   const all = availableActions(s);
   const actionCard = (a: Action) => (
@@ -360,8 +382,10 @@ export function App() {
               onClick={() => {
                 const next = advanceDay(s);
                 setState(next);
-                if (currentEncounter(next)?.id !== currentEncounter(s)?.id)
-                  setConversationScreen(screen);
+                setScreen("City");
+                setHistoryEncounterId(null);
+                window.scrollTo(0, 0);
+                setDayTransition(next.day);
                 setNotice(
                   `Day ${next.day}: living costs processed, the city has moved, and AP is restored.`,
                 );
@@ -371,26 +395,53 @@ export function App() {
               End day <span>→</span>
             </button>
           </div>
-          <NarrativeNotifications
-            s={s}
-            acknowledge={(id) => setState(acknowledgeEvent(s, id))}
-            view={viewReaction}
-          />
-          {encounter && screen === conversationScreen && (
-            <EncounterScene
+          {screen === "City" && dayTransition !== null && (
+            <div className="day-transition" aria-hidden="true">
+              DAY {dayTransition.toString().padStart(2, "0")} · The city has
+              moved. Two AP restored.
+            </div>
+          )}
+          {screen === "City" && !presented && (
+            <NarrativeNotifications
               s={s}
-              encounter={encounter}
-              respond={respond}
-              dismiss={(id) => setState(dismissEncounter(s, id))}
+              acknowledge={(id) => {
+                const next = acknowledgeEvent(s, id);
+                syncEncounters(next);
+                setState(next);
+              }}
+              view={viewReaction}
             />
           )}
-          {(!encounter || screen !== conversationScreen) && request && (
+          {presented && (
+            <Modal
+              key={presented.id + (historical ? ":history" : "")}
+              label="Character encounter"
+              onDismiss={() =>
+                historical
+                  ? setHistoryEncounterId(null)
+                  : setState(dismissEncounter(s, presented.id))
+              }
+            >
+              <EncounterScene
+                s={s}
+                encounter={presented}
+                historical={!!historical}
+                respond={respond}
+                dismiss={() =>
+                  historical
+                    ? setHistoryEncounterId(null)
+                    : setState(dismissEncounter(s, presented.id))
+                }
+              />
+            </Modal>
+          )}
+          {screen === "City" && !presented && request && (
             <div className="narrative-links">
               <button
                 className="secondary"
                 onClick={() => showConversation(request.id)}
               >
-                Talk with Cuzzo · The Chains
+                Continue conversation with Cuzzo
               </button>
             </div>
           )}
@@ -785,14 +836,6 @@ export function App() {
                   </figure>
                 </div>
               )}
-              {actionGroup === "People" && focus === "mega" && request && (
-                <button
-                  className="secondary"
-                  onClick={() => showConversation(request.id)}
-                >
-                  Talk about the chains · No AP
-                </button>
-              )}
               {actionGroup === "People" && (
                 <label className="person-selector">
                   Contact
@@ -1049,11 +1092,7 @@ export function App() {
                   )
                   .slice()
                   .reverse()
-                  .sort(
-                    (a, b) =>
-                      Number(b.importance === "major") -
-                      Number(a.importance === "major"),
-                  )
+
                   .slice(0, 2)
                   .map((e) => (
                     <div className="news-item" key={e.id}>
@@ -1110,7 +1149,7 @@ export function App() {
                       {s.encounters.some((x) => x.sourceEventId === e.id) && (
                         <button
                           className="text-button"
-                          onClick={() => viewReaction(e.id)}
+                          onClick={() => replayReaction(e.id)}
                         >
                           Revisit Cuzzo’s reaction
                         </button>
@@ -1139,86 +1178,7 @@ export function App() {
                   Your circle
                 </button>
               </div>
-              <div className="timeline">
-                {visibleEvents(s)
-                  .filter(
-                    (e) =>
-                      e.importance !== "routine" &&
-                      (activityFilter === "All" || e.category !== "city"),
-                  )
-                  .slice(-80)
-                  .reverse()
-                  .sort(
-                    (a, b) =>
-                      Number(
-                        b.importance === "major" || b.importance === "critical",
-                      ) -
-                      Number(
-                        a.importance === "major" || a.importance === "critical",
-                      ),
-                  )
-                  .map((e, index, events) => (
-                    <article
-                      key={e.id}
-                      className={
-                        index === 0 || events[index - 1].day !== e.day
-                          ? "day-start"
-                          : ""
-                      }
-                    >
-                      {(index === 0 || events[index - 1].day !== e.day) && (
-                        <h3 className="timeline-day">
-                          Day {e.day.toString().padStart(2, "0")}
-                        </h3>
-                      )}
-                      <span className="timeline-dot" />
-                      <div>
-                        <small>
-                          DAY {e.day} <span> / {e.category.toUpperCase()}</span>
-                        </small>
-                        <p>{e.text}</p>
-                      </div>
-                    </article>
-                  ))}
-              </div>
-              <details className="panel routine-reports">
-                <summary>
-                  Daily city reports ·{" "}
-                  {
-                    visibleEvents(s).filter((e) => e.importance === "routine")
-                      .length
-                  }{" "}
-                  routine updates
-                </summary>
-                {[
-                  ...new Set(
-                    visibleEvents(s)
-                      .filter((e) => e.importance === "routine")
-                      .map((e) => e.day),
-                  ),
-                ]
-                  .reverse()
-                  .map((day) => (
-                    <details key={day}>
-                      <summary>
-                        Day {day} ·{" "}
-                        {
-                          visibleEvents(s).filter(
-                            (e) => e.day === day && e.importance === "routine",
-                          ).length
-                        }{" "}
-                        reports
-                      </summary>
-                      {visibleEvents(s)
-                        .filter(
-                          (e) => e.day === day && e.importance === "routine",
-                        )
-                        .map((e) => (
-                          <p key={e.id}>{e.text}</p>
-                        ))}
-                    </details>
-                  ))}
-              </details>
+              <ActivityFeed s={s} personal={activityFilter === "Personal"} />
             </section>
           )}
           <details className="game-menu">
@@ -1249,16 +1209,28 @@ export function App() {
           {(Object.keys(nav) as Screen[]).map((item) => (
             <button
               key={item}
+              aria-label={item === "Finances" ? "Wallet" : item}
               className={screen === item ? "active" : ""}
               aria-current={screen === item ? "page" : undefined}
               onClick={() => {
                 setScreen(item);
-                setConversationScreen("City");
+                setHistoryEncounterId(null);
                 window.scrollTo(0, 0);
               }}
             >
               <Icon name={nav[item]} />
-              <small>{item === "Finances" ? "Wallet" : item}</small>
+              <small>
+                {item === "Finances" ? "Wallet" : item}
+                {item === "City" && unseenEvents(s).length > 0 && (
+                  <span
+                    className="unseen-badge"
+                    aria-label={`${unseenEvents(s).length} important developments waiting`}
+                  >
+                    {" "}
+                    · {unseenEvents(s).length}
+                  </span>
+                )}
+              </small>
             </button>
           ))}
         </nav>

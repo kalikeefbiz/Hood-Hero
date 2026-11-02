@@ -61,9 +61,7 @@ export function respondEncounter(
       );
     if (effect.type === "delay") {
       e.status = "pending";
-      // One reminder only. Postponing cannot change the incident's clock.
-      if (!e.selectedResponses.some((r) => r.id === "delay"))
-        e.revisitDay = s.day + 1;
+      e.deferred = true;
       record(
         s,
         "social",
@@ -72,6 +70,10 @@ export function respondEncounter(
         undefined,
         { incidentId: e.incidentId },
       );
+    }
+    if (effect.type === "promise" || effect.type === "decline") {
+      e.status = "acknowledged";
+      e.followUpPending = false;
     }
     if (effect.type === "acknowledge") {
       if (e.sourceEventId) s = acknowledgeEvent(s, e.sourceEventId);

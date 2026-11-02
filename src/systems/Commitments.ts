@@ -86,7 +86,11 @@ export function finishCommitment(
     [c.requester, c.actor],
     [c.requester, c.actor],
     {
-      importance: "major",
+      importance: broken ? "critical" : "major",
+      factionId: s.characters[c.requester].affiliation ?? undefined,
+      presentationKey: c.incidentId
+        ? `incident:${c.incidentId}:outcome`
+        : `commitment:${c.id}:outcome`,
       title: outcome.title,
       commitmentId: c.id,
       incidentId: c.incidentId,
@@ -142,6 +146,9 @@ export function evaluatePromises(s: GameState, includeDeadlines = true) {
         {
           importance: "major",
           title: "Cuzzo is counting on you",
+          factionId: s.characters[c.requester].affiliation ?? undefined,
+          presentationKey: `commitment:${c.id}:deadline`,
+          expiresOnIncidentClose: true,
           commitmentId: c.id,
           incidentId: i.id,
         },

@@ -1,3 +1,4 @@
+import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
 async function nav(page: import("@playwright/test").Page, name: string) {
   await page
@@ -13,9 +14,11 @@ async function start(
   await page.getByLabel("What do people call you?").fill("Morgan");
   await page.getByRole("radio", { name: home, exact: false }).check();
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await dismissEncounter(page);
   await expect(page.getByRole("heading", { name: "Morgan" })).toBeVisible();
 }
 async function action(page: import("@playwright/test").Page, title: string) {
+  await nav(page, "Actions");
   await page
     .locator(".action-card")
     .filter({ has: page.getByRole("heading", { name: title, exact: true }) })
@@ -37,24 +40,29 @@ test("phone gameplay: contact, lawful income, days, save and load", async ({
   await start(page, "Downtown");
   await noOverflow(page);
   await nav(page, "Actions");
+  await nav(page, "Actions");
   await page.getByRole("button", { name: "The Chains", exact: true }).click();
   await action(page, "Reach out");
   await expect(page.getByRole("status")).toContainText("Trust grew");
+  await nav(page, "Actions");
   await page.getByRole("button", { name: "Everyday", exact: true }).click();
   await action(page, "Pick up a gig");
   await expect(page.locator(".ap b")).toHaveText("0/2");
   await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
   await expect(page.locator(".day")).toHaveText("DAY 02");
   await page.getByLabel("Save game", { exact: true }).click();
   await expect(page.getByRole("status")).toContainText("Saved day 2");
   await action(page, "Clock in");
   await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
   await expect(page.locator(".day")).toHaveText("DAY 03");
   await page.getByLabel("Load game", { exact: true }).click();
   await expect(page.locator(".day")).toHaveText("DAY 02");
   await expect(page.locator(".ap b")).toHaveText("2/2");
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
+  await dismissEncounter(page);
   await expect(page.locator(".day")).toHaveText("DAY 02");
   for (const name of ["City", "People", "Actions", "Set", "Wallet"]) {
     await nav(page, name);
@@ -73,20 +81,28 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
   await nav(page, "Actions");
   await action(page, "Clock in");
   await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
+  await nav(page, "Actions");
   await page.getByRole("button", { name: "The Chains", exact: true }).click();
   await action(page, "Reach out");
   await action(page, "Buy back · $150");
   await expect(page.locator(".situation .status-chip")).toHaveText("resolved");
   await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
+  await nav(page, "Actions");
   await page.getByRole("button", { name: "Everyday", exact: true }).click();
   await action(page, "Clock in");
   await expect(page.getByRole("status")).toContainText("$96");
   await nav(page, "Set");
   await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
+  await nav(page, "Set");
   await page
     .getByRole("button", { name: "Assign a paid errand", exact: false })
     .click();
   await page.getByRole("button", { name: "End day" }).click();
+  await dismissEncounter(page);
+  await nav(page, "Set");
   await expect(page.locator("main")).toContainText("completed");
   await nav(page, "Wallet");
   await expect(page.locator("main")).toContainText("Errand by Flacco");
@@ -102,6 +118,7 @@ test("mobile city and new game remain readable at narrow widths", async ({
     .getByLabel("What do people call you?")
     .fill("A long player name for testing");
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await dismissEncounter(page);
   await noOverflow(page);
   await page.getByRole("button", { name: "Select The Nawf" }).click();
   await expect(page.locator(".zone-details")).toContainText("The Blips");
