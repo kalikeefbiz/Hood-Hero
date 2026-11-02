@@ -8,6 +8,7 @@ import {
 } from "../content/characters";
 import { initializeRelationships } from "../systems/Relationships";
 import { openingIncident } from "../content/openingIncident";
+import { syncEncounters } from "../systems/EncounterLifecycle";
 import { BALANCE } from "../content/balance";
 export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
   if (!ZONES[home]) throw new Error("Unknown neighborhood");
@@ -24,7 +25,7 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     },
   );
   const s: GameState = {
-    version: 1,
+    version: 3,
     day: 1,
     ap: BALANCE.dailyAP,
     rng: seed >>> 0,
@@ -39,6 +40,8 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     incidents: {},
     events: [],
     commitments: [],
+    encounters: [],
+    acknowledgedEvents: [],
     crew: { members: ["flacco"], capacity: 1, successor: null },
     assets: [],
     ledger: [],
@@ -47,5 +50,6 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
   };
   initializeRelationships(s);
   openingIncident(s);
+  syncEncounters(s);
   return s;
 }

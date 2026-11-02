@@ -1,0 +1,53 @@
+[WebServer] (node:30368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 34 tests using 2 workers
+
+(node:30386) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30385) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/city-menu.spec.ts:164:1 › story notification uses the active demand and opens its existing Actions location (2.1s)
+  ✓   2 [chromium-mobile] › tests/city-menu.spec.ts:28:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (2.7s)
+  ✓   3 [chromium-mobile] › tests/city-menu.spec.ts:205:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (1.2s)
+  ✓   5 [chromium-mobile] › tests/encounters.spec.ts:162:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (1.2s)
+  ✓   4 [chromium-mobile] › tests/encounters.spec.ts:65:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (3.9s)
+  ✓   6 [chromium-mobile] › tests/encounters.spec.ts:196:3 › 40 days after fulfilled: one reaction, then no repeated interruptions (4.9s)
+  ✓   8 [chromium-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 320px (1.1s)
+  ✓   9 [chromium-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 375px (1.2s)
+  ✓   7 [chromium-mobile] › tests/encounters.spec.ts:196:3 › 40 days after broken: one reaction, then no repeated interruptions (6.3s)
+  ✓  10 [chromium-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 390px (1.4s)
+  ✓  12 [chromium-mobile] › tests/encounters.spec.ts:290:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (742ms)
+  ✓  11 [chromium-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 430px (1.4s)
+  ✓  13 [chromium-mobile] › tests/encounters.spec.ts:359:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (1.1s)
+  ✓  15 [chromium-mobile] › tests/illustrated.spec.ts:65:1 › approved art maps to real actions and resolves under the production base (1.5s)
+  ✓  16 [chromium-mobile] › tests/illustrated.spec.ts:104:1 › action art loads near the viewport, and failed art preserves layout and gameplay (1.6s)
+  ✓  14 [chromium-mobile] › tests/encounters.spec.ts:401:1 › all homes and affiliation themes retain the City-only modal and normal navigation (5.4s)
+(node:30770) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  17 [chromium-mobile] › tests/illustrated.spec.ts:152:1 › GOAL 002C mobile visual review and usable narrow controls (5.8s)
+(node:30849) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  18 [webkit-mobile] › tests/city-menu.spec.ts:28:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (10.6s)
+  ✓  19 [webkit-mobile] › tests/city-menu.spec.ts:164:1 › story notification uses the active demand and opens its existing Actions location (8.9s)
+  ✓  20 [webkit-mobile] › tests/city-menu.spec.ts:205:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (6.8s)
+  ✓  22 [webkit-mobile] › tests/encounters.spec.ts:162:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (7.5s)
+  ✓  21 [webkit-mobile] › tests/encounters.spec.ts:65:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (21.3s)
+  ✓  23 [webkit-mobile] › tests/encounters.spec.ts:196:3 › 40 days after fulfilled: one reaction, then no repeated interruptions (37.4s)
+  ✓  25 [webkit-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 320px (4.3s)
+  ✓  26 [webkit-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 375px (4.3s)
+  ✓  27 [webkit-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 390px (4.1s)
+  ✓  24 [webkit-mobile] › tests/encounters.spec.ts:196:3 › 40 days after broken: one reaction, then no repeated interruptions (43.5s)
+  ✓  28 [webkit-mobile] › tests/encounters.spec.ts:256:3 › modal touch controls, focus and scrolling at 430px (4.8s)
+  ✓  29 [webkit-mobile] › tests/encounters.spec.ts:290:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (3.8s)
+  ✓  30 [webkit-mobile] › tests/encounters.spec.ts:359:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (4.8s)
+  ✓  32 [webkit-mobile] › tests/illustrated.spec.ts:65:1 › approved art maps to real actions and resolves under the production base (7.4s)
+  ✓  33 [webkit-mobile] › tests/illustrated.spec.ts:104:1 › action art loads near the viewport, and failed art preserves layout and gameplay (10.3s)
+  ✓  31 [webkit-mobile] › tests/encounters.spec.ts:401:1 › all homes and affiliation themes retain the City-only modal and normal navigation (36.9s)
+  ✓  34 [webkit-mobile] › tests/illustrated.spec.ts:152:1 › GOAL 002C mobile visual review and usable narrow controls (20.7s)
+
+  34 passed (2.4m)

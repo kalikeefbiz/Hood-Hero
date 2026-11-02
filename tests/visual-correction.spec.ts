@@ -1,3 +1,4 @@
+import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
 import { performAction } from "../src/core/ActionEngine";
@@ -37,6 +38,9 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   await capture("01-new-run-full-390", true);
   await page.getByLabel("What do people call you?").fill("Morgan");
   await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await dismissEncounter(page);
+  // GOAL 003 introduces an opening scene. Closing it restores the GOAL 002 city.
+  await dismissEncounter(page);
   await capture("02-independent-city-390");
   await expect(page.locator(".game-shell")).toHaveAttribute(
     "data-theme",
@@ -83,6 +87,7 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   );
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
+  await dismissEncounter(page);
   await capture("03-blips-city-390");
   await expect(page.locator(".game-shell")).toHaveAttribute(
     "data-theme",

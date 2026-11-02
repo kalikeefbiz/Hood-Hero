@@ -1,0 +1,34 @@
+{
+  "url": "https://kalikeefbiz.github.io/Hood-Hero/",
+  "commit": "147ef9c750ba6294848f9360db3c07c61f522ad6",
+  "saveSchema": 3,
+  "verifiedAt": "2026-11-02T03:04:02.439Z",
+  "results": [
+    {
+      "browser": "chromium",
+      "passed": true,
+      "openingModal": true,
+      "promiseAutoClosed": true,
+      "actionFeedback": true,
+      "endDayReturnsCity": true,
+      "reloadDidNotReopen": true,
+      "actualBuybackFulfilled": true,
+      "acknowledgedOutcomeStaysClosed": true,
+      "assetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "browser": "webkit",
+      "passed": true,
+      "openingModal": true,
+      "promiseAutoClosed": true,
+      "actionFeedback": true,
+      "endDayReturnsCity": true,
+      "reloadDidNotReopen": true,
+      "actualBuybackFulfilled": true,
+      "acknowledgedOutcomeStaysClosed": true,
+      "assetFailures": [],
+      "pageErrors": []
+    }
+  ]
+}

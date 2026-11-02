@@ -213,9 +213,9 @@ describe("actions, economy, AP and persistence", () => {
     expect(loadGame(storage)).toEqual(s);
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
-    raw.version = 2;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 1/);
-    raw.version = 1;
+    raw.version = 4;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 3/);
+    raw.version = 3;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });

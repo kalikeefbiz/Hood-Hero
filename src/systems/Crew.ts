@@ -5,7 +5,7 @@ import { change, remember } from "./Relationships";
 import { BALANCE } from "../content/balance";
 export function processCommitments(s: GameState) {
   for (const o of s.commitments.filter(
-    (o) => o.status === "pending" && o.dueDay <= s.day,
+    (o) => o.kind === "errand" && o.status === "pending" && o.dueDay <= s.day,
   )) {
     const c = s.characters[o.actor],
       b = s.characters[o.beneficiary];
@@ -15,6 +15,7 @@ export function processCommitments(s: GameState) {
         c.id,
         b.id,
       ]);
+      o.evidence.push(e.id);
       remember(s, b.id, c.id, e.id, "An obligation fell through.", -5);
       continue;
     }
@@ -29,6 +30,7 @@ export function processCommitments(s: GameState) {
       `${c.name} completed the errand: $${BALANCE.errandIncome} clean income for you and $12 for them.`,
       [c.id, b.id],
     );
+    o.evidence.push(e.id);
     remember(s, c.id, b.id, e.id, "We completed paid work together.", 10);
     remember(s, b.id, c.id, e.id, "Kept a work commitment.", 8);
   }

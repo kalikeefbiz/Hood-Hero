@@ -16,7 +16,27 @@ import {
   type Action,
   type ActionType,
 } from "../core/ActionEngine";
-import { visibleEvents } from "../core/EventLog";
+import { Modal } from "./Modal";
+import { ActivityFeed } from "./ActivityFeed";
+import { syncEncounters } from "../systems/EncounterLifecycle";
+import { EncounterScene } from "./EncounterScene";
+import { NarrativeNotifications } from "./NarrativeNotifications";
+import { CommitmentSummary } from "./CommitmentSummary";
+import { CharacterPortrait } from "./CharacterPortrait";
+import { ANGELS_TRIO, CHAIN_EVIDENCE, artURL } from "./characterArt";
+import {
+  currentEncounter,
+  dismissEncounter,
+  openEncounter,
+  respondEncounter,
+} from "../systems/Encounters";
+import "./encounters.css";
+import {
+  acknowledgeEvent,
+  importantEvents,
+  unseenEvents,
+  visibleEvents,
+} from "../core/EventLog";
 import { ZONES } from "../content/city";
 import {
   loadGame,
@@ -107,6 +127,21 @@ export function App() {
     [actionGroup, setGroup] = useState("Everyday"),
     [activityFilter, setActivityFilter] = useState("All");
   const [hasSave, setHasSave] = useState(false);
+  const [historyEncounterId, setHistoryEncounterId] = useState<string | null>(
+    null,
+  );
+  const [dayTransition, setDayTransition] = useState<number | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  useEffect(() => {
+    if (!actionFeedback) return;
+    const timer = window.setTimeout(() => setActionFeedback(null), 5000);
+    return () => clearTimeout(timer);
+  }, [actionFeedback]);
+  useEffect(() => {
+    if (dayTransition === null) return;
+    const timer = window.setTimeout(() => setDayTransition(null), 2200);
+    return () => clearTimeout(timer);
+  }, [dayTransition]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [screen, !!s]);
@@ -129,19 +164,27 @@ export function App() {
       }
   }, [s]);
   function start() {
+    window.scrollTo(0, 0);
+    setActionFeedback(null);
     const next = newGame(name, home);
     setState(next);
     setSelected(home);
     setScreen("City");
+    setHistoryEncounterId(null);
     setNotice("You’re home. Clock in, check on Cuzzo, or see who’s around.");
   }
-  function load() {
+  function load(resume = false) {
+    setActionFeedback(null);
     try {
-      const next = loadGame(localStorage) || loadGame(localStorage, AUTO_KEY);
+      const next = resume
+        ? loadGame(localStorage, AUTO_KEY) || loadGame(localStorage)
+        : loadGame(localStorage) || loadGame(localStorage, AUTO_KEY);
       if (next) {
+        window.scrollTo(0, 0);
         setState(next);
         setSelected(player(next).home);
         setScreen("City");
+        setHistoryEncounterId(null);
         setNotice(`Loaded day ${next.day}.`);
       } else setNotice("No saved game yet.");
     } catch (e) {
@@ -149,6 +192,7 @@ export function App() {
     }
   }
   function save() {
+    setActionFeedback(null);
     if (s)
       try {
         saveGame(localStorage, s);
@@ -161,12 +205,58 @@ export function App() {
   function act(a: Action) {
     if (!s) return;
     const result = performAction(s, a);
+    if (result.error) {
+      setNotice(result.error);
+      setActionFeedback(result.error);
+    } else {
+      setState(result.state);
+      const message = result.event?.text ?? "Action completed.";
+      setNotice(message);
+      setActionFeedback(message);
+    }
+  }
+  function respond(id: string, response: string) {
+    if (!s) return;
+    const result = respondEncounter(s, id, response);
     if (result.error) setNotice(result.error);
     else {
       setState(result.state);
-      setNotice(
-        visibleEvents(result.state).at(-1)?.text ?? "Action completed.",
-      );
+      const reply =
+        response === "promise"
+          ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
+          : response === "decline"
+            ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
+            : response === "delay"
+              ? "You asked for time to think. The situation continues; resume the conversation from City."
+              : response === "acknowledge"
+                ? "Outcome acknowledged. The city moves on; the history remains."
+                : "Cuzzo explains what happened.";
+      setNotice(reply);
+      if (response !== "clarify") setActionFeedback(reply);
+    }
+  }
+  function showConversation(id: string) {
+    if (!s) return;
+    setState(openEncounter(s, id));
+    setScreen("City");
+    setHistoryEncounterId(null);
+    window.scrollTo(0, 0);
+  }
+  function viewReaction(eventId: string) {
+    if (!s) return;
+    const e = s.encounters.find((e) => e.sourceEventId === eventId);
+    if (e) {
+      showConversation(e.id);
+      window.scrollTo(0, 0);
+    }
+  }
+  function replayReaction(eventId: string) {
+    if (!s) return;
+    const e = s.encounters.find((e) => e.sourceEventId === eventId);
+    if (e) {
+      setHistoryEncounterId(e.id);
+      setScreen("City");
+      window.scrollTo(0, 0);
     }
   }
   function openPerson(id: string) {
@@ -175,7 +265,11 @@ export function App() {
     setScreen("Actions");
   }
   const toast = (
-    <div className="notice" role="status" aria-live="polite">
+    <div
+      className="notice"
+      role={actionFeedback ? undefined : "status"}
+      aria-live={actionFeedback ? "off" : "polite"}
+    >
       {notice || "A persistent city. Every day leaves a mark."}
     </div>
   );
@@ -187,7 +281,7 @@ export function App() {
         setName={setName}
         setHome={setHome}
         start={start}
-        load={load}
+        load={() => load(true)}
         hasSave={hasSave}
         feedback={toast}
       />
@@ -198,6 +292,14 @@ export function App() {
   // The Chains is the current game’s only routed storyline. Closed stories
   // stay in history; they must not create a new call to action on City.
   const activeStory = incident?.status === "active" ? incident : null;
+  const encounter = currentEncounter(s);
+  const historical = historyEncounterId
+    ? s.encounters.find((e) => e.id === historyEncounterId)
+    : undefined;
+  const presented = screen === "City" ? (historical ?? encounter) : undefined;
+  const request = s.encounters.find(
+    (e) => e.definitionId === "mega-chains-request" && e.status === "pending",
+  );
   const all = availableActions(s);
   const actionCard = (a: Action) => (
     <ActionCard
@@ -275,9 +377,15 @@ export function App() {
           selected={selected}
           cinematic={screen === "City"}
           save={save}
-          load={load}
+          load={() => load(false)}
         />
         <main className="main-content" id="main-content">
+          {actionFeedback && (
+            <div className="action-feedback" role="status" aria-live="polite">
+              <small>YOUR MOVE</small>
+              <p>{actionFeedback}</p>
+            </div>
+          )}
           <div className="screen-heading">
             <div>
               <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
@@ -296,8 +404,13 @@ export function App() {
             <button
               className="advance"
               onClick={() => {
+                setActionFeedback(null);
                 const next = advanceDay(s);
                 setState(next);
+                setScreen("City");
+                setHistoryEncounterId(null);
+                window.scrollTo(0, 0);
+                setDayTransition(next.day);
                 setNotice(
                   `Day ${next.day}: living costs processed, the city has moved, and AP is restored.`,
                 );
@@ -307,6 +420,59 @@ export function App() {
               End day <span>→</span>
             </button>
           </div>
+          {screen === "City" && dayTransition !== null && (
+            <div className="day-transition" aria-hidden="true">
+              DAY {dayTransition.toString().padStart(2, "0")} · The city has
+              moved. Two AP restored.
+            </div>
+          )}
+          {screen === "City" && !presented && (
+            <NarrativeNotifications
+              s={s}
+              acknowledge={(id) => {
+                const next = acknowledgeEvent(s, id);
+                syncEncounters(next);
+                setState(next);
+              }}
+              view={viewReaction}
+            />
+          )}
+          {presented && (
+            <Modal
+              key={presented.id + (historical ? ":history" : "")}
+              label="Character encounter"
+              onDismiss={() =>
+                historical
+                  ? setHistoryEncounterId(null)
+                  : setState(dismissEncounter(s, presented.id))
+              }
+            >
+              <EncounterScene
+                s={s}
+                encounter={presented}
+                historical={!!historical}
+                respond={respond}
+                dismiss={() =>
+                  historical
+                    ? setHistoryEncounterId(null)
+                    : setState(dismissEncounter(s, presented.id))
+                }
+              />
+            </Modal>
+          )}
+          {screen === "City" && !presented && request && (
+            <div className="narrative-links">
+              <button
+                className="secondary"
+                onClick={() => showConversation(request.id)}
+              >
+                Continue conversation with Cuzzo
+              </button>
+            </div>
+          )}
+          {(screen === "City" || screen === "Actions") && (
+            <CommitmentSummary s={s} />
+          )}
           {s.end && (
             <Panel className="ending">
               <h3>
@@ -543,7 +709,7 @@ export function App() {
                   <Scene key={person.home} zone={person.home} />
                   <span>{s.zones[person.home].name}</span>
                 </div>
-                <Portrait c={person} />
+                <CharacterPortrait s={s} id={person.id} />
                 <p className="eyebrow">{s.zones[person.home].name}</p>
                 <h3>
                   {person.name}
@@ -658,6 +824,42 @@ export function App() {
                     relationships, or end the day at any time.
                   </p>
                 </Panel>
+              )}
+              {actionGroup === "The Chains" && incident?.informed && (
+                <div className="story-evidence">
+                  <figure>
+                    <img
+                      src={artURL(CHAIN_EVIDENCE.path)}
+                      alt={CHAIN_EVIDENCE.alt}
+                      width={CHAIN_EVIDENCE.width}
+                      height={CHAIN_EVIDENCE.height}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.hidden = true;
+                      }}
+                    />
+                    <figcaption>
+                      Mega’s missing jewelry. Item reference; current custody
+                      follows the incident.
+                    </figcaption>
+                  </figure>
+                  <figure>
+                    <img
+                      src={artURL(ANGELS_TRIO.path)}
+                      alt={ANGELS_TRIO.alt}
+                      width={ANGELS_TRIO.width}
+                      height={ANGELS_TRIO.height}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.hidden = true;
+                      }}
+                    />
+                    <figcaption>
+                      Baby Canon · Joker · Dizzy. The three young Angels Mega
+                      identified.
+                    </figcaption>
+                  </figure>
+                </div>
               )}
               {actionGroup === "People" && (
                 <label className="person-selector">
@@ -821,8 +1023,10 @@ export function App() {
                     );
                   })}
               </div>
-              <h3>Commitments</h3>
+              <CommitmentSummary s={s} />
+              <h3>Set errands</h3>
               {s.commitments
+                .filter((c) => c.kind === "errand")
                 .slice(-5)
                 .reverse()
                 .map((o) => (
@@ -911,8 +1115,10 @@ export function App() {
                   .filter(
                     (e) => e.category === "city" || e.category === "incident",
                   )
-                  .slice(-2)
+                  .slice()
                   .reverse()
+
+                  .slice(0, 2)
                   .map((e) => (
                     <div className="news-item" key={e.id}>
                       <small>
@@ -934,8 +1140,48 @@ export function App() {
                         ? `Demand ${money(i.demand)} · ${i.leadershipAware ? "Leadership is considering its response" : "No leadership intervention yet"}`
                         : `${i.resolution}. Life in The Stixx continues.`}
                     </p>
+                    <details>
+                      <summary>Incident record</summary>
+                      {visibleEvents(s)
+                        .filter(
+                          (e) =>
+                            e.incidentId === i.id ||
+                            e.id === i.resolvedEventId ||
+                            i.interventions.some((x) => x.eventId === e.id),
+                        )
+                        .map((e) => (
+                          <p key={e.id}>
+                            <small>DAY {e.day}</small> · {e.text}
+                          </p>
+                        ))}
+                    </details>
                   </div>
                 ))}
+              </details>
+              <details className="panel outcome-history">
+                <summary>
+                  Important outcomes · {unseenEvents(s).length} unseen
+                </summary>
+                {importantEvents(s)
+                  .slice()
+                  .reverse()
+                  .map((e) => (
+                    <article key={e.id}>
+                      <h3>{e.title ?? "Important development"}</h3>
+                      <p>
+                        DAY {e.day} · {e.text}
+                      </p>
+                      {s.encounters.some((x) => x.sourceEventId === e.id) && (
+                        <button
+                          className="text-button"
+                          onClick={() => replayReaction(e.id)}
+                        >
+                          Revisit Cuzzo’s reaction
+                        </button>
+                      )}
+                    </article>
+                  ))}
+                {!importantEvents(s).length && <p>No major outcomes yet.</p>}
               </details>
               <div
                 className="segmented"
@@ -957,45 +1203,16 @@ export function App() {
                   Your circle
                 </button>
               </div>
-              <div className="timeline">
-                {visibleEvents(s)
-                  .filter(
-                    (e) => activityFilter === "All" || e.category !== "city",
-                  )
-                  .slice(-80)
-                  .reverse()
-                  .map((e, index, events) => (
-                    <article
-                      key={e.id}
-                      className={
-                        index === 0 || events[index - 1].day !== e.day
-                          ? "day-start"
-                          : ""
-                      }
-                    >
-                      {(index === 0 || events[index - 1].day !== e.day) && (
-                        <h3 className="timeline-day">
-                          Day {e.day.toString().padStart(2, "0")}
-                        </h3>
-                      )}
-                      <span className="timeline-dot" />
-                      <div>
-                        <small>
-                          DAY {e.day} <span> / {e.category.toUpperCase()}</span>
-                        </small>
-                        <p>{e.text}</p>
-                      </div>
-                    </article>
-                  ))}
-              </div>
+              <ActivityFeed s={s} personal={activityFilter === "Personal"} />
             </section>
           )}
           <details className="game-menu">
             <summary>Game & save information</summary>
             <p>
               Automatic progress saves after each move. Save creates a manual
-              checkpoint; Load and Resume prefer that checkpoint, then autosave.
-              Saves stay in this browser on this device.
+              checkpoint. Load restores that checkpoint, then falls back to
+              autosave. Resume opens your latest automatic progress, including
+              acknowledged outcomes. Saves stay in this browser on this device.
             </p>
             <p>
               Version 0.1 · Seed state {s.rng} · No maximum campaign length.
@@ -1017,15 +1234,28 @@ export function App() {
           {(Object.keys(nav) as Screen[]).map((item) => (
             <button
               key={item}
+              aria-label={item === "Finances" ? "Wallet" : item}
               className={screen === item ? "active" : ""}
               aria-current={screen === item ? "page" : undefined}
               onClick={() => {
                 setScreen(item);
+                setHistoryEncounterId(null);
                 window.scrollTo(0, 0);
               }}
             >
               <Icon name={nav[item]} />
-              <small>{item === "Finances" ? "Wallet" : item}</small>
+              <small>
+                {item === "Finances" ? "Wallet" : item}
+                {item === "City" && unseenEvents(s).length > 0 && (
+                  <span
+                    className="unseen-badge"
+                    aria-label={`${unseenEvents(s).length} important developments waiting`}
+                  >
+                    {" "}
+                    · {unseenEvents(s).length}
+                  </span>
+                )}
+              </small>
             </button>
           ))}
         </nav>

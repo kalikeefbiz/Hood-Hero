@@ -1,3 +1,4 @@
+import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
 import {
@@ -27,6 +28,7 @@ async function seed(page: Page, s: GameState) {
   );
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
+  await dismissEncounter(page);
 }
 async function nav(page: Page, name: string) {
   await page
@@ -130,6 +132,7 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   // A new document discards the image cache as well as the UI's loaded state.
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
+  await dismissEncounter(page);
   await nav(page, "Actions");
   const work = page.locator('[data-action="work"]');
   await expect(work.locator(".action-art-fallback")).toBeVisible();

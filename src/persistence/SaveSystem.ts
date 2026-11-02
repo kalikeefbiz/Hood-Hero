@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ENCOUNTERS } from "../content/encounters";
 import type { GameState } from "../core/GameState";
 const id = z.string().min(1),
   n = z.number().finite(),
@@ -65,8 +66,9 @@ const character = z.object({
   authority: n,
   rivalThreat: n,
 });
+const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(1),
+  version: z.literal(3),
   day: integer.min(1),
   ap: integer.max(2),
   rng: integer.max(4294967295),
@@ -135,6 +137,11 @@ const schema = z.object({
       helpRequested: z.boolean(),
       deadline: integer,
       status: z.enum(["active", "resolved", "abandoned"]),
+      interventions: z.array(
+        z.object({ actor: id, type: z.string(), eventId: id, day: integer }),
+      ),
+      resolvedEventId: id.optional(),
+      resolvedBy: id.optional(),
       resolution: z
         .enum(["buyback", "recovered", "settlement", "sold"])
         .optional(),
@@ -156,6 +163,15 @@ const schema = z.object({
       text: z.string(),
       actors: z.array(id),
       observedBy: z.array(id),
+      importance: z
+        .enum(["routine", "personal", "major", "critical"])
+        .optional(),
+      title: z.string().optional(),
+      incidentId: id.optional(),
+      commitmentId: id.optional(),
+      factionId: faction.optional(),
+      presentationKey: id.optional(),
+      expiresOnIncidentClose: z.boolean().optional(),
     }),
   ),
   commitments: z.array(
@@ -164,10 +180,47 @@ const schema = z.object({
       actor: id,
       beneficiary: id,
       dueDay: integer,
-      kind: z.literal("errand"),
-      status: z.enum(["pending", "completed", "failed"]),
+      kind: z.enum(["errand", "recover-property"]),
+      status: z.enum([
+        "pending",
+        "completed",
+        "failed",
+        "fulfilled",
+        "broken",
+        "released",
+        "superseded",
+      ]),
+      origin: id,
+      requester: id,
+      createdDay: integer,
+      incidentId: id.optional(),
+      evidence: z.array(id),
+      warned: z.boolean(),
+      consequences: z.object({
+        fulfilled: consequence,
+        broken: consequence,
+        released: consequence,
+      }),
     }),
   ),
+  encounters: z.array(
+    z.object({
+      id,
+      definitionId: id,
+      sourceEventId: id.optional(),
+      incidentId: id.optional(),
+      participants: z.array(id),
+      createdDay: integer,
+      dueDay: integer.optional(),
+      status: z.enum(["pending", "active", "acknowledged", "closed"]),
+      selectedResponses: z.array(
+        z.object({ id, day: integer, eventIds: z.array(id) }),
+      ),
+      followUpPending: z.boolean(),
+      deferred: z.boolean(),
+    }),
+  ),
+  acknowledgedEvents: z.array(id),
   crew: z.object({
     members: z.array(id).max(5),
     capacity: integer.min(1).max(5),
@@ -203,7 +256,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 1, state: s });
+  return JSON.stringify({ format: "syndicate", version: 3, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -217,13 +270,13 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(1),
+      version: z.literal(3),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Syndicate save version 1.",
+      "Incompatible or damaged save. Expected Hood Hero save version 3. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];
@@ -239,7 +292,23 @@ export function deserialize(raw: string): GameState {
         !i.participants.every(exists) ||
         !s.properties[i.property],
     ) ||
-    s.commitments.some((o) => !exists(o.actor) || !exists(o.beneficiary))
+    s.commitments.some(
+      (o) =>
+        !exists(o.actor) ||
+        !exists(o.beneficiary) ||
+        !exists(o.requester) ||
+        (o.incidentId && !s.incidents[o.incidentId]),
+    ) ||
+    s.encounters.some(
+      (e) =>
+        !ENCOUNTERS.some((d) => d.id === e.definitionId) ||
+        !e.participants.every(exists) ||
+        (e.sourceEventId && !s.events.some((x) => x.id === e.sourceEventId)) ||
+        (e.incidentId && !s.incidents[e.incidentId]),
+    ) ||
+    new Set([...s.commitments, ...s.encounters, ...s.events].map((x) => x.id))
+      .size !==
+      s.commitments.length + s.encounters.length + s.events.length
   )
     throw new Error("Save contains missing or invalid world references.");
   return s;

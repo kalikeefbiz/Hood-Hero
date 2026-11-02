@@ -30,6 +30,7 @@ export function openingIncident(s: GameState) {
     helpRequested: false,
     deadline: BALANCE.incidentDeadline,
     status: "active",
+    interventions: [],
   };
   const e = record(
     s,
@@ -37,6 +38,7 @@ export function openingIncident(s: GameState) {
     "Cuzzo: “Three young Angels took my chains. Dizzy, Baby Canon, Joker. They’re asking $150 to give them back. Call me.”",
     ["mega", ...participants],
     ["player", "mega", ...participants],
+    { incidentId: "the-chains" },
   );
   remember(s, "mega", "player", e.id, "Asked my cousin for support.", 20);
   for (const a of participants)

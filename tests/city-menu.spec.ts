@@ -1,3 +1,4 @@
+import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
 import { type GameState } from "../src/core/GameState";
@@ -15,6 +16,7 @@ async function seed(page: Page, state: GameState) {
   );
   await page.reload();
   await page.getByRole("button", { name: "Resume saved game" }).click();
+  await dismissEncounter(page);
 }
 async function nav(page: Page, name: string) {
   await page
@@ -28,6 +30,10 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
 }, info) => {
   const state = newGame("Morgan", "south");
   await seed(page, state);
+  const postDismiss = await page.evaluate(
+    (key) => JSON.parse(localStorage.getItem(key)!).state,
+    AUTO_KEY,
+  );
   const dock = page.getByRole("navigation");
   await expect(dock.getByRole("button")).toHaveText([
     "City",
@@ -103,7 +109,7 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     (key) => JSON.parse(localStorage.getItem(key)!).state,
     AUTO_KEY,
   );
-  expect(saved).toEqual(state); // Inspecting the map must never change ownership, membership, AP or saves.
+  expect(saved).toEqual(postDismiss); // Inspecting the map must never change ownership, membership, AP or saves.
   await expect(page.locator(".game-shell")).toHaveAttribute(
     "data-theme",
     "independent",
@@ -178,8 +184,10 @@ test("story notification uses the active demand and opens its existing Actions l
   ).toBeVisible();
   await expect(page.locator(".ap b")).toHaveText("2/2");
   for (const status of ["resolved", "abandoned", "missing"] as const) {
-    if (status === "missing") delete state.incidents["the-chains"];
-    else {
+    if (status === "missing") {
+      delete state.incidents["the-chains"];
+      state.encounters = [];
+    } else {
       state.incidents["the-chains"].status = status;
       state.incidents["the-chains"].resolution = "sold";
     }

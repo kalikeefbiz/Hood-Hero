@@ -100,6 +100,9 @@ export interface Incident {
   deadline: number;
   status: "active" | "resolved" | "abandoned";
   resolution?: "buyback" | "recovered" | "settlement" | "sold";
+  interventions: { actor: ID; type: string; eventId: ID; day: number }[];
+  resolvedEventId?: ID;
+  resolvedBy?: ID;
 }
 export interface GameEvent {
   id: ID;
@@ -109,14 +112,53 @@ export interface GameEvent {
   text: string;
   actors: ID[];
   observedBy: ID[];
+  importance?: "routine" | "personal" | "major" | "critical";
+  title?: string;
+  incidentId?: ID;
+  commitmentId?: ID;
+  factionId?: FactionId;
+  presentationKey?: string;
+  expiresOnIncidentClose?: boolean;
 }
+export type CommitmentStatus =
+  | "pending"
+  | "fulfilled"
+  | "broken"
+  | "released"
+  | "superseded"
+  | "completed"
+  | "failed";
 export interface Commitment {
   id: ID;
+  origin: ID;
+  requester: ID;
   actor: ID;
   beneficiary: ID;
+  createdDay: number;
   dueDay: number;
-  kind: "errand";
-  status: "pending" | "completed" | "failed";
+  kind: "errand" | "recover-property";
+  incidentId?: ID;
+  status: CommitmentStatus;
+  evidence: ID[];
+  warned: boolean;
+  consequences: {
+    fulfilled: { trust: number; respect: number; grievance: number };
+    broken: { trust: number; respect: number; grievance: number };
+    released: { trust: number; respect: number; grievance: number };
+  };
+}
+export interface EncounterInstance {
+  id: ID;
+  definitionId: string;
+  sourceEventId?: ID;
+  incidentId?: ID;
+  participants: ID[];
+  createdDay: number;
+  dueDay?: number;
+  status: "pending" | "active" | "acknowledged" | "closed";
+  selectedResponses: { id: string; day: number; eventIds: ID[] }[];
+  followUpPending: boolean;
+  deferred: boolean;
 }
 export interface Asset {
   id: ID;
@@ -126,7 +168,7 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 1;
+  version: 3;
   day: number;
   ap: number;
   rng: number;
@@ -139,6 +181,8 @@ export interface GameState {
   incidents: Record<ID, Incident>;
   events: GameEvent[];
   commitments: Commitment[];
+  encounters: EncounterInstance[];
+  acknowledgedEvents: ID[];
   crew: { members: ID[]; capacity: number; successor: ID | null };
   assets: Asset[];
   ledger: {
