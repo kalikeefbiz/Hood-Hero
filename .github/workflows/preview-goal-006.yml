@@ -1,0 +1,47 @@
+name: Deploy GOAL 006 iPhone playtest
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/preview-goal-006.yml
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out unmerged GOAL 006
+        uses: actions/checkout@v4
+        with:
+          ref: goal-006-criminal-economy
+      - uses: actions/setup-node@v4
+      # Match the existing playable Pages build.
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build playable GOAL 006
+        run: npm run build
+        env:
+          VITE_BASE_PATH: /Hood-Hero/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GOAL 006 playtest
+        id: deployment
+        uses: actions/deploy-pages@v4
