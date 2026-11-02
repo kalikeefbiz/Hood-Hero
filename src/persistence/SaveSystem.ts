@@ -248,6 +248,8 @@ const schema = z.object({
         "partner-crime",
       ]),
       objective: z.string(),
+      conditions: z.array(z.string()),
+      relationshipEffect: z.string(),
       status: z.enum(["proposed", "refused", "accepted", "active", "resolved"]),
       createdDay: integer,
       dueDay: integer,

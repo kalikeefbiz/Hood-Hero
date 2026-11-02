@@ -208,6 +208,20 @@ function assignment(
     participants: [s.playerId, member],
     activity,
     objective: activityName[activity],
+    conditions: [
+      "Active participants",
+      "Available time and cooperation",
+      "1 AP on participation",
+      ...(activity === "work"
+        ? ["Reserved compensation", "No conflicting shift through completion"]
+        : activity === "partner-gig"
+          ? ["Daily local gig not already completed"]
+          : activity === "partner-crime"
+            ? ["Trusted street connection", "Compatible values and loyalties"]
+            : ["Member's own preferences and knowledge"]),
+    ],
+    relationshipEffect:
+      "Keeping the agreement can build trust; failure can reduce respect; a no-show strains trust.",
     status: "proposed",
     createdDay: s.day,
     dueDay: s.day,
@@ -292,6 +306,8 @@ export function requestActivity(
   s.assignments.push(a);
   if (!decision.accepted) {
     a.status = "refused";
+    a.relationshipEffect =
+      "Refusal creates no obligation or automatic friendship penalty.";
     // Refusals are free. Repeating an unreasonable request once per later day erodes trust gradually.
     const repeated =
       c.agency.lastRequestDay < s.day && c.agency.unreasonableRequests >= 2;
@@ -417,6 +433,9 @@ export function resolveAssignment(s: GameState, a: CrewAssignment) {
     change(c, p.id, { trust: 2, respect: 1 });
   } else change(c, p.id, { respect: -1 });
   a.status = "resolved";
+  a.relationshipEffect = a.success
+    ? "Cooperation strengthened trust and respect."
+    : "Failure reduced respect; agreed compensation remains owed.";
   a.outcome = `${c.name} · ${a.objective}: ${outcome}${a.experience ? ` +${a.experience} ${a.skill} experience.` : ""}`;
   c.agency.lastAssignmentDay = s.day;
   const e = logAssignment(s, a, a.outcome, a.success ? 5 : -2);
@@ -443,6 +462,7 @@ export function processCrewActivities(s: GameState) {
     if (a.status === "accepted" && s.day > a.dueDay) {
       a.status = "resolved";
       a.success = false;
+      a.relationshipEffect = "Missed appointment: trust -4, grievance +3.";
       a.outcome = `${s.characters[a.member].name}: “You didn't show up for what we agreed. I went ahead with my own day.”`;
       change(s.characters[a.member], s.playerId, { trust: -4, grievance: 3 });
       const e = logAssignment(s, a, a.outcome, -4);

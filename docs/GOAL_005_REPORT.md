@@ -63,3 +63,13 @@ Captured from real browser play, with approved artwork or established placeholde
 ## Limits
 
 This milestone deliberately keeps the existing three broad skills, abstract criminal activity and simple appointments. It adds no new crime catalog, faction, territory control, artwork, skill tree, labor-market simulation or passive-income business. Offers cover paid gigs, introductions and social invitations rather than authored personal quest chains. Independent actions remain concise simulation events; they do not each generate an interruption. Physical iPhone creator playtesting remains distinct from automated WebKit device emulation.
+
+## Deployment evidence
+
+The initial feature-branch dispatch built and tested successfully, but GitHub rejected its deployment: `Branch "goal-005-crew-agency" is not allowed to deploy to github-pages due to environment protection rules.`
+
+As authorized, default-branch commit `464f0e3` adds only `.github/workflows/preview-goal-005.yml`. That workflow checks out the unmerged development branch, tests it, builds `/Hood-Hero/` and publishes through the existing Pages actions. GOAL 005 gameplay was not merged into main. [Deployment run 41407832912](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41407832912) succeeded on November 2, 2026.
+
+Public Chromium and WebKit checks verified build metadata identifying **GOAL 005 / schema 5 / `2406f29dea0125d559a92f36763967d792993199`**, then played work, refusal, natural recruitment, an autonomous invitation and a real appointment. In both engines, Flacco offered a shared gig on day 7; the player attended on day 8. Robin occupied the naturally earned second slot. Saved assignments and membership survived reload; there were no script errors or failed game assets. See `GOAL_005_LIVE.json`, the live verification script, and `live-*` screenshots.
+
+Validation at this stage: **110 Vitest tests passed**, including the new conflict and no-show cases, and **18 × 60-day campaigns passed**. The initial complete 84-case browser matrix passed 79 cases; four legacy cases still assumed that no independent character could initiate a conversation after The Chains, and one WebKit all-home tour hit its local timeout during concurrent validation. The four cases now decline legitimate crew offers while continuing to assert no repeated Chains scenes. Focused reruns and final production-path results are recorded with the final evidence below. The local unit run used a 20-second per-test allowance during simultaneous browser validation; the standard default test command also passed in both deployment builds.

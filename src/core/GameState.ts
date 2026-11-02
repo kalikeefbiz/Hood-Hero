@@ -254,6 +254,8 @@ export interface CrewAssignment {
   member: ID;
   activity: CrewActivity;
   objective: string;
+  conditions: string[];
+  relationshipEffect: string;
   status: "proposed" | "refused" | "accepted" | "active" | "resolved";
   createdDay: number;
   dueDay: number;

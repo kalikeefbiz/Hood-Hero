@@ -1,0 +1,302 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test --workers=2 --timeout=90000
+
+[WebServer] (node:5300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 84 tests using 2 workers
+
+(node:5319) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5318) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/city-menu.spec.ts:164:1 › story notification uses the active demand and opens its existing Actions location (3.2s)
+  ✓   2 [chromium-mobile] › tests/city-menu.spec.ts:28:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (3.8s)
+  ✓   3 [chromium-mobile] › tests/city-menu.spec.ts:205:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (1.7s)
+  ✓   4 [chromium-mobile] › tests/crew.spec.ts:43:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (9.3s)
+  ✓   6 [chromium-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 320px (3.0s)
+  ✓   7 [chromium-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 375px (2.2s)
+  ✓   8 [chromium-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 390px (2.0s)
+  ✓   9 [chromium-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 430px (2.6s)
+  ✓   5 [chromium-mobile] › tests/crew.spec.ts:119:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (26.5s)
+  ✓  11 [chromium-mobile] › tests/employment.spec.ts:140:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (5.0s)
+  ✓  12 [chromium-mobile] › tests/employment.spec.ts:189:1 › workplace scene consequence, skip, close and no replay across tabs or reload (2.2s)
+  ✓  13 [chromium-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (3.2s)
+  ✓  10 [chromium-mobile] › tests/employment.spec.ts:76:1 › hire, scheduled wages, save and a thirty-day employment playthrough (28.7s)
+  ✓  14 [chromium-mobile] › tests/encounters.spec.ts:65:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (10.5s)
+  ✓  15 [chromium-mobile] › tests/encounters.spec.ts:172:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (2.2s)
+  ✘  16 [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions (7.7s)
+(node:5744) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✘  17 [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions (7.9s)
+(node:5822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  18 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 320px (2.0s)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  20 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 390px (2.4s)
+  ✓  19 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 375px (2.4s)
+  ✓  22 [chromium-mobile] › tests/encounters.spec.ts:300:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (1.6s)
+  ✓  21 [chromium-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 430px (2.4s)
+  ✓  23 [chromium-mobile] › tests/encounters.spec.ts:369:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (1.5s)
+  ✓  25 [chromium-mobile] › tests/illustrated.spec.ts:66:1 › approved art maps to real actions and resolves under the production base (2.4s)
+  ✓  26 [chromium-mobile] › tests/illustrated.spec.ts:106:1 › action art loads near the viewport, and failed art preserves layout and gameplay (3.1s)
+  ✓  24 [chromium-mobile] › tests/encounters.spec.ts:411:1 › all homes and affiliation themes retain the City-only modal and normal navigation (7.8s)
+  ✓  27 [chromium-mobile] › tests/illustrated.spec.ts:162:1 › GOAL 002C mobile visual review and usable narrow controls (7.3s)
+  ✓  28 [chromium-mobile] › tests/mobile.spec.ts:35:1 › phone gameplay: contact, lawful income, days, save and load (6.1s)
+  ✓  29 [chromium-mobile] › tests/mobile.spec.ts:77:1 › buyback resolves the incident and the ordinary loop remains playable (4.3s)
+  ✓  30 [chromium-mobile] › tests/mobile.spec.ts:115:1 › mobile city and new game remain readable at narrow widths (5.1s)
+  ✓  32 [chromium-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload (3.3s)
+  ✓  33 [chromium-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload (2.8s)
+  ✓  34 [chromium-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload (2.4s)
+  ✓  31 [chromium-mobile] › tests/overhaul.spec.ts:54:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (10.7s)
+  ✓  35 [chromium-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload (3.0s)
+  ✓  36 [chromium-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload (2.6s)
+  ✓  38 [chromium-mobile] › tests/overhaul.spec.ts:201:1 › Actions update cash/AP, explain disabled prerequisites, and autosave (1.7s)
+  ✓  39 [chromium-mobile] › tests/overhaul.spec.ts:238:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility (1.4s)
+  ✓  40 [chromium-mobile] › tests/overhaul.spec.ts:284:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe (1.9s)
+  ✓  37 [chromium-mobile] › tests/overhaul.spec.ts:172:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (7.8s)
+  ✓  42 [chromium-mobile] › tests/visual-correction.spec.ts:8:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 (3.2s)
+(node:6392) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  43 [webkit-mobile] › tests/city-menu.spec.ts:28:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (14.0s)
+  ✓  41 [chromium-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (23.0s)
+(node:6621) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  44 [webkit-mobile] › tests/city-menu.spec.ts:164:1 › story notification uses the active demand and opens its existing Actions location (12.9s)
+  ✓  45 [webkit-mobile] › tests/city-menu.spec.ts:205:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (10.7s)
+  ✓  46 [webkit-mobile] › tests/crew.spec.ts:43:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (1.1m)
+  ✓  48 [webkit-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 320px (16.3s)
+  ✓  47 [webkit-mobile] › tests/crew.spec.ts:119:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (1.5m)
+  ✓  49 [webkit-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 375px (14.0s)
+  ✓  50 [webkit-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 390px (13.1s)
+  ✓  51 [webkit-mobile] › tests/crew.spec.ts:184:3 › crew dialogue and Set fit 430px (15.4s)
+  ✓  53 [webkit-mobile] › tests/employment.spec.ts:140:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (31.6s)
+  ✓  54 [webkit-mobile] › tests/employment.spec.ts:189:1 › workplace scene consequence, skip, close and no replay across tabs or reload (14.1s)
+  ✓  55 [webkit-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (24.8s)
+  ✓  56 [webkit-mobile] › tests/encounters.spec.ts:65:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (36.4s)
+  ✓  57 [webkit-mobile] › tests/encounters.spec.ts:172:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (10.8s)
+  ✘  58 [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions (20.0s)
+  ✓  52 [webkit-mobile] › tests/employment.spec.ts:76:1 › hire, scheduled wages, save and a thirty-day employment playthrough (2.4m)
+(node:7889) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  59 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 320px (5.5s)
+  ✓  61 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 375px (6.3s)
+  ✓  62 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 390px (6.4s)
+  ✓  63 [webkit-mobile] › tests/encounters.spec.ts:266:3 › modal touch controls, focus and scrolling at 430px (4.1s)
+  ✘  60 [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions (20.7s)
+(node:8314) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  64 [webkit-mobile] › tests/encounters.spec.ts:300:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (5.3s)
+  ✓  65 [webkit-mobile] › tests/encounters.spec.ts:369:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (6.5s)
+  ✓  67 [webkit-mobile] › tests/illustrated.spec.ts:66:1 › approved art maps to real actions and resolves under the production base (11.3s)
+  ✓  68 [webkit-mobile] › tests/illustrated.spec.ts:106:1 › action art loads near the viewport, and failed art preserves layout and gameplay (19.6s)
+  ✓  66 [webkit-mobile] › tests/encounters.spec.ts:411:1 › all homes and affiliation themes retain the City-only modal and normal navigation (54.1s)
+  ✓  69 [webkit-mobile] › tests/illustrated.spec.ts:162:1 › GOAL 002C mobile visual review and usable narrow controls (36.7s)
+  ✓  70 [webkit-mobile] › tests/mobile.spec.ts:35:1 › phone gameplay: contact, lawful income, days, save and load (30.9s)
+  ✓  72 [webkit-mobile] › tests/mobile.spec.ts:115:1 › mobile city and new game remain readable at narrow widths (11.4s)
+  ✓  71 [webkit-mobile] › tests/mobile.spec.ts:77:1 › buyback resolves the incident and the ordinary loop remains playable (44.7s)
+  ✓  74 [webkit-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload (20.8s)
+  ✓  75 [webkit-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload (21.2s)
+  ✓  76 [webkit-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload (17.1s)
+  ✘  73 [webkit-mobile] › tests/overhaul.spec.ts:54:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (1.5m)
+(node:9517) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  77 [webkit-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload (19.9s)
+  ✓  78 [webkit-mobile] › tests/overhaul.spec.ts:112:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload (13.4s)
+  ✓  80 [webkit-mobile] › tests/overhaul.spec.ts:201:1 › Actions update cash/AP, explain disabled prerequisites, and autosave (8.0s)
+  ✓  81 [webkit-mobile] › tests/overhaul.spec.ts:238:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility (7.4s)
+  ✓  82 [webkit-mobile] › tests/overhaul.spec.ts:284:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe (11.1s)
+  ✓  79 [webkit-mobile] › tests/overhaul.spec.ts:172:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (55.6s)
+  ✓  84 [webkit-mobile] › tests/visual-correction.spec.ts:8:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 (23.4s)
+  ✓  83 [webkit-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (1.1m)
+
+
+  1) [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Character encounter', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Character encounter', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Character encounter', exact: true })
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      241 |     for (let day = 0; day < 40; day++) {
+      242 |       await endDay(page);
+    > 243 |       await expect(modal(page)).toHaveCount(0);
+          |                                 ^
+      244 |     }
+      245 |     const s = await saved(page);
+      246 |     expect(s.encounters.length).toBe(historyCount);
+        at /workspace/Hood-Hero/tests/encounters.spec.ts:243:33
+
+    Error Context: test-results/encounters-40-days-after-f-a1989-n-no-repeated-interruptions-chromium-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-40-days-after-f-a1989-n-no-repeated-interruptions-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-40-days-after-f-a1989-n-no-repeated-interruptions-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Character encounter', exact: true })
+    Expected substring: "I’m not forgetting it"
+    Received string:    "A CONVERSATION IN THE CITYClose ×FFlaccoResidentFlacco / Work: learning · Connections: local ties · Street experience: inexperiencedAvailable to discuss plans · Trust 100“Aye, Justice is looking for local help on day 10. We could make a little bread. You tryna come? Let me know by day 10. No pressure if you've got other plans.”I'm in. Schedule day 10 · 1 AP on arrivalPersonal request · costs and conditions above; refusal costs no APTell me more about it.Personal request · costs and conditions above; refusal costs no APCan't make it. You go ahead. No friendship penalty.Personal request · costs and conditions above; refusal costs no APClosing makes no new promise. Unfinished conversations can be resumed from City."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog', { name: 'Character encounter', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Character encounter', exact: true })
+        14 × locator resolved to <dialog open="" class="encounter-modal" aria-label="Character encounter">…</dialog>
+           - unexpected value "A CONVERSATION IN THE CITYClose ×FFlaccoResidentFlacco / Work: learning · Connections: local ties · Street experience: inexperiencedAvailable to discuss plans · Trust 100“Aye, Justice is looking for local help on day 10. We could make a little bread. You tryna come? Let me know by day 10. No pressure if you've got other plans.”I'm in. Schedule day 10 · 1 AP on arrivalPersonal request · costs and conditions above; refusal costs no APTell me more about it.Personal request · costs and conditions above; refusal costs no APCan't make it. You go ahead. No friendship penalty.Personal request · costs and conditions above; refusal costs no APClosing makes no new promise. Unfinished conversations can be resumed from City."
+
+
+      226 |       }
+      227 |     }
+    > 228 |     await expect(modal(page)).toContainText(
+          |                               ^
+      229 |       outcome === "broken" ? "I’m not forgetting it" : "came through",
+      230 |     );
+      231 |     expect(
+        at /workspace/Hood-Hero/tests/encounters.spec.ts:228:31
+
+    Error Context: test-results/encounters-40-days-after-b-d86ac-n-no-repeated-interruptions-chromium-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-40-days-after-b-d86ac-n-no-repeated-interruptions-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-40-days-after-b-d86ac-n-no-repeated-interruptions-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Character encounter', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Character encounter', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Character encounter', exact: true })
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      241 |     for (let day = 0; day < 40; day++) {
+      242 |       await endDay(page);
+    > 243 |       await expect(modal(page)).toHaveCount(0);
+          |                                 ^
+      244 |     }
+      245 |     const s = await saved(page);
+      246 |     expect(s.encounters.length).toBe(historyCount);
+        at /workspace/Hood-Hero/tests/encounters.spec.ts:243:33
+
+    Error Context: test-results/encounters-40-days-after-f-a1989-n-no-repeated-interruptions-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-40-days-after-f-a1989-n-no-repeated-interruptions-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-40-days-after-f-a1989-n-no-repeated-interruptions-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Character encounter', exact: true })
+    Expected substring: "I’m not forgetting it"
+    Received string:    "A CONVERSATION IN THE CITYClose ×FFlaccoResidentFlacco / Work: learning · Connections: local ties · Street experience: inexperiencedAvailable to discuss plans · Trust 100“Aye, Justice is looking for local help on day 10. We could make a little bread. You tryna come? Let me know by day 10. No pressure if you've got other plans.”I'm in. Schedule day 10 · 1 AP on arrivalPersonal request · costs and conditions above; refusal costs no APTell me more about it.Personal request · costs and conditions above; refusal costs no APCan't make it. You go ahead. No friendship penalty.Personal request · costs and conditions above; refusal costs no APClosing makes no new promise. Unfinished conversations can be resumed from City."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog', { name: 'Character encounter', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Character encounter', exact: true })
+        14 × locator resolved to <dialog open="" class="encounter-modal" aria-label="Character encounter">…</dialog>
+           - unexpected value "A CONVERSATION IN THE CITYClose ×FFlaccoResidentFlacco / Work: learning · Connections: local ties · Street experience: inexperiencedAvailable to discuss plans · Trust 100“Aye, Justice is looking for local help on day 10. We could make a little bread. You tryna come? Let me know by day 10. No pressure if you've got other plans.”I'm in. Schedule day 10 · 1 AP on arrivalPersonal request · costs and conditions above; refusal costs no APTell me more about it.Personal request · costs and conditions above; refusal costs no APCan't make it. You go ahead. No friendship penalty.Personal request · costs and conditions above; refusal costs no APClosing makes no new promise. Unfinished conversations can be resumed from City."
+
+
+      226 |       }
+      227 |     }
+    > 228 |     await expect(modal(page)).toContainText(
+          |                               ^
+      229 |       outcome === "broken" ? "I’m not forgetting it" : "came through",
+      230 |     );
+      231 |     expect(
+        at /workspace/Hood-Hero/tests/encounters.spec.ts:228:31
+
+    Error Context: test-results/encounters-40-days-after-b-d86ac-n-no-repeated-interruptions-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-40-days-after-b-d86ac-n-no-repeated-interruptions-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-40-days-after-b-d86ac-n-no-repeated-interruptions-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [webkit-mobile] › tests/overhaul.spec.ts:54:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: 'Character encounter' }).getByRole('button', { name: 'Close conversation' })
+        - locator resolved to <button class="text-button" aria-label="Close conversation">Close ×</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+       at helpers.ts:8
+
+       6 |   const modal = page.getByRole("dialog", { name: "Character encounter" });
+       7 |   for (let i = 0; i < 8 && (await modal.count()); i++)
+    >  8 |     await modal.getByRole("button", { name: "Close conversation" }).click();
+         |                                                                     ^
+       9 | }
+      10 |
+        at dismissEncounter (/workspace/Hood-Hero/tests/helpers.ts:8:69)
+        at /workspace/Hood-Hero/tests/overhaul.spec.ts:73:5
+
+    Error Context: test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions 
+    [chromium-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions 
+    [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after fulfilled: one reaction, then no repeated interruptions 
+    [webkit-mobile] › tests/encounters.spec.ts:206:3 › 40 days after broken: one reaction, then no repeated interruptions 
+    [webkit-mobile] › tests/overhaul.spec.ts:54:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation 
+  79 passed (11.9m)

@@ -235,7 +235,10 @@ export function App() {
         .find((e) => e.id === id)
         ?.definitionId.startsWith("crew-");
       const reply = crewResponse
-        ? (result.state.events.at(-1)?.text ?? "Conversation concluded.")
+        ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+          (response === "details"
+            ? "They shared more about their plans."
+            : "Conversation concluded."))
         : response === "promise"
           ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
           : response === "decline"
