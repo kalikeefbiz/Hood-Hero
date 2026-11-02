@@ -47,6 +47,6 @@ dist/assets/barlow-condensed-latin-600-normal-DepVgxBB.woff2        22.31 kB
 dist/assets/barlow-condensed-latin-700-normal-v1xN8_Wq.woff2        22.44 kB
 dist/assets/barlow-condensed-latin-700-italic-DjyOzRJ7.woff2        23.80 kB
 dist/assets/patina-tcrKVhE-.png                                    107.69 kB
-dist/assets/index-BMrbyrJ8.css                                      73.11 kB │ gzip:  14.85 kB
-dist/assets/index-DjJoeKlv.js                                      489.19 kB │ gzip: 152.53 kB
-✓ built in 2.14s
+dist/assets/index-BgZql6vU.css                                      73.81 kB │ gzip:  14.95 kB
+dist/assets/index-D-blAPDI.js                                      489.19 kB │ gzip: 152.53 kB
+✓ built in 2.18s

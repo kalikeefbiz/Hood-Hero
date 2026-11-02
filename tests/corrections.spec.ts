@@ -76,6 +76,9 @@ test("Actions separate Streets, Honest and Connects; completed reach-out returns
   await expect(
     page.getByRole("button", { name: "Talk terms with Cuzzo" }),
   ).toBeVisible();
+  expect(
+    (await page.locator(".connect-action").first().boundingBox())!.height,
+  ).toBeLessThan(100);
   await shot(page, ".actions-hub", "03-connects");
   await clickAction(page, "contact");
   await expect(
