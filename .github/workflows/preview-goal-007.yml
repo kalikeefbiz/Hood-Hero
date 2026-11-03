@@ -19,7 +19,7 @@ jobs:
       - name: Check out unmerged GOAL 007
         uses: actions/checkout@v4
         with:
-          ref: c475562706a8603b49ac8c1b61aa7c83b0e669f5
+          ref: 2fced25c28875b976dd963c33a32dce7e09b7e29
       - uses: actions/setup-node@v4
       # Match the existing playable Pages build.
         with:
