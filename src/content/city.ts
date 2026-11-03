@@ -1,11 +1,11 @@
+import { copy } from "./copy";
 import type { Zone, ZoneId } from "../core/GameState";
 export const ZONES: Record<ZoneId, Zone> = {
   downtown: {
     id: "downtown",
-    name: "Downtown",
-    subtitle: "The commercial heart",
-    description:
-      "Offices, politicians and the docks. High-value work; heavy police presence. No dominant organization.",
+    name: copy("neighborhoods.downtown.name"),
+    subtitle: copy("neighborhoods.downtown.subtitle"),
+    description: copy("neighborhoods.downtown.description"),
     police: 90,
     commerce: 95,
     support: 40,
@@ -14,10 +14,9 @@ export const ZONES: Record<ZoneId, Zone> = {
   },
   rio: {
     id: "rio",
-    name: "Rio Gabriel",
-    subtitle: "Eastside",
-    description:
-      "Lowriders and black-market trade. Gabriel’s Angels enjoy substantial community support.",
+    name: copy("neighborhoods.rio.name"),
+    subtitle: copy("neighborhoods.rio.subtitle"),
+    description: copy("neighborhoods.rio.description"),
     police: 45,
     commerce: 55,
     support: 75,
@@ -26,10 +25,9 @@ export const ZONES: Record<ZoneId, Zone> = {
   },
   south: {
     id: "south",
-    name: "Southside",
-    subtitle: "Old loyalty. New ambition.",
-    description:
-      "Back Street is politically isolated. Younger members question Justice’s turn toward legitimate business.",
+    name: copy("neighborhoods.south.name"),
+    subtitle: copy("neighborhoods.south.subtitle"),
+    description: copy("neighborhoods.south.description"),
     police: 55,
     commerce: 45,
     support: 45,
@@ -38,10 +36,9 @@ export const ZONES: Record<ZoneId, Zone> = {
   },
   resevoir: {
     id: "resevoir",
-    name: "The Resevoir",
-    subtitle: "Westside",
-    description:
-      "Boarded houses, vacant lots and deep neighborhood roots. Block Boys have strong local support and a violent rivalry with the Angels.",
+    name: copy("neighborhoods.resevoir.name"),
+    subtitle: copy("neighborhoods.resevoir.subtitle"),
+    description: copy("neighborhoods.resevoir.description"),
     police: 50,
     commerce: 75,
     support: 80,
@@ -50,10 +47,9 @@ export const ZONES: Record<ZoneId, Zone> = {
   },
   nawf: {
     id: "nawf",
-    name: "The Nawf",
-    subtitle: "Northside",
-    description:
-      "The Blips’ purple and Mudgang’s brown share the zone. Residents want their long feud to end.",
+    name: copy("neighborhoods.nawf.name"),
+    subtitle: copy("neighborhoods.nawf.subtitle"),
+    description: copy("neighborhoods.nawf.description"),
     police: 60,
     commerce: 40,
     support: 20,

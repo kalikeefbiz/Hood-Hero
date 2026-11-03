@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import type { ReactNode } from "react";
 import type { ZoneId } from "../core/GameState";
 import { ZONES } from "../content/city";
@@ -32,22 +33,31 @@ export function NewRun({
       </div>
       <header className="brand">
         <span>
-          BLACKHOUSE <small>PRESENTS</small>
+          {copy("interface.newRun.blackhouse")}
+          <small>{copy("interface.newRun.presents")}</small>
         </span>
-        <span className="edition">A LIFE IN STIXX CITY</span>
+        <span className="edition">
+          {copy("interface.newRun.aLIFEINSTIXXCITY")}
+        </span>
       </header>
       <main className="newgame" id="main-content">
         <section className="intro">
           <div className="intro-copy">
-            <p className="eyebrow">FIVE NEIGHBORHOODS. YOUR STORY.</p>
+            <p className="eyebrow">
+              {copy("interface.newRun.fiveNEIGHBORHOODSYOURSTORY")}
+            </p>
             <h1>
-              HOOD <br />
-              HERO<span>STIXX CITY</span>
+              {copy("interface.newRun.hood")}
+              <br />
+              {copy("interface.newRun.hero")}
+              <span>{copy("interface.newRun.stixxCITY")}</span>
             </h1>
             <p className="lede">
-              A little bread. A few real ones. What you do next is on you.
+              {copy("interface.newRun.aLittleBreadAFewRealOnes")}
             </p>
-            <p className="caption">A PERSISTENT STREET-LIFE SIMULATION</p>
+            <p className="caption">
+              {copy("interface.newRun.aPERSISTENTSTREETLIFESIMULATION")}
+            </p>
           </div>
         </section>
         <form
@@ -58,13 +68,18 @@ export function NewRun({
           }}
         >
           <div className="chapter">
-            <p className="eyebrow">NEW RUN / STIXX CITY</p>
+            <p className="eyebrow">
+              {copy("interface.newRun.newRUNSTIXXCITY")}
+            </p>
           </div>
-          <h2>Pick your block.</h2>
-          <p className="creation-lede">Where you start shapes your story.</p>
+          <h2>{copy("interface.newRun.pickYourBlock")}</h2>
+          <p className="creation-lede">
+            {copy("interface.newRun.whereYouStartShapesYourStory")}
+          </p>
           <fieldset>
             <legend>
-              Choose your home <span>Every home starts independent.</span>
+              {copy("interface.newRun.chooseYourHome")}
+              <span>{copy("interface.newRun.everyHomeStartsIndependent")}</span>
             </legend>
             <div className="zone-choices">
               {Object.values(ZONES).map((z, i) => (
@@ -89,40 +104,54 @@ export function NewRun({
             </div>
           </fieldset>
           <div className="name-entry">
-            <label htmlFor="player-name">What do people call you?</label>
+            <label htmlFor="player-name">
+              {copy("interface.newRun.whatDoPeopleCallYou")}
+            </label>
             <input
               id="player-name"
               maxLength={28}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Your name (or Resident)"
+              placeholder={copy("interface.newRun.yourNameOrResident")}
               autoComplete="off"
             />
           </div>
           <div className="starting-kit">
             <span>
-              <strong>${BALANCE.startingCash}</strong> clean cash
+              <strong>
+                {copy("interface.newRun.text")}
+                {BALANCE.startingCash}
+              </strong>
+              {copy("interface.newRun.cleanCash")}
             </span>
             <span>
-              <strong>{BALANCE.dailyAP} AP</strong> each day
+              <strong>
+                {BALANCE.dailyAP}
+                {copy("interface.newRun.ap")}
+              </strong>
+              {copy("interface.newRun.eachDay")}
             </span>
             <span>
-              <strong>Flacco</strong> in your Set
+              <strong>{copy("interface.newRun.flacco")}</strong>
+              {copy("interface.newRun.inYourSet")}
             </span>
           </div>
           <button className="primary" type="submit">
-            Enter Stixx City <Icon name="arrow" />
+            {copy("interface.newRun.enterStixxCity")}
+            <Icon name="arrow" />
           </button>
           {hasSave && (
             <button type="button" className="secondary" onClick={load}>
-              Resume saved game <Icon name="arrow" />
+              {copy("interface.newRun.resumeSavedGame")}
+              <Icon name="arrow" />
             </button>
           )}
           {feedback}
         </form>
       </main>
       <footer className="landing-footer">
-        BLACKHOUSE / HOOD HERO <span>A FICTIONAL STRATEGY GAME</span>
+        {copy("interface.newRun.blackhouseHOODHERO")}
+        <span>{copy("interface.newRun.aFICTIONALSTRATEGYGAME")}</span>
       </footer>
     </div>
   );

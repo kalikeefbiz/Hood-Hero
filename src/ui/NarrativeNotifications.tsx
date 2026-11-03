@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import type { GameState } from "../core/GameState";
 import { unseenEvents } from "../core/EventLog";
 export function NarrativeNotifications({
@@ -21,11 +22,14 @@ export function NarrativeNotifications({
   return (
     <section
       className="major-notification"
-      aria-label="Important developments"
+      aria-label={copy(
+        "interface.narrativeNotifications.importantDevelopments",
+      )}
       aria-live="polite"
     >
       <p className="eyebrow">
-        {unseen.length} UNSEEN IMPORTANT{" "}
+        {unseen.length}
+        {copy("interface.narrativeNotifications.unseenIMPORTANT")}{" "}
         {unseen.length === 1 ? "DEVELOPMENT" : "DEVELOPMENTS"}
       </p>
       <h3>{event.title ?? "A major development"}</h3>
@@ -33,11 +37,13 @@ export function NarrativeNotifications({
       <div className="notification-controls">
         {s.encounters.some((e) => e.sourceEventId === event.id) && (
           <button onClick={() => view(event.id)}>
-            Hear {speakerName}’s response
+            {copy("interface.narrativeNotifications.hear")}
+            {speakerName}
+            {copy("interface.narrativeNotifications.sResponse")}
           </button>
         )}
         <button className="secondary" onClick={() => acknowledge(event.id)}>
-          Acknowledge
+          {copy("interface.narrativeNotifications.acknowledge")}
         </button>
       </div>
     </section>

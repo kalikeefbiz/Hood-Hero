@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page, type Dialog } from "@playwright/test";
 import { AUTO_KEY, SAVE_KEY, serialize } from "../src/persistence/SaveSystem";
@@ -9,14 +10,22 @@ import { record } from "../src/core/EventLog";
 import type { GameState } from "../src/core/GameState";
 const root = process.env.PLAYWRIGHT_BASE_PATH || "/";
 const modal = (page: Page) =>
-  page.getByRole("dialog", { name: "Character encounter", exact: true });
+  page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+    exact: true,
+  });
 const nav = async (page: Page, name: string) => {
   await page
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
-  if (name === "Actions")
-    await page.getByRole("button", { name: "Honest", exact: true }).click();
+  if (name === copy("interface.navigation.actions"))
+    await page
+      .getByRole("button", {
+        name: copy("interface.navigation.honest"),
+        exact: true,
+      })
+      .click();
 };
 const state = async (page: Page): Promise<GameState> =>
   page.evaluate(
@@ -26,7 +35,9 @@ const state = async (page: Page): Promise<GameState> =>
 async function close(page: Page) {
   for (let i = 0; i < 8 && (await modal(page).count()); i++)
     await modal(page)
-      .getByRole("button", { name: "Close conversation" })
+      .getByRole("button", {
+        name: copy("interface.encounterScene.closeConversation"),
+      })
       .click();
 }
 async function seed(page: Page, s: GameState) {
@@ -39,7 +50,9 @@ async function seed(page: Page, s: GameState) {
     { key: SAVE_KEY, raw: serialize(s) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await close(page);
 }
 async function capture(page: Page, name: string) {
@@ -66,7 +79,10 @@ async function click(page: Page, type: string) {
   if (type === "rest") {
     await page
       .getByRole("navigation")
-      .getByRole("button", { name: "Actions", exact: true })
+      .getByRole("button", {
+        name: copy("interface.navigation.actions"),
+        exact: true,
+      })
       .click();
   }
   if (["buyback", "negotiate", "recover", "settlement"].includes(type)) {
@@ -94,18 +110,22 @@ test("hire, scheduled wages, save and a thirty-day employment playthrough", asyn
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(root);
-  await page.getByLabel("What do people call you?").fill("Test(4)");
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Test(4)");
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await close(page);
   expect((await state(page)).characters.player.wallet.clean).toBe(125);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await expect(page.locator(".employment-summary")).toContainText("Unemployed");
   await expect(page.locator('[data-action="work"]')).toHaveCount(0);
   await capture(page, "01-job-search");
   await click(page, "apply");
   await click(page, "acceptJob");
   expect((await state(page)).employment[0].status).toBe("employed");
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await capture(page, "02-hired-schedule");
   for (let day = 1; day <= 30; day++) {
     let s = await state(page);
@@ -116,21 +136,19 @@ test("hire, scheduled wages, save and a thirty-day employment playthrough", asyn
         c.status === "pending",
     );
     if (due) {
-      await nav(page, "Actions");
+      await nav(page, copy("interface.navigation.actions"));
       await click(page, "work");
       if (await modal(page).count())
-        await modal(page)
-          .getByRole("button", { name: /Skip scene/ })
-          .click();
+        await modal(page).locator('[data-response="skip"]').click();
       s = await state(page);
       expect(s.ap).toBe(0);
       expect(s.employment[0].attendance.at(-1)?.status).toBe("worked");
       if (day === 2) {
-        await nav(page, "Wallet");
+        await nav(page, copy("interface.navigation.wallet"));
         await capture(page, "03-first-wages");
       }
     } else {
-      await nav(page, "Actions");
+      await nav(page, copy("interface.navigation.actions"));
       await click(page, "rest");
     }
     await endDay(page);
@@ -142,11 +160,15 @@ test("hire, scheduled wages, save and a thirty-day employment playthrough", asyn
   expect(
     s.employment[0].attendance.filter((a) => a.status === "missed"),
   ).toHaveLength(0);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await capture(page, "04-reliable-progression");
-  await page.getByLabel("Save game", { exact: true }).click();
+  await page
+    .getByLabel(copy("interface.gameHUD.saveGame"), { exact: true })
+    .click();
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await close(page);
   expect((await state(page)).employment).toEqual(s.employment);
   expect(errors).toEqual([]);
@@ -169,7 +191,7 @@ test("absence warning can be cancelled; repeated absences fire and gigs survive 
   await seed(page, s);
   await endDay(page, false);
   expect((await state(page)).day).toBe(2);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await page.locator('[data-action="work"]').scrollIntoViewIfNeeded();
   await capture(page, "05-scheduled-choice");
   for (let d = 2; d <= 6; d++) await endDay(page);
@@ -180,20 +202,22 @@ test("absence warning can be cancelled; repeated absences fire and gigs survive 
     "Employment terminated",
   );
   await capture(page, "06-termination");
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await capture(page, "07-hiring-restriction");
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   for (const b of await page.locator('[data-action="apply"] button').all())
     await expect(b).toBeDisabled();
   await click(page, "gig");
   expect((await state(page)).progression.cleanEarned).toBe(38);
   await expect(page.locator('[data-action="gig"] button')).toBeDisabled();
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await close(page);
   expect((await state(page)).employmentSearch.player.eligibleDay).toBe(13);
   while ((await state(page)).day < 13) await endDay(page);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await click(page, "apply");
   await click(page, "acceptJob");
   expect(
@@ -229,14 +253,16 @@ test("workplace scene consequence, skip, close and no replay across tabs or relo
   );
   syncEncounters(s);
   await seed(page, s);
-  await nav(page, "City");
+  await nav(page, copy("interface.navigation.city"));
   await page
     .getByRole("button", { name: "Resume workplace conversation" })
     .click();
   await expect(modal(page)).toBeVisible();
   await capture(page, "08-workplace-choice");
   await modal(page)
-    .getByRole("button", { name: /Fix it/ })
+    .getByRole("button", {
+      name: copy("workplace-dialogue.fixIt6StressBetterPerformance"),
+    })
     .click();
   await expect(modal(page)).toHaveCount(0);
   const after = await state(page);
@@ -247,7 +273,9 @@ test("workplace scene consequence, skip, close and no replay across tabs or relo
     await expect(modal(page)).toHaveCount(0);
   }
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await expect(modal(page)).toHaveCount(0);
   expect((await state(page)).progression.cleanEarned).toBe(
     s.progression.cleanEarned,
@@ -278,20 +306,20 @@ test("employment competes with The Chains through actual AP, wages, attendance a
   base = performAction(base, { type: "gig", actor: "player" }).state;
   base = advanceDay(base);
   await seed(page, base);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await click(page, "work");
   if (await modal(page).count())
-    await modal(page)
-      .getByRole("button", { name: /Skip scene/ })
-      .click();
-  await nav(page, "Actions");
+    await modal(page).locator('[data-response="skip"]').click();
+  await nav(page, copy("interface.navigation.actions"));
   await storyline(page);
   await expect(
-    modal(page).getByRole("button", { name: /Pay to return the chains/ }),
+    modal(page).getByRole("button", {
+      name: copy("storylines.the-chains.choices.buyback"),
+    }),
   ).toBeDisabled();
   await close(page);
   await endDay(page);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await storyline(page);
   await click(page, "buyback");
   const worked = await state(page);
@@ -301,7 +329,7 @@ test("employment competes with The Chains through actual AP, wages, attendance a
     worked.commitments.find((c) => c.kind === "recover-property")?.status,
   ).toBe("fulfilled");
   await seed(page, base);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await click(page, "gig");
   await storyline(page);
   await click(page, "buyback");
@@ -320,6 +348,6 @@ test("employment competes with The Chains through actual AP, wages, attendance a
   ).toBeGreaterThan(
     helped.characters[helped.employment[0].employer].relationships.player.trust,
   );
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await capture(page, "10-chains-attendance-tradeoff");
 });

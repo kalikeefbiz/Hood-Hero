@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
@@ -16,7 +17,9 @@ async function seed(page: Page, state: GameState) {
     { key: SAVE_KEY, raw: serialize(state) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
 }
 async function nav(page: Page, name: string) {
@@ -24,8 +27,13 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
-  if (name === "Actions")
-    await page.getByRole("button", { name: "Honest", exact: true }).click();
+  if (name === copy("interface.navigation.actions"))
+    await page
+      .getByRole("button", {
+        name: copy("interface.navigation.honest"),
+        exact: true,
+      })
+      .click();
 }
 
 test("City centers the five state-backed neighborhoods and keeps actions in Actions", async ({
@@ -46,12 +54,15 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     "Wallet",
   ]);
   await expect(
-    dock.getByRole("button", { name: "City", exact: true }),
+    dock.getByRole("button", {
+      name: copy("interface.navigation.city"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-current", "page");
   await expect(page.locator(".action-card, .today-moves")).toHaveCount(0);
   await expect(page.getByText("Today’s moves", { exact: true })).toHaveCount(0);
   const map = page.getByRole("group", {
-    name: "Five neighborhoods of Stixx City",
+    name: copy("interface.cityMap.fiveNeighborhoodsOfStixxCity"),
   });
   await expect(map.getByRole("button")).toHaveCount(5);
   for (const zone of Object.values(state.zones)) {
@@ -63,10 +74,16 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     await expect(button).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(".zone-details h3")).toHaveText(zone.name);
     await expect(
-      page.getByRole("meter", { name: "Police presence", exact: true }),
+      page.getByRole("meter", {
+        name: copy("interface.app.policePresence"),
+        exact: true,
+      }),
     ).toHaveAttribute("aria-valuenow", String(zone.police));
     await expect(
-      page.getByRole("meter", { name: "Your local standing", exact: true }),
+      page.getByRole("meter", {
+        name: copy("interface.app.yourLocalStanding"),
+        exact: true,
+      }),
     ).toHaveAttribute(
       "aria-valuenow",
       String(state.characters.player.neighborhoodStanding[zone.id]),
@@ -107,7 +124,9 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
   await expect(downtown).toHaveAccessibleDescription(
     /No single controller.*Unclaimed/,
   );
-  await expect(page.locator(".zone-details .tags")).toHaveText("Unclaimed");
+  await expect(page.locator(".zone-details .tags")).toHaveText(
+    copy("interface.app.unclaimed"),
+  );
   const saved = await page.evaluate(
     (key) => JSON.parse(localStorage.getItem(key)!).state,
     AUTO_KEY,
@@ -117,7 +136,10 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     "data-theme",
     "independent",
   );
-  const activity = page.getByRole("region", { name: "Activity", exact: true });
+  const activity = page.getByRole("region", {
+    name: copy("interface.app.activity"),
+    exact: true,
+  });
   expect(
     await activity.evaluate(
       (el) =>
@@ -128,17 +150,23 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     ),
   ).toBe(true);
   await expect(
-    page.getByRole("heading", { name: "Your position", exact: true }),
+    page.getByRole("heading", {
+      name: copy("interface.app.yourPosition"),
+      exact: true,
+    }),
   ).toBeVisible();
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await expect(page.locator('[data-action="apply"]').first()).toBeVisible();
   await expect(page.locator('[data-action="gig"]')).toHaveCount(1);
   await page
-    .getByRole("button", { name: "Connects", exact: true })
+    .getByRole("button", {
+      name: copy("interface.navigation.connects"),
+      exact: true,
+    })
     .filter({ hasNot: page.locator("svg") })
     .click();
   await expect(page.locator('[data-action="contact"]')).toHaveCount(1);
-  await nav(page, "City");
+  await nav(page, copy("interface.navigation.city"));
   await page
     .getByRole("button", { name: "Select Southside", exact: true })
     .click();
@@ -180,10 +208,14 @@ test("storyline uses the active demand and opens its existing City conversation"
   await expect(alert).toContainText("Leadership is considering its response");
   await alert.click();
   await expect(
-    page.getByRole("dialog", { name: "Character encounter" }),
+    page.getByRole("dialog", {
+      name: copy("interface.app.characterEncounter"),
+    }),
   ).toBeVisible();
   await expect(
-    page.getByRole("dialog", { name: "Character encounter" }),
+    page.getByRole("dialog", {
+      name: copy("interface.app.characterEncounter"),
+    }),
   ).toContainText("$105");
   await expect(page.locator(".ap b")).toHaveText("2/2");
   for (const status of ["resolved", "abandoned", "missing"] as const) {
@@ -198,7 +230,9 @@ test("storyline uses the active demand and opens its existing City conversation"
     await expect(page.locator(".story-alert")).toHaveCount(0);
     await expect(page.locator(".city-map")).toBeVisible();
     if (status !== "missing") {
-      await page.getByText("Completed storylines", { exact: true }).click();
+      await page
+        .getByText(copy("interface.app.completedStorylines"), { exact: true })
+        .click();
       await expect(page.locator(".situation-history")).toContainText(status);
       await expect(page.locator(".situation-history")).toContainText("sold");
     }
@@ -239,16 +273,29 @@ test("City activity preserves visible history, reverse chronology, day groups, l
     "Day 02",
     "Day 01",
   ]);
-  await page.getByRole("button", { name: "Your circle", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: copy("interface.app.yourCircle"),
+      exact: true,
+    })
+    .click();
   await expect(feed.locator("article")).toHaveCount(41);
   await expect(feed.locator("article p").last()).toHaveText("History event 1");
   await expect(feed).not.toContainText("/ CITY");
-  await nav(page, "People");
-  await nav(page, "City");
+  await nav(page, copy("interface.navigation.people"));
+  await nav(page, copy("interface.navigation.city"));
   await expect(
-    page.getByRole("button", { name: "Your circle", exact: true }),
+    page.getByRole("button", {
+      name: copy("interface.app.yourCircle"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "All activity", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: copy("interface.app.allActivity"),
+      exact: true,
+    })
+    .click();
   await expect(feed.locator("article")).toHaveCount(80);
   expect(
     await page.evaluate(

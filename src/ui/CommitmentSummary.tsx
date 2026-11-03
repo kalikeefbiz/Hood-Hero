@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import type { GameState } from "../core/GameState";
 export function CommitmentSummary({ s }: { s: GameState }) {
   const promises = s.commitments.filter(
@@ -5,11 +6,17 @@ export function CommitmentSummary({ s }: { s: GameState }) {
   );
   if (!promises.length) return null;
   return (
-    <section className="commitment-summary panel" aria-label="Your promises">
-      <h3>Your word</h3>
+    <section
+      className="commitment-summary panel"
+      aria-label={copy("interface.commitmentSummary.yourPromises")}
+    >
+      <h3>{copy("interface.commitmentSummary.yourWord")}</h3>
       {promises.map((c) => (
         <div key={c.id}>
-          <strong>Help Cuzzo recover his chains · {c.status}</strong>
+          <strong>
+            {copy("interface.commitmentSummary.helpCuzzoRecoverHisChains")}
+            {c.status}
+          </strong>
           <p>
             {c.status === "pending"
               ? `${Math.max(0, c.dueDay - s.day)} days remaining · Before day ${c.dueDay} begins. The situation may end sooner.`

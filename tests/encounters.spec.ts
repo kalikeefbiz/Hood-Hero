@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
@@ -11,7 +12,10 @@ import type { GameState, ZoneId, FactionId } from "../src/core/GameState";
 import { THEMES } from "../src/ui/theme";
 const root = process.env.PLAYWRIGHT_BASE_PATH || "/";
 const modal = (page: Page) =>
-  page.getByRole("dialog", { name: "Character encounter", exact: true });
+  page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+    exact: true,
+  });
 const reply = (page: Page, text: string) =>
   modal(page).getByRole("button", { name: text, exact: false });
 async function nav(page: Page, name: string) {
@@ -19,8 +23,13 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
-  if (name === "Actions")
-    await page.getByRole("button", { name: "Honest", exact: true }).click();
+  if (name === copy("interface.navigation.actions"))
+    await page
+      .getByRole("button", {
+        name: copy("interface.navigation.honest"),
+        exact: true,
+      })
+      .click();
 }
 async function seed(page: Page, s = newGame("Test(3)", "south")) {
   await page.goto(root);
@@ -32,7 +41,9 @@ async function seed(page: Page, s = newGame("Test(3)", "south")) {
     { key: SAVE_KEY, raw: serialize(s) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
 }
 async function saved(page: Page): Promise<GameState> {
   return page.evaluate(
@@ -64,7 +75,7 @@ async function acknowledge(page: Page) {
 async function declineCrewOffer(page: Page) {
   const e = (await saved(page)).encounters.find((e) => e.status === "active");
   if (e?.definitionId === "crew-offer")
-    await reply(page, "Can't make it").click();
+    await reply(page, copy("crew-dialogue.canTMakeItYouGoAhead")).click();
 }
 async function endDay(page: Page) {
   await page.getByRole("button", { name: "End day" }).click();
@@ -77,7 +88,12 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
   page.on("pageerror", (e) => errors.push(e.message));
   await seed(page);
   await expect(modal(page)).toHaveJSProperty("open", true);
-  await expect(modal(page)).toContainText("out with my girl");
+  await expect(modal(page)).toContainText(
+    copy("storylines.the-chains.opening.dialogue", {
+      amount: 150,
+      details: "",
+    }),
+  );
   await expect(modal(page).locator("img")).toHaveAttribute(
     "src",
     /concerned-no-chain.webp$/,
@@ -96,8 +112,10 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
     ).toBe(true);
   }
   await capture(page, "01-modal-over-city");
-  await reply(page, "Tell me what happened").click();
-  await expect(modal(page)).toContainText("This wasn’t authorized");
+  await reply(page, copy("storylines.the-chains.choices.clarify")).click();
+  await expect(modal(page)).toContainText(
+    copy("storylines.the-chains.clarification.dialogue", { amount: 150 }),
+  );
   await expect(modal(page).locator("img")).toHaveAttribute(
     "src",
     /confident-no-chain.webp$/,
@@ -105,12 +123,18 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
   expect((await saved(page)).rng).toBe(original.rng);
   await capture(page, "02-contextual-exchange");
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
-  await expect(modal(page)).toContainText("This wasn’t authorized");
-  await reply(page, "I’ll help you").click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
+  await expect(modal(page)).toContainText(
+    copy("storylines.the-chains.clarification.dialogue", { amount: 150 }),
+  );
+  await reply(page, copy("storylines.the-chains.choices.promise")).click();
   await expect(modal(page)).toHaveCount(0);
   await expect(
-    page.getByRole("region", { name: "Your promises" }),
+    page.getByRole("region", {
+      name: copy("interface.commitmentSummary.yourPromises"),
+    }),
   ).toContainText("8 days remaining");
   expect(incidentPromise(await saved(page), "the-chains")?.status).toBe(
     "pending",
@@ -120,25 +144,31 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
     timeout: 7000,
   });
   await capture(page, "03-conversation-concluded-city");
-  await page.getByLabel("Save game", { exact: true }).click();
+  await page
+    .getByLabel(copy("interface.gameHUD.saveGame"), { exact: true })
+    .click();
   for (const destination of ["Actions", "People", "Set", "Wallet"]) {
     await nav(page, destination);
     await expect(modal(page)).toHaveCount(0);
   }
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await page.locator('[data-action="gig"]').getByRole("button").click();
   await expect(page.getByRole("status")).toContainText("$38");
   await storyline(page);
   await page
-    .getByRole("dialog", { name: "Character encounter" })
-    .getByRole("button", { name: /Pay to return the chains/ })
+    .getByRole("dialog", { name: copy("interface.app.characterEncounter") })
+    .getByRole("button", {
+      name: copy("storylines.the-chains.choices.buyback"),
+    })
     .click();
   expect(
     unseenEvents(await saved(page)).filter(
       (e) => e.incidentId === "the-chains",
     ),
   ).toHaveLength(1);
-  await expect(modal(page)).toContainText("You came through for me");
+  await expect(modal(page)).toContainText(
+    copy("storylines.the-chains.reactions.fulfilledPromise"),
+  );
   await expect(modal(page).locator("img")).toHaveAttribute(
     "src",
     /confident-with-chain.webp$/,
@@ -153,19 +183,27 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
     ),
   ).toHaveLength(0);
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await expect(modal(page)).toHaveCount(0);
   expect(incidentPromise(await saved(page), "the-chains")?.status).toBe(
     "fulfilled",
   );
-  await page.getByText("Important outcomes", { exact: false }).click();
+  await page
+    .getByText(copy("interface.app.importantOutcomes"), { exact: false })
+    .click();
   const before = await saved(page);
   await page.getByRole("button", { name: "Revisit Cuzzo’s reaction" }).click();
   await expect(modal(page)).toContainText("RECORDED ENCOUNTER");
   await expect(
     modal(page).getByRole("button", { name: "I hear you", exact: false }),
   ).toHaveCount(0);
-  await modal(page).getByRole("button", { name: "Close conversation" }).click();
+  await modal(page)
+    .getByRole("button", {
+      name: copy("interface.encounterScene.closeConversation"),
+    })
+    .click();
   expect(await saved(page)).toEqual(before);
   expect(errors).toEqual([]);
 });
@@ -178,24 +216,29 @@ test("refusing, postponing, Escape and backdrop leave no accidental obligation o
   await expect(modal(page)).toHaveCount(0);
   expect((await saved(page)).commitments).toHaveLength(0);
   await page
-    .getByRole("button", { name: "Continue conversation with Cuzzo" })
+    .getByRole("button", {
+      name: copy("interface.app.continueConversationWithCuzzo"),
+    })
     .click();
-  await reply(page, "Let me think").click();
+  await reply(page, copy("storylines.the-chains.choices.delay")).click();
   await expect(modal(page)).toHaveCount(0);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await endDay(page);
   await expect(
-    page
-      .getByRole("navigation")
-      .getByRole("button", { name: "City", exact: true }),
+    page.getByRole("navigation").getByRole("button", {
+      name: copy("interface.navigation.city"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-current", "page");
   await expect(modal(page)).toHaveCount(0);
   expect(await page.evaluate(() => scrollY)).toBe(0);
   await expect(page.locator(".day-transition")).toContainText("DAY 02");
   await page
-    .getByRole("button", { name: "Continue conversation with Cuzzo" })
+    .getByRole("button", {
+      name: copy("interface.app.continueConversationWithCuzzo"),
+    })
     .click();
-  await reply(page, "I can’t get involved").click();
+  await reply(page, copy("storylines.the-chains.choices.decline")).click();
   await expect(modal(page)).toHaveCount(0);
   expect((await saved(page)).commitments).toHaveLength(0);
   await expect(page.getByRole("status")).toContainText("No promise");
@@ -213,14 +256,16 @@ for (const outcome of ["fulfilled", "broken"] as const)
       page,
       newGame("Test(3)", "south", outcome === "broken" ? 13 : 2026),
     );
-    await reply(page, "I’ll help you").click();
+    await reply(page, copy("storylines.the-chains.choices.promise")).click();
     if (outcome === "fulfilled") {
-      await nav(page, "Actions");
+      await nav(page, copy("interface.navigation.actions"));
       await page.locator('[data-action="gig"]').getByRole("button").click();
       await storyline(page);
       await page
-        .getByRole("dialog", { name: "Character encounter" })
-        .getByRole("button", { name: /Pay to return the chains/ })
+        .getByRole("dialog", { name: copy("interface.app.characterEncounter") })
+        .getByRole("button", {
+          name: copy("storylines.the-chains.choices.buyback"),
+        })
         .click();
     } else {
       for (let day = 2; day <= 9; day++) {
@@ -231,7 +276,9 @@ for (const outcome of ["fulfilled", "broken"] as const)
     }
     await declineCrewOffer(page);
     await expect(modal(page)).toContainText(
-      outcome === "broken" ? "I’m not forgetting it" : "came through",
+      outcome === "broken"
+        ? copy("storylines.the-chains.reactions.brokenPromise")
+        : copy("storylines.the-chains.reactions.fulfilledPromise"),
     );
     expect(
       unseenEvents(await saved(page)).filter(
@@ -264,12 +311,14 @@ for (const outcome of ["fulfilled", "broken"] as const)
       ),
     ).toBe(true);
     await page.reload();
-    await page.getByRole("button", { name: "Resume saved game" }).click();
+    await page
+      .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+      .click();
     await expect(modal(page)).toHaveCount(0);
-    await nav(page, "Actions");
+    await nav(page, copy("interface.navigation.actions"));
     await page.locator('[data-action="gig"]').getByRole("button").click();
     await expect(page.getByRole("status")).toContainText("$38");
-    await nav(page, "City");
+    await nav(page, copy("interface.navigation.city"));
     if (outcome === "broken") await capture(page, "07-city-after-consequences");
   });
 
@@ -293,7 +342,7 @@ for (const width of [320, 375, 390, 430])
       expect(
         Math.round((await button.boundingBox())!.height),
       ).toBeGreaterThanOrEqual(44);
-    const last = reply(page, "Let me think");
+    const last = reply(page, copy("storylines.the-chains.choices.delay"));
     await last.scrollIntoViewIfNeeded();
     const lastBox = (await last.boundingBox())!;
     expect(lastBox.y + lastBox.height).toBeLessThanOrEqual(box.y + box.height);
@@ -301,7 +350,7 @@ for (const width of [320, 375, 390, 430])
       (await new AxeBuilder({ page }).include(".encounter-modal").analyze())
         .violations,
     ).toEqual([]);
-    await reply(page, "I’ll help you").click();
+    await reply(page, copy("storylines.the-chains.choices.promise")).click();
     await expect(modal(page)).toHaveCount(0);
     expect(await page.evaluate(() => document.body.style.position)).not.toBe(
       "fixed",
@@ -441,7 +490,9 @@ test("all homes and affiliation themes retain the City-only modal and normal nav
       affiliation ?? "independent",
     );
     await modal(page)
-      .getByRole("button", { name: "Close conversation" })
+      .getByRole("button", {
+        name: copy("interface.encounterScene.closeConversation"),
+      })
       .click();
     for (const tab of ["Actions", "People", "Set", "Wallet"]) {
       await nav(page, tab);

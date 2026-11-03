@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { availability, knownCapabilities } from "../systems/CrewAgency";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { encounterDefinition, responseError } from "../systems/Encounters";
@@ -40,7 +41,7 @@ export function EncounterScene({
   return (
     <section
       className="encounter-scene"
-      aria-label="Character encounter"
+      aria-label={copy("interface.encounterScene.characterEncounter")}
       style={themeStyle(c.affiliation)}
     >
       <div className="encounter-top">
@@ -52,16 +53,16 @@ export function EncounterScene({
         <button
           className="text-button"
           onClick={() => dismiss(e.id)}
-          aria-label="Close conversation"
+          aria-label={copy("interface.encounterScene.closeConversation")}
         >
-          Close ×
+          {copy("interface.encounterScene.close")}
         </button>
       </div>
       <div
         className="encounter-scroll"
         tabIndex={0}
         role="region"
-        aria-label="Dialogue"
+        aria-label={copy("interface.encounterScene.dialogue")}
       >
         <div className="encounter-composition">
           <CharacterPortrait
@@ -76,30 +77,48 @@ export function EncounterScene({
               {c.affiliation ? s.factions[c.affiliation].name : "Resident"}
             </p>
             <h3>
-              {c.name} <small>/ {c.alias ?? ""}</small>
+              {c.name}{" "}
+              <small>
+                {copy("interface.encounterScene.text")}
+                {c.alias ?? ""}
+              </small>
             </h3>
             {d.id.startsWith("crew-") && (
               <p className="encounter-fact">
                 {knownCapabilities(c)}
                 <br />
-                {availability(s, c) ?? "Available to discuss plans"} · Trust{" "}
+                {availability(s, c) ?? "Available to discuss plans"}
+                {copy("interface.encounterScene.trust")}{" "}
                 {Math.round(c.relationships[s.playerId]?.trust ?? 0)}
               </p>
             )}
-            <p className="dialogue">“{d.dialogue(s, e)}”</p>
+            <p className="dialogue">
+              {copy("interface.encounterScene.text2")}
+              {d.dialogue(s, e)}
+              {copy("interface.encounterScene.text3")}
+            </p>
             {source && (
               <p className="encounter-fact">
-                DAY {source.day} · {source.text}
+                {copy("interface.encounterScene.day")}
+                {source.day}
+                {copy("interface.encounterScene.text4")}
+                {source.text}
               </p>
             )}
             {promise && (
               <p className="promise-status">
-                <strong>Your word · {promise.status}</strong>
+                <strong>
+                  {copy("interface.encounterScene.yourWord")}
+                  {promise.status}
+                </strong>
                 {promise.status === "pending" && (
                   <span>
-                    {Math.max(0, promise.dueDay - s.day)} days remaining ·
-                    Before day {promise.dueDay} begins. The dispute can end
-                    sooner.
+                    {Math.max(0, promise.dueDay - s.day)}
+                    {copy("interface.encounterScene.daysRemainingBeforeDay")}
+                    {promise.dueDay}
+                    {copy(
+                      "interface.encounterScene.beginsTheDisputeCanEndSooner",
+                    )}
                   </span>
                 )}
               </p>
@@ -115,7 +134,7 @@ export function EncounterScene({
       <div
         className="encounter-responses"
         role="group"
-        aria-label="Your response"
+        aria-label={copy("interface.encounterScene.yourResponse")}
       >
         {[...counts.entries()]
           .filter(([, n]) => n > 1)
@@ -126,7 +145,7 @@ export function EncounterScene({
           ))}
         {historical ? (
           <button className="encounter-response" onClick={() => dismiss(e.id)}>
-            Return to City
+            {copy("interface.encounterScene.returnToCity")}
           </button>
         ) : (
           responses.map((r) => {
@@ -136,6 +155,7 @@ export function EncounterScene({
             return (
               <button
                 key={r.id}
+                data-response={r.id}
                 className="encounter-response"
                 disabled={!!reason}
                 onClick={() => respond(e.id, r.id)}

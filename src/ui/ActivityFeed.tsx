@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import type { GameState, GameEvent } from "../core/GameState";
 import { visibleEvents } from "../core/EventLog";
 import { themeStyle } from "./theme";
@@ -30,7 +31,8 @@ export function ActivityFeed({
         return (
           <div className="activity-day" key={day}>
             <h3 className="timeline-day">
-              Day {day.toString().padStart(2, "0")}
+              {copy("interface.activityFeed.day")}
+              {day.toString().padStart(2, "0")}
             </h3>
             {significant.map((e) => (
               <article
@@ -44,7 +46,10 @@ export function ActivityFeed({
                 <span className="timeline-dot" />
                 <div>
                   <small>
-                    DAY {e.day} / {describe(e)}{" "}
+                    {copy("interface.activityFeed.day2")}
+                    {e.day}
+                    {copy("interface.activityFeed.text")}
+                    {describe(e)}{" "}
                     <b className="severity-label">
                       {e.importance === "critical"
                         ? "CRITICAL"
@@ -61,7 +66,11 @@ export function ActivityFeed({
             {routine.length > 0 && (
               <details className="routine-summary">
                 <summary>
-                  Day {day} · {routine.length} routine reports
+                  {copy("interface.activityFeed.day3")}
+                  {day}
+                  {copy("interface.activityFeed.text2")}
+                  {routine.length}
+                  {copy("interface.activityFeed.routineReports")}
                   {[
                     ...new Set(
                       routine.flatMap((e) =>
@@ -81,7 +90,9 @@ export function ActivityFeed({
                       data-faction={e.factionId}
                       style={e.factionId ? themeStyle(e.factionId) : undefined}
                     >
-                      <strong>{describe(e)}</strong> · {e.text}
+                      <strong>{describe(e)}</strong>
+                      {copy("interface.activityFeed.text3")}
+                      {e.text}
                     </p>
                   ))}
               </details>

@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { heatDescription } from "../systems/CriminalExposure";
 import { type GameState, type ZoneId, player, cash } from "../core/GameState";
 import { BALANCE } from "../content/balance";
@@ -45,7 +46,9 @@ export function GameHUD({
     <div className="scene-identity">
       <h1>{p.name}</h1>
       <span className="home-label">
-        {s.zones[p.home].name} · {p.status}
+        {s.zones[p.home].name}
+        {copy("interface.gameHUD.text")}
+        {p.status}
       </span>
     </div>
   );
@@ -59,27 +62,39 @@ export function GameHUD({
       className={`hud-composition ${cinematic ? "cinematic-hud" : "compact-hud"}`}
     >
       <header className="game-header">
-        <strong className="day">DAY {s.day.toString().padStart(2, "0")}</strong>
+        <strong className="day">
+          {copy("interface.gameHUD.day")}
+          {s.day.toString().padStart(2, "0")}
+        </strong>
         <div className="hud-wordmark">
-          HOOD HERO<span>STIXX CITY</span>
+          {copy("interface.gameHUD.hoodHERO")}
+          <span>{copy("interface.gameHUD.stixxCITY")}</span>
         </div>
         <span className="ap">
           <Icon name="ap" />
           <span>
-            <small>AP</small>
+            <small>{copy("interface.gameHUD.ap")}</small>
             <b>
-              {s.ap}/{BALANCE.dailyAP}
+              {s.ap}
+              {copy("interface.gameHUD.text2")}
+              {BALANCE.dailyAP}
             </b>
           </span>
         </span>
         <div className="header-tools">
-          <button onClick={save} aria-label="Save game">
+          <button
+            onClick={save}
+            aria-label={copy("interface.gameHUD.saveGame")}
+          >
             <Icon name="save" />
-            <span>Save</span>
+            <span>{copy("interface.gameHUD.save")}</span>
           </button>
-          <button onClick={load} aria-label="Load game">
+          <button
+            onClick={load}
+            aria-label={copy("interface.gameHUD.loadGame")}
+          >
             <Icon name="load" />
-            <span>Load</span>
+            <span>{copy("interface.gameHUD.load")}</span>
           </button>
         </div>
       </header>
@@ -92,7 +107,8 @@ export function GameHUD({
           <div className="scene-rules" aria-hidden="true" />
           {identity}
           <span className="hero-index">
-            STIXX / 0{Object.keys(NEIGHBORHOODS).indexOf(selected) + 1}
+            {copy("interface.gameHUD.stixx0")}
+            {Object.keys(NEIGHBORHOODS).indexOf(selected) + 1}
           </span>
           <div className="hero-copy">
             <p className="scene-affiliation">
@@ -105,8 +121,8 @@ export function GameHUD({
                 : s.zones[selected].name}
             </h2>
             <p className="hero-location">
-              {selected === p.home ? "YOUR HOME" : "NEIGHBORHOOD VIEW"} /{" "}
-              {s.zones[selected].name}
+              {selected === p.home ? "YOUR HOME" : "NEIGHBORHOOD VIEW"}
+              {copy("interface.gameHUD.text3")} {s.zones[selected].name}
             </p>
             <p className="hero-flavor">{NEIGHBORHOODS[selected].flavor}</p>
           </div>
@@ -117,15 +133,26 @@ export function GameHUD({
           {affiliation}
         </div>
       )}
-      <div className="resource-strip" aria-label="Player resources">
+      <div
+        className="resource-strip"
+        aria-label={copy("interface.gameHUD.playerResources")}
+      >
         <Stat
-          label="Cash"
+          label={copy("interface.gameHUD.cash")}
           value={money(cash(p))}
           icon="cash"
           className="cash-resource"
         />
-        <Stat label="Influence" value={Math.floor(p.influence)} icon="People" />
-        <Stat label="Stress" value={Math.round(p.stress)} icon="pulse" />
+        <Stat
+          label={copy("interface.gameHUD.influence")}
+          value={Math.floor(p.influence)}
+          icon="People"
+        />
+        <Stat
+          label={copy("interface.gameHUD.stress")}
+          value={Math.round(p.stress)}
+          icon="pulse"
+        />
         <Stat
           label={`Heat · ${heatDescription(p.police)}`}
           value={Math.round(p.police)}

@@ -1,0 +1,38 @@
+{
+  "reminder": {
+    "overdue": "It's late. I need you to start making this right.",
+    "onTime": "We said the end of day {deadline}.",
+    "dialogue": "You still have ${amount} with me. {terms} Losing the goods doesn't settle that. Bring what you can; I'll count every dollar."
+  },
+  "opening": {
+    "mega": "Cuzzo, I'll put my name behind one small lot. Don't make me chase you.",
+    "pablo": "You give your word, you keep it. I remember who does.",
+    "other": "Small lot. Clear terms. We see how this goes before there's any more.",
+    "dialogue": "{tone} {quantity} night goods: $90 cash now, or $102 on consignment by the end of day {deadline}. Expected gross here is ${gross} if it all sells. {risk}"
+  },
+  "terms": {
+    "expanded": "That's gross, before supplier cost, losses and a partner's share. No guaranteed buyers. Police scrutiny, competition and repeated activity can interrupt trade; you still owe me if goods disappear.",
+    "brief": "Buyers aren't promised. Police and local organizations are watching."
+  },
+  "choices": {
+    "fullPayment": "Repay full balance · ${amount}",
+    "partialPayment": "Make partial payment · ${amount}",
+    "affordablePayment": "Pay what you can · ${amount}",
+    "returnLater": "I'll come back.",
+    "cashPurchase": "Accept cash purchase · $90 · 1 AP",
+    "consignment": "Accept consignment · $102 due day {deadline} · 1 AP",
+    "explainTerms": "Explain the terms and risk.",
+    "decline": "Decline. No arrangement.",
+    "acknowledge": "I hear you. Return to City."
+  },
+  "details": {
+    "fullPayment": "0 AP · actual cash transferred",
+    "partialPayment": "0 AP · reduces remaining debt",
+    "affordablePayment": "0 AP · leaves no cash cushion",
+    "cashPurchase": "6 units · ownership transfers; no supplier debt",
+    "consignment": "6 units · personal repayment obligation, including losses"
+  },
+  "reaction": {
+    "fallback": "Your supplier remembers the arrangement."
+  }
+}

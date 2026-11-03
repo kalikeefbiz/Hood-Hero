@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import type { GameState } from "../core/GameState";
 import {
   currentEmployment,
@@ -18,21 +19,31 @@ export function EmploymentSummary({ s }: { s: GameState }) {
     }
   }
   return (
-    <section className="panel employment-summary" aria-label="Employment">
-      <p className="eyebrow">EMPLOYMENT / LAWFUL INCOME</p>
+    <section
+      className="panel employment-summary"
+      aria-label={copy("interface.employmentSummary.employment")}
+    >
+      <p className="eyebrow">
+        {copy("interface.employmentSummary.employmentLAWFULINCOME")}
+      </p>
       <h3>{e ? jobDefinition(e.jobId).name : "Unemployed"}</h3>
       {e ? (
         <>
           <p>
-            {s.zones[e.location].name} · Hiring contact:{" "}
+            {s.zones[e.location].name}
+            {copy("interface.employmentSummary.hiringContact")}{" "}
             {s.characters[e.employer].name}
           </p>
           <p>
-            <strong>{money(e.wage)} / shift · 2 AP</strong> ·{" "}
+            <strong>
+              {money(e.wage)}
+              {copy("interface.employmentSummary.shift2AP")}
+            </strong>
+            {copy("interface.employmentSummary.text")}{" "}
             {e.workdays.map((d) => WEEKDAYS[d]).join(" / ")}
           </p>
           <p>
-            Next shifts:{" "}
+            {copy("interface.employmentSummary.nextShifts")}{" "}
             {upcoming
               .map(
                 (d) =>
@@ -41,14 +52,19 @@ export function EmploymentSummary({ s }: { s: GameState }) {
               .join(" · ")}
           </p>
           <p>
-            Reliability {e.reliability}/100 · Performance {e.performance} ·
-            Formal warnings {e.warnings} · Employer trust{" "}
+            {copy("interface.employmentSummary.reliability")}
+            {e.reliability}
+            {copy("interface.employmentSummary.100Performance")}
+            {e.performance}
+            {copy("interface.employmentSummary.formalWarnings")}
+            {e.warnings}
+            {copy("interface.employmentSummary.employerTrust")}{" "}
             {s.characters[e.employer].relationships[s.playerId]?.trust ?? 0}
           </p>
           <p className="muted">
-            Three absences in the last five scheduled shifts end the job. One
-            unpaid leave per seven days. Six reliable shifts can earn an $8
-            raise.
+            {copy(
+              "interface.employmentSummary.threeAbsencesInTheLastFiveScheduled",
+            )}
           </p>
         </>
       ) : (
@@ -59,16 +75,20 @@ export function EmploymentSummary({ s }: { s: GameState }) {
         </p>
       )}
       <p>
-        Earned lawful income:{" "}
-        <strong>{money(s.progression.cleanEarned)}</strong> · Living costs: $18
-        / day
+        {copy("interface.employmentSummary.earnedLawfulIncome")}{" "}
+        <strong>{money(s.progression.cleanEarned)}</strong>
+        {copy("interface.employmentSummary.livingCosts18Day")}
       </p>
       {s.employment
         .filter((x) => x.actor === s.playerId && x.status !== "employed")
         .slice(-2)
         .map((x) => (
           <p key={x.id}>
-            {jobDefinition(x.jobId).name} · {x.status} on day {x.endedDay}
+            {jobDefinition(x.jobId).name}
+            {copy("interface.employmentSummary.text2")}
+            {x.status}
+            {copy("interface.employmentSummary.onDay")}
+            {x.endedDay}
           </p>
         ))}
     </section>

@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { useId } from "react";
 import type { GameState, ZoneId } from "../core/GameState";
 import { THEMES } from "./theme";
@@ -26,7 +27,7 @@ export function CityMap({
       className="city-map"
       viewBox="0 0 420 390"
       role="group"
-      aria-label="Five neighborhoods of Stixx City"
+      aria-label={copy("interface.cityMap.fiveNeighborhoodsOfStixxCity")}
     >
       <defs>
         <pattern
@@ -200,7 +201,7 @@ export function CityMap({
                 fontSize="9"
                 letterSpacing="1"
               >
-                CONTESTED
+                {copy("interface.cityMap.contested")}
               </text>
             )}
             {s.characters.player.home === id && (
@@ -215,10 +216,10 @@ export function CityMap({
         );
       })}
       <text x="16" y="367" fill="#94a699" fontSize="9" letterSpacing="2">
-        THE STIXX
+        {copy("interface.cityMap.theSTIXX")}
       </text>
       <text x="390" y="32" fill="#94a699" fontSize="10">
-        N ↑
+        {copy("interface.cityMap.n")}
       </text>
     </svg>
   );

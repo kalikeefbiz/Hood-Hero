@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
@@ -60,8 +61,12 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await capture("01-new-run-390", true);
   await audit();
-  await page.getByLabel("What do people call you?").fill("Morgan");
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Morgan");
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await dismissEncounter(page);
   await capture("02-city-390");
   await audit();
@@ -123,7 +128,9 @@ test("review captures and WCAG checks cover every M1 screen and faction palette"
       { key: SAVE_KEY, raw: serialize(result.state) },
     );
     await page.reload();
-    await page.getByRole("button", { name: "Resume saved game" }).click();
+    await page
+      .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+      .click();
     await dismissEncounter(page);
     await ready();
     await audit();

@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
@@ -17,8 +18,13 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
-  if (name === "Actions")
-    await page.getByRole("button", { name: "Honest", exact: true }).click();
+  if (name === copy("interface.navigation.actions"))
+    await page
+      .getByRole("button", {
+        name: copy("interface.navigation.honest"),
+        exact: true,
+      })
+      .click();
 }
 async function seed(page: Page, state: GameState) {
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
@@ -30,7 +36,9 @@ async function seed(page: Page, state: GameState) {
     { key: SAVE_KEY, raw: serialize(state) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
 }
 async function noOverflow(page: Page) {
@@ -71,8 +79,12 @@ test("all approved scenes load; every home starts independent and map selection 
   expect(await page.locator(".zone-choices img").count()).toBe(5);
   for (const z of Object.values(ZONES)) {
     await page.getByRole("radio", { name: new RegExp(z.name) }).check();
-    await page.getByLabel("What do people call you?").fill(`From ${z.name}`);
-    await page.getByRole("button", { name: "Enter Stixx City" }).click();
+    await page
+      .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+      .fill(`From ${z.name}`);
+    await page
+      .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+      .click();
     await dismissEncounter(page);
     await expect(page.locator(".game-shell")).toHaveAttribute(
       "data-theme",
@@ -99,8 +111,12 @@ test("all approved scenes load; every home starts independent and map selection 
         "independent",
       );
     }
-    await page.getByText("Game & save information", { exact: true }).click();
-    await page.getByRole("button", { name: "New game menu" }).click();
+    await page
+      .getByText(copy("interface.app.gameSaveInformation"), { exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: copy("interface.app.newGameMenu") })
+      .click();
   }
   expect(failures).toEqual([]);
 });
@@ -136,14 +152,20 @@ for (const faction of [
       "data-theme",
       "independent",
     );
-    await nav(page, "Actions");
+    await nav(page, copy("interface.navigation.actions"));
     await page
-      .getByRole("button", { name: "Connects", exact: true })
+      .getByRole("button", {
+        name: copy("interface.navigation.connects"),
+        exact: true,
+      })
       .filter({ hasNot: page.locator("svg") })
       .click();
     await page.getByRole("combobox").selectOption(sponsor.id);
     const card = page.locator(".action-card").filter({
-      has: page.getByRole("heading", { name: "Get put on", exact: true }),
+      has: page.getByRole("heading", {
+        name: copy("actions.buttons.affiliate"),
+        exact: true,
+      }),
     });
     await expect(card.getByRole("button")).toBeEnabled();
     await card.getByRole("button").click();
@@ -160,16 +182,25 @@ for (const faction of [
       state.factions[faction].name,
     );
     await expect(page.locator(".ap b")).toHaveText("1/2");
-    await page.getByRole("button", { name: "Save game", exact: true }).click();
+    await page
+      .getByRole("button", {
+        name: copy("interface.gameHUD.saveGame"),
+        exact: true,
+      })
+      .click();
     await page.reload();
-    await page.getByRole("button", { name: "Resume saved game" }).click();
+    await page
+      .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+      .click();
     await dismissEncounter(page);
     await expect(page.locator(".game-shell")).toHaveAttribute(
       "data-theme",
       faction,
     );
     await expect(page.locator(".ap b")).toHaveText("1/2");
-    await expect(page.locator(".home-label")).toContainText("Downtown");
+    await expect(page.locator(".home-label")).toContainText(
+      copy("neighborhoods.downtown.name"),
+    );
   });
 }
 
@@ -195,7 +226,7 @@ test("all destinations fit 320/375/390/430 and desktop, including long names and
       );
       expect(
         (await page
-          .getByText("Game & save information", { exact: true })
+          .getByText(copy("interface.app.gameSaveInformation"), { exact: true })
           .boundingBox())!.y + 44,
       ).toBeLessThanOrEqual((await dock.boundingBox())!.y);
     }
@@ -208,9 +239,12 @@ test("Actions update cash/AP, explain disabled prerequisites, and autosave", asy
   await page.setViewportSize({ width: 390, height: 844 });
   await seed(page, newGame("Morgan", "rio"));
   await expect(page.locator(".action-card")).toHaveCount(0);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   const card = page.locator(".action-card").filter({
-    has: page.getByRole("heading", { name: "Pick up a gig", exact: true }),
+    has: page.getByRole("heading", {
+      name: copy("actions.buttons.gig"),
+      exact: true,
+    }),
   });
   const button = card.getByRole("button");
   await button.scrollIntoViewIfNeeded();
@@ -260,22 +294,27 @@ test("directional trust, witnessed events, activity filters and day grouping pre
   });
   await seed(page, s);
   await expect(page.locator("main")).not.toContainText("PRIVATE NPC ONLY");
-  await nav(page, "People");
+  await nav(page, copy("interface.navigation.people"));
   await expect(
-    page.getByRole("meter", { name: "Their trust in you" }),
+    page.getByRole("meter", { name: copy("interface.app.theirTrustInYou") }),
   ).toHaveAttribute("aria-valuenow", "72");
   await expect(
-    page.getByRole("meter", { name: "Your trust in them" }),
+    page.getByRole("meter", { name: copy("interface.app.yourTrustInThem") }),
   ).toHaveAttribute("aria-valuenow", "23");
   await expect(page.locator("main")).not.toContainText("PRIVATE NPC ONLY");
-  await nav(page, "City");
+  await nav(page, copy("interface.navigation.city"));
   await expect(
     page.getByRole("heading", { name: "Day 01", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".timeline")).toContainText(
     "Observed city decision",
   );
-  await page.getByRole("button", { name: "Your circle", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: copy("interface.app.yourCircle"),
+      exact: true,
+    })
+    .click();
   await expect(page.locator(".timeline")).not.toContainText(
     "Observed city decision",
   );
@@ -290,13 +329,17 @@ test("negotiated demand comes from state; ended and damaged saves remain inspect
   s.incidents["the-chains"].demand = 105;
   s.incidents["the-chains"].negotiated = true;
   await seed(page, s);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await storyline(page);
   await expect(
-    page.getByRole("dialog", { name: "Character encounter" }),
+    page.getByRole("dialog", {
+      name: copy("interface.app.characterEncounter"),
+    }),
   ).toContainText("$105");
   await expect(
-    page.getByRole("button", { name: /Talk down the demand/ }),
+    page.getByRole("button", {
+      name: copy("storylines.the-chains.choices.negotiate"),
+    }),
   ).toHaveCount(0);
   s.end = "arrested";
   await seed(page, s);
@@ -305,7 +348,12 @@ test("negotiated demand comes from state; ended and damaged saves remain inspect
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "End day" })).toBeDisabled();
   await page.evaluate((key) => localStorage.setItem(key, "corrupt"), SAVE_KEY);
-  await page.getByRole("button", { name: "Load game", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: copy("interface.gameHUD.loadGame"),
+      exact: true,
+    })
+    .click();
   await expect(page.getByRole("status")).toContainText(
     "Save could not be read",
   );

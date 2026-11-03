@@ -1,3 +1,5 @@
+import { CREW_OFFER } from "../src/content/crewEncounters";
+import { copy } from "../src/content/copy";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { dismissEncounter } from "./helpers";
@@ -10,13 +12,22 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
-  if (name === "Actions")
-    await page.getByRole("button", { name: "Honest", exact: true }).click();
+  if (name === copy("interface.navigation.actions"))
+    await page
+      .getByRole("button", {
+        name: copy("interface.navigation.honest"),
+        exact: true,
+      })
+      .click();
 }
 async function start(page: Page) {
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
-  await page.getByLabel("What do people call you?").fill("Test(5)");
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Test(5)");
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await dismissEncounter(page);
 }
 async function day(page: Page) {
@@ -30,7 +41,7 @@ async function snap(page: Page, name: string) {
   });
 }
 async function interact(page: Page, name = "Flacco") {
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await page
     .getByRole("button", { name: `Interact with ${name}`, exact: true })
     .click();
@@ -51,17 +62,23 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
   page.on("pageerror", (e) => errors.push(e.message));
   await start(page);
   await interact(page);
-  const modal = page.getByRole("dialog", { name: "Character encounter" });
-  await expect(modal).toContainText("Flacco");
+  const modal = page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+  });
+  await expect(modal).toContainText(copy("interface.newRun.flacco"));
   await expect(modal).toContainText("Work: learning");
   await snap(page, "01-flacco-interaction");
   await modal
     .locator(".encounter-responses")
     .evaluate((e) => (e.scrollTop = e.scrollHeight));
   await snap(page, "02-cooperation-options");
-  await modal.getByRole("button", { name: /^Paid local work/ }).click();
+  await modal
+    .getByRole("button", {
+      name: copy("crew-dialogue.activities.paidLocalWork"),
+    })
+    .click();
   await expect(modal).toHaveCount(0);
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await expect(page.locator("main")).toContainText("active");
   await page
     .getByText(/Flacco · Paid local work · active/)
@@ -71,8 +88,12 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
   expect(accepted.ap).toBe(1);
   expect(accepted.characters.player.wallet.clean).toBe(113);
   await interact(page);
-  await modal.getByRole("button", { name: /^Spend time together/ }).click();
-  await nav(page, "Set");
+  await modal
+    .getByRole("button", {
+      name: copy("crew-dialogue.activities.spendTimeTogether"),
+    })
+    .click();
+  await nav(page, copy("interface.navigation.set"));
   await expect(page.locator("main")).toContainText("No new obligation");
   await page
     .getByText(/No new obligation/)
@@ -81,7 +102,7 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
   await snap(page, "04-refused-request");
   expect((await state(page)).ap).toBe(1);
   await day(page);
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await expect(page.locator("main")).toContainText("Paid local work:");
   await page.getByText(/Flacco · Paid local work:/).scrollIntoViewIfNeeded();
   await snap(page, "07-completed-assignment");
@@ -94,7 +115,7 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
     )
       break;
     if (!s.ap) await day(page);
-    await nav(page, "Set");
+    await nav(page, copy("interface.navigation.set"));
     await page
       .getByRole("button", {
         name: "Build relationship with Robin",
@@ -104,11 +125,11 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
     await card(page, "Spend time together");
   }
   if (!(await state(page)).ap) await day(page);
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await page
     .locator(".recruit-row")
     .filter({ has: page.getByText("Robin", { exact: true }) })
-    .getByRole("button", { name: "Invite", exact: true })
+    .getByRole("button", { name: copy("interface.app.invite"), exact: true })
     .click();
   await expect(page.locator("main")).toContainText("2/2 MEMBERS");
   await expect(
@@ -122,9 +143,13 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
   expect(s.characters["resident-south"].skills.work).toBeGreaterThan(
     s.characters.flacco.skills.work,
   );
-  await page.getByLabel("Save game", { exact: true }).click();
+  await page
+    .getByLabel(copy("interface.gameHUD.saveGame"), { exact: true })
+    .click();
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
   expect((await state(page)).assignments).toEqual(s.assignments);
   expect(errors).toEqual([]);
@@ -135,7 +160,9 @@ test("independent offer: inspect, accept, attend, decline and expire while the N
 }) => {
   test.setTimeout(120000);
   await start(page);
-  const modal = page.getByRole("dialog", { name: "Character encounter" });
+  const modal = page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+  });
   let accepted = false,
     completed = false,
     declined = false,
@@ -144,18 +171,31 @@ test("independent offer: inspect, accept, attend, decline and expire while the N
     let s = await state(page);
     const offer = s.crewOffers.find((o: any) => o.status === "pending");
     if (offer && (!accepted || !declined)) {
-      await nav(page, "Set");
+      await nav(page, copy("interface.navigation.set"));
       await page
-        .getByRole("button", { name: "Hear the offer", exact: true })
+        .getByRole("button", {
+          name: copy("interface.app.hearTheOffer"),
+          exact: true,
+        })
         .click();
       if (!accepted) {
-        await expect(modal).toContainText("You tryna come?");
+        await expect(modal).toContainText(
+          CREW_OFFER.dialogue(
+            s,
+            s.encounters.find((e: any) => e.crewOfferId === offer.id)!,
+          ),
+        );
         await snap(page, "05-npc-initiated-offer");
         await modal
-          .getByRole("button", { name: "Tell me more about it.", exact: false })
+          .getByRole("button", {
+            name: copy("crew-dialogue.tellMeMoreAboutIt"),
+            exact: false,
+          })
           .click();
-        await expect(modal).toContainText("No wages before we work");
-        await modal.getByRole("button", { name: /^I'm in/ }).click();
+        await expect(modal).toContainText(
+          copy("crew-dialogue.sameLocalGigAsUsualOncePer"),
+        );
+        await modal.locator('[data-response="accept-offer"]').click();
         accepted = true;
         expect(
           (await state(page)).assignments.some(
@@ -163,7 +203,11 @@ test("independent offer: inspect, accept, attend, decline and expire while the N
           ),
         ).toBe(true);
       } else {
-        await modal.getByRole("button", { name: /^Can't make it/ }).click();
+        await modal
+          .getByRole("button", {
+            name: copy("crew-dialogue.canTMakeItYouGoAhead"),
+          })
+          .click();
         declined = true;
       }
     }
@@ -173,9 +217,7 @@ test("independent offer: inspect, accept, attend, decline and expire while the N
     );
     if (a) {
       await interact(page);
-      await modal
-        .getByRole("button", { name: /^Join scheduled activity/ })
-        .click();
+      await modal.locator('[data-response^="attend-"]').click();
       completed = true;
     }
     s = await state(page);
@@ -209,9 +251,12 @@ for (const width of [320, 375, 390, 430])
     expect(bounds!.x).toBeGreaterThanOrEqual(0);
     expect(bounds!.width).toBeLessThanOrEqual(width);
     await page
-      .getByRole("button", { name: "Close conversation", exact: true })
+      .getByRole("button", {
+        name: copy("interface.encounterScene.closeConversation"),
+        exact: true,
+      })
       .click();
-    await nav(page, "Set");
+    await nav(page, copy("interface.navigation.set"));
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,

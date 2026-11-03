@@ -1,3 +1,4 @@
+import { copy } from "./copy";
 import type { EncounterDefinition, EncounterResponse } from "../core/Encounter";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import {
@@ -25,7 +26,14 @@ export const CREW_CONVERSATION: EncounterDefinition = {
   expression: () => "strategizing",
   dialogue: (s, e) => {
     const c = member(s, e);
-    return `${availability(s, c) ?? "I've got some time. What did you have in mind?"} ${c.relationships[s.playerId]?.trust >= 55 ? "We've got history. Just remember I've got my own limits." : "Let's be straight about what we're asking of each other."}`;
+    return copy("crew-dialogue.availabilityDetails", {
+      availability:
+        availability(s, c) ?? copy("crew-dialogue.iVeGotSomeTimeWhatDid"),
+      details:
+        c.relationships[s.playerId]?.trust >= 55
+          ? copy("crew-dialogue.weVeGotHistoryJustRememberI")
+          : copy("crew-dialogue.letSBeStraightAboutWhatWe"),
+    });
   },
   responses: (s, e) => {
     const c = member(s, e);
@@ -35,7 +43,9 @@ export const CREW_CONVERSATION: EncounterDefinition = {
     ))
       rows.push({
         id: `attend-${a.id}`,
-        label: `Join scheduled activity · day ${a.dueDay} · 1 AP`,
+        label: copy("crew-dialogue.joinScheduledActivityDayDeadline1AP", {
+          deadline: a.dueDay,
+        }),
         effect: { type: "crew", choice: "attend", assignmentId: a.id },
         requirement: () => attendError(s, a.id),
       });
@@ -50,25 +60,41 @@ export const CREW_CONVERSATION: EncounterDefinition = {
       const chance = Math.round(assignmentChance(s, c, activity) * 100);
       const detail =
         activity === "work"
-          ? `$12 reserved compensation · possible $${24 + Math.floor(c.skills.work / 6)} tomorrow · ${chance}% reliability`
+          ? copy(
+              "crew-dialogue.12ReservedCompensationPossibleAmountTomorrowChance",
+              { amount: 24 + Math.floor(c.skills.work / 6), chance: chance },
+            )
           : activity === "partner-gig"
-            ? "same daily gig limit · both earn; skills affect pay"
+            ? copy("crew-dialogue.sameDailyGigLimitBothEarnSkills")
             : activity === "partner-crime"
-              ? "requires held merchandise · 15% of actual gross to partner · both face exposure and loss"
+              ? copy("crew-dialogue.requiresHeldMerchandise15OfActualGross")
               : activity === "social"
-                ? "trust, affection and stress relief"
-                : `only their contacts and knowledge · ${chance}% chance of useful information`;
+                ? copy("crew-dialogue.trustAffectionAndStressRelief")
+                : copy(
+                    "crew-dialogue.onlyTheirContactsAndKnowledgeChanceChance",
+                    { chance: chance },
+                  );
       rows.push({
         id: activity,
         label: activityName[activity],
-        detail: `1 AP if accepted · ${detail}${!decision.accepted ? ` · ${decision.negotiate ? "Negotiate" : "Likely refusal"}: ${decision.reason}` : ""}`,
+        detail: copy("crew-dialogue.1APIfAcceptedDetailsReason", {
+          details: detail,
+          reason: !decision.accepted
+            ? copy("crew-dialogue.contextReason", {
+                decision: decision.negotiate
+                  ? copy("crew-dialogue.negotiate")
+                  : copy("crew-dialogue.likelyRefusal"),
+                reason: decision.reason,
+              })
+            : "",
+        }),
         effect: { type: "crew", choice: "request", activity },
         requirement: () => requestError(s, c.id, activity),
       });
       if (activity === "work" && decision.negotiate)
         rows.push({
           id: "work-negotiated",
-          label: "Agree to $18 compensation · 1 AP if accepted",
+          label: copy("crew-dialogue.agreeTo18Compensation1APIf"),
           effect: {
             type: "crew",
             choice: "request",
@@ -80,7 +106,7 @@ export const CREW_CONVERSATION: EncounterDefinition = {
     }
     rows.push({
       id: "leave",
-      label: "Catch you later. Return to City.",
+      label: copy("crew-dialogue.catchYouLaterReturnToCity"),
       effect: { type: "crew", choice: "leave" },
     });
     return rows;
@@ -114,19 +140,43 @@ export const CREW_OFFER: EncounterDefinition = {
       p = s.characters[s.playerId];
     const contact = p.known.includes(o.contact)
       ? s.characters[o.contact].name
-      : "somebody I know";
+      : copy("crew-dialogue.somebodyIKnow");
     const intro =
       o.activity === "partner-gig"
-        ? `Aye, ${contact} is looking for local help on day ${o.activityDay}. We could make a little bread. You tryna come?`
+        ? copy("crew-dialogue.ayeContactIsLookingForLocalHelp", {
+            contact: contact,
+            deadline: o.activityDay,
+          })
         : o.activity === "social"
-          ? `I've had a lot on my mind. Could use some time with a friend on day ${o.activityDay}. You free?`
-          : `I could introduce you to ${contact} on day ${o.activityDay}. Might be useful for both of us.`;
-    return `${intro} ${e.selectedResponses.some((r) => r.id === "details") ? `It takes 1 AP when we meet. ${o.activity === "partner-gig" ? "Same local gig as usual, once per day. You get $38 plus a small work-skill bonus; I get $16. No wages before we work." : "No cash payment. We both make time; I can only share what I know."} If you can't come, I'll keep on with my own day.` : `Let me know by day ${Math.min(o.expiresDay, o.activityDay)}.`} ${c.stress > 35 ? "I could really use the break." : "No pressure if you've got other plans."}`;
+          ? copy("crew-dialogue.iVeHadALotOnMy", { deadline: o.activityDay })
+          : copy("crew-dialogue.iCouldIntroduceYouToContactOn", {
+              contact: contact,
+              deadline: o.activityDay,
+            });
+    return copy("crew-dialogue.introDeadlineReaction", {
+      intro: intro,
+      details: e.selectedResponses.some((r) => r.id === "details")
+        ? copy("crew-dialogue.itTakes1APWhenWeMeet", {
+            terms:
+              o.activity === "partner-gig"
+                ? copy("crew-dialogue.sameLocalGigAsUsualOncePer")
+                : copy("crew-dialogue.noCashPaymentWeBothMakeTime"),
+          })
+        : copy("crew-dialogue.letMeKnowByDayDeadline", {
+            deadline: Math.min(o.expiresDay, o.activityDay),
+          }),
+      reaction:
+        c.stress > 35
+          ? copy("crew-dialogue.iCouldReallyUseTheBreak")
+          : copy("crew-dialogue.noPressureIfYouVeGotOther"),
+    });
   },
   responses: (s, e) => [
     {
       id: "accept-offer",
-      label: `I'm in. Schedule day ${offer(s, e)!.activityDay} · 1 AP on arrival`,
+      label: copy("crew-dialogue.iMInScheduleDayDeadline1", {
+        deadline: offer(s, e)!.activityDay,
+      }),
       effect: { type: "crew", choice: "accept" },
       requirement: () => offerError(s, offer(s, e)!.id),
     },
@@ -134,14 +184,14 @@ export const CREW_OFFER: EncounterDefinition = {
       ? [
           {
             id: "details",
-            label: "Tell me more about it.",
+            label: copy("crew-dialogue.tellMeMoreAboutIt"),
             effect: { type: "crew" as const, choice: "details" },
           },
         ]
       : []),
     {
       id: "decline-offer",
-      label: "Can't make it. You go ahead. No friendship penalty.",
+      label: copy("crew-dialogue.canTMakeItYouGoAhead"),
       effect: { type: "crew", choice: "decline" },
     },
   ],

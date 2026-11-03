@@ -1,0 +1,10 @@
+{
+  "playerSecuredRecognizedPowerThroughFactionWith": "{player} secured recognized power through {faction}, with {successor} ready to carry the position forward. The city's record of your rise remains.",
+  "playerChoseToLeaveTheStreetsBehind": "{player} chose to leave the streets behind. Proven lawful income and clean assets support an independent life; the record of how you got here remains.",
+  "playerSLifeEndedStixxCityKeeps": "{player}'s life ended. Stixx City keeps its memory.",
+  "aBackedNeighborhoodChallengeWeakenedFactionS": "A backed neighborhood challenge weakened {faction}'s economic position.",
+  "playerEarnedPlayer2AuthorityPermissionEstablishedLeadership": "{player} earned {stage} authority. {permission}. Established leadership retains its position.",
+  "organizationalAdvancement": "Organizational advancement",
+  "playerAcceptedSuccessionPlanningForYourPosition": "{character} accepted succession planning for your position within {faction}.",
+  "successorAppointed": "Successor appointed"
+}

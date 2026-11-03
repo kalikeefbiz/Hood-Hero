@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { applyInfluence } from "./Territory";
 import { saleLot, transactionChance } from "./StreetEconomy";
 import {
@@ -36,19 +37,23 @@ export const CREW_BALANCE = {
   growthCap: 85,
 };
 export const activityName: Record<CrewActivity, string> = {
-  work: "Paid local work",
-  information: "Ask for information",
-  social: "Spend time together",
-  "partner-gig": "Partner on a local gig",
-  "partner-crime": "Partner on street work",
+  work: copy("crew-dialogue.activities.paidLocalWork"),
+  information: copy("crew-dialogue.activities.askForInformation"),
+  social: copy("crew-dialogue.activities.spendTimeTogether"),
+  "partner-gig": copy("crew-dialogue.activities.partnerOnALocalGig"),
+  "partner-crime": copy("crew-dialogue.activities.partnerOnStreetWork"),
 };
 export function availability(
   s: GameState,
   c: Character,
   day = s.day,
 ): string | null {
-  if (c.status !== "active") return `I'm ${c.status}; I can't help right now.`;
-  if (c.availableDay > day) return `I'm committed until day ${c.availableDay}.`;
+  if (c.status !== "active")
+    return copy("crew-dialogue.availability.iM", { status: c.status });
+  if (c.availableDay > day)
+    return copy("crew-dialogue.availability.iMCommittedUntilDay", {
+      deadline: c.availableDay,
+    });
   const job = currentEmployment(s, c.id);
   if (
     job &&
@@ -56,7 +61,7 @@ export function availability(
     job.workdays.includes(weekday(day)) &&
     !job.timeOffDays.includes(day)
   )
-    return "I've got a scheduled shift. I won't double-book it.";
+    return copy("crew-dialogue.availability.iVeGotAScheduledShiftI");
   if (
     s.assignments.some(
       (a) =>
@@ -65,9 +70,9 @@ export function availability(
         a.dueDay >= day,
     )
   )
-    return "I've already given my word on another activity.";
+    return copy("crew-dialogue.availability.iVeAlreadyGivenMyWordOn");
   if (c.agency.lastAssignmentDay === day)
-    return "I've already done my part today. Ask me tomorrow.";
+    return copy("crew-dialogue.availability.iVeAlreadyDoneMyPartToday");
   return null;
 }
 export const knownCapabilities = (c: Character) =>

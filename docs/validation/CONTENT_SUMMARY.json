@@ -1,0 +1,25 @@
+{
+  "copyEntries": 626,
+  "vitest": 177,
+  "validatorTests": 2,
+  "rootBrowserDistinctScenarios": 138,
+  "pagesBrowserChecks": 108,
+  "jsonOnlyAuthorEditBrowserChecks": 10,
+  "publicReviewBrowserSmokes": 2,
+  "baselineCampaigns": 30,
+  "baselineDays": 900,
+  "baselineComparisons": 11187,
+  "baselineResponseBranches": 2384,
+  "renderedComponentComparisons": 35,
+  "finalButtonRenderedComparisons": 15,
+  "saveSchema": 8,
+  "gameStateOrSaveParserChanged": false,
+  "remainingFailures": 0,
+  "rootRuns": [
+    "CONTENT_BROWSER_ROOT_REVIEW.txt",
+    "CONTENT_WEBKIT_ROOT.txt",
+    "CONTENT_CHROMIUM_CORRECTED.txt"
+  ],
+  "pagesRun": "CONTENT_BROWSER_PAGES.txt",
+  "finalButtonBrowserChecks": 10
+}

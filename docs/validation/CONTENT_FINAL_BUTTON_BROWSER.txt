@@ -1,0 +1,29 @@
+[WebServer] (node:32459) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 2 workers
+
+(node:32478) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32477) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored blips membership keeps the shell neutral and survives checkpoint reload (2.6s)
+  ✓   2 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored angels membership keeps the shell neutral and survives checkpoint reload (2.5s)
+  ✓   3 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored muds membership keeps the shell neutral and survives checkpoint reload (2.0s)
+  ✓   4 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored backstreet membership keeps the shell neutral and survives checkpoint reload (2.1s)
+(node:32699) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   5 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored blocks membership keeps the shell neutral and survives checkpoint reload (2.1s)
+(node:32776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   6 [webkit-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored angels membership keeps the shell neutral and survives checkpoint reload (4.2s)
+  ✓   7 [webkit-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored blips membership keeps the shell neutral and survives checkpoint reload (4.4s)
+  ✓   8 [webkit-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored muds membership keeps the shell neutral and survives checkpoint reload (4.2s)
+  ✓   9 [webkit-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored backstreet membership keeps the shell neutral and survives checkpoint reload (4.4s)
+  ✓  10 [webkit-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored blocks membership keeps the shell neutral and survives checkpoint reload (3.4s)
+
+  10 passed (18.9s)

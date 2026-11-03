@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import {
   NeighborhoodStrategy,
   OrganizationPanel,
@@ -168,7 +169,7 @@ export function App() {
         !!(localStorage.getItem(SAVE_KEY) || localStorage.getItem(AUTO_KEY)),
       );
     } catch {
-      setNotice("Local storage is unavailable. This tab can still run a game.");
+      setNotice(copy("interface.notice.localStorageIsUnavailableThisTabCan"));
     }
   }, []);
   useEffect(() => {
@@ -188,7 +189,7 @@ export function App() {
     setSelected(home);
     setScreen("City");
     setHistoryEncounterId(null);
-    setNotice("You’re home. Find work, check on Cuzzo, or see who’s around.");
+    setNotice(copy("interface.notice.youReHomeFindWorkCheckOn"));
   }
   function load(resume = false) {
     setActionFeedback(null);
@@ -202,8 +203,8 @@ export function App() {
         setSelected(player(next).home);
         setScreen("City");
         setHistoryEncounterId(null);
-        setNotice(`Loaded day ${next.day}.`);
-      } else setNotice("No saved game yet.");
+        setNotice(copy("interface.notice.loadedDay", { day: next.day }));
+      } else setNotice(copy("interface.notice.noSavedGameYet"));
     } catch (e) {
       setNotice((e as Error).message);
     }
@@ -214,7 +215,7 @@ export function App() {
       try {
         saveGame(localStorage, s);
         setHasSave(true);
-        setNotice(`Saved day ${s.day}. Load restores this checkpoint.`);
+        setNotice(copy("interface.notice.savedDay", { day: s.day }));
       } catch (e) {
         setNotice((e as Error).message);
       }
@@ -389,23 +390,25 @@ export function App() {
       data-theme={p.affiliation ?? "independent"}
     >
       <a className="skip-link" href="#main-content">
-        Skip to game
+        {copy("interface.app.skipToGame")}
       </a>
       <aside className="desktop-brand">
-        <p className="eyebrow">BLACKHOUSE PRESENTS</p>
+        <p className="eyebrow">{copy("interface.app.blackhousePRESENTS")}</p>
         <h2>
-          HOOD
+          {copy("interface.app.hood")}
           <br />
-          HERO
+          {copy("interface.app.hero")}
         </h2>
-        <p className="city-label">STIXX CITY</p>
+        <p className="city-label">{copy("interface.app.stixxCITY")}</p>
         <div className="side-note">
-          A city with a memory.
-          <br />A life of your own.
+          {copy("interface.app.aCityWithAMemory")}
+          <br />
+          {copy("interface.app.aLifeOfYourOwn")}
         </div>
         <Scene zone={p.home} />
         <span className="sidebar-home">
-          YOUR ROOTS / {s.zones[p.home].name}
+          {copy("interface.app.yourROOTS")}
+          {s.zones[p.home].name}
         </span>
       </aside>
       <div className="game-body">
@@ -419,13 +422,16 @@ export function App() {
         <main className="main-content" id="main-content">
           {actionFeedback && (
             <div className="action-feedback" role="status" aria-live="polite">
-              <small>YOUR MOVE</small>
+              <small>{copy("interface.app.yourMOVE")}</small>
               <p>{actionFeedback}</p>
             </div>
           )}
           <div className="screen-heading">
             <div>
-              <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
+              <p className="eyebrow">
+                {copy("interface.app.stixxCITY2")}
+                {screen.toUpperCase()}
+              </p>
               <h2>
                 {screen === "City"
                   ? "Know your city."
@@ -451,19 +457,19 @@ export function App() {
                 setHistoryEncounterId(null);
                 window.scrollTo(0, 0);
                 setDayTransition(next.day);
-                setNotice(
-                  `Day ${next.day}: living costs processed, the city has moved, and AP is restored.`,
-                );
+                setNotice(copy("interface.notice.day", { day: next.day }));
               }}
               disabled={!!s.end}
             >
-              End day <span>→</span>
+              {copy("interface.app.endDay")}
+              <span>{copy("interface.app.text")}</span>
             </button>
           </div>
           {screen === "City" && dayTransition !== null && (
             <div className="day-transition" aria-hidden="true">
-              DAY {dayTransition.toString().padStart(2, "0")} · The city has
-              moved. Two AP restored.
+              {copy("interface.app.day")}
+              {dayTransition.toString().padStart(2, "0")}
+              {copy("interface.app.theCityHasMovedTwoAPRestored")}
             </div>
           )}
           {screen === "City" && !presented && (
@@ -480,7 +486,7 @@ export function App() {
           {presented && (
             <Modal
               key={presented.id + (historical ? ":history" : "")}
-              label="Character encounter"
+              label={copy("interface.app.characterEncounter")}
               onDismiss={() =>
                 historical
                   ? setHistoryEncounterId(null)
@@ -506,7 +512,7 @@ export function App() {
                 className="secondary"
                 onClick={() => showConversation(request.id)}
               >
-                Continue conversation with Cuzzo
+                {copy("interface.app.continueConversationWithCuzzo")}
               </button>
             </div>
           )}
@@ -545,22 +551,23 @@ export function App() {
                   ? s.events.find((e) => e.id === s.strategic.ending?.eventId)
                       ?.text
                   : ""}{" "}
-                Your history remains available to inspect. Start a new life from
-                the game menu below.
+                {copy(
+                  "interface.app.yourHistoryRemainsAvailableToInspectStart",
+                )}
               </p>
             </Panel>
           )}
           {p.status === "arrested" && (
             <Panel>
-              <h3>In custody</h3>
+              <h3>{copy("interface.app.inCustody")}</h3>
               <p>
-                Release day{" "}
+                {copy("interface.app.releaseDay")}{" "}
                 {s.street.custody.find(
                   (r) => r.character === p.id && r.status === "held",
                 )?.releaseDay ?? "not defined"}
-                . Street actions and ordinary work are unavailable. Each day
-                still resolves living costs, employment, supplier obligations,
-                crew and city activity.
+                {copy(
+                  "interface.app.streetActionsAndOrdinaryWorkAreUnavailable",
+                )}
               </p>
               <button
                 onClick={() => {
@@ -568,7 +575,7 @@ export function App() {
                   setScreen("City");
                 }}
               >
-                Serve remaining sentence
+                {copy("interface.app.serveRemainingSentence")}
               </button>
             </Panel>
           )}
@@ -576,8 +583,11 @@ export function App() {
           {screen === "City" && (
             <>
               {activeStory && (
-                <section className="storylines" aria-label="Storylines">
-                  <h3>Storylines</h3>
+                <section
+                  className="storylines"
+                  aria-label={copy("interface.app.storylines")}
+                >
+                  <h3>{copy("interface.app.storylines2")}</h3>
                   <button
                     className="dispatch story-alert"
                     aria-label={`Open ${activeStory.title} storyline`}
@@ -590,10 +600,14 @@ export function App() {
                       <Icon name="message" />
                     </span>
                     <span>
-                      <span className="eyebrow">WORD ON THE BLOCK</span>
+                      <span className="eyebrow">
+                        {copy("interface.app.wordONTHEBLOCK")}
+                      </span>
                       <strong>{activeStory.title}</strong>
                       <span className="story-status">
-                        Demand {money(activeStory.demand)} ·{" "}
+                        {copy("interface.app.demand")}
+                        {money(activeStory.demand)}
+                        {copy("interface.app.text2")}{" "}
                         {activeStory.leadershipAware
                           ? "Leadership is considering its response"
                           : "Awaiting your help"}
@@ -607,11 +621,16 @@ export function App() {
               <div className="city-layout">
                 <Panel className="map-panel">
                   <div className="panel-title">
-                    <h3>Stixx City</h3>
-                    <span className="map-key">● Your home</span>
+                    <h3>{copy("interface.app.stixxCity")}</h3>
+                    <span className="map-key">
+                      {copy("interface.app.yourHome")}
+                    </span>
                   </div>
                   <CityMap s={s} selected={selected} onSelect={setSelected} />
-                  <ul className="map-legend" aria-label="Faction colors">
+                  <ul
+                    className="map-legend"
+                    aria-label={copy("interface.app.factionColors")}
+                  >
                     {Object.values(s.factions).map((f) => (
                       <li key={f.id}>
                         <i
@@ -623,8 +642,7 @@ export function App() {
                     ))}
                   </ul>
                   <p className="caption">
-                    Select a neighborhood to read its politics. Split colors
-                    show shared presence; gray is unclaimed.
+                    {copy("interface.app.selectANeighborhoodToReadItsPolitics")}
                   </p>
                 </Panel>
                 <div className="zone-details">
@@ -639,7 +657,7 @@ export function App() {
                         : s.zones[selected].description}
                     </p>
                     <p className="control-label">
-                      Control:{" "}
+                      {copy("interface.app.control")}{" "}
                       {s.zones[selected].controller
                         ? s.factions[s.zones[selected].controller!].name
                         : "No single controller"}
@@ -661,11 +679,11 @@ export function App() {
                           </span>
                         ))
                       ) : (
-                        <span>Unclaimed</span>
+                        <span>{copy("interface.app.unclaimed")}</span>
                       )}
                     </div>
                     <Meter
-                      label="Police presence"
+                      label={copy("interface.app.policePresence")}
                       value={s.zones[selected].police}
                       description={band(s.zones[selected].police, [
                         "Minimal",
@@ -675,7 +693,7 @@ export function App() {
                       ])}
                     />
                     <Meter
-                      label="Your local standing"
+                      label={copy("interface.app.yourLocalStanding")}
                       value={p.neighborhoodStanding[selected]}
                       description={band(p.neighborhoodStanding[selected], [
                         "Unknown",
@@ -694,7 +712,7 @@ export function App() {
                         setScreen("People");
                       }}
                     >
-                      Meet local people →
+                      {copy("interface.app.meetLocalPeople")}
                     </button>
                   </Panel>
                 </div>
@@ -703,12 +721,14 @@ export function App() {
               <EmploymentSummary s={s} />
               <Panel>
                 <div className="panel-title">
-                  <h3>Your position</h3>
-                  <span className="eyebrow">SEPARATE REPUTATIONS</span>
+                  <h3>{copy("interface.app.yourPosition")}</h3>
+                  <span className="eyebrow">
+                    {copy("interface.app.separateREPUTATIONS")}
+                  </span>
                 </div>
                 <div className="meters">
                   <Meter
-                    label="Stress"
+                    label={copy("interface.app.stress")}
                     value={p.stress}
                     description={band(p.stress, [
                       "At ease",
@@ -718,7 +738,7 @@ export function App() {
                     ])}
                   />
                   <Meter
-                    label="Legitimacy"
+                    label={copy("interface.app.legitimacy")}
                     value={p.legitimacy}
                     description={band(p.legitimacy, [
                       "Unestablished",
@@ -728,7 +748,7 @@ export function App() {
                     ])}
                   />
                   <Meter
-                    label="Notoriety"
+                    label={copy("interface.app.notoriety")}
                     value={p.notoriety}
                     description={band(p.notoriety, [
                       "Under the radar",
@@ -738,7 +758,7 @@ export function App() {
                     ])}
                   />
                   <Meter
-                    label="Police attention"
+                    label={copy("interface.app.policeAttention")}
                     value={p.police}
                     description={band(p.police, [
                       "Quiet",
@@ -748,7 +768,7 @@ export function App() {
                     ])}
                   />
                   <Meter
-                    label="Personal influence"
+                    label={copy("interface.app.personalInfluence")}
                     value={p.influence}
                     description={band(p.influence, [
                       "Small circle",
@@ -758,7 +778,7 @@ export function App() {
                     ])}
                   />
                   <Meter
-                    label="Rival pressure"
+                    label={copy("interface.app.rivalPressure")}
                     value={p.rivalThreat}
                     description={band(p.rivalThreat, [
                       "No active threat",
@@ -791,10 +811,11 @@ export function App() {
                             {c.affiliation
                               ? s.factions[c.affiliation].name
                               : "Civilian"}{" "}
-                            · {c.status}
+                            {copy("interface.app.text3")}
+                            {c.status}
                           </small>
                         </span>
-                        <span>›</span>
+                        <span>{copy("interface.app.text4")}</span>
                       </button>
                     );
                   })}
@@ -808,7 +829,12 @@ export function App() {
                 <p className="eyebrow">{s.zones[person.home].name}</p>
                 <h3>
                   {person.name}
-                  {person.alias && <small> / {person.alias}</small>}
+                  {person.alias && (
+                    <small>
+                      {copy("interface.app.text5")}
+                      {person.alias}
+                    </small>
+                  )}
                 </h3>
                 <p>{person.description}</p>
                 {p.connections.includes(person.id) && (
@@ -819,7 +845,8 @@ export function App() {
                     className="secondary"
                     onClick={() => interact(person.id)}
                   >
-                    Interact with {person.name}
+                    {copy("interface.app.interactWith")}
+                    {person.name}
                   </button>
                 )}
                 <p className="muted">
@@ -832,7 +859,7 @@ export function App() {
                 {p.connections.includes(person.id) && (
                   <>
                     <Meter
-                      label="Their trust in you"
+                      label={copy("interface.app.theirTrustInYou")}
                       value={person.relationships[p.id]?.trust ?? 0}
                       description={band(
                         person.relationships[p.id]?.trust ?? 0,
@@ -840,7 +867,7 @@ export function App() {
                       )}
                     />
                     <Meter
-                      label="Your trust in them"
+                      label={copy("interface.app.yourTrustInThem")}
                       value={p.relationships[person.id]?.trust ?? 0}
                       description={band(
                         p.relationships[person.id]?.trust ?? 0,
@@ -848,8 +875,11 @@ export function App() {
                       )}
                     />
                     <p className="muted">
-                      Work {person.skills.work} · Social {person.skills.social}{" "}
-                      · Recovery {person.skills.recovery}
+                      {copy("interface.app.work")}
+                      {person.skills.work}
+                      {copy("interface.app.social")}
+                      {person.skills.social} {copy("interface.app.recovery")}
+                      {person.skills.recovery}
                     </p>
                   </>
                 )}
@@ -858,32 +888,40 @@ export function App() {
                   disabled={!!contactError(s, p.id, person.id)}
                   onClick={() => openPerson(person.id)}
                 >
-                  Interact with {person.alias ?? person.name} →
+                  {copy("interface.app.interactWith2")}
+                  {person.alias ?? person.name}
+                  {copy("interface.app.text6")}
                 </button>
-                <h4>Your shared history</h4>
+                <h4>{copy("interface.app.yourSharedHistory")}</h4>
                 {p.memories
                   .filter((m) => m.about === person.id)
                   .slice(-4)
                   .reverse()
                   .map((m, i) => (
                     <p className="memory" key={i}>
-                      <small>DAY {m.day}</small>
+                      <small>
+                        {copy("interface.app.day2")}
+                        {m.day}
+                      </small>
                       {m.meaning}
                     </p>
                   ))}
                 {!p.memories.some((m) => m.about === person.id) && (
                   <p className="muted">
-                    You have not shared a significant event yet.
+                    {copy("interface.app.youHaveNotSharedASignificantEvent")}
                   </p>
                 )}
-                <h4>Events you witnessed</h4>
+                <h4>{copy("interface.app.eventsYouWitnessed")}</h4>
                 {visibleEvents(s)
                   .filter((e) => e.actors.includes(person.id))
                   .slice(-4)
                   .reverse()
                   .map((e) => (
                     <p className="memory" key={e.id}>
-                      <small>DAY {e.day}</small>
+                      <small>
+                        {copy("interface.app.day3")}
+                        {e.day}
+                      </small>
                       {e.text}
                     </p>
                   ))}
@@ -909,19 +947,21 @@ export function App() {
               <OrganizationPanel s={s} onChange={setState} />
               <Panel>
                 <div className="panel-title">
-                  <h3>A personal crew.</h3>
+                  <h3>{copy("interface.app.aPersonalCrew")}</h3>
                   <span className="status-chip">
-                    {s.crew.members.length}/{s.crew.capacity} MEMBERS
+                    {s.crew.members.length}
+                    {copy("interface.app.text7")}
+                    {s.crew.capacity}
+                    {copy("interface.app.members")}
                   </span>
                 </div>
-                <p>
-                  Your Set is a circle of up to five trusted people, distinct
-                  from the city’s five organizations. Influence expands capacity
-                  at 5, 15, 30 and 50.
-                </p>
+                <p>{copy("interface.app.yourSetIsACircleOfUp")}</p>
                 <p className="muted">
-                  Current influence: {Math.floor(p.influence)}. Members keep
-                  their own affiliations, resources and memories.
+                  {copy("interface.app.currentInfluence")}
+                  {Math.floor(p.influence)}
+                  {copy(
+                    "interface.app.membersKeepTheirOwnAffiliationsResourcesAnd",
+                  )}
                 </p>
               </Panel>
               <div className="action-grid">
@@ -939,13 +979,14 @@ export function App() {
                               : c.availableDay > s.day
                                 ? "Committed"
                                 : "Available"}{" "}
-                            · Work {c.skills.work}
+                            {copy("interface.app.work2")}
+                            {c.skills.work}
                           </small>
                         </div>
                       </div>
                       <p>{c.description}</p>
                       <Meter
-                        label="Their trust in you"
+                        label={copy("interface.app.theirTrustInYou2")}
                         value={c.relationships[p.id]?.trust ?? 0}
                         description={`${Math.round(c.relationships[p.id]?.trust ?? 0)} / 100`}
                       />
@@ -958,7 +999,8 @@ export function App() {
                         disabled={!!s.end}
                         onClick={() => interact(id)}
                       >
-                        Interact with {c.name}
+                        {copy("interface.app.interactWith3")}
+                        {c.name}
                       </button>
                       {(["remove"] as ActionType[]).map((type) => {
                         const a: Action = { type, actor: p.id, target: id },
@@ -970,7 +1012,8 @@ export function App() {
                             disabled={!!reason}
                             onClick={() => act(a)}
                           >
-                            {ACTIONS[type].label} · 1 AP
+                            {ACTIONS[type].label}
+                            {copy("interface.app.1AP")}
                             {reason ? ` · ${reason}` : ""}
                           </button>
                         );
@@ -980,13 +1023,13 @@ export function App() {
                 })}
               </div>
               <Panel>
-                <h3>Plans & opportunities</h3>
+                <h3>{copy("interface.app.plansOpportunities")}</h3>
                 {s.crewOffers
                   .filter((o) => o.status === "pending")
                   .map((o) => (
                     <p key={o.id}>
-                      {s.characters[o.member].name} · invitation for day{" "}
-                      {o.activityDay}{" "}
+                      {s.characters[o.member].name}
+                      {copy("interface.app.invitationForDay")} {o.activityDay}{" "}
                       <button
                         className="secondary"
                         onClick={() => {
@@ -996,7 +1039,7 @@ export function App() {
                           if (e) showConversation(e.id);
                         }}
                       >
-                        Hear the offer
+                        {copy("interface.app.hearTheOffer")}
                       </button>
                     </p>
                   ))}
@@ -1004,14 +1047,18 @@ export function App() {
                   .filter((a) => ["accepted", "active"].includes(a.status))
                   .map((a) => (
                     <p key={a.id}>
-                      {s.characters[a.member].name} · {a.objective} · {a.status}{" "}
-                      · day {a.dueDay}
+                      {s.characters[a.member].name}
+                      {copy("interface.app.text8")}
+                      {a.objective}
+                      {copy("interface.app.text9")}
+                      {a.status} {copy("interface.app.day4")}
+                      {a.dueDay}
                       {a.status === "accepted" && (
                         <button
                           className="secondary"
                           onClick={() => interact(a.member)}
                         >
-                          Meet for scheduled activity
+                          {copy("interface.app.meetForScheduledActivity")}
                         </button>
                       )}
                     </p>
@@ -1027,15 +1074,15 @@ export function App() {
                   ))}
                 {!s.assignments.length && !s.crewOffers.length && (
                   <p className="muted">
-                    No plans yet. Talk with a member; they also bring ideas when
-                    their own lives allow.
+                    {copy("interface.app.noPlansYetTalkWithAMember")}
                   </p>
                 )}
               </Panel>
-              <h3>People you could ask</h3>
+              <h3>{copy("interface.app.peopleYouCouldAsk")}</h3>
               <p className="muted">
-                Available people need 42 trust, compatible loyalties, and an
-                open place.
+                {copy(
+                  "interface.app.availablePeopleNeed42TrustCompatibleLoyalties",
+                )}
               </p>
               <div className="recruit-list">
                 {p.known
@@ -1055,8 +1102,9 @@ export function App() {
                         <span className="recruit-info">
                           <strong>{c.name}</strong>
                           <small>
-                            Trust{" "}
-                            {Math.round(c.relationships[p.id]?.trust ?? 0)} ·{" "}
+                            {copy("interface.app.trust")}{" "}
+                            {Math.round(c.relationships[p.id]?.trust ?? 0)}
+                            {copy("interface.app.text10")}{" "}
                             {c.affiliation
                               ? s.factions[c.affiliation].name
                               : "Civilian"}
@@ -1071,7 +1119,7 @@ export function App() {
                           title={reason ?? "Recruit for 1 AP"}
                           onClick={() => act(a)}
                         >
-                          Invite
+                          {copy("interface.app.invite")}
                         </button>
                         <button
                           className="icon-button"
@@ -1085,21 +1133,22 @@ export function App() {
                   })}
               </div>
               <CommitmentSummary s={s} />
-              <h3>Set errands</h3>
+              <h3>{copy("interface.app.setErrands")}</h3>
               {s.commitments
                 .filter((c) => c.kind === "errand")
                 .slice(-5)
                 .reverse()
                 .map((o) => (
                   <p className="memory" key={o.id}>
-                    {s.characters[o.actor].name} · Local errand · Due day{" "}
-                    {o.dueDay} · {o.status}
+                    {s.characters[o.actor].name}
+                    {copy("interface.app.localErrandDueDay")} {o.dueDay}
+                    {copy("interface.app.text11")}
+                    {o.status}
                   </p>
                 ))}
               {!s.commitments.length && (
                 <p className="muted">
-                  Assign a member to a paid errand. Their availability is
-                  reserved until it is processed.
+                  {copy("interface.app.assignAMemberToAPaidErrand")}
                 </p>
               )}
             </>
@@ -1107,27 +1156,29 @@ export function App() {
           {screen === "Finances" && (
             <>
               <Panel>
-                <p className="eyebrow">CASH ON HAND</p>
+                <p className="eyebrow">{copy("interface.app.cashONHAND")}</p>
                 <h3 className="cash-total">{money(cash(p))}</h3>
                 <div className="finance-split">
                   <span>
-                    <small>CLEAN</small>
+                    <small>{copy("interface.app.clean")}</small>
                     <strong>{money(p.wallet.clean)}</strong>
                   </span>
                   <span>
-                    <small>ILLICIT</small>
+                    <small>{copy("interface.app.illicit")}</small>
                     <strong>{money(p.wallet.illicit)}</strong>
                   </span>
                   <span>
-                    <small>DAILY LIVING</small>
+                    <small>{copy("interface.app.dailyLIVING")}</small>
                     <strong>{money(BALANCE.livingCost)}</strong>
                   </span>
                 </div>
-                <p>Living expenses are charged as you advance each day.</p>
+                <p>
+                  {copy("interface.app.livingExpensesAreChargedAsYouAdvance")}
+                </p>
                 <p className="muted">
-                  Clean and illicit funds keep separate provenance. Purchases
-                  use clean money first. Running short increases stress; it
-                  never locks you out of work.
+                  {copy(
+                    "interface.app.cleanAndIllicitFundsKeepSeparateProvenance",
+                  )}
                 </p>
               </Panel>
               <InventoryWallet
@@ -1139,12 +1190,12 @@ export function App() {
               />
               <BusinessPanel s={s} onChange={setState} />
               <RetirementPanel s={s} onChange={setState} />
-              <h3>Personal purchases</h3>
+              <h3>{copy("interface.app.personalPurchases")}</h3>
               <div className="action-grid">
                 {all.filter((a) => a.type === "buy").map(actionCard)}
               </div>
               <Panel>
-                <h3>Money trail</h3>
+                <h3>{copy("interface.app.moneyTrail")}</h3>
                 {s.ledger
                   .slice(-20)
                   .reverse()
@@ -1153,7 +1204,10 @@ export function App() {
                       <span>
                         <strong>{entry.reason}</strong>
                         <small>
-                          DAY {entry.day} · {entry.provenance.toUpperCase()}
+                          {copy("interface.app.day5")}
+                          {entry.day}
+                          {copy("interface.app.text12")}
+                          {entry.provenance.toUpperCase()}
                         </small>
                       </span>
                       <b className={entry.amount > 0 ? "positive" : ""}>
@@ -1164,8 +1218,7 @@ export function App() {
                   ))}
                 {!s.ledger.length && (
                   <p className="muted">
-                    Your first $125 is clean starting cash. Future transactions
-                    appear here.
+                    {copy("interface.app.yourFirst125IsCleanStartingCash")}
                   </p>
                 )}
               </Panel>
@@ -1173,10 +1226,10 @@ export function App() {
           )}
           {screen === "City" && (
             <section id="city-activity" aria-labelledby="city-activity-title">
-              <h3 id="city-activity-title">Activity</h3>
+              <h3 id="city-activity-title">{copy("interface.app.activity")}</h3>
               <Panel className="city-news">
                 <div className="panel-title">
-                  <h3>Word on the block</h3>
+                  <h3>{copy("interface.app.wordOnTheBlock")}</h3>
                 </div>
                 {visibleEvents(s)
                   .filter(
@@ -1189,14 +1242,17 @@ export function App() {
                   .map((e) => (
                     <div className="news-item" key={e.id}>
                       <small>
-                        DAY {e.day} / {e.category.toUpperCase()}
+                        {copy("interface.app.day6")}
+                        {e.day}
+                        {copy("interface.app.text13")}
+                        {e.category.toUpperCase()}
                       </small>
                       <p>{e.text}</p>
                     </div>
                   ))}
               </Panel>
               <details className="panel situation-history">
-                <summary>Completed storylines</summary>
+                <summary>{copy("interface.app.completedStorylines")}</summary>
                 {Object.values(s.incidents)
                   .filter((i) => i.status !== "active")
                   .map((i) => (
@@ -1221,7 +1277,9 @@ export function App() {
                             : "Resolved without your involvement")}
                       </p>
                       <details>
-                        <summary>Incident record</summary>
+                        <summary>
+                          {copy("interface.app.incidentRecord")}
+                        </summary>
                         {visibleEvents(s)
                           .filter(
                             (e) =>
@@ -1231,7 +1289,12 @@ export function App() {
                           )
                           .map((e) => (
                             <p key={e.id}>
-                              <small>DAY {e.day}</small> · {e.text}
+                              <small>
+                                {copy("interface.app.day7")}
+                                {e.day}
+                              </small>
+                              {copy("interface.app.text14")}
+                              {e.text}
                             </p>
                           ))}
                       </details>
@@ -1240,7 +1303,9 @@ export function App() {
               </details>
               <details className="panel outcome-history">
                 <summary>
-                  Important outcomes · {unseenEvents(s).length} unseen
+                  {copy("interface.app.importantOutcomes")}
+                  {unseenEvents(s).length}
+                  {copy("interface.app.unseen")}
                 </summary>
                 {importantEvents(s)
                   .slice()
@@ -1249,14 +1314,17 @@ export function App() {
                     <article key={e.id}>
                       <h3>{e.title ?? "Important development"}</h3>
                       <p>
-                        DAY {e.day} · {e.text}
+                        {copy("interface.app.day8")}
+                        {e.day}
+                        {copy("interface.app.text15")}
+                        {e.text}
                       </p>
                       {s.encounters.some((x) => x.sourceEventId === e.id) && (
                         <button
                           className="text-button"
                           onClick={() => replayReaction(e.id)}
                         >
-                          Revisit{" "}
+                          {copy("interface.app.revisit")}{" "}
                           {(() => {
                             const id = s.encounters
                               .find((x) => x.sourceEventId === e.id)
@@ -1266,65 +1334,75 @@ export function App() {
                                   s.characters[id].name)
                               : "this person";
                           })()}
-                          ’s reaction
+                          {copy("interface.app.sReaction")}
                         </button>
                       )}
                     </article>
                   ))}
-                {!importantEvents(s).length && <p>No major outcomes yet.</p>}
+                {!importantEvents(s).length && (
+                  <p>{copy("interface.app.noMajorOutcomesYet")}</p>
+                )}
               </details>
               <div
                 className="segmented"
                 role="group"
-                aria-label="Activity filters"
+                aria-label={copy("interface.app.activityFilters")}
               >
                 <button
                   aria-pressed={activityFilter === "All"}
                   className={activityFilter === "All" ? "active" : ""}
                   onClick={() => setActivityFilter("All")}
                 >
-                  All activity
+                  {copy("interface.app.allActivity")}
                 </button>
                 <button
                   aria-pressed={activityFilter === "Personal"}
                   className={activityFilter === "Personal" ? "active" : ""}
                   onClick={() => setActivityFilter("Personal")}
                 >
-                  Your circle
+                  {copy("interface.app.yourCircle")}
                 </button>
               </div>
               <ActivityFeed s={s} personal={activityFilter === "Personal"} />
             </section>
           )}
           <details className="game-menu">
-            <summary>Game & save information</summary>
+            <summary>{copy("interface.app.gameSaveInformation")}</summary>
             <p>
-              Automatic progress saves after each move. Save creates a manual
-              checkpoint. Load restores that checkpoint, then falls back to
-              autosave. Resume opens your latest automatic progress, including
-              acknowledged outcomes. Saves stay in this browser on this device.
+              {copy("interface.app.automaticProgressSavesAfterEachMoveSave")}
             </p>
             <p>
-              Version 0.1 · Seed state {s.rng} · No maximum campaign length.
+              {copy("interface.app.version01SeedState")}
+              {s.rng}
+              {copy("interface.app.noMaximumCampaignLength")}
             </p>
             <button
               className="secondary"
               onClick={() => {
                 setState(null);
-                setNotice(
-                  "Choose a name and home for a new game, or resume your saved checkpoint.",
-                );
+                setNotice(copy("interface.notice.chooseANameAndHomeForA"));
               }}
             >
-              New game menu
+              {copy("interface.app.newGameMenu")}
             </button>
           </details>
         </main>
-        <nav className="bottom-nav" aria-label="Main navigation">
+        <nav
+          className="bottom-nav"
+          aria-label={copy("interface.app.mainNavigation")}
+        >
           {(Object.keys(nav) as Screen[]).map((item) => (
             <button
               key={item}
-              aria-label={item === "Finances" ? "Wallet" : item}
+              aria-label={
+                {
+                  City: copy("interface.navigation.city"),
+                  People: copy("interface.navigation.people"),
+                  Actions: copy("interface.navigation.actions"),
+                  Set: copy("interface.navigation.set"),
+                  Finances: copy("interface.navigation.wallet"),
+                }[item]
+              }
               className={screen === item ? "active" : ""}
               aria-current={screen === item ? "page" : undefined}
               onClick={() => {
@@ -1336,14 +1414,23 @@ export function App() {
             >
               <Icon name={nav[item]} />
               <small>
-                {item === "Finances" ? "Wallet" : item}
+                {
+                  {
+                    City: copy("interface.navigation.city"),
+                    People: copy("interface.navigation.people"),
+                    Actions: copy("interface.navigation.actions"),
+                    Set: copy("interface.navigation.set"),
+                    Finances: copy("interface.navigation.wallet"),
+                  }[item]
+                }
                 {item === "City" && unseenEvents(s).length > 0 && (
                   <span
                     className="unseen-badge"
                     aria-label={`${unseenEvents(s).length} important developments waiting`}
                   >
                     {" "}
-                    · {unseenEvents(s).length}
+                    {copy("interface.app.text16")}
+                    {unseenEvents(s).length}
                   </span>
                 )}
               </small>

@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { honest, connects } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
@@ -29,7 +30,9 @@ async function seed(page: Page, s: GameState) {
     { key: SAVE_KEY, raw: serialize(s) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
 }
 async function nav(page: Page, name: string) {
@@ -43,7 +46,10 @@ async function loaded(page: Page, id: keyof typeof scenes) {
   else if (id === "rest") {
     await page
       .getByRole("navigation")
-      .getByRole("button", { name: "Actions", exact: true })
+      .getByRole("button", {
+        name: copy("interface.navigation.actions"),
+        exact: true,
+      })
       .click();
   } else await connects(page, "mega");
   const card = page.locator(`.action-card[data-action="${id}"]`);
@@ -99,7 +105,7 @@ test("approved art maps to real actions and resolves under the production base",
   }).state;
   await seed(page, initial);
   await expect(page.locator(".action-card")).toHaveCount(0);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   for (const id of ["work", "rest"] as const) {
     const card = await loaded(page, id);
     await expect(card.locator(".ap-cost")).toHaveText(`${ACTIONS[id].ap} AP`);
@@ -111,7 +117,10 @@ test("approved art maps to real actions and resolves under the production base",
   }
   await expect(page.locator('[data-action="gig"] img')).toHaveCount(0);
   await page
-    .getByRole("button", { name: "Connects", exact: true })
+    .getByRole("button", {
+      name: copy("interface.navigation.connects"),
+      exact: true,
+    })
     .filter({ hasNot: page.locator("svg") })
     .click();
   await page.getByRole("combobox").selectOption("mega");
@@ -151,7 +160,7 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   await seed(page, employed);
   expect(requested).toEqual([]);
   const before = requested.length;
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await loaded(page, "work");
   expect(
     requested.slice(before).some((url) => /ask-around|build-local/.test(url)),
@@ -164,9 +173,11 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   await page.route("**/assets/actions/**", (route) => route.abort());
   // A new document discards the image cache as well as the UI's loaded state.
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await honest(page);
   const work = page.locator('[data-action="work"]');
   await work.scrollIntoViewIfNeeded();
@@ -240,13 +251,13 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
   }).state;
   await seed(page, initial);
   await capture("01-independent-city-390");
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   // Scroll each approved card into view so the full-page review includes loaded art.
   for (const id of ["work", "rest"] as const) await loaded(page, id);
   await capture("02-everyday-actions-390", true);
   await page.setViewportSize({ width: 320, height: 700 });
   await capture("04-everyday-actions-320", true);
-  await nav(page, "City");
+  await nav(page, copy("interface.navigation.city"));
   await capture("04-city-320");
   expect(
     await page.evaluate(
@@ -297,9 +308,12 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     "blips",
   );
   await capture("03-blips-city-390");
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await page
-    .getByRole("button", { name: "Connects", exact: true })
+    .getByRole("button", {
+      name: copy("interface.navigation.connects"),
+      exact: true,
+    })
     .filter({ hasNot: page.locator("svg") })
     .click();
   await page.getByRole("combobox").selectOption(sponsor.id);
@@ -311,7 +325,7 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     await session.send("Emulation.setSafeAreaInsetsOverride", {
       insets: { top: 47, bottom: 34, left: 0, right: 0 },
     });
-    await nav(page, "City");
+    await nav(page, copy("interface.navigation.city"));
     expect(
       await page
         .locator(".game-header")
@@ -323,7 +337,7 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
         .evaluate((el) => parseFloat(getComputedStyle(el).paddingBottom)),
     ).toBe(34);
     await capture("06-city-safe-area-390");
-    await nav(page, "Actions");
+    await nav(page, copy("interface.navigation.actions"));
     await honest(page);
     const control = page.locator('[data-action="gig"] button');
     await control.scrollIntoViewIfNeeded();

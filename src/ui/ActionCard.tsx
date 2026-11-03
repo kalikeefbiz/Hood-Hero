@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import {
   ACTIONS,
   actionSuccessChance,
@@ -19,9 +20,9 @@ export const money = (n: number) =>
 import { currentEmployment } from "../systems/Employment";
 import { jobDefinition, WEEKDAYS } from "../content/jobs";
 const labels = {
-  work: "Clock in",
-  gig: "Pick up a gig",
-  affiliate: "Get put on",
+  work: copy("actions.buttons.work"),
+  gig: copy("actions.buttons.gig"),
+  affiliate: copy("actions.buttons.affiliate"),
 };
 export function ActionCard({
   s,
@@ -40,9 +41,21 @@ export function ActionCard({
   const job = a.jobId ? jobDefinition(a.jobId) : undefined;
   const employmentCopy =
     a.type === "work"
-      ? `${employment ? `$${employment.wage} clean · ${jobDefinition(employment.jobId).name}` : "Employment required"}. Scheduled full shift · +8 stress.`
+      ? copy("actions.cards.scheduledFullShift8Stress", {
+          employment: employment
+            ? copy("actions.cards.clean", {
+                amount: employment.wage,
+                workplace: jobDefinition(employment.jobId).name,
+              })
+            : copy("actions.cards.employmentRequired"),
+        })
       : job
-        ? `${job.description} $${job.wage} / shift · 2 AP · ${job.workdays.map((d) => WEEKDAYS[d]).join(" / ")} · ${s.zones[job.location].name}.`
+        ? copy("actions.cards.shift2AP", {
+            description: job.description,
+            amount: job.wage,
+            workdays: job.workdays.map((d) => WEEKDAYS[d]).join(" / "),
+            neighborhood: s.zones[job.location].name,
+          })
         : null;
   const chance = actionSuccessChance(s, a);
   const def = ACTIONS[a.type],
@@ -58,11 +71,17 @@ export function ActionCard({
             ? 25
             : 0;
   const title = job
-    ? `${a.type === "apply" ? "Apply" : "Accept"} · ${job.name}`
+    ? copy("actions.cards.text", {
+        choice:
+          a.type === "apply"
+            ? copy("actions.cards.apply")
+            : copy("actions.cards.accept"),
+        workplace: job.name,
+      })
     : a.type === "buy"
       ? ITEMS[a.item!].name
       : a.type === "buyback"
-        ? `Buy back · ${money(cost)}`
+        ? copy("actions.cards.buyBack", { price: money(cost) })
         : (labels[a.type as keyof typeof labels] ?? def.label);
   const identity = `${a.type}-${a.target ?? a.item ?? a.jobId ?? "default"}`;
   const hasArt = !!ACTION_ART[a.type];
@@ -70,9 +89,12 @@ export function ActionCard({
     a.type === "work"
       ? employmentCopy!
       : a.type === "gig"
-        ? `$${BALANCE.gigIncome} clean. Local work.`
+        ? copy("actions.cards.cleanLocalWork", { amount: BALANCE.gigIncome })
         : a.target
-          ? `Check in with ${s.characters[a.target].alias ?? s.characters[a.target].name}.`
+          ? copy("actions.cards.checkInWith", {
+              character:
+                s.characters[a.target].alias ?? s.characters[a.target].name,
+            })
           : def.description;
   if (compact)
     return (
@@ -95,7 +117,10 @@ export function ActionCard({
               />
             </span>
           )}
-          <span className="tile-ap">{def.ap} AP</span>
+          <span className="tile-ap">
+            {def.ap}
+            {copy("interface.actionCard.ap")}
+          </span>
         </div>
         <div className="tile-copy">
           <h3>{title}</h3>
@@ -121,7 +146,7 @@ export function ActionCard({
             <Icon name="arrow" />
           </button>
           <details className="tile-details">
-            <summary>Outcomes</summary>
+            <summary>{copy("interface.actionCard.outcomes")}</summary>
             <small>
               {def.description} {def.outcomes.join(" / ")}
             </small>
@@ -138,13 +163,15 @@ export function ActionCard({
         <div className="action-illustration">
           <ActionIllustration key={a.type} type={a.type} />
           <span className="action-scene-caption" aria-hidden="true">
-            STIXX CITY / EVERY MOVE MATTERS
+            {copy("interface.actionCard.stixxCITYEVERYMOVEMATTERS")}
           </span>
         </div>
       )}
       <div className="action-top">
         <span className="ap-cost">
-          {def.ap} AP{cost ? ` · ${money(cost)}` : ""}
+          {def.ap}
+          {copy("interface.actionCard.ap2")}
+          {cost ? ` · ${money(cost)}` : ""}
         </span>
         <span className={`risk ${def.risk === "High" ? "high" : ""}`}>
           {def.risk === "None" ? "NO RISK" : `${def.risk.toUpperCase()} RISK`}
@@ -156,7 +183,8 @@ export function ActionCard({
       )}
       {a.target && (
         <p className="action-target">
-          With {s.characters[a.target].alias ?? s.characters[a.target].name}
+          {copy("interface.actionCard.with")}
+          {s.characters[a.target].alias ?? s.characters[a.target].name}
         </p>
       )}
       <p>
@@ -168,13 +196,17 @@ export function ActionCard({
       </p>
       {chance !== null && (
         <p className="chance">
-          Success chance <strong>{Math.round(chance * 100)}%</strong>
+          {copy("interface.actionCard.successChance")}
+          <strong>
+            {Math.round(chance * 100)}
+            {copy("interface.actionCard.text")}
+          </strong>
           <small>
-            Based on current skills, stress
+            {copy("interface.actionCard.basedOnCurrentSkillsStress")}
             {a.type === "recover"
               ? ", escalation and available Set support"
               : ""}
-            .
+            {copy("interface.actionCard.text2")}
           </small>
         </p>
       )}

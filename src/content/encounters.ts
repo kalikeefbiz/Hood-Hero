@@ -1,3 +1,4 @@
+import { copy } from "./copy";
 import { SUPPLIER_ENCOUNTER, SUPPLIER_REACTION } from "./streetEncounters";
 import { CREW_CONVERSATION, CREW_OFFER } from "./crewEncounters";
 import { WORKPLACE_ENCOUNTER } from "./workplaceEncounters";
@@ -10,26 +11,33 @@ export function megaDialogue(s: GameState, e: EncounterInstance): string {
   const i = chains(s),
     promise = incidentPromise(s, "the-chains");
   if (promise?.status === "broken")
-    return "You said you had me, Cuzzo. I waited on that. The chain’s gone now. We can still talk, but I’m not forgetting it.";
+    return copy("storylines.the-chains.reactions.brokenPromise");
   if (promise?.status === "fulfilled")
-    return "You came through for me. I got my chain back, and I know what you did to make that happen. That means something.";
+    return copy("storylines.the-chains.reactions.fulfilledPromise");
   if (i?.status === "resolved")
     return promise?.status === "superseded"
-      ? "Pablo handled it. My chain’s back. You didn’t get the chance to finish what you promised — we’re square on that."
+      ? copy("storylines.the-chains.reactions.supersededPromise")
       : i.resolvedBy === s.playerId
-        ? "My chain’s back. You helped me get it home. I appreciate that, Cuzzo."
-        : "My chain’s back. Leadership sorted it out. I’m glad it’s over.";
+        ? copy("storylines.the-chains.reactions.playerResolved")
+        : copy("storylines.the-chains.reactions.leadershipResolved");
   if (i?.status === "abandoned")
-    return "They sold it. There’s no buying it back from them now. I’ve got to move on.";
+    return copy("storylines.the-chains.reactions.abandoned");
   if (promise?.status === "pending")
     return i.leadershipAware
-      ? "You said you’d help. Pablo’s heard about it now, so I’m waiting to see what he does. Nothing’s settled yet."
-      : "I’m counting on you. They still have my chain. Talk them down, cover the demand, or see if Pablo will handle his people. Just don’t let this sit.";
+      ? copy("storylines.the-chains.followUp.leadershipAware")
+      : copy("storylines.the-chains.followUp.pendingPromise");
   if (e.selectedResponses.at(-1)?.id === "decline")
-    return "Alright. I wanted your help, but I heard you. I’ll figure out what I can do.";
+    return copy("storylines.the-chains.responses.declined");
   if (e.selectedResponses.some((r) => r.id === "clarify"))
-    return `Dizzy, Baby Canon, Joker. Three of them, trying to get a name. They want $${i.demand}. Loco’s locked up; Pablo runs things out here. This wasn’t authorized. I wasn’t badly hurt. I want my property back, not more trouble.`;
-  return `Cuzzo, three young Angels took my diamond chain while I was out with my girl. I’m alright. They want $${i.demand} to give it back. ${i.leadershipAware ? "Pablo’s heard about it, but nothing’s settled. " : ""}Can you help me get it home?`;
+    return copy("storylines.the-chains.clarification.dialogue", {
+      amount: i.demand,
+    });
+  return copy("storylines.the-chains.opening.dialogue", {
+    amount: i.demand,
+    details: i.leadershipAware
+      ? copy("storylines.the-chains.opening.leadershipAware")
+      : "",
+  });
 }
 function requestResponses(
   s: GameState,
@@ -40,7 +48,7 @@ function requestResponses(
     return [
       {
         id: "acknowledge",
-        label: "I hear you. Return to the city.",
+        label: copy("storylines.the-chains.choices.acknowledge"),
         effect: { type: "acknowledge" },
       },
     ];
@@ -48,33 +56,53 @@ function requestResponses(
   if (!incidentPromise(s, i.id)) {
     responses.push({
       id: "promise",
-      label: "I’ll help you get it back. I give you my word.",
+      label: copy("storylines.the-chains.choices.promise"),
       effect: { type: "promise" },
     });
     if (!e.selectedResponses.some((r) => r.id === "clarify"))
       responses.push({
         id: "clarify",
-        label: "Tell me what happened. Who was involved?",
+        label: copy("storylines.the-chains.choices.clarify"),
         effect: { type: "clarify" },
       });
     if (!e.selectedResponses.some((r) => r.id === "decline"))
       responses.push({
         id: "decline",
-        label: "I can’t get involved in this.",
+        label: copy("storylines.the-chains.choices.decline"),
         effect: { type: "decline" },
       });
     responses.push({
       id: "delay",
-      label: "Let me think. I’m not promising yet.",
+      label: copy("storylines.the-chains.choices.delay"),
       effect: { type: "delay" },
     });
   }
   if (incidentPromise(s, i.id) || i.informed) {
     for (const [id, type, label, target] of [
-      ["negotiate", "negotiate", "Talk down the demand", undefined],
-      ["buyback", "buyback", "Pay to return the chains", undefined],
-      ["settlement", "settlement", "Bring the dispute to Pablo", "pablo"],
-      ["recover", "recover", "Attempt property recovery", undefined],
+      [
+        "negotiate",
+        "negotiate",
+        copy("storylines.the-chains.choices.negotiate"),
+        undefined,
+      ],
+      [
+        "buyback",
+        "buyback",
+        copy("storylines.the-chains.choices.buyback"),
+        undefined,
+      ],
+      [
+        "settlement",
+        "settlement",
+        copy("storylines.the-chains.choices.settlement"),
+        "pablo",
+      ],
+      [
+        "recover",
+        "recover",
+        copy("storylines.the-chains.choices.recover"),
+        undefined,
+      ],
     ] as const) {
       if (
         (type === "negotiate" && i.negotiated) ||
@@ -138,7 +166,7 @@ export const ENCOUNTERS: EncounterDefinition[] = [
     responses: () => [
       {
         id: "acknowledge",
-        label: "I hear you. Return to the city.",
+        label: copy("storylines.the-chains.choices.acknowledgeReaction"),
         effect: { type: "acknowledge" },
       },
     ],

@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "app": "Hood Hero",
+    "commit": "dda6ba807d4bb79e3f01b05ed72966c659b785e4",
+    "saveSchema": 8,
+    "milestone": "GOAL 007a"
+  },
+  "bundleSHA256": "25bee824c9b91d2e72f2880dcda60a0fb470755f38286e0ce395c72a3e416335",
+  "url": "https://kalikeefbiz.github.io/Hood-Hero/",
+  "results": [
+    {
+      "engine": "chromium",
+      "commit": "dda6ba807d4bb79e3f01b05ed72966c659b785e4",
+      "newGame": true,
+      "chains": true,
+      "action": true,
+      "saveLoad": true,
+      "advanceDay": true,
+      "errors": [],
+      "failedAssets": []
+    },
+    {
+      "engine": "webkit",
+      "commit": "dda6ba807d4bb79e3f01b05ed72966c659b785e4",
+      "newGame": true,
+      "chains": true,
+      "action": true,
+      "saveLoad": true,
+      "advanceDay": true,
+      "errors": [],
+      "failedAssets": []
+    }
+  ]
+}

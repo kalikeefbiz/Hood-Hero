@@ -1,0 +1,2 @@
+WebSocket server error: Port 24678 is already in use
+PASS: 15 final ActionsHub rendered-HTML comparisons against accepted GOAL 007, including the shared affiliation button copy.

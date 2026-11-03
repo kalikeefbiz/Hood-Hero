@@ -1,0 +1,36 @@
+{
+  "reactions": {
+    "brokenPromise": "You said you had me, Cuzzo. I waited on that. The chain’s gone now. We can still talk, but I’m not forgetting it.",
+    "fulfilledPromise": "You came through for me. I got my chain back, and I know what you did to make that happen. That means something.",
+    "supersededPromise": "Pablo handled it. My chain’s back. You didn’t get the chance to finish what you promised — we’re square on that.",
+    "playerResolved": "My chain’s back. You helped me get it home. I appreciate that, Cuzzo.",
+    "leadershipResolved": "My chain’s back. Leadership sorted it out. I’m glad it’s over.",
+    "abandoned": "They sold it. There’s no buying it back from them now. I’ve got to move on."
+  },
+  "followUp": {
+    "leadershipAware": "You said you’d help. Pablo’s heard about it now, so I’m waiting to see what he does. Nothing’s settled yet.",
+    "pendingPromise": "I’m counting on you. They still have my chain. Talk them down, cover the demand, or see if Pablo will handle his people. Just don’t let this sit."
+  },
+  "responses": {
+    "declined": "Alright. I wanted your help, but I heard you. I’ll figure out what I can do."
+  },
+  "opening": {
+    "leadershipAware": "Pablo’s heard about it, but nothing’s settled. ",
+    "dialogue": "Cuzzo, three young Angels took my diamond chain while I was out with my girl. I’m alright. They want ${amount} to give it back. {details}Can you help me get it home?"
+  },
+  "choices": {
+    "acknowledge": "I hear you. Return to the city.",
+    "promise": "I’ll help you get it back. I give you my word.",
+    "clarify": "Tell me what happened. Who was involved?",
+    "decline": "I can’t get involved in this.",
+    "delay": "Let me think. I’m not promising yet.",
+    "negotiate": "Talk down the demand",
+    "buyback": "Pay to return the chains",
+    "settlement": "Bring the dispute to Pablo",
+    "recover": "Attempt property recovery",
+    "acknowledgeReaction": "I hear you. Return to the city."
+  },
+  "clarification": {
+    "dialogue": "Dizzy, Baby Canon, Joker. Three of them, trying to get a name. They want ${amount}. Loco’s locked up; Pablo runs things out here. This wasn’t authorized. I wasn’t badly hurt. I want my property back, not more trouble."
+  }
+}

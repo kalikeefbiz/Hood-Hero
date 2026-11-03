@@ -1,0 +1,5 @@
+
+> syndicate@0.1.0 validate:copy
+> node --experimental-strip-types scripts/validate-copy.ts
+
+Copy valid: 626 text entries; JSON, IDs, structure, placeholders and usage checked.

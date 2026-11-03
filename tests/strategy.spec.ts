@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { test, expect, type Page } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
 import { advanceDay } from "../src/core/TimeSystem";
@@ -26,7 +27,9 @@ async function seed(page: Page, s: GameState) {
     { key: SAVE_KEY, raw: serialize(s) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
 }
 async function shot(page: Page, selector: string, name: string) {
@@ -50,9 +53,18 @@ test("actual local investment, contested map, autonomous decisions and persisted
   page,
 }) => {
   await page.goto(base);
-  await page.getByLabel("What do people call you?").fill("Test(7) Local");
-  await page.getByRole("radio", { name: "Southside", exact: false }).check();
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Test(7) Local");
+  await page
+    .getByRole("radio", {
+      name: copy("neighborhoods.south.name"),
+      exact: false,
+    })
+    .check();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await dismissEncounter(page);
   await page.locator(".strategic-actions summary").click();
   await page.getByRole("button", { name: /Build Community Support/ }).click();
@@ -85,11 +97,13 @@ test("actual local investment, contested map, autonomous decisions and persisted
   await page
     .locator(".strategy-neighborhood details")
     .last()
-    .getByText("Recent faction decisions")
+    .getByText(copy("interface.strategyPanels.recentFactionDecisions"))
     .click();
   await shot(page, ".strategy-neighborhood", "09-faction-development");
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
   await expect(page.locator(".game-shell")).toBeVisible();
 });
@@ -103,11 +117,15 @@ test("simulation-resolved control change and council succession progression", as
     .click();
   await expect(page.locator(".control-label")).toContainText("Gabriel");
   await shot(page, ".city-layout", "03-control-change");
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await expect(page.locator(".organization-panel")).toContainText(
     "4/4 stabilized",
   );
-  await page.getByText("Successor eligibility", { exact: true }).click();
+  await page
+    .getByText(copy("interface.strategyPanels.successorEligibility"), {
+      exact: true,
+    })
+    .click();
   await expect(page.locator(".organization-panel")).toContainText(
     "Eligible to accept",
   );
@@ -129,9 +147,11 @@ test("earned affiliation authority restriction and advancement use existing spon
   connect(s, "player", "justice");
   s.characters.justice.relationships.player.trust = 60;
   await seed(page, s);
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await page
-    .getByRole("button", { name: "Request advancement · 1 AP" })
+    .getByRole("button", {
+      name: copy("interface.strategyPanels.requestAdvancement1AP"),
+    })
     .click();
   await expect(page.locator(".organization-panel")).toContainText(
     "Contributor",
@@ -148,14 +168,18 @@ test("business acquisition, real operating income, sale, and voluntary retiremen
   s.characters.player.wallet.clean = 3000;
   s.characters.player.legitimacy = 30; // controlled financial setup, production acquisition and daily operation
   await seed(page, s);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await page.getByRole("button", { name: /Acquire Southside repair/ }).click();
   await expect(page.locator(".business-panel")).toContainText("Funding: clean");
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await expect(page.locator(".business-panel")).toContainText("Latest net");
-  await page.getByText("Operating history", { exact: true }).click();
+  await page
+    .getByText(copy("interface.strategyPanels.operatingHistory"), {
+      exact: true,
+    })
+    .click();
   await shot(page, ".business-panel", "06-business-income");
   await shot(page, ".retirement-panel", "08-legitimate-progress");
   await page.getByRole("button", { name: /Sell .*repair counter/ }).click();
@@ -167,11 +191,17 @@ test("business acquisition, real operating income, sale, and voluntary retiremen
   s = businessAction(s, "laundry", "buy").state;
   for (let d = 0; d < 35; d++) s = advanceDay(s);
   await seed(page, s);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await expect(
-    page.getByRole("button", { name: "Retire voluntarily" }),
+    page.getByRole("button", {
+      name: copy("interface.strategyPanels.retireVoluntarily"),
+    }),
   ).toBeEnabled();
-  await page.getByRole("button", { name: "Retire voluntarily" }).click();
+  await page
+    .getByRole("button", {
+      name: copy("interface.strategyPanels.retireVoluntarily"),
+    })
+    .click();
   await expect(page.locator(".ending")).toContainText("legitimate-exit");
 });
 for (const width of [320, 375, 390, 430])

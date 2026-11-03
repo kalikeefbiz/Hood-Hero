@@ -1,0 +1,19 @@
+{
+  "theDeliveryNumbersDonTMatchCan": "The delivery numbers don't match. Can you push through and fix it, or should we flag it for the next shift?",
+  "flaccoIsHereOnALocalDelivery": "Flacco is here on a local delivery gig. He could use a hand clearing the station. Can you spare the effort?",
+  "youKeepShowingUpThereSAn": "You keep showing up. There's an extra $18 for finishing this task before you leave. It'll be a tiring finish. Interested?",
+  "fixIt6StressBetterPerformance": "Fix it · +6 stress, better performance",
+  "flagIt3ReliabilityKeepWages": "Flag it · −3 reliability, keep wages",
+  "helpFlacco4StressBuildTrust": "Help Flacco · +4 stress, build trust",
+  "takeTheTask1810Stress": "Take the task · +$18, +10 stress",
+  "skipSceneFlagIt3Reliability": "Skip scene · Flag it, −3 reliability",
+  "skipScenePassKeepRegularPay": "Skip scene · Pass, keep regular pay",
+  "youFixedTheDeliveryCount6Stress": "You fixed the delivery count. +6 stress, performance improved; full wages retained.",
+  "youFlaggedTheProblemForTheNext": "You flagged the problem for the next shift. Reliability −3; wages retained, no extra stress.",
+  "characterAppreciatedTheHelpWithALocal": "{character} appreciated the help with a local delivery. +4 stress; trust grew.",
+  "youKeptToYourOwnStationNo": "You kept to your own station. No additional stress or reward.",
+  "extraShiftTask": "Extra shift task",
+  "youFinishedTheExtraTask18Lawful": "You finished the extra task. +$18 lawful pay, +10 stress.",
+  "youPassedOnTheExtraTaskAnd": "You passed on the extra task and kept your regular shift pay.",
+  "helpedMeFinishALocalDelivery": "Helped me finish a local delivery."
+}

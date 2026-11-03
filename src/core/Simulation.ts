@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { syncTerritory, newStrategy } from "../systems/Territory";
 import { newStreetState } from "../systems/StreetEconomy";
 import { type GameState, type ZoneId } from "./GameState";
@@ -19,7 +20,7 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     name.trim().slice(0, 28) || "Resident",
     home,
     null,
-    "Unaffiliated. Make a living, build trust, find your place.",
+    copy("characters.player.description"),
     {
       influence: 0,
       wallet: { clean: BALANCE.startingCash, illicit: 0 },
