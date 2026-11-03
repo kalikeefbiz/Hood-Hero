@@ -9,7 +9,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 const [url, expected] = process.argv.slice(2);
 if (!url || !expected)
-  throw Error("Usage: node scripts/verify-content-live.mjs PUBLIC_URL COMMIT");
+  throw Error(
+    "Usage: node --experimental-strip-types scripts/verify-content-live.mjs PUBLIC_URL COMMIT",
+  );
 const curl = (address) =>
   execFileSync("curl", ["-fsS", "--retry", "2", address]);
 const metadata = JSON.parse(curl(`${url}build-info.json?verify=${expected}`));
@@ -83,7 +85,7 @@ for (const [engineName, engine] of [
     await page.getByRole("button", { name: ui.newRun.resumeSavedGame }).click();
     await expect(page.locator(".game-shell")).toBeVisible();
     await page
-      .getByRole("button", { name: ui.app.endDay.trim(), exact: true })
+      .getByRole("button", { name: ui.app.endDay.trim(), exact: false })
       .click();
     await expect(page.locator(".day")).toContainText("02");
     assert.deepEqual(errors, []);

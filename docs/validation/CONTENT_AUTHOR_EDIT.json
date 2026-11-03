@@ -1,0 +1,20 @@
+{
+  "baseCommit": "dda6ba807d4bb79e3f01b05ed72966c659b785e4",
+  "isolatedCheckout": true,
+  "changedSourceFiles": [
+    "src/content/copy/actions.json",
+    "src/content/copy/storylines/the-chains.json"
+  ],
+  "editedKeys": [
+    "actions.reachOut.description",
+    "storylines.the-chains.opening.dialogue",
+    "storylines.the-chains.choices.promise",
+    "storylines.the-chains.reactions.fulfilledPromise"
+  ],
+  "typescriptEdits": 0,
+  "unitTests": 177,
+  "validatorTests": 2,
+  "chromiumAndWebkitBrowserChecks": 10,
+  "allPassed": true,
+  "deliveredCopyPreservesBaseline": true
+}

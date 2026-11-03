@@ -250,7 +250,7 @@ export function ActionsHub({
                       const reason = validateAction(s, a),
                         label =
                           a.type === "affiliate"
-                            ? "Get put on"
+                            ? copy("actions.buttons.affiliate")
                             : ACTIONS[a.type].label;
                       return (
                         <article

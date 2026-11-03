@@ -1,0 +1,58 @@
+
+> syndicate@0.1.0 pretest
+> npm run validate:copy
+
+
+> syndicate@0.1.0 validate:copy
+> node --experimental-strip-types scripts/validate-copy.ts
+
+Copy valid: 626 text entries; JSON, IDs, structure, placeholders and usage checked.
+
+> syndicate@0.1.0 test
+> vitest run && node --experimental-strip-types --test scripts/copy-validation.test.mjs
+
+
+ RUN  v3.2.7 /workspace/hood-authoring
+
+ ✓ src/tests/employment.test.ts (20 tests) 16919ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 1  4422ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 7  3445ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 21  4041ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 2026  4423ms
+ ✓ src/tests/crew.test.ts (22 tests) 9257ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 1: independent lives, occasional offers, real appointments, save/load and bounded growth  1829ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 7: independent lives, occasional offers, real appointments, save/load and bounded growth  1383ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 21: independent lives, occasional offers, real appointments, save/load and bounded growth  1468ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 83: independent lives, occasional offers, real appointments, save/load and bounded growth  1307ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 2026: independent lives, occasional offers, real appointments, save/load and bounded growth  1300ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 5099: independent lives, occasional offers, real appointments, save/load and bounded growth  1417ms
+ ✓ src/tests/simulation.test.ts (44 tests) 5114ms
+   ✓ The Chains and automated playthroughs > ignores the incident while continuing repeatable legitimate work  422ms
+   ✓ The Chains and automated playthroughs > has no fixed turn limit and no arbitrary defeat timer  3692ms
+ ✓ src/tests/encounters.test.ts (20 tests) 1890ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a fulfilled story over 40 further days, including reload  748ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a broken story over 40 further days, including reload  673ms
+ ✓ src/tests/corrections.test.ts (11 tests) 856ms
+   ✓ 006.1 routine, accumulated and significant exposure > low-scrutiny arrest is possible, but never fixed by action count  650ms
+ ✓ src/tests/actionOdds.test.ts (3 tests) 880ms
+   ✓ odds presented to the player > crime predicts the actual seeded outcome without changing the world or RNG  321ms
+ ✓ src/tests/strategy.test.ts (36 tests) 781ms
+ ✓ src/tests/street.test.ts (15 tests) 587ms
+ ✓ src/tests/copy.test.ts (4 tests) 39ms
+ ✓ src/tests/actionArt.test.ts (2 tests) 5ms
+
+ Test Files  10 passed (10)
+      Tests  177 passed (177)
+   Start at  06:25:46
+   Duration  42.98s (transform 903ms, setup 0ms, collect 3.09s, tests 36.33s, environment 2ms, prepare 1.02s)
+
+✔ strict JSON rejects duplicate identifiers at every depth, malformed JSON and non-JSON syntax (4.203217ms)
+✔ author edits pass; broken contracts, placeholders, structures and unused entries fail (893.620941ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1673.726525

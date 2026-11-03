@@ -1,0 +1,184 @@
+[WebServer] (node:19151) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 138 tests using 2 workers
+
+(node:19170) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:19169) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓    1 [chromium-mobile] › tests/city-menu.spec.ts:195:1 › storyline uses the active demand and opens its existing City conversation (3.2s)
+  ✓    2 [chromium-mobile] › tests/city-menu.spec.ts:39:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (4.2s)
+  ✓    3 [chromium-mobile] › tests/city-menu.spec.ts:242:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (1.7s)
+  ✓    4 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 320px (1.5s)
+  ✓    5 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 375px (1.6s)
+  ✓    6 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 390px (1.5s)
+  ✓    7 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 430px (1.6s)
+  ✓    8 [chromium-mobile] › tests/corrections.spec.ts:59:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (2.9s)
+  ✓    9 [chromium-mobile] › tests/corrections.spec.ts:124:1 › known suspects and leaders need real introductions; access and inventory survive reload (9.2s)
+  ✓   10 [chromium-mobile] › tests/corrections.spec.ts:189:1 › active Chains lives in City; fulfillment leaves only completed history (7.5s)
+  ✓   11 [chromium-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 320px (2.2s)
+  ✓   12 [chromium-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 375px (2.4s)
+  ✓   13 [chromium-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 390px (2.3s)
+  ✓   14 [chromium-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 430px (2.3s)
+  ✓   15 [chromium-mobile] › tests/crew.spec.ts:56:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (12.4s)
+  ✓   17 [chromium-mobile] › tests/crew.spec.ts:236:3 › crew dialogue and Set fit 320px (1.8s)
+  ✓   18 [chromium-mobile] › tests/crew.spec.ts:236:3 › crew dialogue and Set fit 375px (1.9s)
+  ✓   19 [chromium-mobile] › tests/crew.spec.ts:236:3 › crew dialogue and Set fit 390px (1.7s)
+  ✓   20 [chromium-mobile] › tests/crew.spec.ts:236:3 › crew dialogue and Set fit 430px (1.8s)
+  ✓   16 [chromium-mobile] › tests/crew.spec.ts:157:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (22.1s)
+  ✓   22 [chromium-mobile] › tests/employment.spec.ts:178:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (5.3s)
+  ✓   23 [chromium-mobile] › tests/employment.spec.ts:229:1 › workplace scene consequence, skip, close and no replay across tabs or reload (1.8s)
+  ✓   24 [chromium-mobile] › tests/employment.spec.ts:288:1 › employment competes with The Chains through actual AP, wages, attendance and promises (6.4s)
+  ✓   25 [chromium-mobile] › tests/encounters.spec.ts:84:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (14.5s)
+  ✓   26 [chromium-mobile] › tests/encounters.spec.ts:206:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (3.3s)
+  ✓   21 [chromium-mobile] › tests/employment.spec.ts:106:1 › hire, scheduled wages, save and a thirty-day employment playthrough (39.8s)
+  ✓   27 [chromium-mobile] › tests/encounters.spec.ts:248:3 › 40 days after fulfilled: one storyline reaction while independent offers continue (13.1s)
+  ✓   29 [chromium-mobile] › tests/encounters.spec.ts:323:3 › modal touch controls, focus and scrolling at 320px (1.6s)
+  ✓   30 [chromium-mobile] › tests/encounters.spec.ts:323:3 › modal touch controls, focus and scrolling at 375px (1.6s)
+  ✓   31 [chromium-mobile] › tests/encounters.spec.ts:323:3 › modal touch controls, focus and scrolling at 390px (2.7s)
+  ✓   32 [chromium-mobile] › tests/encounters.spec.ts:323:3 › modal touch controls, focus and scrolling at 430px (3.4s)
+  ✓   28 [chromium-mobile] › tests/encounters.spec.ts:248:3 › 40 days after broken: one storyline reaction while independent offers continue (18.7s)
+  ✓   34 [chromium-mobile] › tests/encounters.spec.ts:426:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (1.8s)
+  ✘   33 [chromium-mobile] › tests/encounters.spec.ts:357:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (7.5s)
+(node:20034) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   36 [chromium-mobile] › tests/illustrated.spec.ts:88:1 › approved art maps to real actions and resolves under the production base (3.8s)
+  ✓   35 [chromium-mobile] › tests/encounters.spec.ts:468:1 › all homes and affiliation themes retain the City-only modal and normal navigation (12.7s)
+  ✓   37 [chromium-mobile] › tests/illustrated.spec.ts:140:1 › action art loads near the viewport, and failed art preserves layout and gameplay (4.6s)
+  ✓   38 [chromium-mobile] › tests/illustrated.spec.ts:200:1 › GOAL 002C mobile visual review and usable narrow controls (7.7s)
+  ✓   39 [chromium-mobile] › tests/mobile.spec.ts:46:1 › phone gameplay: contact, lawful income, days, save and load (10.9s)
+  ✓   40 [chromium-mobile] › tests/mobile.spec.ts:99:1 › buyback resolves the incident and the ordinary loop remains playable (5.3s)
+  ✓   41 [chromium-mobile] › tests/mobile.spec.ts:153:1 › mobile city and new game remain readable at narrow widths (5.2s)
+  ✓   43 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored angels membership keeps the shell neutral and survives checkpoint reload (2.4s)
+  ✓   42 [chromium-mobile] › tests/overhaul.spec.ts:65:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (7.8s)
+  ✓   44 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored blips membership keeps the shell neutral and survives checkpoint reload (2.7s)
+  ✓   45 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored muds membership keeps the shell neutral and survives checkpoint reload (2.8s)
+  ✓   46 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored backstreet membership keeps the shell neutral and survives checkpoint reload (2.6s)
+  ✓   47 [chromium-mobile] › tests/overhaul.spec.ts:131:3 › valid sponsored blocks membership keeps the shell neutral and survives checkpoint reload (2.4s)
+  ✓   49 [chromium-mobile] › tests/overhaul.spec.ts:236:1 › Actions update cash/AP, explain disabled prerequisites, and autosave (2.0s)
+  ✓   50 [chromium-mobile] › tests/overhaul.spec.ts:273:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility (1.7s)
+  ✓   51 [chromium-mobile] › tests/overhaul.spec.ts:324:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe (3.4s)
+  ✓   48 [chromium-mobile] › tests/overhaul.spec.ts:207:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (9.4s)
+  ✓   53 [chromium-mobile] › tests/strategy.spec.ts:52:1 › actual local investment, contested map, autonomous decisions and persisted continuation (4.7s)
+  ✓   54 [chromium-mobile] › tests/strategy.spec.ts:110:1 › simulation-resolved control change and council succession progression (2.9s)
+  ✓   55 [chromium-mobile] › tests/strategy.spec.ts:136:1 › earned affiliation authority restriction and advancement use existing sponsorship (2.0s)
+  ✓   56 [chromium-mobile] › tests/strategy.spec.ts:164:1 › business acquisition, real operating income, sale, and voluntary retirement (3.6s)
+  ✓   57 [chromium-mobile] › tests/strategy.spec.ts:210:3 › strategy, organization and businesses fit 320px (2.1s)
+  ✓   58 [chromium-mobile] › tests/strategy.spec.ts:210:3 › strategy, organization and businesses fit 375px (2.1s)
+  ✓   59 [chromium-mobile] › tests/strategy.spec.ts:210:3 › strategy, organization and businesses fit 390px (2.0s)
+  ✓   60 [chromium-mobile] › tests/strategy.spec.ts:210:3 › strategy, organization and businesses fit 430px (2.0s)
+  ✓   52 [chromium-mobile] › tests/review.spec.ts:10:1 › review captures and WCAG checks cover every M1 screen and faction palette (28.1s)
+CUSTODY {"engine":"chromium-mobile","arrestDay":24,"releaseDay":26,"cashBefore":291,"cashAfter":255,"debtAfter":0,"loco":"arrested","campaignEnd":null}
+  ✓   62 [chromium-mobile] › tests/street.spec.ts:275:1 › seeded real-play arrest serves every day and releases into continued gameplay (9.4s)
+  ✓   63 [chromium-mobile] › tests/street.spec.ts:339:1 › default reaction and accumulated heat are rendered from real simulated consequences (4.4s)
+  ✓   64 [chromium-mobile] › tests/street.spec.ts:365:1 › crew-assisted street work uses an earned willing partner and actual inventory (1.3s)
+  ✓   65 [chromium-mobile] › tests/street.spec.ts:382:3 › street inventory and supplier modal fit 320px (898ms)
+JOURNEY {"engine":"chromium-mobile","day":5,"cash":{"clean":0,"illicit":190},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":275,"owed":0,"paid":102,"losses":36,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-33","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-32"},{"id":"transaction-35","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-34"},{"id":"transaction-57","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-56"},{"id":"transaction-59","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-58"},{"id":"transaction-80","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-79"},{"id":"transaction-82","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-81"},{"id":"transaction-103","day":5,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-102"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-32","event-34","event-56","event-58","event-79","event-81","event-102","event-105"]}}
+  ✓   61 [chromium-mobile] › tests/street.spec.ts:149:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (21.8s)
+  ✓   66 [chromium-mobile] › tests/street.spec.ts:382:3 › street inventory and supplier modal fit 375px (1.4s)
+  ✓   67 [chromium-mobile] › tests/street.spec.ts:382:3 › street inventory and supplier modal fit 390px (1.6s)
+  ✓   68 [chromium-mobile] › tests/street.spec.ts:382:3 › street inventory and supplier modal fit 430px (1.5s)
+(node:20805) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   69 [chromium-mobile] › tests/visual-correction.spec.ts:10:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 (3.5s)
+(node:20879) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   71 [webkit-mobile] › tests/city-menu.spec.ts:195:1 › storyline uses the active demand and opens its existing City conversation (12.7s)
+  ✓   70 [webkit-mobile] › tests/city-menu.spec.ts:39:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (21.5s)
+  ✓   72 [webkit-mobile] › tests/city-menu.spec.ts:242:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (9.2s)
+  ✓   73 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 320px (8.4s)
+  ✓   74 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 375px (7.8s)
+  ✓   75 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 390px (8.3s)
+  ✓   76 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 430px (8.7s)
+  ✓   77 [webkit-mobile] › tests/corrections.spec.ts:59:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (16.9s)
+  ✓   78 [webkit-mobile] › tests/corrections.spec.ts:124:1 › known suspects and leaders need real introductions; access and inventory survive reload (38.0s)
+  ✓   79 [webkit-mobile] › tests/corrections.spec.ts:189:1 › active Chains lives in City; fulfillment leaves only completed history (25.9s)
+  ✓   80 [webkit-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 320px (13.7s)
+  ✘   82 [webkit-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 390px (3.0s)
+  ✘   81 [webkit-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 375px (15.6s)
+
+
+  1) [chromium-mobile] › tests/encounters.spec.ts:357:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.timeline').locator('.routine-summary')
+    Expected substring: "Lowriders and black-market trade. Gabriel’s Angels enjoy substantial community support."
+    Received string:    "Day 2 · 7 routine reports · 2 organizationsSYSTEM · Day 2. Two action points available.MONEY · $18 covered today’s basic living costs.The Blips · The Blips kept its neighborhood network active.The Blips · The Blips maintained local relationships in The Nawf.The Blips · The Blips reinforced its position in The Nawf.Gabriel’s Angels · Gabriel’s Angels maintained local relationships in The Resevoir.Gabriel’s Angels · Gabriel’s Angels invested in a wider foothold in The Resevoir."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.timeline').locator('.routine-summary') with timeout 5000ms
+      - waiting for locator('.timeline').locator('.routine-summary')
+        14 × locator resolved to <details open="" class="routine-summary">…</details>
+           - unexpected value "Day 2 · 7 routine reports · 2 organizationsSYSTEM · Day 2. Two action points available.MONEY · $18 covered today’s basic living costs.The Blips · The Blips kept its neighborhood network active.The Blips · The Blips maintained local relationships in The Nawf.The Blips · The Blips reinforced its position in The Nawf.Gabriel’s Angels · Gabriel’s Angels maintained local relationships in The Resevoir.Gabriel’s Angels · Gabriel’s Angels invested in a wider foothold in The Resevoir."
+
+
+      417 |   );
+      418 |   await expect(feed.locator(".event-critical")).toContainText(
+    > 419 |     "earlier major betrayal",
+          |                              ^
+      420 |   );
+      421 |   await feed.locator(".routine-summary summary").first().click();
+      422 |   await expect(feed.locator(".routine-summary")).toContainText(
+        at /workspace/hood-authoring/tests/encounters.spec.ts:419:50
+
+    Error Context: test-results/encounters-activity-preser-0b892-nowledge-and-routine-detail-chromium-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-activity-preser-0b892-nowledge-and-routine-detail-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-activity-preser-0b892-nowledge-and-routine-detail-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [webkit-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 390px
+
+    Test was interrupted.
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByRole('button', { name: 'Enter Stixx City ' })
+        - locator resolved to <button type="submit" class="primary">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - performing click action
+
+
+      25 |   await page
+      26 |     .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    > 27 |     .click();
+         |      ^
+      28 |   await dismissEncounter(page);
+      29 | }
+      30 | async function clickAction(page: Page, type: string) {
+        at start (/workspace/hood-authoring/tests/corrections.spec.ts:27:6)
+        at /workspace/hood-authoring/tests/corrections.spec.ts:232:5
+
+    Error Context: test-results/corrections-all-three-categories-and-inventory-fit-390px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-all-three-categories-and-inventory-fit-390px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-all-three-categories-and-inventory-fit-390px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium-mobile] › tests/encounters.spec.ts:357:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail
+  2 interrupted
+    [webkit-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 375px
+    [webkit-mobile] › tests/corrections.spec.ts:227:3 › all three categories and inventory fit 390px
+  56 did not run
+  79 passed (4.9m)

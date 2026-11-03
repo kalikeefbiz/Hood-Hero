@@ -47,7 +47,7 @@ Chains entries are grouped by scene/purpose: `opening`, `clarification`, `choice
 - `src/content/encounters.ts`, `crewEncounters.ts`, `streetEncounters.ts`, `workplaceEncounters.ts`: dialogue/response wording only. IDs, effects, triggers, priorities, expression conditions and eligibility remain in code.
 - `src/content/characters.ts`, `city.ts`, `src/ui/neighborhoods.ts`: presentation fields only; no control, faction membership, statistics or image paths moved.
 - `src/systems/CrewAgency.ts`, `Workplace.ts`, `Politics.ts`, `EndConditions.ts`: selected text expressions only, retaining the existing calculations and conditional selection.
-- `src/ui/App.tsx`, `ActionCard.tsx`, `ActionsHub.tsx`, `ActivityFeed.tsx`, `CityMap.tsx`, `CommitmentSummary.tsx`, `EmploymentSummary.tsx`, `EncounterScene.tsx`, `GameHUD.tsx`, `InventoryWallet.tsx`, `NarrativeNotifications.tsx`, `NewRun.tsx`, `StrategyPanels.tsx`, `StreetWork.tsx`: text references. No CSS, layouts or artwork changed.
+- `src/ui/App.tsx`, `ActionCard.tsx`, `ActionsHub.tsx`, `ActivityFeed.tsx`, `CityMap.tsx`, `CommitmentSummary.tsx`, `EmploymentSummary.tsx`, `EncounterScene.tsx`, `GameHUD.tsx`, `InventoryWallet.tsx`, `NarrativeNotifications.tsx`, `NewRun.tsx`, `StrategyPanels.tsx`, `StreetWork.tsx`: text references. No CSS, layouts or product artwork changed. Review captures are in `docs/screenshots/content-authoring/`.
 
 ## Text intentionally left in TypeScript
 
@@ -65,15 +65,25 @@ This is a bounded authoring foundation, not complete extraction. The following r
 
 ## Validation
 
-The accepted baseline’s 173 Vitest tests passed before extraction. Final authoring and regression results are recorded in the accompanying validation logs.
+The accepted baseline’s 173 Vitest tests passed before extraction. The implementation passes **177 Vitest tests plus 2 validator tests**. In an isolated checkout, four sample edits to two JSON files (an action description, Mega’s opening, promise label and fulfilled reaction) passed those same 179 checks and **10 Chromium/WebKit checks**, with no TypeScript edits. The delivered writing retains the original baseline wording. See `CONTENT_AUTHOR_EDIT.json` and accompanying logs. Final browser/deployment results are recorded below and in the PR.
+
+| Final validation              | Result                                                                                              |
+| ----------------------------- | --------------------------------------------------------------------------------------------------- |
+| Content contract              | 626 entries valid; strict JSON, duplicates, structure, required/unused IDs and placeholders checked |
+| Unit / validator              | 177 Vitest + 2 validator tests passed                                                               |
+| Root browser regression       | All 138 distinct Chromium/WebKit scenarios passed across the full runs and corrected rerun          |
+| Pages-path browser regression | 108/108 Chromium/WebKit checks passed                                                               |
+| JSON-only creator edit proof  | 179 unit/validator checks + 10 browser checks passed, with zero TypeScript edits                    |
+| Initial public review         | 2/2 browser smoke checks passed; served SHA/schema and exact JavaScript hash verified               |
+| Final shared-button reference | 15 rendered-HTML comparisons match GOAL 007; 10/10 focused Chromium/WebKit browser checks passed    |
 
 Exact baseline comparison passed **30 seeded campaigns / 900 days / 11,187 comparisons / 2,384 independent response branches**. Complete GameState, event text, actions, encounter dialogue/response labels/details/effects, save/load and continuation matched. **35 rendered HTML comparisons** cover NewRun, HUD, Chains dialogue, all three Actions categories and inventory across all five homes, including inline whitespace (excluding only the new nonvisual `data-response` test selector). See `CONTENT_PARITY.json`. Reproduce with `node scripts/verify-copy-parity.mjs /path/to/accepted-checkout` after installing dependencies there.
 
 The regression suite covers new games, Chains buyback/recovery/leadership and promise outcomes, crew agency, employment, supplier acquisition/repayment/default, police consequences/incarceration/release, dynamic faction control, organizational advancement/succession, business ownership, both victory routes, save/load and deterministic replay. Phone checks cover **320, 375, 390 and 430px**, long names/descriptions, scene scrolling and button bounds.
 
-The first browser run passed all 69 Chromium scenarios; WebKit could not launch because workspace libraries were absent. Debian library packages were installed in the user-owned browser runtime and WebKit was rerun. No product workaround was introduced. An initial Node-based browser-fixture load also exposed the need for JSON import attributes; the final imports work in both Node and Vite.
+The first browser run passed all 69 Chromium scenarios; WebKit could not launch because workspace libraries were absent. Debian library packages were installed in the user-owned browser runtime and WebKit was rerun. No product workaround was introduced. An initial Node-based browser-fixture load also exposed the need for JSON import attributes; the final imports work in both Node and Vite. One test-locator migration initially expanded a faction-name substring into an unrelated full neighborhood description; the faction assertion was restored and rerun. A slow default-scale WebKit run was stopped and repeated with the repository’s existing `WEBKIT_SOFTWARE_SCALE=1` setting in this two-CPU software-rendered environment; CSS viewport sizes and all gameplay checks are unchanged. Public smoke checks also run the normal iPhone device scale.
 
-Public deployment uses the review workflow at **https://kalikeefbiz.github.io/Hood-Hero/**. Final commit/deployment run and public Chromium/WebKit evidence are recorded in the PR delivery note; `build-info.json` is the served-commit authority. The live verification also compares public JavaScript bytes against the locally validated Pages bundle.
+The initial review deployment ([run 41588705162](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41588705162)) succeeded. Both public Chromium and WebKit smoke tests passed new-game creation, Chains clarification/promise, an income action, checkpoint save/resume and day advancement, with zero page errors or failed assets. Served metadata and SHA-256 of the JavaScript matched the locally validated review build; see `CONTENT_PUBLIC_REVIEW.json`. Public deployment uses the review workflow at **https://kalikeefbiz.github.io/Hood-Hero/**. Final commit/deployment run and public Chromium/WebKit evidence are recorded in the PR delivery note; `build-info.json` is the served-commit authority. The live verification also compares public JavaScript bytes against the locally validated Pages bundle.
 
 ## Compatibility and limits
 

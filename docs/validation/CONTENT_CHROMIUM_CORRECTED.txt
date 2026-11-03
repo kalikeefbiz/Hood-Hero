@@ -1,0 +1,11 @@
+[WebServer] (node:30317) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:30334) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  1 [chromium-mobile] › tests/encounters.spec.ts:360:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (2.6s)
+
+  1 passed (5.6s)

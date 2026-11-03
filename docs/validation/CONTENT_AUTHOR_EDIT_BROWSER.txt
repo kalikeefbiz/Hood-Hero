@@ -1,0 +1,29 @@
+[WebServer] (node:22470) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 2 workers
+
+(node:22567) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+(node:22568) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 320px (3.8s)
+  ✓   2 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 375px (3.4s)
+  ✓   4 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 430px (3.2s)
+  ✓   3 [chromium-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 390px (3.3s)
+(node:22858) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   6 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 320px (4.8s)
+  ✓   7 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 375px (6.1s)
+  ✓   5 [chromium-mobile] › tests/encounters.spec.ts:84:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (16.2s)
+(node:23229) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   8 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 390px (7.7s)
+  ✓   9 [webkit-mobile] › tests/content-authoring.spec.ts:5:3 › authored dialogue and descriptions wrap at 430px (6.6s)
+  ✓  10 [webkit-mobile] › tests/encounters.spec.ts:84:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (25.2s)
+
+  10 passed (57.5s)
