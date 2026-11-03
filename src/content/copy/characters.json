@@ -1,0 +1,31 @@
+{
+  "loco": {
+    "name": "Cristian Santiago",
+    "description": "Recognized leader. Incarcerated, but his influence remains."
+  },
+  "pablo": {
+    "description": "Active leadership. Cold, vindictive; loyalty and respect come first."
+  },
+  "youngAngels": {
+    "description": "Young Angels member. Participated in the unauthorized robbery of Mega."
+  },
+  "justice": {
+    "description": "Respected older leader, former high-level dealer and owner of legitimate local nightclubs."
+  },
+  "mega": {
+    "description": "Your cousin, Cuzzo. Formidable reputation; his chains were taken while out with his girlfriend."
+  },
+  "flacco": {
+    "description": "Your childhood best friend. Inexperienced, with room to grow."
+  },
+  "resident": {
+    "description": "Local resident looking for steady work and reliable people."
+  },
+  "membershipContact": {
+    "blocksName": "Block Boys",
+    "description": "An ordinary member who can sponsor a membership request."
+  },
+  "player": {
+    "description": "Unaffiliated. Make a living, build trust, find your place."
+  }
+}

@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { clamp, player, type GameState, type ZoneId } from "../core/GameState";
 import { record } from "../core/EventLog";
 import { expense } from "./Economy";
@@ -166,7 +167,10 @@ export function politicalAction(
         zone,
         kind: "disruption",
         magnitude: 7,
-        cause: `A backed neighborhood challenge weakened ${s.factions[rival].name}'s economic position.`,
+        cause: copy(
+          "city-events.aBackedNeighborhoodChallengeWeakenedFactionS",
+          { faction: s.factions[rival].name },
+        ),
       });
       p.rivalThreat = clamp(p.rivalThreat + 5);
       s.factions[faction].instability = clamp(
@@ -278,12 +282,19 @@ export function promote(state: GameState) {
   record(
     s,
     "city",
-    `${player(s).name} earned ${r.stage.name} authority. ${r.stage.permission}. Established leadership retains its position.`,
+    copy(
+      "city-events.playerEarnedPlayer2AuthorityPermissionEstablishedLeadership",
+      {
+        player: player(s).name,
+        stage: r.stage.name,
+        permission: r.stage.permission,
+      },
+    ),
     [s.playerId],
     [s.playerId],
     {
       importance: "major",
-      title: "Organizational advancement",
+      title: copy("city-events.organizationalAdvancement"),
       factionId: player(s).affiliation!,
     },
   );
@@ -317,12 +328,15 @@ export function appointSuccessor(state: GameState, id: string) {
   record(
     s,
     "crew",
-    `${s.characters[id].name} accepted succession planning for your position within ${s.factions[player(s).affiliation!].name}.`,
+    copy("city-events.playerAcceptedSuccessionPlanningForYourPosition", {
+      character: s.characters[id].name,
+      faction: s.factions[player(s).affiliation!].name,
+    }),
     [s.playerId, id],
     [s.playerId, id],
     {
       importance: "major",
-      title: "Successor appointed",
+      title: copy("city-events.successorAppointed"),
       factionId: player(s).affiliation!,
     },
   );

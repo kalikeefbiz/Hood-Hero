@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { honest } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
@@ -37,8 +38,12 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
   await capture("01-new-run-390");
   await capture("01-new-run-full-390", true);
-  await page.getByLabel("What do people call you?").fill("Morgan");
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Morgan");
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await dismissEncounter(page);
   // GOAL 003 introduces an opening scene. Closing it restores the GOAL 002 city.
   await dismissEncounter(page);
@@ -53,7 +58,9 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
   expect(situation.y + situation.height).toBeLessThanOrEqual(dock.y);
   await page.getByRole("button", { name: "Open The Chains storyline" }).click();
   await expect(
-    page.getByRole("dialog", { name: "Character encounter" }),
+    page.getByRole("dialog", {
+      name: copy("interface.app.characterEncounter"),
+    }),
   ).toContainText("Cuzzo");
   await dismissEncounter(page);
   await honest(page);
@@ -89,7 +96,9 @@ test("GOAL 002B mandatory visual review: new run, independent and Blips at 390",
     { key: SAVE_KEY, raw: serialize(result.state) },
   );
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
   await capture("03-blips-city-390");
   await expect(page.locator(".game-shell")).toHaveAttribute(

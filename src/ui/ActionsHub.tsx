@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { MERCHANDISE } from "../content/street";
 import type { GameState } from "../core/GameState";
 import { player } from "../core/GameState";
@@ -98,11 +99,17 @@ export function ActionsHub({
       <div
         className="segmented action-categories"
         role="group"
-        aria-label="Action categories"
+        aria-label={copy("interface.actionsHub.actionCategories")}
       >
         {(["Streets", "Honest", "Connects"] as const).map((g) => (
           <button
-            key={g}
+            key={
+              {
+                Streets: copy("interface.navigation.streets"),
+                Honest: copy("interface.navigation.honest"),
+                Connects: copy("interface.navigation.connects"),
+              }[g]
+            }
             aria-pressed={category === g}
             className={category === g ? "active" : ""}
             onClick={() => setCategory(g)}
@@ -151,7 +158,9 @@ export function ActionsHub({
           </div>
           {currentEmployment(s) && (
             <details className="panel">
-              <summary>Employment options</summary>
+              <summary>
+                {copy("interface.actionsHub.employmentOptions")}
+              </summary>
               {all.filter((a) => a.type === "resign").map(card)}
             </details>
           )}
@@ -160,14 +169,14 @@ export function ActionsHub({
       {category === "Connects" && (
         <>
           <label className="person-selector">
-            Connected contacts
+            {copy("interface.actionsHub.connectedContacts")}
             <select
-              aria-label="Connected contacts"
+              aria-label={copy("interface.actionsHub.connectedContacts2")}
               value={p.connections.includes(focus) ? focus : ""}
               onChange={(e) => setFocus(e.target.value)}
             >
               <option value="" disabled>
-                Select a contact
+                {copy("interface.actionsHub.selectAContact")}
               </option>
               {connected.map((id) => (
                 <option key={id} value={id}>
@@ -178,14 +187,16 @@ export function ActionsHub({
           </label>
           <section
             className="panel connect-profile"
-            aria-label="Selected contact"
+            aria-label={copy("interface.actionsHub.selectedContact")}
           >
             <p className="eyebrow">
-              REACH OUT / {accessStatus(s, p.id, c.id).toUpperCase()}
+              {copy("interface.actionsHub.reachOUT")}
+              {accessStatus(s, p.id, c.id).toUpperCase()}
             </p>
             <h3>{c.alias ?? c.name}</h3>
             <p>
-              {s.zones[c.home].name} ·{" "}
+              {s.zones[c.home].name}
+              {copy("interface.actionsHub.text")}{" "}
               {c.affiliation ? s.factions[c.affiliation].name : "Independent"}
             </p>
             {lock ? (
@@ -193,7 +204,10 @@ export function ActionsHub({
             ) : (
               <>
                 {supplier && (
-                  <div className="supplier-entry" aria-label="Supplier offer">
+                  <div
+                    className="supplier-entry"
+                    aria-label={copy("interface.actionsHub.supplierOffer")}
+                  >
                     <strong>
                       {debt
                         ? `Outstanding: $${debt.balance} · due day ${debt.dueDay}`
@@ -201,9 +215,12 @@ export function ActionsHub({
                     </strong>
                     {!debt && (
                       <p>
-                        {MERCHANDISE.nightgoods.quantity} units · $
-                        {MERCHANDISE.nightgoods.wholesale} cash / $
-                        {MERCHANDISE.nightgoods.consignment} consignment · 1 AP
+                        {MERCHANDISE.nightgoods.quantity}
+                        {copy("interface.actionsHub.units")}
+                        {MERCHANDISE.nightgoods.wholesale}
+                        {copy("interface.actionsHub.cash")}
+                        {MERCHANDISE.nightgoods.consignment}
+                        {copy("interface.actionsHub.consignment1AP")}
                       </p>
                     )}
                     <button onClick={() => openSupplier(c.id)}>
@@ -222,7 +239,9 @@ export function ActionsHub({
                 <div className="connect-actions">
                   {s.ap === 0 && (
                     <p className="request-limit">
-                      No AP left for contact requests today.
+                      {copy(
+                        "interface.actionsHub.noAPLeftForContactRequestsToday",
+                      )}
                     </p>
                   )}
                   {all
@@ -242,7 +261,8 @@ export function ActionsHub({
                           <div>
                             <h3>{label}</h3>
                             <small>
-                              {ACTIONS[a.type].ap} AP
+                              {ACTIONS[a.type].ap}
+                              {copy("interface.actionsHub.ap")}
                               {a.type === "offer"
                                 ? " · $20"
                                 : a.type === "transfer"
@@ -259,7 +279,7 @@ export function ActionsHub({
                             aria-label={label}
                             onClick={() => act(a)}
                           >
-                            Choose →
+                            {copy("interface.actionsHub.choose")}
                           </button>
                         </article>
                       );
@@ -269,7 +289,9 @@ export function ActionsHub({
             )}
           </section>
           <details className="panel known-contacts">
-            <summary>Known of · introductions needed</summary>
+            <summary>
+              {copy("interface.actionsHub.knownOfIntroductionsNeeded")}
+            </summary>
             {p.known
               .filter(
                 (id) =>
@@ -282,9 +304,14 @@ export function ActionsHub({
                   <strong>
                     {s.characters[id].alias ?? s.characters[id].name}
                   </strong>
-                  <span>{s.zones[s.characters[id].home].name} · Known of</span>
+                  <span>
+                    {s.zones[s.characters[id].home].name}
+                    {copy("interface.actionsHub.knownOf")}
+                  </span>
                   <small>
-                    Ask an established connection for an introduction.
+                    {copy(
+                      "interface.actionsHub.askAnEstablishedConnectionForAnIntroduction",
+                    )}
                     {id === "pablo" &&
                     s.incidents["the-chains"]?.status === "active"
                       ? " The Chains can be brought to him through City."

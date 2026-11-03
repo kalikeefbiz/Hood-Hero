@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import type { ZoneId } from "../core/GameState";
 
 export const NEIGHBORHOODS: Record<
@@ -6,32 +7,32 @@ export const NEIGHBORHOODS: Record<
 > = {
   downtown: {
     image: "downtown.webp",
-    alt: "Downtown towers, rain-soaked commerce and docks under police watch",
-    flavor: "Money. Influence. Opportunity.",
+    alt: copy("neighborhoods.downtown.alt"),
+    flavor: copy("neighborhoods.downtown.flavor"),
     position: "50% 52%",
   },
   rio: {
     image: "rio.webp",
-    alt: "Lowriders along warm Eastside streets in Rio Gabriel",
-    flavor: "Eastside roots. Lowrider streets.",
+    alt: copy("neighborhoods.rio.alt"),
+    flavor: copy("neighborhoods.rio.flavor"),
     position: "50% 60%",
   },
   south: {
     image: "south.webp",
-    alt: "Southside project housing above worn neighborhood streets",
-    flavor: "Old loyalty. New ambition.",
+    alt: copy("neighborhoods.south.alt"),
+    flavor: copy("neighborhoods.south.flavor"),
     position: "50% 48%",
   },
   resevoir: {
     image: "resevoir.webp",
-    alt: "Boarded homes and vacant lots in The Resevoir at sunset",
-    flavor: "Boarded houses. Deep roots.",
+    alt: copy("neighborhoods.resevoir.alt"),
+    flavor: copy("neighborhoods.resevoir.flavor"),
     position: "50% 55%",
   },
   nawf: {
     image: "nawf.webp",
-    alt: "The Nawf’s bodega, elevated train and defaced Mudgang memorial",
-    flavor: "Culture. Hustle. Conflict.",
+    alt: copy("neighborhoods.nawf.alt"),
+    flavor: copy("neighborhoods.nawf.flavor"),
     position: "50% 55%",
   },
 };

@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { payArrears } from "../systems/Economy";
 import { useState } from "react";
 import { player, type GameState, type ZoneId } from "../core/GameState";
@@ -57,7 +58,7 @@ export function NeighborhoodStrategy({
   return (
     <section
       className="strategy-neighborhood"
-      aria-label="Neighborhood strategy"
+      aria-label={copy("interface.strategyPanels.neighborhoodStrategy")}
     >
       <h4>{t.contested ? "Contested neighborhood" : "Neighborhood balance"}</h4>
       <p>
@@ -68,8 +69,11 @@ export function NeighborhoodStrategy({
           `${s.factions[t.candidate].name} is consolidating a challenge (${t.candidateDays}/${B.stabilizationDays} days).`}
       </p>
       <p className="muted">
-        Civilian climate {Math.round(s.zones[zone].support)}/100 · Lawful
-        economy {Math.round(t.lawfulEconomy)}/100.{" "}
+        {copy("interface.strategyPanels.civilianClimate")}
+        {Math.round(s.zones[zone].support)}
+        {copy("interface.strategyPanels.100LawfulEconomy")}
+        {Math.round(t.lawfulEconomy)}
+        {copy("interface.strategyPanels.100")}{" "}
         {t.contested
           ? "Rival pressure increases market risk and reduces local trade."
           : "Local trade faces ordinary competition."}
@@ -99,31 +103,41 @@ export function NeighborhoodStrategy({
             />
           </div>
           <small>
-            Presence {Math.round(q.presence)} · Economy {Math.round(q.economy)}{" "}
-            · Support {Math.round(q.support)} · Pressure{" "}
-            {Math.round(q.pressure)}
+            {copy("interface.strategyPanels.presence")}
+            {Math.round(q.presence)}
+            {copy("interface.strategyPanels.economy")}
+            {Math.round(q.economy)} {copy("interface.strategyPanels.support")}
+            {Math.round(q.support)}
+            {copy("interface.strategyPanels.pressure")} {Math.round(q.pressure)}
           </small>
         </div>
       ))}
       {!meaningful.length && (
         <p>
-          No substantial faction foothold. Commerce alone does not establish
-          territorial control.
+          {copy(
+            "interface.strategyPanels.noSubstantialFactionFootholdCommerceAloneDoes",
+          )}
         </p>
       )}
       {t.changes.slice(-2).map((c) => (
         <p className="memory" key={c.eventId}>
-          Day {c.day}:{" "}
+          {copy("interface.strategyPanels.day")}
+          {c.day}
+          {copy("interface.strategyPanels.text")}{" "}
           {c.to
             ? s.factions[c.to].name + " gained control"
             : "Recognized control lost"}
-          .
+          {copy("interface.strategyPanels.text2")}
         </p>
       ))}
       <details className="strategic-actions">
-        <summary>Influence this neighborhood</summary>
+        <summary>
+          {copy("interface.strategyPanels.influenceThisNeighborhood")}
+        </summary>
         <p className="muted">
-          One investment every {B.actionCooldown} days.{" "}
+          {copy("interface.strategyPanels.oneInvestmentEvery")}
+          {B.actionCooldown}
+          {copy("interface.strategyPanels.days")}{" "}
           {contact
             ? `Work through ${s.characters[contact].name}.`
             : "Organizational actions require an accessible, trusted representative."}
@@ -137,7 +151,10 @@ export function NeighborhoodStrategy({
                 disabled={!!error}
                 onClick={() => r.apply(politicalAction(s, type, zone, contact))}
               >
-                {a.label} · ${a.cost} · 1 AP
+                {a.label}
+                {copy("interface.strategyPanels.text3")}
+                {a.cost}
+                {copy("interface.strategyPanels.1AP")}
               </button>
               {error && <small>{error}</small>}
             </div>
@@ -146,13 +163,23 @@ export function NeighborhoodStrategy({
       </details>
       {r.message && <p role="status">{r.message}</p>}
       <details>
-        <summary>Recent faction decisions</summary>
+        <summary>
+          {copy("interface.strategyPanels.recentFactionDecisions")}
+        </summary>
         {Object.values(s.factions).map((f) => {
           const plan = s.strategic.strategies[f.id],
             last = plan.history.filter((h) => h.zone === zone).at(-1);
           return last ? (
             <p key={f.id}>
-              Day {last.day} · {f.name}: {last.kind} · ${last.cost} committed.
+              {copy("interface.strategyPanels.day2")}
+              {last.day}
+              {copy("interface.strategyPanels.text4")}
+              {f.name}
+              {copy("interface.strategyPanels.text5")}
+              {last.kind}
+              {copy("interface.strategyPanels.text6")}
+              {last.cost}
+              {copy("interface.strategyPanels.committed")}
             </p>
           ) : null;
         })}
@@ -169,9 +196,11 @@ export function OrganizationPanel({ s, onChange }: Props) {
   return (
     <section
       className="panel organization-panel"
-      aria-label="Organizational progression"
+      aria-label={copy("interface.strategyPanels.organizationalProgression")}
     >
-      <p className="eyebrow">POWER & SUCCESSION</p>
+      <p className="eyebrow">
+        {copy("interface.strategyPanels.powerSUCCESSION")}
+      </p>
       <h3>{f ? f.name : "Unaffiliated"}</h3>
       <p>
         {f
@@ -181,14 +210,18 @@ export function OrganizationPanel({ s, onChange }: Props) {
       {f && (
         <>
           <p>
-            {stage?.permission}.{" "}
+            {stage?.permission}
+            {copy("interface.strategyPanels.text7")}{" "}
             {f.leaders.length
               ? `Established leadership: ${f.leaders.map((id) => s.characters[id].name + " (" + s.characters[id].status + ")").join(", ")}.`
               : "The organization retains its existing authority structure."}
           </p>
           {next.stage && (
             <>
-              <h4>Next: {next.stage.name}</h4>
+              <h4>
+                {copy("interface.strategyPanels.next")}
+                {next.stage.name}
+              </h4>
               <ul>
                 {next.missing.map((m) => (
                   <li key={m}>{m}</li>
@@ -203,25 +236,31 @@ export function OrganizationPanel({ s, onChange }: Props) {
                 }
                 onClick={() => r.apply(promote(s))}
               >
-                Request advancement · 1 AP
+                {copy("interface.strategyPanels.requestAdvancement1AP")}
               </button>
             </>
           )}
           <p>
-            Underlord: {stabilizedControl(s, f.id)}/4 stabilized neighborhoods ·{" "}
-            {Math.min(70, p.authority)}/70 authority ·{" "}
+            {copy("interface.strategyPanels.underlord")}
+            {stabilizedControl(s, f.id)}
+            {copy("interface.strategyPanels.4StabilizedNeighborhoods")}{" "}
+            {Math.min(70, p.authority)}
+            {copy("interface.strategyPanels.70Authority")}{" "}
             {s.crew.successor
               ? `Appointed: ${s.characters[s.crew.successor].name}`
               : "Successor not appointed"}
-            .
+            {copy("interface.strategyPanels.text8")}
           </p>
         </>
       )}
       <details>
-        <summary>Successor eligibility</summary>
+        <summary>
+          {copy("interface.strategyPanels.successorEligibility")}
+        </summary>
         <p>
-          Requires council authority, shared affiliation, 60 trust, 60 loyalty
-          and availability.
+          {copy(
+            "interface.strategyPanels.requiresCouncilAuthoritySharedAffiliation60Trust",
+          )}
         </p>
         {s.crew.members.map((id) => {
           const error = successorError(s, id);
@@ -235,7 +274,9 @@ export function OrganizationPanel({ s, onChange }: Props) {
                 }
                 onClick={() => r.apply(appointSuccessor(s, id))}
               >
-                Appoint {s.characters[id].alias ?? s.characters[id].name} · 1 AP
+                {copy("interface.strategyPanels.appoint")}
+                {s.characters[id].alias ?? s.characters[id].name}
+                {copy("interface.strategyPanels.1AP2")}
               </button>
             </div>
           );
@@ -250,14 +291,16 @@ export function BusinessPanel({ s, onChange }: Props) {
   return (
     <section
       className="panel business-panel"
-      aria-label="Legitimate businesses"
+      aria-label={copy("interface.strategyPanels.legitimateBusinesses")}
     >
-      <p className="eyebrow">OWN A PIECE OF THE CITY</p>
-      <h3>Business opportunities</h3>
+      <p className="eyebrow">
+        {copy("interface.strategyPanels.ownAPIECEOFTHECITY")}
+      </p>
+      <h3>{copy("interface.strategyPanels.businessOpportunities")}</h3>
       <p className="muted">
-        Acquisition uses actual cash, clean first. Any illicit funding makes the
-        asset, all income and resale illicit. Net income fluctuates; maintenance
-        costs $120. Sale value replaces the asset and never counts twice.
+        {copy(
+          "interface.strategyPanels.acquisitionUsesActualCashCleanFirstAny",
+        )}
       </p>
       {BUSINESSES.map((d) => {
         const b = s.strategic.businesses.find((b) => b.definition === d.id),
@@ -271,19 +314,33 @@ export function BusinessPanel({ s, onChange }: Props) {
           <article className="business-opportunity" key={d.id}>
             <h4>{d.name}</h4>
             <p>
-              {s.zones[d.zone].name} ·{" "}
+              {s.zones[d.zone].name}
+              {copy("interface.strategyPanels.text9")}{" "}
               {b ? b.status : `Available · $${d.cost.toLocaleString()}`}
             </p>
             <p className="muted">
-              {d.description} Base daily revenue ${d.revenue}, expenses $
-              {d.expenses}; actual results depend on conditions.
+              {d.description}
+              {copy("interface.strategyPanels.baseDailyRevenue")}
+              {d.revenue}
+              {copy("interface.strategyPanels.expenses")}
+              {d.expenses}
+              {copy("interface.strategyPanels.actualResultsDependOnConditions")}
             </p>
             {b && (
               <p>
-                Funding: {b.provenance} · Condition {Math.round(b.condition)}% ·
-                Latest net ${b.lastNet} · Lifetime net ${b.totalNet} · Asset
-                value ${a?.value ?? 0} · Proven recurring net $
-                {a?.recurringIncome ?? 0}/day
+                {copy("interface.strategyPanels.funding")}
+                {b.provenance}
+                {copy("interface.strategyPanels.condition")}
+                {Math.round(b.condition)}
+                {copy("interface.strategyPanels.latestNet")}
+                {b.lastNet}
+                {copy("interface.strategyPanels.lifetimeNet")}
+                {b.totalNet}
+                {copy("interface.strategyPanels.assetValue")}
+                {a?.value ?? 0}
+                {copy("interface.strategyPanels.provenRecurringNet")}
+                {a?.recurringIncome ?? 0}
+                {copy("interface.strategyPanels.day3")}
               </p>
             )}
             {actions.map((action) => {
@@ -301,7 +358,8 @@ export function BusinessPanel({ s, onChange }: Props) {
                         : action === "sell"
                           ? `Sell · $${a?.value}`
                           : "Close"}{" "}
-                    {d.name} · 1 AP
+                    {d.name}
+                    {copy("interface.strategyPanels.1AP3")}
                   </button>
                   {error && <small>{error}</small>}
                 </div>
@@ -309,14 +367,21 @@ export function BusinessPanel({ s, onChange }: Props) {
             })}
             {b && (
               <details>
-                <summary>Operating history</summary>
+                <summary>
+                  {copy("interface.strategyPanels.operatingHistory")}
+                </summary>
                 {b.history
                   .slice(-7)
                   .reverse()
                   .map((h, i) => (
                     <p key={i}>
-                      Day {h.day} · ${h.revenue} revenue − ${h.expenses}{" "}
-                      expenses = ${h.net}
+                      {copy("interface.strategyPanels.day4")}
+                      {h.day}
+                      {copy("interface.strategyPanels.text10")}
+                      {h.revenue}
+                      {copy("interface.strategyPanels.revenue")}
+                      {h.expenses} {copy("interface.strategyPanels.expenses2")}
+                      {h.net}
                     </p>
                   ))}
               </details>
@@ -334,10 +399,12 @@ export function RetirementPanel({ s, onChange }: Props) {
   return (
     <section
       className="panel retirement-panel"
-      aria-label="Legitimate Exit progress"
+      aria-label={copy("interface.strategyPanels.legitimateExitProgress")}
     >
-      <p className="eyebrow">A LIFE OF YOUR OWN</p>
-      <h3>Legitimate Exit</h3>
+      <p className="eyebrow">
+        {copy("interface.strategyPanels.aLIFEOFYOUROWN")}
+      </p>
+      <h3>{copy("interface.strategyPanels.legitimateExit")}</h3>
       {s.street.arrears > 0 && (
         <button
           disabled={
@@ -347,25 +414,35 @@ export function RetirementPanel({ s, onChange }: Props) {
           }
           onClick={() => r.apply(payArrears(s))}
         >
-          Clear arrears · ${s.street.arrears}
+          {copy("interface.strategyPanels.clearArrears")}
+          {s.street.arrears}
         </button>
       )}
       <p>
-        Qualifying net wealth ${Math.floor(v.wealth).toLocaleString()} /
-        $100,000 · Proven recurring net ${v.income}/day / $24 · Sustainable days{" "}
-        {s.strategic.lawfulStreak}/{B.lawfulSustainDays}
+        {copy("interface.strategyPanels.qualifyingNetWealth")}
+        {Math.floor(v.wealth).toLocaleString()}
+        {copy("interface.strategyPanels.100000ProvenRecurringNet")}
+        {v.income}
+        {copy("interface.strategyPanels.day24SustainableDays")}{" "}
+        {s.strategic.lawfulStreak}
+        {copy("interface.strategyPanels.text11")}
+        {B.lawfulSustainDays}
       </p>
       <ul>
         {v.missing.map((m) => (
           <li key={m}>{m}</li>
         ))}
       </ul>
-      {!v.missing.length && <p>You qualify. Retirement is your decision.</p>}
+      {!v.missing.length && (
+        <p>
+          {copy("interface.strategyPanels.youQualifyRetirementIsYourDecision")}
+        </p>
+      )}
       <button
         disabled={!!s.end || !!v.missing.length}
         onClick={() => r.apply(retire(s))}
       >
-        Retire voluntarily
+        {copy("interface.strategyPanels.retireVoluntarily")}
       </button>
       {r.message && <p role="status">{r.message}</p>}
     </section>

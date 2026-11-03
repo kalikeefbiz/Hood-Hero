@@ -1,0 +1,194 @@
+{
+  "applyForWork": {
+    "label": "Apply for work",
+    "description": "Meet the hiring contact. Review the offer before accepting; no wages for applying.",
+    "outcomes": {
+      "summary": "Job offer if eligible"
+    }
+  },
+  "acceptEmployment": {
+    "label": "Accept employment",
+    "description": "Commit to the repeating schedule. First shift is after today.",
+    "outcomes": {
+      "summary": "Persistent employment and scheduled shifts"
+    }
+  },
+  "requestTimeOff": {
+    "label": "Request unpaid time off",
+    "description": "Ask to be excused from today's shift. One approved leave per seven days.",
+    "outcomes": {
+      "summary": "No absence, no wages"
+    }
+  },
+  "resignFromWork": {
+    "label": "Resign from work",
+    "description": "End employment and future obligations. Applications pause for three days; same workplace for seven.",
+    "outcomes": {
+      "summary": "Employment ends; employer trust falls"
+    }
+  },
+  "reachOut": {
+    "label": "Reach out",
+    "description": "Make contact and establish a little trust.",
+    "outcomes": {
+      "summary": "Trust and shared memories"
+    }
+  },
+  "askAround": {
+    "label": "Ask around",
+    "description": "Learn about people and the property dispute.",
+    "outcomes": {
+      "summary": "Information and new contacts"
+    }
+  },
+  "askIntroduction": {
+    "label": "Ask for an introduction",
+    "description": "Meet the people this contact knows.",
+    "outcomes": {
+      "summary": "New known contacts"
+    }
+  },
+  "spendTime": {
+    "label": "Spend time together",
+    "description": "Build trust, shaped by their values.",
+    "outcomes": {
+      "summary": "Trust, respect and stress relief"
+    }
+  },
+  "requestHelp": {
+    "label": "Request help",
+    "description": "Ask a trusted person to support the dispute.",
+    "outcomes": {
+      "summary": "Support from a trusted contact"
+    }
+  },
+  "offerSupport": {
+    "label": "Offer support · $20",
+    "description": "Give financial support. Its provenance stays with the money.",
+    "outcomes": {
+      "summary": "Money transferred and trust built"
+    }
+  },
+  "transferMoney": {
+    "label": "Transfer $25",
+    "description": "Send $25 to this person.",
+    "outcomes": {
+      "summary": "Money transferred"
+    }
+  },
+  "negotiateBuyback": {
+    "label": "Negotiate buyback",
+    "description": "Try to lower the group’s demand, once per dispute.",
+    "outcomes": {
+      "summary": "Lower demand or refusal"
+    }
+  },
+  "discussSettlement": {
+    "label": "Discuss settlement",
+    "description": "Tell active leadership about the unauthorized incident.",
+    "outcomes": {
+      "summary": "Leadership may intervene on a later day"
+    }
+  },
+  "returnChains": {
+    "label": "Pay for the chains",
+    "description": "Meet the current demand and return the property to its owner.",
+    "outcomes": {
+      "summary": "Property returned; cash paid to the group"
+    }
+  },
+  "recoverProperty": {
+    "label": "Attempt property recovery",
+    "description": "An abstract, uncertain operation. Failure raises exposure and conflict.",
+    "outcomes": {
+      "summary": "Property returned or police and rival pressure"
+    }
+  },
+  "fullShift": {
+    "label": "Work a full shift",
+    "description": "Attend your scheduled shift. Build work skills and legitimacy. Requires an active job and today’s obligation.",
+    "outcomes": {
+      "summary": "$96 clean income; +8 stress"
+    }
+  },
+  "localGig": {
+    "label": "Take a local gig",
+    "description": "Earn $38 helping a local business in your neighborhood. One ordinary gig per day; no recurring obligation.",
+    "outcomes": {
+      "summary": "$38 clean income; +3 stress"
+    }
+  },
+  "streetTransaction": {
+    "label": "Street work transaction",
+    "description": "Distribute merchandise you actually hold through a limited local market. Supplier balances remain owed.",
+    "outcomes": {
+      "summary": "Actual sales or loss; inventory, supplier debt and exposure persist"
+    }
+  },
+  "purchaseItem": {
+    "label": "Buy item",
+    "description": "Buy a personal item and reduce stress.",
+    "outcomes": {
+      "summary": "Cash spent; stress relieved"
+    }
+  },
+  "inviteToSet": {
+    "label": "Invite to your Set",
+    "description": "Requires free capacity, trust and willingness.",
+    "outcomes": {
+      "summary": "Persistent crew membership"
+    }
+  },
+  "removeFromSet": {
+    "label": "Remove from Set",
+    "description": "Part ways. Identity and relationship history remain.",
+    "outcomes": {
+      "summary": "Member leaves; trust falls"
+    }
+  },
+  "paidErrand": {
+    "label": "Assign a paid errand",
+    "description": "Reserve an available member for a lawful errand due next day.",
+    "outcomes": {
+      "summary": "$24 clean income and member experience, or a failed obligation"
+    }
+  },
+  "localConnection": {
+    "label": "Build a local connection",
+    "description": "Help a member’s neighborhood. Build personal and organizational standing.",
+    "outcomes": {
+      "summary": "Standing, influence and legitimacy"
+    }
+  },
+  "requestAffiliation": {
+    "label": "Request affiliation",
+    "description": "A trusted member sponsors you when standing is sufficient.",
+    "outcomes": {
+      "summary": "Membership in one established organization"
+    }
+  },
+  "quietAfternoon": {
+    "label": "Take a quiet afternoon",
+    "description": "Relieve stress without spending money.",
+    "outcomes": {
+      "summary": "−14 stress"
+    }
+  },
+  "buttons": {
+    "work": "Clock in",
+    "gig": "Pick up a gig",
+    "affiliate": "Get put on"
+  },
+  "cards": {
+    "clean": "${amount} clean · {workplace}",
+    "employmentRequired": "Employment required",
+    "scheduledFullShift8Stress": "{employment}. Scheduled full shift · +8 stress.",
+    "shift2AP": "{description} ${amount} / shift · 2 AP · {workdays} · {neighborhood}.",
+    "apply": "Apply",
+    "accept": "Accept",
+    "text": "{choice} · {workplace}",
+    "buyBack": "Buy back · {price}",
+    "cleanLocalWork": "${amount} clean. Local work.",
+    "checkInWith": "Check in with {character}."
+  }
+}

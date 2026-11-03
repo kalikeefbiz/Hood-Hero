@@ -1,3 +1,4 @@
+import { copy } from "./copy";
 import type { EncounterDefinition, EncounterResponse } from "../core/Encounter";
 const response = (id: string, label: string): EncounterResponse => ({
   id,
@@ -21,27 +22,43 @@ export const WORKPLACE_ENCOUNTER: EncounterDefinition = {
   dialogue: (s, e) => {
     const event = s.events.find((x) => x.id === e.sourceEventId)!;
     return event.title === "Difficult shift"
-      ? "The delivery numbers don't match. Can you push through and fix it, or should we flag it for the next shift?"
+      ? copy("workplace-dialogue.theDeliveryNumbersDonTMatchCan")
       : event.title === "Coworker request"
-        ? "Flacco is here on a local delivery gig. He could use a hand clearing the station. Can you spare the effort?"
-        : "You keep showing up. There's an extra $18 for finishing this task before you leave. It'll be a tiring finish. Interested?";
+        ? copy("workplace-dialogue.flaccoIsHereOnALocalDelivery")
+        : copy("workplace-dialogue.youKeepShowingUpThereSAn");
   },
   responses: (s, e) => {
     const title = s.events.find((x) => x.id === e.sourceEventId)?.title;
     return [
       ...(title === "Difficult shift"
         ? [
-            response("push", "Fix it · +6 stress, better performance"),
-            response("flag", "Flag it · −3 reliability, keep wages"),
+            response(
+              "push",
+              copy("workplace-dialogue.fixIt6StressBetterPerformance"),
+            ),
+            response(
+              "flag",
+              copy("workplace-dialogue.flagIt3ReliabilityKeepWages"),
+            ),
           ]
         : title === "Coworker request"
-          ? [response("help", "Help Flacco · +4 stress, build trust")]
-          : [response("extra", "Take the task · +$18, +10 stress")]),
+          ? [
+              response(
+                "help",
+                copy("workplace-dialogue.helpFlacco4StressBuildTrust"),
+              ),
+            ]
+          : [
+              response(
+                "extra",
+                copy("workplace-dialogue.takeTheTask1810Stress"),
+              ),
+            ]),
       response(
         "skip",
         title === "Difficult shift"
-          ? "Skip scene · Flag it, −3 reliability"
-          : "Skip scene · Pass, keep regular pay",
+          ? copy("workplace-dialogue.skipSceneFlagIt3Reliability")
+          : copy("workplace-dialogue.skipScenePassKeepRegularPay"),
       ),
     ];
   },

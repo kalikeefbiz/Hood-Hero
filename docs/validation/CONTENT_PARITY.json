@@ -1,0 +1,9 @@
+{
+  "baseline": "2fced25c28875b976dd963c33a32dce7e09b7e29",
+  "renderedComponents": 35,
+  "campaigns": 30,
+  "days": 900,
+  "checkpoints": 11187,
+  "responseBranches": 2384,
+  "exactStateAndTextParity": true
+}

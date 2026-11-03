@@ -1,3 +1,4 @@
+import { copy } from "./copy";
 import type { EncounterDefinition } from "../core/Encounter";
 import { cash, player, type GameState } from "../core/GameState";
 import { MERCHANDISE, STREET_BALANCE as B } from "./street";
@@ -24,14 +25,28 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
     const n = s.characters[e.participants[0]],
       a = s.street.agreements.find((a) => a.supplier === n.id && a.balance > 0);
     if (a)
-      return `You still have $${a.balance} with me. ${a.status === "overdue" ? "It's late. I need you to start making this right." : `We said the end of day ${a.dueDay}.`} Losing the goods doesn't settle that. Bring what you can; I'll count every dollar.`;
+      return copy("supplier-dialogue.reminder.dialogue", {
+        amount: a.balance,
+        terms:
+          a.status === "overdue"
+            ? copy("supplier-dialogue.reminder.overdue")
+            : copy("supplier-dialogue.reminder.onTime", { deadline: a.dueDay }),
+      });
     const tone =
       n.id === "mega"
-        ? "Cuzzo, I'll put my name behind one small lot. Don't make me chase you."
+        ? copy("supplier-dialogue.opening.mega")
         : n.id === "pablo"
-          ? "You give your word, you keep it. I remember who does."
-          : "Small lot. Clear terms. We see how this goes before there's any more.";
-    return `${tone} ${MERCHANDISE.nightgoods.quantity} night goods: $90 cash now, or $102 on consignment by the end of day ${s.day + B.deadline}. Expected gross here is $${6 * unitPrice(s, n.home)} if it all sells. ${e.selectedResponses.some((r) => r.id === "terms") ? "That's gross, before supplier cost, losses and a partner's share. No guaranteed buyers. Police scrutiny, competition and repeated activity can interrupt trade; you still owe me if goods disappear." : "Buyers aren't promised. Police and local organizations are watching."}`;
+          ? copy("supplier-dialogue.opening.pablo")
+          : copy("supplier-dialogue.opening.other");
+    return copy("supplier-dialogue.opening.dialogue", {
+      tone: tone,
+      quantity: MERCHANDISE.nightgoods.quantity,
+      deadline: s.day + B.deadline,
+      gross: 6 * unitPrice(s, n.home),
+      risk: e.selectedResponses.some((r) => r.id === "terms")
+        ? copy("supplier-dialogue.terms.expanded")
+        : copy("supplier-dialogue.terms.brief"),
+    });
   },
   responses: (s, e) => {
     const supplier = e.participants[0],
@@ -42,8 +57,10 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
       return [
         {
           id: "full",
-          label: `Repay full balance · $${a.balance}`,
-          detail: "0 AP · actual cash transferred",
+          label: copy("supplier-dialogue.choices.fullPayment", {
+            amount: a.balance,
+          }),
+          detail: copy("supplier-dialogue.details.fullPayment"),
           effect: {
             type: "street",
             choice: "repay",
@@ -54,8 +71,10 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
         },
         {
           id: "partial",
-          label: `Make partial payment · $${Math.min(25, a.balance)}`,
-          detail: "0 AP · reduces remaining debt",
+          label: copy("supplier-dialogue.choices.partialPayment", {
+            amount: Math.min(25, a.balance),
+          }),
+          detail: copy("supplier-dialogue.details.partialPayment"),
           effect: {
             type: "street",
             choice: "repay",
@@ -66,8 +85,10 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
         },
         {
           id: "affordable",
-          label: `Pay what you can · $${Math.min(cash(player(s)), a.balance)}`,
-          detail: "0 AP · leaves no cash cushion",
+          label: copy("supplier-dialogue.choices.affordablePayment", {
+            amount: Math.min(cash(player(s)), a.balance),
+          }),
+          detail: copy("supplier-dialogue.details.affordablePayment"),
           effect: {
             type: "street",
             choice: "repay",
@@ -79,15 +100,15 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
         },
         {
           id: "leave",
-          label: "I'll come back.",
+          label: copy("supplier-dialogue.choices.returnLater"),
           effect: { type: "street", choice: "leave" },
         },
       ];
     return [
       {
         id: "cash",
-        label: "Accept cash purchase · $90 · 1 AP",
-        detail: "6 units · ownership transfers; no supplier debt",
+        label: copy("supplier-dialogue.choices.cashPurchase"),
+        detail: copy("supplier-dialogue.details.cashPurchase"),
         effect: {
           type: "street",
           choice: "acquire",
@@ -98,8 +119,10 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
       },
       {
         id: "consignment",
-        label: `Accept consignment · $102 due day ${s.day + B.deadline} · 1 AP`,
-        detail: "6 units · personal repayment obligation, including losses",
+        label: copy("supplier-dialogue.choices.consignment", {
+          deadline: s.day + B.deadline,
+        }),
+        detail: copy("supplier-dialogue.details.consignment"),
         effect: {
           type: "street",
           choice: "acquire",
@@ -112,14 +135,14 @@ export const SUPPLIER_ENCOUNTER: EncounterDefinition = {
         ? [
             {
               id: "terms",
-              label: "Explain the terms and risk.",
+              label: copy("supplier-dialogue.choices.explainTerms"),
               effect: { type: "street" as const, choice: "terms" },
             },
           ]
         : []),
       {
         id: "leave",
-        label: "Decline. No arrangement.",
+        label: copy("supplier-dialogue.choices.decline"),
         effect: { type: "street", choice: "leave" },
       },
     ];
@@ -181,11 +204,11 @@ export const SUPPLIER_REACTION: EncounterDefinition = {
     !["closed", "acknowledged"].includes(e.status),
   dialogue: (s, e) =>
     s.events.find((x) => x.id === e.sourceEventId)?.text ??
-    "Your supplier remembers the arrangement.",
+    copy("supplier-dialogue.reaction.fallback"),
   responses: () => [
     {
       id: "acknowledge",
-      label: "I hear you. Return to City.",
+      label: copy("supplier-dialogue.choices.acknowledge"),
       effect: { type: "acknowledge" },
     },
   ],

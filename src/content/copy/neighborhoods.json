@@ -1,0 +1,37 @@
+{
+  "downtown": {
+    "name": "Downtown",
+    "subtitle": "The commercial heart",
+    "description": "Offices, politicians and the docks. High-value work; heavy police presence. No dominant organization.",
+    "alt": "Downtown towers, rain-soaked commerce and docks under police watch",
+    "flavor": "Money. Influence. Opportunity."
+  },
+  "rio": {
+    "name": "Rio Gabriel",
+    "subtitle": "Eastside",
+    "description": "Lowriders and black-market trade. Gabriel’s Angels enjoy substantial community support.",
+    "alt": "Lowriders along warm Eastside streets in Rio Gabriel",
+    "flavor": "Eastside roots. Lowrider streets."
+  },
+  "south": {
+    "name": "Southside",
+    "subtitle": "Old loyalty. New ambition.",
+    "description": "Back Street is politically isolated. Younger members question Justice’s turn toward legitimate business.",
+    "alt": "Southside project housing above worn neighborhood streets",
+    "flavor": "Old loyalty. New ambition."
+  },
+  "resevoir": {
+    "name": "The Resevoir",
+    "subtitle": "Westside",
+    "description": "Boarded houses, vacant lots and deep neighborhood roots. Block Boys have strong local support and a violent rivalry with the Angels.",
+    "alt": "Boarded homes and vacant lots in The Resevoir at sunset",
+    "flavor": "Boarded houses. Deep roots."
+  },
+  "nawf": {
+    "name": "The Nawf",
+    "subtitle": "Northside",
+    "description": "The Blips’ purple and Mudgang’s brown share the zone. Residents want their long feud to end.",
+    "alt": "The Nawf’s bodega, elevated train and defaced Mudgang memorial",
+    "flavor": "Culture. Hustle. Conflict."
+  }
+}

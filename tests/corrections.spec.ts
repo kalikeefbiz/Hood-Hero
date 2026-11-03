@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { test, expect, type Page } from "@playwright/test";
 import {
   dismissEncounter,
@@ -17,9 +18,13 @@ async function nav(page: Page, name: string) {
 }
 async function start(page: Page, home = "Southside") {
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
-  await page.getByLabel("What do people call you?").fill("Test(6.1)");
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Test(6.1)");
   await page.getByRole("radio", { name: home, exact: false }).check();
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await dismissEncounter(page);
 }
 async function clickAction(page: Page, type: string) {
@@ -56,9 +61,12 @@ test("Actions separate Streets, Honest and Connects; completed reach-out returns
 }) => {
   test.setTimeout(90000);
   await start(page);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await expect(
-    page.getByRole("button", { name: "Streets", exact: true }),
+    page.getByRole("button", {
+      name: copy("interface.navigation.streets"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator('[data-action="apply"]')).toHaveCount(0);
   await expect(
@@ -69,7 +77,9 @@ test("Actions separate Streets, Honest and Connects; completed reach-out returns
   await expect(page.locator('[data-action="apply"]').first()).toBeVisible();
   await expect(page.locator('[data-action="gig"]')).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Pursue local transaction · 1 AP" }),
+    page.getByRole("button", {
+      name: copy("interface.streetWork.pursueLocalTransaction1AP"),
+    }),
   ).toHaveCount(0);
   await shot(page, ".actions-hub", "02-honest");
   await connects(page, "mega");
@@ -82,7 +92,10 @@ test("Actions separate Streets, Honest and Connects; completed reach-out returns
   await shot(page, ".actions-hub", "03-connects");
   await clickAction(page, "contact");
   await expect(
-    page.getByRole("button", { name: "Streets", exact: true }),
+    page.getByRole("button", {
+      name: copy("interface.navigation.streets"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-pressed", "true");
   expect((await state(page)).ap).toBe(1);
   await expect(page.locator(".action-feedback")).toContainText("Trust grew");
@@ -91,14 +104,21 @@ test("Actions separate Streets, Honest and Connects; completed reach-out returns
   await connects(page, "mega");
   await expect(page.locator(".supplier-entry .disabled-reason")).toHaveCount(1);
   await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
-  const modal = page.getByRole("dialog", { name: "Character encounter" });
+  const modal = page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+  });
   await expect(modal.locator(".disabled-reason")).toHaveCount(1);
   await expect(
     modal.getByRole("button", { name: /Accept consignment/ }),
   ).toBeDisabled();
-  await modal.getByRole("button", { name: "Decline. No arrangement." }).click();
+  await modal
+    .getByRole("button", { name: copy("supplier-dialogue.choices.decline") })
+    .click();
   await expect(
-    page.getByRole("button", { name: "Streets", exact: true }),
+    page.getByRole("button", {
+      name: copy("interface.navigation.streets"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-pressed", "true");
 });
 test("known suspects and leaders need real introductions; access and inventory survive reload", async ({
@@ -106,7 +126,7 @@ test("known suspects and leaders need real introductions; access and inventory s
 }) => {
   test.setTimeout(90000);
   await start(page, "Rio Gabriel");
-  await nav(page, "People");
+  await nav(page, copy("interface.navigation.people"));
   await page
     .locator(".person-row")
     .filter({ has: page.getByText("Pablo", { exact: true }) })
@@ -116,7 +136,9 @@ test("known suspects and leaders need real introductions; access and inventory s
   ).toBeDisabled();
   await connects(page, "resident-rio");
   await page
-    .getByText("Known of · introductions needed", { exact: true })
+    .getByText(copy("interface.actionsHub.knownOfIntroductionsNeeded"), {
+      exact: true,
+    })
     .click();
   await expect(page.locator(".known-contacts")).toContainText("Pablo");
   await shot(page, ".actions-hub", "04-contact-access");
@@ -137,13 +159,16 @@ test("known suspects and leaders need real introductions; access and inventory s
   await page.getByRole("button", { name: "Talk terms with Dizzy" }).click();
   await shot(page, ".encounter-scene", "05-supplier-terms");
   await page
-    .getByRole("dialog", { name: "Character encounter" })
+    .getByRole("dialog", { name: copy("interface.app.characterEncounter") })
     .getByRole("button", { name: /Accept consignment/ })
     .click();
   await expect(
-    page.getByRole("button", { name: "Streets", exact: true }),
+    page.getByRole("button", {
+      name: copy("interface.navigation.streets"),
+      exact: true,
+    }),
   ).toHaveAttribute("aria-pressed", "true");
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await expect(page.locator(".inventory-slot")).toContainText("×6");
   await page.locator(".inventory-slot summary").click();
   await expect(page.locator(".inventory-panel .lot-details")).toContainText(
@@ -152,7 +177,9 @@ test("known suspects and leaders need real introductions; access and inventory s
   await shot(page, ".inventory-panel", "06-inventory");
   const saved = await state(page);
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
   expect((await state(page)).characters.player.connections).toEqual(
     saved.characters.player.connections,
@@ -165,20 +192,31 @@ test("active Chains lives in City; fulfillment leaves only completed history", a
   test.setTimeout(90000);
   await start(page);
   await storyline(page);
-  const modal = page.getByRole("dialog", { name: "Character encounter" });
-  await modal.getByRole("button", { name: /I’ll help you/ }).click();
+  const modal = page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+  });
+  await modal
+    .getByRole("button", {
+      name: copy("storylines.the-chains.choices.promise"),
+    })
+    .click();
   await honest(page);
   await clickAction(page, "gig");
   await storyAction(page, "buyback");
   await dismissEncounter(page);
-  await nav(page, "City");
+  await nav(page, copy("interface.navigation.city"));
   await expect(
-    page.getByRole("region", { name: "Storylines", exact: true }),
+    page.getByRole("region", {
+      name: copy("interface.app.storylines"),
+      exact: true,
+    }),
   ).toHaveCount(0);
-  await page.getByText("Completed storylines", { exact: true }).click();
+  await page
+    .getByText(copy("interface.app.completedStorylines"), { exact: true })
+    .click();
   await expect(page.locator(".situation-history")).toContainText("fulfilled");
   await shot(page, ".situation-history", "07-storyline-history");
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await expect(page.locator(".commitment-summary")).toHaveCount(0);
   await expect(
     page.getByRole("button", { name: "The Chains", exact: true }),
@@ -192,7 +230,7 @@ for (const width of [320, 375, 390, 430])
     test.setTimeout(90000);
     await page.setViewportSize({ width, height: 844 });
     await start(page);
-    await nav(page, "Actions");
+    await nav(page, copy("interface.navigation.actions"));
     for (const group of ["Streets", "Honest", "Connects"]) {
       await page.getByRole("button", { name: group, exact: true }).click();
       expect(
@@ -201,10 +239,10 @@ for (const width of [320, 375, 390, 430])
     }
     await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
     await page
-      .getByRole("dialog", { name: "Character encounter" })
+      .getByRole("dialog", { name: copy("interface.app.characterEncounter") })
       .getByRole("button", { name: /Accept consignment/ })
       .click();
-    await nav(page, "Wallet");
+    await nav(page, copy("interface.navigation.wallet"));
     await page.locator(".inventory-slot summary").click();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),

@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import {
   clamp,
   type GameState,
@@ -26,15 +27,13 @@ export function resolveWorkplace(
     if (choice === "push") {
       p.stress = clamp(p.stress + 6);
       if (e) e.performance++;
-      text =
-        "You fixed the delivery count. +6 stress, performance improved; full wages retained.";
+      text = copy("workplace-dialogue.youFixedTheDeliveryCount6Stress");
     } else {
       if (e) {
         e.reliability = clamp(e.reliability - 3);
         change(s.characters[e.employer], p.id, { respect: -2 });
       }
-      text =
-        "You flagged the problem for the next shift. Reliability −3; wages retained, no extra stress.";
+      text = copy("workplace-dialogue.youFlaggedTheProblemForTheNext");
     }
   } else if (source.title === "Coworker request") {
     const coworker = s.characters["flacco"];
@@ -42,16 +41,16 @@ export function resolveWorkplace(
       change(coworker, p.id, { trust: 4, respect: 2 });
       change(p, coworker.id, { trust: 2 });
       p.stress = clamp(p.stress + 4);
-      text = `${coworker.name} appreciated the help with a local delivery. +4 stress; trust grew.`;
-    } else
-      text = "You kept to your own station. No additional stress or reward.";
+      text = copy("workplace-dialogue.characterAppreciatedTheHelpWithALocal", {
+        character: coworker.name,
+      });
+    } else text = copy("workplace-dialogue.youKeptToYourOwnStationNo");
   } else {
     if (choice === "extra") {
-      earn(s, p, 18, "clean", "Extra shift task");
+      earn(s, p, 18, "clean", copy("workplace-dialogue.extraShiftTask"));
       p.stress = clamp(p.stress + 10);
-      text = "You finished the extra task. +$18 lawful pay, +10 stress.";
-    } else
-      text = "You passed on the extra task and kept your regular shift pay.";
+      text = copy("workplace-dialogue.youFinishedTheExtraTask18Lawful");
+    } else text = copy("workplace-dialogue.youPassedOnTheExtraTaskAnd");
   }
   const coworker = source.title === "Coworker request" ? "flacco" : null;
   const event = record(
@@ -74,7 +73,7 @@ export function resolveWorkplace(
       coworker,
       p.id,
       event.id,
-      "Helped me finish a local delivery.",
+      copy("workplace-dialogue.helpedMeFinishALocalDelivery"),
       4,
     );
     remember(s, p.id, coworker, event.id, text, 2);

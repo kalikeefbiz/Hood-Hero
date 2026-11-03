@@ -1,3 +1,4 @@
+import { copy } from "./copy";
 import type { Character, FactionId, ZoneId } from "../core/GameState";
 export function character(
   id: string,
@@ -60,10 +61,10 @@ export function canonicalCharacters(): Character[] {
   return [
     character(
       "loco",
-      "Cristian Santiago",
+      copy("characters.loco.name"),
       "rio",
       "angels",
-      "Recognized leader. Incarcerated, but his influence remains.",
+      copy("characters.loco.description"),
       {
         alias: "Loco",
         status: "arrested",
@@ -77,7 +78,7 @@ export function canonicalCharacters(): Character[] {
       "Pablo",
       "rio",
       "angels",
-      "Active leadership. Cold, vindictive; loyalty and respect come first.",
+      copy("characters.pablo.description"),
       {
         authority: 80,
         influence: 80,
@@ -91,7 +92,7 @@ export function canonicalCharacters(): Character[] {
         name,
         "rio",
         "angels",
-        "Young Angels member. Participated in the unauthorized robbery of Mega.",
+        copy("characters.youngAngels.description"),
         {
           traits: {
             loyalty: 50 + i * 7,
@@ -110,7 +111,7 @@ export function canonicalCharacters(): Character[] {
       "Justice",
       "south",
       "backstreet",
-      "Respected older leader, former high-level dealer and owner of legitimate local nightclubs.",
+      copy("characters.justice.description"),
       {
         authority: 90,
         influence: 85,
@@ -124,7 +125,7 @@ export function canonicalCharacters(): Character[] {
       "Mega",
       "south",
       "backstreet",
-      "Your cousin, Cuzzo. Formidable reputation; his chains were taken while out with his girlfriend.",
+      copy("characters.mega.description"),
       {
         alias: "Cuzzo",
         notoriety: 65,
@@ -139,7 +140,7 @@ export function canonicalCharacters(): Character[] {
       "Flacco",
       "south",
       null,
-      "Your childhood best friend. Inexperienced, with room to grow.",
+      copy("characters.flacco.description"),
       {
         skills: { social: 35, work: 30, recovery: 20 },
         goals: ["loyalty", "income"],
@@ -157,7 +158,7 @@ export function residents(): Character[] {
         ["Alex", "Sam", "Robin", "Drew", "Taylor"][i],
         zone,
         null,
-        "Local resident looking for steady work and reliable people.",
+        copy("characters.resident.description"),
         {
           skills: { social: 45, work: 60, recovery: 15 },
           traits: { loyalty: 65, ambition: 35, risk: 20, lawful: 80 },
@@ -170,10 +171,10 @@ export function residents(): Character[] {
           ].map((f) =>
             character(
               `contact-${f}`,
-              `${f === "blocks" ? "Block Boys" : f === "blips" ? "Blips" : "Mudgang"} contact`,
+              `${f === "blocks" ? copy("characters.membershipContact.blocksName") : f === "blips" ? "Blips" : "Mudgang"} contact`,
               zone,
               f,
-              "An ordinary member who can sponsor a membership request.",
+              copy("characters.membershipContact.description"),
               { goals: ["loyalty", "income"] },
             ),
           )

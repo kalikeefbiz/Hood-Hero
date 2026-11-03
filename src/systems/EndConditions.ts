@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { type GameState, player } from "../core/GameState";
 import { BALANCE } from "../content/balance";
 import { STRATEGY_BALANCE as B } from "../content/strategy";
@@ -82,10 +83,18 @@ export function finalizeEnding(s: GameState) {
   const p = player(s),
     text =
       ending === "underlord"
-        ? `${p.name} secured recognized power through ${s.factions[p.affiliation!].name}, with ${s.characters[s.crew.successor!].name} ready to carry the position forward. The city's record of your rise remains.`
+        ? copy("city-events.playerSecuredRecognizedPowerThroughFactionWith", {
+            player: p.name,
+            faction: s.factions[p.affiliation!].name,
+            successor: s.characters[s.crew.successor!].name,
+          })
         : ending === "legitimate-exit"
-          ? `${p.name} chose to leave the streets behind. Proven lawful income and clean assets support an independent life; the record of how you got here remains.`
-          : `${p.name}'s life ended. Stixx City keeps its memory.`;
+          ? copy("city-events.playerChoseToLeaveTheStreetsBehind", {
+              player: p.name,
+            })
+          : copy("city-events.playerSLifeEndedStixxCityKeeps", {
+              player: p.name,
+            });
   const e = record(s, "system", text, [p.id], [p.id], {
     title: ending === "killed" ? "Campaign ended" : "A life established",
     importance: "critical",

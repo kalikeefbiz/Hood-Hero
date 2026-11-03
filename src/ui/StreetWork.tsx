@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { useState } from "react";
 import { player, type GameState, type ZoneId } from "../core/GameState";
 import {
@@ -25,8 +26,13 @@ export function StreetWork({
     m = s.street.markets[zone],
     reason = transactionError(s, s.playerId, zone);
   return (
-    <section className="panel street-work" aria-label="Street operations">
-      <p className="eyebrow">STREETS / CURRENT OPERATION</p>
+    <section
+      className="panel street-work"
+      aria-label={copy("interface.streetWork.streetOperations")}
+    >
+      <p className="eyebrow">
+        {copy("interface.streetWork.streetsCURRENTOPERATION")}
+      </p>
       <h3>
         {lot
           ? `${lot.remaining} night goods on hand`
@@ -37,12 +43,15 @@ export function StreetWork({
           <p>
             {s.characters[lot.supplier].alias ??
               s.characters[lot.supplier].name}{" "}
-            · ${lot.owed} still owed{lot.owed ? ` · due day ${lot.dueDay}` : ""}
+            {copy("interface.streetWork.text")}
+            {lot.owed}
+            {copy("interface.streetWork.stillOwed")}
+            {lot.owed ? ` · due day ${lot.dueDay}` : ""}
           </p>
           <label>
-            Transaction market{" "}
+            {copy("interface.streetWork.transactionMarket")}{" "}
             <select
-              aria-label="Transaction market"
+              aria-label={copy("interface.streetWork.transactionMarket2")}
               value={zone}
               onChange={(e) => setChosen(e.target.value as ZoneId)}
             >
@@ -58,25 +67,36 @@ export function StreetWork({
             </select>
           </label>
           <p className="market-outlook">
-            {s.zones[zone].name} · demand {m.demand} · pressure{" "}
-            {Math.round(m.pressure)} · competition {m.competition}
+            {s.zones[zone].name}
+            {copy("interface.streetWork.demand")}
+            {m.demand}
+            {copy("interface.streetWork.pressure")} {Math.round(m.pressure)}
+            {copy("interface.streetWork.competition")}
+            {m.competition}
           </p>
           <p>
-            About ${unitPrice(s, zone)} each · up to{" "}
-            {Math.min(lot.remaining, 2 + (m.demand >= 60 ? 1 : 0))} units ·{" "}
-            {Math.round(transactionChance(s, p.id, zone) * 100)}% sale chance
+            {copy("interface.streetWork.about")}
+            {unitPrice(s, zone)}
+            {copy("interface.streetWork.eachUpTo")}{" "}
+            {Math.min(lot.remaining, 2 + (m.demand >= 60 ? 1 : 0))}
+            {copy("interface.streetWork.units")}{" "}
+            {Math.round(transactionChance(s, p.id, zone) * 100)}
+            {copy("interface.streetWork.saleChance")}
           </p>
           <button disabled={!!reason} onClick={() => sell(zone)}>
-            Pursue local transaction · 1 AP
+            {copy("interface.streetWork.pursueLocalTransaction1AP")}
           </button>
           {reason && <p className="disabled-reason">{reason}</p>}
         </>
       ) : (
-        <button onClick={connects}>Find an arrangement in Connects →</button>
+        <button onClick={connects}>
+          {copy("interface.streetWork.findAnArrangementInConnects")}
+        </button>
       )}
       <p className="muted">
-        Heat: {heatDescription(p.police)} · Goods and cash can be lost. Police
-        risk remains even when things seem quiet.
+        {copy("interface.streetWork.heat")}
+        {heatDescription(p.police)}
+        {copy("interface.streetWork.goodsAndCashCanBeLostPolice")}
       </p>
     </section>
   );

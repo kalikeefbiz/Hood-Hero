@@ -1,3 +1,4 @@
+import { copy } from "../src/content/copy";
 import { connects, honest } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { dismissEncounter } from "./helpers";
@@ -52,7 +53,10 @@ async function snap(page: Page, name: string) {
     await page
       .locator(".panel")
       .filter({
-        has: page.getByRole("heading", { name: "In custody", exact: true }),
+        has: page.getByRole("heading", {
+          name: copy("interface.app.inCustody"),
+          exact: true,
+        }),
       })
       .screenshot({ path, scale: "css" });
     return;
@@ -83,7 +87,9 @@ async function resume(page: Page, s: GameState) {
     raw: serialize(s),
   });
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
 }
 function campaign(target: "custody" | "crew" | "default") {
@@ -154,25 +160,36 @@ test("supplier to inventory to multiple real sales and repayment through normal 
     if (r.url().includes("/assets/")) errors.push(`Asset failed: ${r.url()}`);
   });
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
-  await page.getByLabel("What do people call you?").fill("Test(6)");
-  await page.getByRole("button", { name: "Enter Stixx City" }).click();
+  await page
+    .getByLabel(copy("interface.newRun.whatDoPeopleCallYou"))
+    .fill("Test(6)");
+  await page
+    .getByRole("button", { name: copy("interface.newRun.enterStixxCity") })
+    .click();
   await dismissEncounter(page);
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await connects(page, "mega");
   await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
-  const modal = page.getByRole("dialog", { name: "Character encounter" });
+  const modal = page.getByRole("dialog", {
+    name: copy("interface.app.characterEncounter"),
+  });
   await expect(modal).toContainText("$102");
   await modal
-    .getByRole("button", { name: "Explain the terms and risk." })
+    .getByRole("button", {
+      name: copy("supplier-dialogue.choices.explainTerms"),
+    })
     .click();
-  await expect(modal).toContainText("before supplier cost");
+  await expect(modal).toContainText(copy("supplier-dialogue.terms.expanded"));
   await snap(page, "01-supplier-terms");
-  await modal.getByRole("button", { name: /Accept consignment/ }).click();
+  await modal.locator('[data-response="consignment"]').click();
   expect((await state(page)).street.lots[0].remaining).toBe(6);
   expect((await state(page)).characters.player.wallet.clean).toBe(125);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await page
-    .getByRole("heading", { name: "Inventory", exact: true })
+    .getByRole("heading", {
+      name: copy("interface.inventoryWallet.inventory"),
+      exact: true,
+    })
     .scrollIntoViewIfNeeded();
   await page.locator(".inventory-slot summary").first().click();
   await snap(page, "02-inventory-and-obligation");
@@ -182,9 +199,9 @@ test("supplier to inventory to multiple real sales and repayment through normal 
     let s = await state(page);
     if (!s.street.lots[0].remaining) break;
     if (!s.ap) await day(page);
-    await nav(page, "Actions");
+    await nav(page, copy("interface.navigation.actions"));
     const sell = page.getByRole("button", {
-      name: "Pursue local transaction · 1 AP",
+      name: copy("interface.streetWork.pursueLocalTransaction1AP"),
     });
     if (await sell.isDisabled()) {
       await day(page);
@@ -203,20 +220,34 @@ test("supplier to inventory to multiple real sales and repayment through normal 
   }
   expect(successes).toBeGreaterThan(0);
   expect((await state(page)).street.transactions.length).toBeGreaterThan(1);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await page
-    .getByRole("heading", { name: "Inventory", exact: true })
+    .getByRole("heading", {
+      name: copy("interface.inventoryWallet.inventory"),
+      exact: true,
+    })
     .scrollIntoViewIfNeeded();
   await snap(page, "05-outstanding-balance");
-  await page.getByRole("button", { name: "Discuss repayment" }).click();
-  await modal.getByRole("button", { name: /Repay full balance/ }).click();
+  await page
+    .getByRole("button", {
+      name: copy("interface.inventoryWallet.discussRepayment"),
+    })
+    .click();
+  await modal.locator('[data-response="full"]').click();
   await dismissEncounter(page);
   expect((await state(page)).street.agreements[0].balance).toBe(0);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await page
-    .getByRole("heading", { name: "Inventory", exact: true })
+    .getByRole("heading", {
+      name: copy("interface.inventoryWallet.inventory"),
+      exact: true,
+    })
     .scrollIntoViewIfNeeded();
-  await page.getByText("Supplier and lot records", { exact: true }).click();
+  await page
+    .getByText(copy("interface.inventoryWallet.supplierAndLotRecords"), {
+      exact: true,
+    })
+    .click();
   await snap(page, "06-repaid");
   const saved = await state(page);
   console.log(
@@ -230,9 +261,13 @@ test("supplier to inventory to multiple real sales and repayment through normal 
       agreement: saved.street.agreements[0],
     }),
   );
-  await page.getByLabel("Save game", { exact: true }).click();
+  await page
+    .getByLabel(copy("interface.gameHUD.saveGame"), { exact: true })
+    .click();
   await page.reload();
-  await page.getByRole("button", { name: "Resume saved game" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.newRun.resumeSavedGame") })
+    .click();
   await dismissEncounter(page);
   expect((await state(page)).street).toEqual(saved.street);
   expect(errors).toEqual([]);
@@ -243,11 +278,16 @@ test("seeded real-play arrest serves every day and releases into continued gamep
   const s = campaign("custody");
   await resume(page, s);
   await expect(
-    page.getByRole("heading", { name: "In custody", exact: true }),
+    page.getByRole("heading", {
+      name: copy("interface.app.inCustody"),
+      exact: true,
+    }),
   ).toBeVisible();
   await snap(page, "08-arrest-and-incarceration");
   const before = await state(page);
-  await page.getByRole("button", { name: "Serve remaining sentence" }).click();
+  await page
+    .getByRole("button", { name: copy("interface.app.serveRemainingSentence") })
+    .click();
   await dismissEncounter(page);
   const after = await state(page);
   console.log(
@@ -275,19 +315,25 @@ test("seeded real-play arrest serves every day and releases into continued gamep
   expect(after.characters.loco.status).toBe("arrested");
   expect(after.end).toBeNull();
   expect(after.street.custody.at(-1).status).toBe("released");
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await honest(page);
   await page.locator('[data-action="gig"]').getByRole("button").click();
   expect((await state(page)).ap).toBe(1);
-  await nav(page, "Wallet");
-  await page.getByText("Custody history", { exact: true }).click();
+  await nav(page, copy("interface.navigation.wallet"));
+  await page
+    .getByText(copy("interface.inventoryWallet.custodyHistory"), {
+      exact: true,
+    })
+    .click();
   await expect(page.locator(".transaction-history")).toContainText(
     "Custody record · released",
   );
   await snap(page, "09-release");
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await expect(
-    page.getByRole("button", { name: "Pursue local transaction · 1 AP" }),
+    page.getByRole("button", {
+      name: copy("interface.streetWork.pursueLocalTransaction1AP"),
+    }),
   ).toBeVisible();
 });
 test("default reaction and accumulated heat are rendered from real simulated consequences", async ({
@@ -295,19 +341,25 @@ test("default reaction and accumulated heat are rendered from real simulated con
 }) => {
   const s = campaign("default");
   await resume(page, s);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await page
-    .getByRole("heading", { name: "Inventory", exact: true })
+    .getByRole("heading", {
+      name: copy("interface.inventoryWallet.inventory"),
+      exact: true,
+    })
     .scrollIntoViewIfNeeded();
   await expect(page.locator(".obligations-panel")).toContainText("overdue");
   await snap(page, "07-default");
   const hot = campaign("custody");
   await resume(page, hot);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
   await page
-    .getByRole("heading", { name: "Inventory", exact: true })
+    .getByRole("heading", {
+      name: copy("interface.inventoryWallet.inventory"),
+      exact: true,
+    })
     .scrollIntoViewIfNeeded();
-  await nav(page, "Actions");
+  await nav(page, copy("interface.navigation.actions"));
   await snap(page, "07-accumulated-attention");
 });
 test("crew-assisted street work uses an earned willing partner and actual inventory", async ({
@@ -315,7 +367,7 @@ test("crew-assisted street work uses an earned willing partner and actual invent
 }) => {
   const s = campaign("crew");
   await resume(page, s);
-  await nav(page, "Wallet");
+  await nav(page, copy("interface.navigation.wallet"));
 
   await page
     .getByText(/with Flacco/)
@@ -323,7 +375,7 @@ test("crew-assisted street work uses an earned willing partner and actual invent
     .scrollIntoViewIfNeeded();
   await snap(page, "10-crew-assisted");
   expect((await state(page)).street.transactions.at(-1).partner).toBe("flacco");
-  await nav(page, "Set");
+  await nav(page, copy("interface.navigation.set"));
   await expect(page.locator("main")).toContainText("Shared street transaction");
 });
 for (const width of [320, 375, 390, 430])
@@ -333,13 +385,11 @@ for (const width of [320, 375, 390, 430])
     await page.setViewportSize({ width, height: 844 });
     const s = newGame("Mobile", "south");
     await resume(page, s);
-    await nav(page, "Actions");
+    await nav(page, copy("interface.navigation.actions"));
     await connects(page, "mega");
     await page.getByRole("button", { name: "Talk terms with Cuzzo" }).click();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBeLessThanOrEqual(width);
-    await expect(
-      page.getByRole("button", { name: /Accept consignment/ }),
-    ).toBeVisible();
+    await expect(page.locator('[data-response="consignment"]')).toBeVisible();
   });

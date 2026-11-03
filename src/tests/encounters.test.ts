@@ -1,3 +1,4 @@
+import { copy } from "../content/copy";
 import { describe, expect, it } from "vitest";
 import { newGame } from "../core/Simulation";
 import { advanceDay } from "../core/TimeSystem";
@@ -92,7 +93,9 @@ describe("character-driven Chains playthroughs", () => {
         true,
       );
       expect(characterArt(s, "mega")?.path).toContain("confident-with-chain");
-      expect(megaDialogue(s, currentEncounter(s)!)).toContain("came through");
+      expect(megaDialogue(s, currentEncounter(s)!)).toContain(
+        copy("storylines.the-chains.reactions.fulfilledPromise"),
+      );
       expect(
         availableActions(s).filter((a) =>
           ["buyback", "recover", "negotiate", "settlement", "favor"].includes(
@@ -173,7 +176,9 @@ describe("character-driven Chains playthroughs", () => {
     expect(s.commitments).toHaveLength(0);
     expect(intro(s).selectedResponses[0].id).toBe("decline");
     expect(s.characters.mega.relationships.player).toEqual(r);
-    expect(megaDialogue(s, intro(s))).toContain("I heard you");
+    expect(megaDialogue(s, intro(s))).toContain(
+      copy("storylines.the-chains.responses.declined"),
+    );
     while (s.day < 10) s = advanceDay(s);
     expect(s.incidents["the-chains"].status).not.toBe("active");
     expect(s.events.some((e) => e.title === "You left Cuzzo hanging")).toBe(
@@ -206,7 +211,7 @@ describe("character-driven Chains playthroughs", () => {
     expect(independent.characters.mega.relationships.player.trust).toBe(trust);
     expect(independent.properties.chains.possession.id).toBe("mega");
     expect(megaDialogue(independent, currentEncounter(independent)!)).toContain(
-      "Pablo handled it",
+      copy("storylines.the-chains.reactions.supersededPromise"),
     );
   });
   it("E: save/resume preserves choices, deadlines, RNG, evidence and acknowledgment without farming", () => {
