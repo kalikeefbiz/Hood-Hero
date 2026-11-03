@@ -160,6 +160,7 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
   expect(incidentPromise(await saved(page), "the-chains")?.status).toBe(
     "fulfilled",
   );
+  await openJournal(page);
   await page.getByText("Important outcomes", { exact: false }).click();
   const before = await saved(page);
   await page.getByRole("button", { name: "Revisit Cuzzo’s reaction" }).click();
