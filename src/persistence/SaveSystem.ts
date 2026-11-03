@@ -1,3 +1,4 @@
+import { strategicSchema } from "./StrategicSchema";
 import { streetSchema } from "./StreetSchema";
 import { z } from "zod";
 import { JOBS } from "../content/jobs";
@@ -77,8 +78,9 @@ const character = z.object({
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(7),
+  version: z.literal(8),
   street: streetSchema,
+  strategic: strategicSchema,
   day: integer.min(1),
   ap: integer.max(2),
   rng: integer.max(4294967295),
@@ -355,7 +357,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 7, state: s });
+  return JSON.stringify({ format: "syndicate", version: 8, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -369,17 +371,56 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(7),
+      version: z.literal(8),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Hood Hero save version 7. Start a new test run from the new game menu.",
+      "Incompatible or damaged save. Expected Hood Hero save version 8. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];
   const st = s.street;
+  const strategy = s.strategic;
+  if (
+    new Set(s.assets.map((a) => a.id)).size !== s.assets.length ||
+    new Set(strategy.businesses.map((b) => b.definition)).size !==
+      strategy.businesses.length ||
+    strategy.businesses.some((b) => b.lastOperatingDay > s.day) ||
+    Object.entries(strategy.territories).some(
+      ([zone, t]) =>
+        t.controller !== s.zones[zone as keyof typeof s.zones].controller ||
+        t.controlSince > s.day ||
+        !t.changes.every((c) => s.events.some((e) => e.id === c.eventId)),
+    ) ||
+    strategy.effects.some(
+      (x) =>
+        !s.events.some((e) => e.id === x.eventId) ||
+        (!exists(x.actor) && !s.factions[x.actor as keyof typeof s.factions]),
+    ) ||
+    Object.values(strategy.strategies).some(
+      (x) => !x.history.every((h) => s.events.some((e) => e.id === h.eventId)),
+    ) ||
+    new Set(strategy.businesses.map((b) => b.id)).size !==
+      strategy.businesses.length ||
+    strategy.businesses.some(
+      (b) =>
+        !s.assets.some(
+          (a) =>
+            a.id === b.id &&
+            a.owner === s.playerId &&
+            a.provenance === b.provenance,
+        ) ||
+        (["sold", "closed"].includes(b.status) &&
+          s.assets.some(
+            (a) => a.id === b.id && (a.value !== 0 || a.recurringIncome !== 0),
+          )),
+    ) ||
+    (strategy.ending &&
+      !s.events.some((e) => e.id === strategy.ending!.eventId))
+  )
+    throw new Error("Save contains invalid strategic or business references.");
   const invalidStreet =
     new Set(
       [...st.lots, ...st.agreements, ...st.transactions, ...st.custody].map(

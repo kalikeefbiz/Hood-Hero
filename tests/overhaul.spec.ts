@@ -112,7 +112,7 @@ for (const faction of [
   "backstreet",
   "blocks",
 ] as FactionId[]) {
-  test(`valid sponsored ${faction} membership updates theme immediately and survives checkpoint reload`, async ({
+  test(`valid sponsored ${faction} membership keeps the shell neutral and survives checkpoint reload`, async ({
     page,
   }) => {
     const state = newGame("Theme Check", "downtown");
@@ -155,7 +155,7 @@ for (const faction of [
       await page
         .locator(".game-shell")
         .evaluate((el) => el.style.getPropertyValue("--accent")),
-    ).toBe(THEMES[faction].accent);
+    ).toBe(THEMES.independent.accent);
     await expect(page.locator(".affiliation")).toHaveText(
       state.factions[faction].name,
     );

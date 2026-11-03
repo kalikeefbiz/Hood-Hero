@@ -44,3 +44,19 @@ export function expense(
         });
   return paid;
 }
+
+// Repaying arrears is an actual expense, preserving the same clean-first provenance rules.
+export function payArrears(state: GameState) {
+  const p = state.characters[state.playerId],
+    amount = state.street.arrears;
+  if (state.end || p.status !== "active" || !amount || cash(p) < amount)
+    return {
+      state,
+      error:
+        "Requires available cash to clear all living and operating arrears",
+    };
+  const s = structuredClone(state);
+  expense(s, s.characters[s.playerId], amount, "Arrears repaid");
+  s.street.arrears = 0;
+  return { state: s, error: null };
+}

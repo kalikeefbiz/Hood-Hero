@@ -1,0 +1,232 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test --project=webkit-mobile --workers=2
+
+[WebServer] (node:16870) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 57 tests using 2 workers
+
+(node:16911) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:16912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   2 [webkit-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation (19.9s)
+  ✓   1 [webkit-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (23.0s)
+  ✓   3 [webkit-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (8.8s)
+  ✓   4 [webkit-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (16.1s)
+  ✓   6 [webkit-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (18.9s)
+  ✓   5 [webkit-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (30.1s)
+  ✓   7 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (9.0s)
+  ✓   8 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (8.8s)
+  ✓   9 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (9.5s)
+  ✓  10 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (10.3s)
+  ✓  11 [webkit-mobile] › tests/crew.spec.ts:46:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (21.9s)
+  ✓  13 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 320px (3.8s)
+  ✓  14 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 375px (3.8s)
+  ✓  12 [webkit-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (31.2s)
+  ✓  15 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 390px (3.6s)
+  ✓  16 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 430px (9.3s)
+  ✓  18 [webkit-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (20.0s)
+  ✓  19 [webkit-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload (8.6s)
+  ✓  20 [webkit-mobile] › tests/employment.spec.ts:258:1 › employment competes with The Chains through actual AP, wages, attendance and promises (22.6s)
+  ✘  21 [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (31.9s)
+(node:19662) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  17 [webkit-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough (1.8m)
+  ✓  22 [webkit-mobile] › tests/encounters.spec.ts:173:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (19.1s)
+  ✓  23 [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after fulfilled: one storyline reaction while independent offers continue (1.2m)
+  ✓  25 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 320px (6.8s)
+  ✓  26 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 375px (6.2s)
+  ✓  24 [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after broken: one storyline reaction while independent offers continue (1.3m)
+  ✓  27 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 390px (7.0s)
+  ✓  28 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 430px (7.6s)
+  ✓  29 [webkit-mobile] › tests/encounters.spec.ts:311:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (5.8s)
+  ✓  30 [webkit-mobile] › tests/encounters.spec.ts:380:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (6.0s)
+  ✓  32 [webkit-mobile] › tests/illustrated.spec.ts:82:1 › approved art maps to real actions and resolves under the production base (10.2s)
+  ✓  33 [webkit-mobile] › tests/illustrated.spec.ts:131:1 › action art loads near the viewport, and failed art preserves layout and gameplay (14.2s)
+  ✘  31 [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation (31.4s)
+(node:21158) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  34 [webkit-mobile] › tests/illustrated.spec.ts:189:1 › GOAL 002C mobile visual review and usable narrow controls (29.0s)
+  ✓  35 [webkit-mobile] › tests/mobile.spec.ts:41:1 › phone gameplay: contact, lawful income, days, save and load (25.2s)
+  ✓  37 [webkit-mobile] › tests/mobile.spec.ts:124:1 › mobile city and new game remain readable at narrow widths (7.5s)
+  ✓  36 [webkit-mobile] › tests/mobile.spec.ts:83:1 › buyback resolves the incident and the ordinary loop remains playable (27.6s)
+  ✓  39 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload (11.6s)
+  ✘  38 [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (31.7s)
+(node:21667) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  40 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload (13.6s)
+  ✓  41 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload (17.3s)
+  ✓  42 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload (15.7s)
+  ✓  43 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload (14.6s)
+  ✓  45 [webkit-mobile] › tests/overhaul.spec.ts:205:1 › Actions update cash/AP, explain disabled prerequisites, and autosave (9.2s)
+  ✓  46 [webkit-mobile] › tests/overhaul.spec.ts:239:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility (6.8s)
+  ✘  44 [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (31.3s)
+(node:22283) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  47 [webkit-mobile] › tests/overhaul.spec.ts:285:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe (10.8s)
+JOURNEY {"engine":"webkit-mobile","day":5,"cash":{"clean":0,"illicit":190},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":275,"owed":0,"paid":102,"losses":36,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-32","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-31"},{"id":"transaction-34","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-33"},{"id":"transaction-58","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-57"},{"id":"transaction-60","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-59"},{"id":"transaction-85","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-84"},{"id":"transaction-87","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-86"},{"id":"transaction-113","day":5,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-112"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-31","event-33","event-57","event-59","event-84","event-86","event-112","event-115"]}}
+  ✓  49 [webkit-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (44.7s)
+CUSTODY {"engine":"webkit-mobile","arrestDay":24,"releaseDay":26,"cashBefore":291,"cashAfter":255,"debtAfter":0,"loco":"arrested","campaignEnd":null}
+  ✓  50 [webkit-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay (22.9s)
+  ✓  48 [webkit-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (1.4m)
+  ✓  52 [webkit-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory (11.2s)
+  ✓  51 [webkit-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences (25.0s)
+  ✓  53 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px (8.7s)
+  ✓  54 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px (8.7s)
+  ✓  55 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px (8.8s)
+  ✓  56 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px (9.8s)
+  ✓  57 [webkit-mobile] › tests/visual-correction.spec.ts:9:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 (16.0s)
+
+
+  1) [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.screenshot: Test timeout of 30000ms exceeded.
+    Call log:
+      - taking page screenshot
+        - disabled all CSS animations
+      - waiting for fonts to load...
+      - fonts loaded
+
+
+      56 |       ? `docs/screenshots/goal-003-correction/${name}.png`
+      57 |       : test.info().outputPath(`${name}.png`);
+    > 58 |   await page.screenshot({ path, scale: "css", animations: "disabled" });
+         |              ^
+      59 |   await test.info().attach(name, { path, contentType: "image/png" });
+      60 | }
+      61 | async function acknowledge(page: Page) {
+        at capture (/workspace/hood-baseline/tests/encounters.spec.ts:58:14)
+        at /workspace/hood-baseline/tests/encounters.spec.ts:147:3
+
+    attachment #1: 01-modal-over-city (image/png) ──────────────────────────────────────────────────
+    test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/attachments/01-modal-over-city-8166daa36b29d784920a87d1337a0d6d74002845.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 02-contextual-exchange (image/png) ──────────────────────────────────────────────
+    test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/attachments/02-contextual-exchange-23796634401ddfd15957bfea6e4f7d1270700319.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 03-conversation-concluded-city (image/png) ──────────────────────────────────────
+    test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/attachments/03-conversation-concluded-city-717a0a97fd1b18cc59cd3ab15f3b1b76fdd2afa1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: 'Character encounter', exact: true }).getByRole('button', { name: 'Close conversation' })
+        - locator resolved to <button class="text-button" aria-label="Close conversation">Close ×</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      443 |     await modal(page)
+      444 |       .getByRole("button", { name: "Close conversation" })
+    > 445 |       .click();
+          |        ^
+      446 |     for (const tab of ["Actions", "People", "Set", "Wallet"]) {
+      447 |       await nav(page, tab);
+      448 |       await expect(modal(page)).toHaveCount(0);
+        at /workspace/hood-baseline/tests/encounters.spec.ts:445:8
+
+    Error Context: test-results/encounters-all-homes-and-a-99cd1-modal-and-normal-navigation-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-all-homes-and-a-99cd1-modal-and-normal-navigation-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-all-homes-and-a-99cd1-modal-and-normal-navigation-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'New game menu' })
+        - locator resolved to <button class="secondary">New game menu</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      101 |     }
+      102 |     await page.getByText("Game & save information", { exact: true }).click();
+    > 103 |     await page.getByRole("button", { name: "New game menu" }).click();
+          |                                                               ^
+      104 |   }
+      105 |   expect(failures).toEqual([]);
+      106 | });
+        at /workspace/hood-baseline/tests/overhaul.spec.ts:103:63
+
+    Error Context: test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('navigation').getByRole('button', { name: 'Wallet', exact: true })
+        - locator resolved to <button class="" aria-label="Wallet">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      17 |     .getByRole("navigation")
+      18 |     .getByRole("button", { name, exact: true })
+    > 19 |     .click();
+         |      ^
+      20 |   if (name === "Actions")
+      21 |     await page.getByRole("button", { name: "Honest", exact: true }).click();
+      22 | }
+        at nav (/workspace/hood-baseline/tests/overhaul.spec.ts:19:6)
+        at /workspace/hood-baseline/tests/overhaul.spec.ts:183:13
+
+    Error Context: test-results/overhaul-all-destinations--116b5-names-and-every-dock-target-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-all-destinations--116b5-names-and-every-dock-target-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-all-destinations--116b5-names-and-every-dock-target-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume 
+    [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation 
+    [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation 
+    [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target 
+  53 passed (10.1m)

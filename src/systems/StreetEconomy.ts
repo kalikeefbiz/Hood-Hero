@@ -1,3 +1,5 @@
+import { applyInfluence } from "./Territory";
+import { STRATEGY_BALANCE } from "../content/strategy";
 import { arrest } from "./Incarceration";
 import {
   cash,
@@ -77,6 +79,14 @@ export function marketAccess(
   zone: ZoneId,
 ): string | null {
   const c = s.characters[actor];
+  const controller = s.strategic.territories[zone].controller;
+  if (
+    controller &&
+    c.affiliation &&
+    s.factions[controller].enemies.includes(c.affiliation) &&
+    c.neighborhoodStanding[zone] < 25
+  )
+    return "Rival control restricts market access; requires 25 local standing";
   const local = suppliers(s).some(
     (n) =>
       n.home === zone &&
@@ -345,7 +355,8 @@ export function transactionChance(
       exposureScore(s, actor, zone) / 220 -
       c.stress / 650 -
       m.pressure / 500 -
-      m.competition / 900 -
+      (m.competition + (s.strategic.territories[zone].contested ? 10 : 0)) /
+        900 -
       conflict,
     B.minSuccess,
     B.maxSuccess,
@@ -432,7 +443,22 @@ export function transact(
   m.actors[actor] = (m.actors[actor] ?? 0) + sold;
   if (c.affiliation) {
     m.factions[c.affiliation] = (m.factions[c.affiliation] ?? 0) + sold;
-    s.factions[c.affiliation].resources += Math.floor(gross * 0.05);
+    s.factions[c.affiliation].resources = clamp(
+      s.factions[c.affiliation].resources + Math.floor(gross * 0.05),
+      0,
+      STRATEGY_BALANCE.resourceCap,
+    );
+    if (sold)
+      applyInfluence(s, {
+        actor,
+        faction: c.affiliation,
+        zone,
+        kind: "economic",
+        magnitude: Math.min(1.5, sold * 0.15),
+        cause: `${c.name}'s commerce contributed to ${s.factions[c.affiliation].name}'s economic presence.`,
+      });
+    if (actor === s.playerId)
+      s.strategic.contributions[c.affiliation] += Math.min(3, gross * 0.01);
   }
   c.stress = clamp(c.stress + 7);
   c.rivalThreat = clamp(c.rivalThreat + 2 + m.competition / 25);
@@ -444,6 +470,8 @@ export function transact(
         ? B.actionExposure
         : B.noBuyerExposure;
   addExposure(s, actor, zone, weight);
+  if (actor === s.playerId || partner === s.playerId)
+    s.strategic.lastCrimeDay = s.day;
   if (partner) {
     const n = s.characters[partner];
     addExposure(s, partner, zone, weight * B.crewExposureShare, lost > 0);
@@ -596,7 +624,11 @@ export function advanceStreet(s: GameState) {
         (m.factions[active.affiliation] ?? 0) + 1;
       m.pressure = clamp(m.pressure + 4);
       m.competition = clamp(m.competition + 1, 0, 50);
-      s.factions[active.affiliation].resources += 2;
+      s.factions[active.affiliation].resources = clamp(
+        s.factions[active.affiliation].resources + 2,
+        0,
+        STRATEGY_BALANCE.resourceCap,
+      );
       m.demand = clamp(
         m.demand +
           (s.factions[active.affiliation].priority === "commerce" ? 1 : -1),

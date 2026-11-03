@@ -1,0 +1,76 @@
+.strategy-neighborhood {
+  border-top: 1px solid var(--line, #37393d);
+  margin-top: 20px;
+  padding-top: 16px;
+}
+.strategy-neighborhood h3 {
+  font-size: 22px;
+}
+.foothold {
+  border-left: 3px solid;
+  margin: 14px 0;
+  padding-left: 12px;
+}
+.foothold small,
+.strategy-action small {
+  display: block;
+  color: #b9b9b5;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 6px 0;
+}
+.power-track {
+  height: 5px;
+  background: #34363b;
+  margin: 8px 0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.power-track i {
+  height: 100%;
+  display: block;
+  transition: width 0.5s;
+}
+.strategy-action {
+  margin: 12px 0;
+}
+.strategy-action button {
+  white-space: normal;
+  text-align: left;
+  max-width: 100%;
+}
+.business-opportunity {
+  padding: 16px 0;
+  border-top: 1px solid #34363b;
+}
+.business-opportunity h4 {
+  font-size: 21px;
+  margin: 4px 0;
+}
+.organization-panel ul,
+.retirement-panel ul {
+  padding-left: 20px;
+  font-size: 13px;
+  color: #bdbcb8;
+}
+.strategy-neighborhood details,
+.organization-panel details,
+.business-opportunity details {
+  margin: 12px 0;
+}
+.strategy-neighborhood summary,
+.organization-panel summary,
+.business-opportunity summary {
+  cursor: pointer;
+  padding: 10px 0;
+  min-height: 44px;
+}
+.strategy-neighborhood p,
+.business-panel p,
+.organization-panel p,
+.retirement-panel p {
+  overflow-wrap: anywhere;
+}
+.zone-contested {
+  stroke-dasharray: 5 3;
+}

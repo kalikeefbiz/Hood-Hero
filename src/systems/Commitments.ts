@@ -1,3 +1,4 @@
+import { applyInfluence } from "./Territory";
 import type {
   Commitment,
   CommitmentStatus,
@@ -71,6 +72,24 @@ export function finishCommitment(
 ) {
   if (c.status !== "pending") return;
   c.status = status;
+  const requester = s.characters[c.requester];
+  if (
+    c.actor === s.playerId &&
+    status === "fulfilled" &&
+    requester.affiliation
+  ) {
+    applyInfluence(s, {
+      actor: c.actor,
+      participants: [requester.id],
+      faction: requester.affiliation,
+      zone: requester.home,
+      kind: "support",
+      magnitude: 2,
+      cause: "A fulfilled commitment reinforced organizational reliability.",
+    });
+    if (s.characters[c.actor].affiliation === requester.affiliation)
+      s.strategic.contributions[requester.affiliation] += 8;
+  }
   c.evidence = [...new Set(evidence)];
   const fulfilled = status === "fulfilled",
     broken = status === "broken";

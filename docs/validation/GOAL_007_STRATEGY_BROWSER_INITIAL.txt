@@ -1,0 +1,39 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test tests/strategy.spec.ts --workers=2
+
+[WebServer] (node:17294) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 2 workers
+
+(node:17345) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   2 [chromium-mobile] › tests/strategy.spec.ts:98:1 › simulation-resolved control change and council succession progression (7.2s)
+  ✓   1 [chromium-mobile] › tests/strategy.spec.ts:51:1 › actual local investment, contested map, autonomous decisions and persisted continuation (9.4s)
+  ✓   3 [chromium-mobile] › tests/strategy.spec.ts:120:1 › earned affiliation authority restriction and advancement use existing sponsorship (2.9s)
+  ✓   5 [chromium-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 320px (3.4s)
+  ✓   4 [chromium-mobile] › tests/strategy.spec.ts:146:1 › business acquisition, real operating income, sale, and voluntary retirement (7.7s)
+  ✓   6 [chromium-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 375px (3.9s)
+  ✓   7 [chromium-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 390px (3.4s)
+  ✓   8 [chromium-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 430px (3.7s)
+(node:17740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+(node:17748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  10 [webkit-mobile] › tests/strategy.spec.ts:98:1 › simulation-resolved control change and council succession progression (6.9s)
+  ✓   9 [webkit-mobile] › tests/strategy.spec.ts:51:1 › actual local investment, contested map, autonomous decisions and persisted continuation (15.1s)
+  ✓  11 [webkit-mobile] › tests/strategy.spec.ts:120:1 › earned affiliation authority restriction and advancement use existing sponsorship (8.1s)
+  ✓  13 [webkit-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 320px (7.8s)
+  ✓  14 [webkit-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 375px (8.6s)
+  ✓  12 [webkit-mobile] › tests/strategy.spec.ts:146:1 › business acquisition, real operating income, sale, and voluntary retirement (18.7s)
+  ✓  15 [webkit-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 390px (8.6s)
+  ✓  16 [webkit-mobile] › tests/strategy.spec.ts:180:3 › strategy, organization and businesses fit 430px (8.8s)
+
+  16 passed (1.2m)

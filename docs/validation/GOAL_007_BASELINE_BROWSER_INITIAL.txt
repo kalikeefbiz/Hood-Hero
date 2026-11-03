@@ -1,0 +1,1483 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test --workers=2
+
+[WebServer] (node:3501) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 114 tests using 2 workers
+
+(node:3538) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3539) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    2 [chromium-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation (5.0s)
+  ✓    1 [chromium-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (6.7s)
+  ✓    3 [chromium-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (2.7s)
+  ✓    4 [chromium-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (3.8s)
+  ✓    5 [chromium-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (9.7s)
+  ✓    6 [chromium-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (7.4s)
+  ✓    7 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (1.9s)
+  ✓    8 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (1.9s)
+  ✓    9 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (2.0s)
+  ✓   10 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (2.2s)
+  ✓   11 [chromium-mobile] › tests/crew.spec.ts:46:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (10.4s)
+  ✓   13 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 320px (1.4s)
+  ✓   14 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 375px (1.4s)
+  ✓   15 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 390px (1.3s)
+  ✓   16 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 430px (1.4s)
+  ✓   12 [chromium-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (18.0s)
+  ✓   18 [chromium-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (4.1s)
+  ✓   19 [chromium-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload (2.0s)
+  ✓   20 [chromium-mobile] › tests/employment.spec.ts:258:1 › employment competes with The Chains through actual AP, wages, attendance and promises (4.7s)
+  ✓   21 [chromium-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (11.2s)
+  ✓   22 [chromium-mobile] › tests/encounters.spec.ts:173:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (2.4s)
+  ✓   17 [chromium-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough (30.0s)
+  ✓   23 [chromium-mobile] › tests/encounters.spec.ts:208:3 › 40 days after fulfilled: one storyline reaction while independent offers continue (13.6s)
+  ✓   25 [chromium-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 320px (1.8s)
+  ✓   26 [chromium-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 375px (1.7s)
+  ✓   27 [chromium-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 390px (1.8s)
+  ✓   24 [chromium-mobile] › tests/encounters.spec.ts:208:3 › 40 days after broken: one storyline reaction while independent offers continue (16.3s)
+  ✓   29 [chromium-mobile] › tests/encounters.spec.ts:311:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (1.4s)
+  ✓   28 [chromium-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 430px (2.0s)
+  ✓   30 [chromium-mobile] › tests/encounters.spec.ts:380:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (1.5s)
+  ✓   32 [chromium-mobile] › tests/illustrated.spec.ts:82:1 › approved art maps to real actions and resolves under the production base (3.6s)
+  ✓   33 [chromium-mobile] › tests/illustrated.spec.ts:131:1 › action art loads near the viewport, and failed art preserves layout and gameplay (5.2s)
+  ✓   31 [chromium-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation (12.2s)
+  ✓   34 [chromium-mobile] › tests/illustrated.spec.ts:189:1 › GOAL 002C mobile visual review and usable narrow controls (10.1s)
+  ✓   35 [chromium-mobile] › tests/mobile.spec.ts:41:1 › phone gameplay: contact, lawful income, days, save and load (10.2s)
+  ✓   36 [chromium-mobile] › tests/mobile.spec.ts:83:1 › buyback resolves the incident and the ordinary loop remains playable (4.5s)
+  ✓   37 [chromium-mobile] › tests/mobile.spec.ts:124:1 › mobile city and new game remain readable at narrow widths (4.1s)
+  ✓   39 [chromium-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload (2.0s)
+  ✓   40 [chromium-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload (1.7s)
+  ✓   38 [chromium-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (6.7s)
+  ✓   41 [chromium-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload (1.8s)
+  ✓   42 [chromium-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload (1.9s)
+  ✓   43 [chromium-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload (2.1s)
+  ✓   45 [chromium-mobile] › tests/overhaul.spec.ts:205:1 › Actions update cash/AP, explain disabled prerequisites, and autosave (1.4s)
+  ✓   46 [chromium-mobile] › tests/overhaul.spec.ts:239:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility (1.4s)
+  ✓   47 [chromium-mobile] › tests/overhaul.spec.ts:285:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe (2.7s)
+  ✓   44 [chromium-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (9.8s)
+  ✓   48 [chromium-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (23.3s)
+JOURNEY {"engine":"chromium-mobile","day":5,"cash":{"clean":0,"illicit":190},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":275,"owed":0,"paid":102,"losses":36,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-32","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-31"},{"id":"transaction-34","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-33"},{"id":"transaction-58","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-57"},{"id":"transaction-60","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-59"},{"id":"transaction-85","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-84"},{"id":"transaction-87","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-86"},{"id":"transaction-113","day":5,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-112"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-31","event-33","event-57","event-59","event-84","event-86","event-112","event-115"]}}
+CUSTODY {"engine":"chromium-mobile","arrestDay":24,"releaseDay":26,"cashBefore":291,"cashAfter":255,"debtAfter":0,"loco":"arrested","campaignEnd":null}
+  ✓   49 [chromium-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (25.0s)
+  ✓   50 [chromium-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay (11.5s)
+  ✓   51 [chromium-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences (6.9s)
+  ✓   52 [chromium-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory (1.8s)
+  ✓   53 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px (1.7s)
+  ✓   54 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px (1.7s)
+  ✓   55 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px (1.7s)
+  ✓   56 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px (1.6s)
+(node:4875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   58 [webkit-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (1ms)
+(node:5084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   59 [webkit-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation (2ms)
+(node:5298) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   57 [chromium-mobile] › tests/visual-correction.spec.ts:9:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 (4.6s)
+  ✘   60 [webkit-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (2ms)
+(node:5516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5517) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   61 [webkit-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (2ms)
+  ✘   62 [webkit-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (2ms)
+(node:5729) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:5917) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   63 [webkit-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (2ms)
+  ✘   64 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (4ms)
+(node:6304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6310) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   65 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (3ms)
+  ✘   66 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (8ms)
+(node:6595) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   67 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (2ms)
+(node:6717) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   68 [webkit-mobile] › tests/crew.spec.ts:46:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (2ms)
+(node:6914) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   69 [webkit-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (2ms)
+  ✘   70 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 320px (2ms)
+(node:7312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7505) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   71 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 375px (3ms)
+  ✘   72 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 390px (2ms)
+(node:7785) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7899) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   73 [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 430px (3ms)
+  ✘   74 [webkit-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough (2ms)
+(node:8100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8293) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   75 [webkit-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (2ms)
+  ✘   76 [webkit-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload (2ms)
+(node:8514) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8686) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   77 [webkit-mobile] › tests/employment.spec.ts:258:1 › employment competes with The Chains through actual AP, wages, attendance and promises (2ms)
+  ✘   78 [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (2ms)
+(node:8888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:9081) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   79 [webkit-mobile] › tests/encounters.spec.ts:173:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (2ms)
+  ✘   80 [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after fulfilled: one storyline reaction while independent offers continue (2ms)
+(node:9278) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:9475) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   81 [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after broken: one storyline reaction while independent offers continue (2ms)
+  ✘   82 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 320px (2ms)
+(node:9674) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   83 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 375px (2ms)
+(node:9880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   84 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 390px (2ms)
+(node:10077) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10274) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   85 [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 430px (2ms)
+  ✘   86 [webkit-mobile] › tests/encounters.spec.ts:311:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail (2ms)
+(node:10471) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   87 [webkit-mobile] › tests/encounters.spec.ts:380:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners (6ms)
+  ✘   88 [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation (2ms)
+(node:10865) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11065) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   89 [webkit-mobile] › tests/illustrated.spec.ts:82:1 › approved art maps to real actions and resolves under the production base (2ms)
+  ✘   90 [webkit-mobile] › tests/illustrated.spec.ts:131:1 › action art loads near the viewport, and failed art preserves layout and gameplay (2ms)
+(node:11262) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11459) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   91 [webkit-mobile] › tests/illustrated.spec.ts:189:1 › GOAL 002C mobile visual review and usable narrow controls (1ms)
+  ✘   92 [webkit-mobile] › tests/mobile.spec.ts:41:1 › phone gameplay: contact, lawful income, days, save and load (2ms)
+(node:11685) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   93 [webkit-mobile] › tests/mobile.spec.ts:83:1 › buyback resolves the incident and the ordinary loop remains playable (2ms)
+(node:11853) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   94 [webkit-mobile] › tests/mobile.spec.ts:124:1 › mobile city and new game remain readable at narrow widths (2ms)
+(node:12050) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:12249) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   95 [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (2ms)
+  ✘   96 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload (2ms)
+(node:12450) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:12659) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   97 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload (2ms)
+  ✘   98 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload (2ms)
+(node:12898) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13141) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   99 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload (2ms)
+  ✘  100 [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload (4ms)
+(node:13381) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13579) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  101 [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (3ms)
+  ✘  102 [webkit-mobile] › tests/overhaul.spec.ts:205:1 › Actions update cash/AP, explain disabled prerequisites, and autosave (4ms)
+(node:13780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13973) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  103 [webkit-mobile] › tests/overhaul.spec.ts:239:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility (2ms)
+  ✘  104 [webkit-mobile] › tests/overhaul.spec.ts:285:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe (4ms)
+(node:14170) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:14379) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  105 [webkit-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (20ms)
+  ✘  106 [webkit-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (6ms)
+(node:14770) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  107 [webkit-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay (2ms)
+(node:14963) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  108 [webkit-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences (2ms)
+(node:15160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  109 [webkit-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory (2ms)
+(node:15357) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  110 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px (2ms)
+(node:15554) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  111 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px (6ms)
+(node:15759) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  112 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px (2ms)
+(node:15956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  113 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px (3ms)
+(node:16173) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  114 [webkit-mobile] › tests/visual-correction.spec.ts:9:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 (2ms)
+
+
+  1) [webkit-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/city-menu-City-centers-the-a1bdb-nd-keeps-actions-in-Actions-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/city-menu-City-centers-the-a1bdb-nd-keeps-actions-in-Actions-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/city-menu-City-centers-the-a1bdb-nd-keeps-actions-in-Actions-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [webkit-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/city-menu-storyline-uses-t-bc580--existing-City-conversation-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/city-menu-storyline-uses-t-bc580--existing-City-conversation-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/city-menu-storyline-uses-t-bc580--existing-City-conversation-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/city-menu-City-activity-pr-f50b4-y-groups-limits-and-filters-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/city-menu-City-activity-pr-f50b4-y-groups-limits-and-filters-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/city-menu-City-activity-pr-f50b4-y-groups-limits-and-filters-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-Actions-separa-e3349-each-out-returns-to-Streets-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-Actions-separa-e3349-each-out-returns-to-Streets-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-Actions-separa-e3349-each-out-returns-to-Streets-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [webkit-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-known-suspects-51e32-nd-inventory-survive-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-known-suspects-51e32-nd-inventory-survive-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-known-suspects-51e32-nd-inventory-survive-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [webkit-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-active-Chains--c22f3-aves-only-completed-history-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-active-Chains--c22f3-aves-only-completed-history-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-active-Chains--c22f3-aves-only-completed-history-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-all-three-categories-and-inventory-fit-320px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-all-three-categories-and-inventory-fit-320px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-all-three-categories-and-inventory-fit-320px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-all-three-categories-and-inventory-fit-375px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-all-three-categories-and-inventory-fit-375px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-all-three-categories-and-inventory-fit-375px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-all-three-categories-and-inventory-fit-390px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-all-three-categories-and-inventory-fit-390px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-all-three-categories-and-inventory-fit-390px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/corrections-all-three-categories-and-inventory-fit-430px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/corrections-all-three-categories-and-inventory-fit-430px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/corrections-all-three-categories-and-inventory-fit-430px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [webkit-mobile] › tests/crew.spec.ts:46:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/crew-Flacco-cooperation-pa-d0667-ment-and-saved-consequences-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/crew-Flacco-cooperation-pa-d0667-ment-and-saved-consequences-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/crew-Flacco-cooperation-pa-d0667-ment-and-saved-consequences-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [webkit-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/crew-independent-offer-ins-bea02--while-the-NPC-keeps-acting-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/crew-independent-offer-ins-bea02--while-the-NPC-keeps-acting-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/crew-independent-offer-ins-bea02--while-the-NPC-keeps-acting-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 320px ─────────────────
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/crew-crew-dialogue-and-Set-fit-320px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/crew-crew-dialogue-and-Set-fit-320px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/crew-crew-dialogue-and-Set-fit-320px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 375px ─────────────────
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/crew-crew-dialogue-and-Set-fit-375px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/crew-crew-dialogue-and-Set-fit-375px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/crew-crew-dialogue-and-Set-fit-375px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 390px ─────────────────
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/crew-crew-dialogue-and-Set-fit-390px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/crew-crew-dialogue-and-Set-fit-390px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/crew-crew-dialogue-and-Set-fit-390px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 430px ─────────────────
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/crew-crew-dialogue-and-Set-fit-430px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/crew-crew-dialogue-and-Set-fit-430px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/crew-crew-dialogue-and-Set-fit-430px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [webkit-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/employment-hire-scheduled--00424--day-employment-playthrough-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/employment-hire-scheduled--00424--day-employment-playthrough-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/employment-hire-scheduled--00424--day-employment-playthrough-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [webkit-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [webkit-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/employment-workplace-scene-69957-eplay-across-tabs-or-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/employment-workplace-scene-69957-eplay-across-tabs-or-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/employment-workplace-scene-69957-eplay-across-tabs-or-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [webkit-mobile] › tests/employment.spec.ts:258:1 › employment competes with The Chains through actual AP, wages, attendance and promises 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/employment-employment-comp-a6252-ges-attendance-and-promises-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/employment-employment-comp-a6252-ges-attendance-and-promises-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/employment-employment-comp-a6252-ges-attendance-and-promises-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-true-City-modal-43ffa-fillment-history-and-Resume-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [webkit-mobile] › tests/encounters.spec.ts:173:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-refusing-postpo-9fdf4-ligation-or-daily-reopening-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-refusing-postpo-9fdf4-ligation-or-daily-reopening-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-refusing-postpo-9fdf4-ligation-or-daily-reopening-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after fulfilled: one storyline reaction while independent offers continue 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-40-days-after-f-d1547-independent-offers-continue-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-40-days-after-f-d1547-independent-offers-continue-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-40-days-after-f-d1547-independent-offers-continue-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after broken: one storyline reaction while independent offers continue 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-40-days-after-b-6bea0-independent-offers-continue-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-40-days-after-b-6bea0-independent-offers-continue-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-40-days-after-b-6bea0-independent-offers-continue-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 320px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-modal-touch-controls-focus-and-scrolling-at-320px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-modal-touch-controls-focus-and-scrolling-at-320px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-modal-touch-controls-focus-and-scrolling-at-320px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 375px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-modal-touch-controls-focus-and-scrolling-at-375px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-modal-touch-controls-focus-and-scrolling-at-375px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-modal-touch-controls-focus-and-scrolling-at-375px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 390px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-modal-touch-controls-focus-and-scrolling-at-390px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-modal-touch-controls-focus-and-scrolling-at-390px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-modal-touch-controls-focus-and-scrolling-at-390px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 430px 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-modal-touch-controls-focus-and-scrolling-at-430px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-modal-touch-controls-focus-and-scrolling-at-430px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-modal-touch-controls-focus-and-scrolling-at-430px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29) [webkit-mobile] › tests/encounters.spec.ts:311:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-activity-preser-0b892-nowledge-and-routine-detail-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-activity-preser-0b892-nowledge-and-routine-detail-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-activity-preser-0b892-nowledge-and-routine-detail-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  30) [webkit-mobile] › tests/encounters.spec.ts:380:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-queued-simultan-dfdd0-t-duplicate-outcome-banners-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-queued-simultan-dfdd0-t-duplicate-outcome-banners-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-queued-simultan-dfdd0-t-duplicate-outcome-banners-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  31) [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/encounters-all-homes-and-a-99cd1-modal-and-normal-navigation-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encounters-all-homes-and-a-99cd1-modal-and-normal-navigation-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encounters-all-homes-and-a-99cd1-modal-and-normal-navigation-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  32) [webkit-mobile] › tests/illustrated.spec.ts:82:1 › approved art maps to real actions and resolves under the production base 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/illustrated-approved-art-m-39068-s-under-the-production-base-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/illustrated-approved-art-m-39068-s-under-the-production-base-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/illustrated-approved-art-m-39068-s-under-the-production-base-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  33) [webkit-mobile] › tests/illustrated.spec.ts:131:1 › action art loads near the viewport, and failed art preserves layout and gameplay 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/illustrated-action-art-loa-9a0dc-eserves-layout-and-gameplay-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/illustrated-action-art-loa-9a0dc-eserves-layout-and-gameplay-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/illustrated-action-art-loa-9a0dc-eserves-layout-and-gameplay-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  34) [webkit-mobile] › tests/illustrated.spec.ts:189:1 › GOAL 002C mobile visual review and usable narrow controls 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/illustrated-GOAL-002C-mobi-96951--and-usable-narrow-controls-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/illustrated-GOAL-002C-mobi-96951--and-usable-narrow-controls-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/illustrated-GOAL-002C-mobi-96951--and-usable-narrow-controls-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  35) [webkit-mobile] › tests/mobile.spec.ts:41:1 › phone gameplay: contact, lawful income, days, save and load 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/mobile-phone-gameplay-cont-b9df3-l-income-days-save-and-load-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/mobile-phone-gameplay-cont-b9df3-l-income-days-save-and-load-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/mobile-phone-gameplay-cont-b9df3-l-income-days-save-and-load-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  36) [webkit-mobile] › tests/mobile.spec.ts:83:1 › buyback resolves the incident and the ordinary loop remains playable 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/mobile-buyback-resolves-th-c9430-inary-loop-remains-playable-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/mobile-buyback-resolves-th-c9430-inary-loop-remains-playable-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/mobile-buyback-resolves-th-c9430-inary-loop-remains-playable-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  37) [webkit-mobile] › tests/mobile.spec.ts:124:1 › mobile city and new game remain readable at narrow widths 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/mobile-mobile-city-and-new-68cad-n-readable-at-narrow-widths-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/mobile-mobile-city-and-new-68cad-n-readable-at-narrow-widths-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/mobile-mobile-city-and-new-68cad-n-readable-at-narrow-widths-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  38) [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-all-approved-scen-05f49-n-cannot-change-affiliation-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  39) [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libcairo-script-interpreter.so.2                 ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-valid-sponsored-a-f6d41--survives-checkpoint-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-valid-sponsored-a-f6d41--survives-checkpoint-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-valid-sponsored-a-f6d41--survives-checkpoint-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  40) [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     libhidapi-hidraw.so.0                            ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-valid-sponsored-b-db657--survives-checkpoint-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-valid-sponsored-b-db657--survives-checkpoint-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-valid-sponsored-b-db657--survives-checkpoint-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  41) [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-valid-sponsored-m-ea8eb--survives-checkpoint-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-valid-sponsored-m-ea8eb--survives-checkpoint-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-valid-sponsored-m-ea8eb--survives-checkpoint-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  42) [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-valid-sponsored-b-d5cc6--survives-checkpoint-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-valid-sponsored-b-d5cc6--survives-checkpoint-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-valid-sponsored-b-d5cc6--survives-checkpoint-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  43) [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-valid-sponsored-b-98f9c--survives-checkpoint-reload-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-valid-sponsored-b-98f9c--survives-checkpoint-reload-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-valid-sponsored-b-98f9c--survives-checkpoint-reload-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  44) [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-all-destinations--116b5-names-and-every-dock-target-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-all-destinations--116b5-names-and-every-dock-target-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-all-destinations--116b5-names-and-every-dock-target-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  45) [webkit-mobile] › tests/overhaul.spec.ts:205:1 › Actions update cash/AP, explain disabled prerequisites, and autosave 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-Actions-update-ca-9258b--prerequisites-and-autosave-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-Actions-update-ca-9258b--prerequisites-and-autosave-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-Actions-update-ca-9258b--prerequisites-and-autosave-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  46) [webkit-mobile] › tests/overhaul.spec.ts:239:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-directional-trust-6ce73-rouping-preserve-visibility-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-directional-trust-6ce73-rouping-preserve-visibility-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-directional-trust-6ce73-rouping-preserve-visibility-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  47) [webkit-mobile] › tests/overhaul.spec.ts:285:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/overhaul-negotiated-demand-a10eb-remain-inspectable-and-safe-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/overhaul-negotiated-demand-a10eb-remain-inspectable-and-safe-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/overhaul-negotiated-demand-a10eb-remain-inspectable-and-safe-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  48) [webkit-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/review-review-captures-and-d9517--screen-and-faction-palette-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/review-review-captures-and-d9517--screen-and-faction-palette-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/review-review-captures-and-d9517--screen-and-faction-palette-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  49) [webkit-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-supplier-to-invento-f1fef-ough-normal-mobile-controls-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-supplier-to-invento-f1fef-ough-normal-mobile-controls-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-supplier-to-invento-f1fef-ough-normal-mobile-controls-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  50) [webkit-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-seeded-real-play-ar-27862-ses-into-continued-gameplay-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-seeded-real-play-ar-27862-ses-into-continued-gameplay-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-seeded-real-play-ar-27862-ses-into-continued-gameplay-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  51) [webkit-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-default-reaction-an-df0c9-real-simulated-consequences-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-default-reaction-an-df0c9-real-simulated-consequences-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-default-reaction-an-df0c9-real-simulated-consequences-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  52) [webkit-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-crew-assisted-stree-cc36b-artner-and-actual-inventory-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-crew-assisted-stree-cc36b-artner-and-actual-inventory-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-crew-assisted-stree-cc36b-artner-and-actual-inventory-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  53) [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px ─
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-street-inventory-and-supplier-modal-fit-320px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-street-inventory-and-supplier-modal-fit-320px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-street-inventory-and-supplier-modal-fit-320px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  54) [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px ─
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-street-inventory-and-supplier-modal-fit-375px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-street-inventory-and-supplier-modal-fit-375px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-street-inventory-and-supplier-modal-fit-375px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  55) [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px ─
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-street-inventory-and-supplier-modal-fit-390px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-street-inventory-and-supplier-modal-fit-390px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-street-inventory-and-supplier-modal-fit-390px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  56) [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px ─
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/street-street-inventory-and-supplier-modal-fit-430px-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/street-street-inventory-and-supplier-modal-fit-430px-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/street-street-inventory-and-supplier-modal-fit-430px-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  57) [webkit-mobile] › tests/visual-correction.spec.ts:9:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 
+
+    Error: browserType.launch: 
+    ╔══════════════════════════════════════════════════════╗
+    ║ Host system is missing dependencies to run browsers. ║
+    ║ Missing libraries:                                   ║
+    ║     liblzo2.so.2                                     ║
+    ║     libGLESv2.so.2                                   ║
+    ╚══════════════════════════════════════════════════════╝
+
+    Error Context: test-results/visual-correction-GOAL-002-4e887-ndependent-and-Blips-at-390-webkit-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/visual-correction-GOAL-002-4e887-ndependent-and-Blips-at-390-webkit-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/visual-correction-GOAL-002-4e887-ndependent-and-Blips-at-390-webkit-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  57 failed
+    [webkit-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions 
+    [webkit-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation 
+    [webkit-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters 
+    [webkit-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets 
+    [webkit-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload 
+    [webkit-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history 
+    [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px 
+    [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px 
+    [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px 
+    [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px 
+    [webkit-mobile] › tests/crew.spec.ts:46:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences 
+    [webkit-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting 
+    [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 320px ───────────────────
+    [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 375px ───────────────────
+    [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 390px ───────────────────
+    [webkit-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 430px ───────────────────
+    [webkit-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough 
+    [webkit-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown 
+    [webkit-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload 
+    [webkit-mobile] › tests/employment.spec.ts:258:1 › employment competes with The Chains through actual AP, wages, attendance and promises 
+    [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume 
+    [webkit-mobile] › tests/encounters.spec.ts:173:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening 
+    [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after fulfilled: one storyline reaction while independent offers continue 
+    [webkit-mobile] › tests/encounters.spec.ts:208:3 › 40 days after broken: one storyline reaction while independent offers continue 
+    [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 320px 
+    [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 375px 
+    [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 390px 
+    [webkit-mobile] › tests/encounters.spec.ts:277:3 › modal touch controls, focus and scrolling at 430px 
+    [webkit-mobile] › tests/encounters.spec.ts:311:1 › activity preserves chronology, true faction IDs, severity, private knowledge and routine detail 
+    [webkit-mobile] › tests/encounters.spec.ts:380:1 › queued simultaneous encounters are acknowledged in sequence without duplicate outcome banners 
+    [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation 
+    [webkit-mobile] › tests/illustrated.spec.ts:82:1 › approved art maps to real actions and resolves under the production base 
+    [webkit-mobile] › tests/illustrated.spec.ts:131:1 › action art loads near the viewport, and failed art preserves layout and gameplay 
+    [webkit-mobile] › tests/illustrated.spec.ts:189:1 › GOAL 002C mobile visual review and usable narrow controls 
+    [webkit-mobile] › tests/mobile.spec.ts:41:1 › phone gameplay: contact, lawful income, days, save and load 
+    [webkit-mobile] › tests/mobile.spec.ts:83:1 › buyback resolves the incident and the ordinary loop remains playable 
+    [webkit-mobile] › tests/mobile.spec.ts:124:1 › mobile city and new game remain readable at narrow widths 
+    [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation 
+    [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored angels membership updates theme immediately and survives checkpoint reload 
+    [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blips membership updates theme immediately and survives checkpoint reload 
+    [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored muds membership updates theme immediately and survives checkpoint reload 
+    [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored backstreet membership updates theme immediately and survives checkpoint reload 
+    [webkit-mobile] › tests/overhaul.spec.ts:115:3 › valid sponsored blocks membership updates theme immediately and survives checkpoint reload 
+    [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target 
+    [webkit-mobile] › tests/overhaul.spec.ts:205:1 › Actions update cash/AP, explain disabled prerequisites, and autosave 
+    [webkit-mobile] › tests/overhaul.spec.ts:239:1 › directional trust, witnessed events, activity filters and day grouping preserve visibility 
+    [webkit-mobile] › tests/overhaul.spec.ts:285:1 › negotiated demand comes from state; ended and damaged saves remain inspectable and safe 
+    [webkit-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette 
+    [webkit-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls 
+    [webkit-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay 
+    [webkit-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences 
+    [webkit-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory 
+    [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px ───
+    [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px ───
+    [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px ───
+    [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px ───
+    [webkit-mobile] › tests/visual-correction.spec.ts:9:1 › GOAL 002B mandatory visual review: new run, independent and Blips at 390 
+  57 passed (3.6m)

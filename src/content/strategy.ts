@@ -1,0 +1,87 @@
+export const STRATEGY_BALANCE = {
+  controlThreshold: 57,
+  controlMargin: 12,
+  stabilizationDays: 7,
+  lossDays: 10,
+  minimumPresence: 40,
+  minimumSupport: 25,
+  retentionScore: 39,
+  resourceCap: 1600,
+  decisionInterval: 4,
+  effectCap: 20,
+  actionCooldown: 3,
+  lawfulSustainDays: 14,
+};
+export const AUTHORITY_STAGES = [
+  {
+    authority: 10,
+    name: "Member",
+    standing: 35,
+    contribution: 0,
+    days: 0,
+    trust: 35,
+    permission: "Local support and community work",
+  },
+  {
+    authority: 25,
+    name: "Contributor",
+    standing: 50,
+    contribution: 100,
+    days: 10,
+    trust: 40,
+    permission: "Back neighborhood operations and negotiate cooperation",
+  },
+  {
+    authority: 45,
+    name: "Organizer",
+    standing: 65,
+    contribution: 300,
+    days: 30,
+    trust: 50,
+    permission: "Challenge rivals and propose territorial priorities",
+  },
+  {
+    authority: 70,
+    name: "Succession council",
+    standing: 80,
+    contribution: 700,
+    days: 60,
+    trust: 60,
+    permission: "Appoint an eligible Set successor",
+  },
+];
+export const BUSINESSES = [
+  {
+    id: "repair",
+    name: "Southside repair counter",
+    zone: "south" as const,
+    cost: 1800,
+    revenue: 62,
+    expenses: 39,
+    legitimacy: 15,
+    description:
+      "A modest repair concession with steady overhead and variable foot traffic.",
+  },
+  {
+    id: "courier",
+    name: "Downtown courier route",
+    zone: "downtown" as const,
+    cost: 4200,
+    revenue: 112,
+    expenses: 68,
+    legitimacy: 30,
+    description:
+      "A licensed delivery route exposed to commercial demand and disruption.",
+  },
+  {
+    id: "laundry",
+    name: "Resevoir laundry lease",
+    zone: "resevoir" as const,
+    cost: 8500,
+    revenue: 170,
+    expenses: 105,
+    legitimacy: 45,
+    description:
+      "A neighborhood laundry lease with maintenance costs and local demand.",
+  },
+];

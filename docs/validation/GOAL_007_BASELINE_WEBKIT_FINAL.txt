@@ -1,0 +1,21 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test --project=webkit-mobile --last-failed --timeout=90000 --workers=2
+
+[WebServer] (node:25030) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 2 workers
+
+(node:25081) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25082) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  1 [webkit-mobile] › tests/encounters.spec.ts:73:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (34.1s)
+  ✓  2 [webkit-mobile] › tests/encounters.spec.ts:422:1 › all homes and affiliation themes retain the City-only modal and normal navigation (45.5s)
+  ✓  3 [webkit-mobile] › tests/overhaul.spec.ts:57:1 › all approved scenes load; every home starts independent and map selection cannot change affiliation (43.8s)
+  ✓  4 [webkit-mobile] › tests/overhaul.spec.ts:176:1 › all destinations fit 320/375/390/430 and desktop, including long names and every dock target (41.0s)
+
+  4 passed (1.5m)

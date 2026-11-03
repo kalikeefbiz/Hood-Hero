@@ -1,0 +1,188 @@
+
+> syndicate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /workspace/Hood-Hero
+
+ ✓ src/tests/employment.test.ts (20 tests) 23740ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 1  6358ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 7  4708ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 21  6349ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 2026  5825ms
+ ✓ src/tests/crew.test.ts (22 tests) 19471ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 1: independent lives, occasional offers, real appointments, save/load and bounded growth  2514ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 7: independent lives, occasional offers, real appointments, save/load and bounded growth  3063ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 21: independent lives, occasional offers, real appointments, save/load and bounded growth  4140ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 83: independent lives, occasional offers, real appointments, save/load and bounded growth  3328ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 2026: independent lives, occasional offers, real appointments, save/load and bounded growth  3069ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 5099: independent lives, occasional offers, real appointments, save/load and bounded growth  2923ms
+ ❯ src/tests/simulation.test.ts (44 tests | 6 failed) 4189ms
+   ✓ world and canon > initializes exactly five zones and five established organizations 7ms
+   ✓ world and canon > starts in downtown while preserving incident participants and finances 1ms
+   ✓ world and canon > starts in rio while preserving incident participants and finances 2ms
+   ✓ world and canon > starts in south while preserving incident participants and finances 1ms
+   ✓ world and canon > starts in resevoir while preserving incident participants and finances 1ms
+   ✓ world and canon > starts in nawf while preserving incident participants and finances 1ms
+   ✓ world and canon > keeps Loco influential while incarcerated and Pablo active 0ms
+   ✓ world and canon > does not propagate hostility through organizational allies 1ms
+   ✓ world and canon > maintains independent directed relationships and shared-event memories 1ms
+   ✓ actions, economy, AP and persistence > cannot pay the initial $150 demand with $125 3ms
+   ✓ actions, economy, AP and persistence > validates money, rejects invalid transfers and never overdraws 4ms
+   ✓ actions, economy, AP and persistence > preserves provenance in transfers and spending 1ms
+   ✓ actions, economy, AP and persistence > permits two 1AP actions, blocks overspending AP and restores daily AP 24ms
+   ✓ actions, economy, AP and persistence > does not mutate the input state on successful actions or day advancement 4ms
+   ✓ actions, economy, AP and persistence > keeps work and free rest available at zero cash and maximum stress 38ms
+   ✓ actions, economy, AP and persistence > stores and restores complete memories, incidents, money, RNG, commitments and progression 30ms
+   × actions, economy, AP and persistence > supports storage round trips and rejects damaged or future saves 13ms
+     → expected [Function] to throw error matching /version 7/ but got 'Incompatible or damaged save. Expecte…'
+   ✓ actions, economy, AP and persistence > rejects broken entity references and unavailable storage 4ms
+   ✓ actions, economy, AP and persistence > reproduces the same outcomes for identical seeds and action sequences 36ms
+   × living simulation and personal Set > NPCs choose actions and factions spend resources without player input 2ms
+     → expected 65.12 to be less than 65
+   ✓ living simulation and personal Set > regular NPC status and availability govern crew assignments 2ms
+   ✓ living simulation and personal Set > removal preserves Flacco identity, memories and relationship history 4ms
+   ✓ living simulation and personal Set > recruits an ordinary civilian through repeated trust building 11ms
+   ✓ living simulation and personal Set > gates affiliation through a member’s trust and organizational standing 12ms
+   ✓ The Chains and automated playthroughs > engages, earns money, buys back and continues from downtown 15ms
+   ✓ The Chains and automated playthroughs > engages, earns money, buys back and continues from south 12ms
+   ✓ The Chains and automated playthroughs > ignores the incident while continuing repeatable legitimate work 268ms
+   ✓ The Chains and automated playthroughs > earns legitimate money before contacting anyone 5ms
+   ✓ The Chains and automated playthroughs > allows peaceful leadership settlement without paying 26ms
+   ✓ The Chains and automated playthroughs > runs abstract high-risk recovery without softlocks (seed 1) 111ms
+   ✓ The Chains and automated playthroughs > runs abstract high-risk recovery without softlocks (seed 8) 88ms
+   ✓ The Chains and automated playthroughs > runs abstract high-risk recovery without softlocks (seed 20) 84ms
+   ✓ The Chains and automated playthroughs > runs abstract high-risk recovery without softlocks (seed 40) 79ms
+   ✓ The Chains and automated playthroughs > has no fixed turn limit and no arbitrary defeat timer  3280ms
+   ✓ constructed end condition fixtures > ordinary arrest continues the campaign; death ends it 0ms
+   × constructed end condition fixtures > requires clean wealth, recurring lawful support and formal retirement 1ms
+     → expected null to be 'legitimate-exit' // Object.is equality
+   × constructed end condition fixtures > excludes illicit assets and current dependence, but allows a lawful exit after past crime 1ms
+     → expected null to be 'legitimate-exit' // Object.is equality
+   ✓ constructed end condition fixtures > never awards Underlord to an independent player or a personal Set 0ms
+   × constructed end condition fixtures > requires four established-gang zones, authority and an eligible Set successor 1ms
+     → expected null to be 'underlord' // Object.is equality
+   ✓ regression checks for autonomous schedules and ordinary crew members > limits NPC actions independently of player AP without locking recruitment 2ms
+   ✓ regression checks for autonomous schedules and ordinary crew members > allows removing an inactive member and logs a failed commitment 2ms
+   ✓ regression checks for autonomous schedules and ordinary crew members > rejects attempts to create a sixth organization through the action boundary 1ms
+   ✓ regression checks for autonomous schedules and ordinary crew members > never adds resources or consumes randomness for an ineligible action 2ms
+   × preserves an incarcerated leader’s practical influence on organization decisions 3ms
+     → expected 71.9 to be greater than 71.9
+ ✓ src/tests/encounters.test.ts (20 tests) 2005ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a fulfilled story over 40 further days, including reload  724ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a broken story over 40 further days, including reload  1042ms
+ ✓ src/tests/actionOdds.test.ts (3 tests) 881ms
+   ✓ odds presented to the player > crime predicts the actual seeded outcome without changing the world or RNG  319ms
+ ✓ src/tests/corrections.test.ts (11 tests) 1477ms
+   ✓ 006.1 routine, accumulated and significant exposure > low-scrutiny arrest is possible, but never fixed by action count  1081ms
+ ✓ src/tests/street.test.ts (15 tests) 1021ms
+ ✓ src/tests/actionArt.test.ts (2 tests) 57ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/tests/simulation.test.ts > actions, economy, AP and persistence > supports storage round trips and rejects damaged or future saves
+AssertionError: expected [Function] to throw error matching /version 7/ but got 'Incompatible or damaged save. Expecte…'
+
+- Expected: 
+/version 7/
+
++ Received: 
+"Incompatible or damaged save. Expected Hood Hero save version 8. Start a new test run from the new game menu."
+
+ ❯ src/tests/simulation.test.ts:218:52
+    216|     const raw = JSON.parse(serialize(s));
+    217|     raw.version = 99;
+    218|     expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 7/…
+       |                                                    ^
+    219|     raw.version = 7;
+    220|     raw.state.characters.player.wallet.clean = -1;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/tests/simulation.test.ts > living simulation and personal Set > NPCs choose actions and factions spend resources without player input
+AssertionError: expected 65.12 to be less than 65
+ ❯ src/tests/simulation.test.ts:261:50
+    259|       s.characters["resident-south"].wallet.clean,
+    260|     );
+    261|     expect(next.factions.backstreet.instability).toBeLessThan(
+       |                                                  ^
+    262|       s.factions.backstreet.instability,
+    263|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/tests/simulation.test.ts > constructed end condition fixtures > requires clean wealth, recurring lawful support and formal retirement
+AssertionError: expected null to be 'legitimate-exit' // Object.is equality
+
+- Expected: 
+"legitimate-exit"
+
++ Received: 
+null
+
+ ❯ src/tests/simulation.test.ts:433:28
+    431|     expect(evaluateEnd(s)).toBeNull();
+    432|     s.progression.retired = true;
+    433|     expect(evaluateEnd(s)).toBe("legitimate-exit");
+       |                            ^
+    434|     player(s).recurringLawfulIncome = 0;
+    435|     expect(evaluateEnd(s)).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/tests/simulation.test.ts > constructed end condition fixtures > excludes illicit assets and current dependence, but allows a lawful exit after past crime
+AssertionError: expected null to be 'legitimate-exit' // Object.is equality
+
+- Expected: 
+"legitimate-exit"
+
++ Received: 
+null
+
+ ❯ src/tests/simulation.test.ts:467:28
+    465|     expect(evaluateEnd(s)).toBeNull();
+    466|     s.day = 32;
+    467|     expect(evaluateEnd(s)).toBe("legitimate-exit");
+       |                            ^
+    468|   });
+    469|   it("never awards Underlord to an independent player or a personal Se…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/tests/simulation.test.ts > constructed end condition fixtures > requires four established-gang zones, authority and an eligible Set successor
+AssertionError: expected null to be 'underlord' // Object.is equality
+
+- Expected: 
+"underlord"
+
++ Received: 
+null
+
+ ❯ src/tests/simulation.test.ts:486:28
+    484|     expect(evaluateEnd(s)).toBeNull();
+    485|     s.zones.resevoir.controller = "angels";
+    486|     expect(evaluateEnd(s)).toBe("underlord");
+       |                            ^
+    487|     p.authority = 69;
+    488|     expect(evaluateEnd(s)).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/tests/simulation.test.ts > preserves an incarcerated leader’s practical influence on organization decisions
+AssertionError: expected 71.9 to be greater than 71.9
+ ❯ src/tests/simulation.test.ts:563:52
+    561|   const withLeader = advanceDay(alive);
+    562|   const withoutLeader = advanceDay(absent);
+    563|   expect(withLeader.factions.angels.influence.rio).toBeGreaterThan(
+       |                                                    ^
+    564|     withoutLeader.factions.angels.influence.rio,
+    565|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  6 failed | 131 passed (137)
+   Start at  01:40:48
+   Duration  57.38s (transform 514ms, setup 0ms, collect 1.84s, tests 52.84s, environment 2ms, prepare 749ms)
+

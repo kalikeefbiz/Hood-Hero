@@ -46,7 +46,7 @@ export function CityMap({
         {Object.values(s.zones).map((z) => {
           // Multiple organizations without a controller are shared presence,
           // never an inferred winner or a change to saved ownership.
-          const factions = z.controller ? [z.controller] : z.organizations;
+          const factions = z.organizations;
           return (
             <linearGradient id={`${mapId}-${z.id}`} key={z.id}>
               {factions.flatMap((f, index) => [
@@ -109,7 +109,7 @@ export function CityMap({
               {presence ? ` Faction presence: ${presence}.` : " Unclaimed."}
             </desc>
             <rect
-              className="zone-base"
+              className={`zone-base ${s.strategic.territories[id].contested ? "zone-contested" : ""}`}
               x={l.x}
               y={l.y}
               width={l.w}
@@ -131,7 +131,17 @@ export function CityMap({
                   ? `url(#${mapId}-${id})`
                   : "#A8ADB3"
               }
-              opacity={z.controller || z.organizations.length ? 0.24 : 0.06}
+              opacity={
+                z.organizations.length
+                  ? 0.1 +
+                    Math.max(
+                      ...Object.values(
+                        s.strategic.territories[id].factions,
+                      ).map((q) => q.influence),
+                    ) /
+                      400
+                  : 0.06
+              }
             />
             {/* A bright, narrow strip keeps each presence color legible. */}
             {(z.organizations.length
@@ -144,7 +154,11 @@ export function CityMap({
                 key={f}
                 x={l.x + 6 + (index * (l.w - 12)) / factions.length}
                 y={l.y + l.h - 9}
-                width={(l.w - 12) / factions.length}
+                width={
+                  (((l.w - 12) / factions.length) *
+                    s.strategic.territories[id].factions[f].presence) /
+                  100
+                }
                 height="3"
                 fill={THEMES[f].accent}
               />
@@ -177,6 +191,18 @@ export function CityMap({
                       .join("/")
                   : "UNCLAIMED"}
             </text>
+            {s.strategic.territories[id].contested && (
+              <text
+                x={l.x + l.w / 2}
+                y={l.y + 18}
+                textAnchor="middle"
+                fill="#e2d5b2"
+                fontSize="9"
+                letterSpacing="1"
+              >
+                CONTESTED
+              </text>
+            )}
             {s.characters.player.home === id && (
               <circle
                 cx={l.x + 12}

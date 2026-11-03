@@ -1,3 +1,6 @@
+import { advanceBusinesses } from "../systems/Businesses";
+import { resolveTerritories } from "../systems/Territory";
+import { legitimateProgress, finalizeEnding } from "../systems/EndConditions";
 import { advanceStreet } from "../systems/StreetEconomy";
 import { releaseEligible } from "../systems/Incarceration";
 import { processCrewActivities } from "../systems/CrewAgency";
@@ -12,7 +15,7 @@ import { advanceFactions } from "../systems/Factions";
 import { advanceIncidents } from "../systems/Incidents";
 import { advancePressure } from "../systems/Reputation";
 import { progress } from "../systems/Progression";
-import { evaluateEnd } from "../systems/EndConditions";
+
 import { settleAttendance, generateShifts } from "../systems/Employment";
 import { settleWorkplaceScenes } from "../systems/Workplace";
 export function advanceDay(state: GameState): GameState {
@@ -27,6 +30,8 @@ export function advanceDay(state: GameState): GameState {
   processCrewActivities(s);
   advanceNPCs(s);
   advanceFactions(s);
+  resolveTerritories(s);
+  advanceBusinesses(s);
   advanceIncidents(s);
   evaluatePromises(s);
   advancePressure(s);
@@ -34,7 +39,12 @@ export function advanceDay(state: GameState): GameState {
     income =
       p.recurringLawfulIncome +
       s.assets
-        .filter((a) => a.owner === p.id && a.provenance === "clean")
+        .filter(
+          (a) =>
+            a.owner === p.id &&
+            a.provenance === "clean" &&
+            !s.strategic.businesses.some((b) => b.id === a.id),
+        )
         .reduce((n, a) => n + a.recurringIncome, 0);
   if (income) earn(s, p, income, "clean", "Recurring lawful income");
   const paid = Math.min(BALANCE.livingCost, cash(p));
@@ -58,7 +68,13 @@ export function advanceDay(state: GameState): GameState {
       { importance: "routine" },
     );
   progress(s);
-  s.end = evaluateEnd(s);
+  s.strategic.lawfulStreak =
+    legitimateProgress(s).income >= BALANCE.recurringIncomeVictory &&
+    !legitimateProgress(s).recentCrime &&
+    p.wallet.illicit === 0
+      ? s.strategic.lawfulStreak + 1
+      : 0;
+  finalizeEnding(s);
   s.ap = BALANCE.dailyAP;
   record(
     s,

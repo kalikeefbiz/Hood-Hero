@@ -212,7 +212,8 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 7;
+  version: 8;
+  strategic: import("../systems/StrategicTypes").StrategicState;
   street: import("../systems/StreetTypes").StreetState;
   assignments: CrewAssignment[];
   crewOffers: CrewOffer[];
