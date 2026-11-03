@@ -1035,13 +1035,17 @@
 }
 .board-hud-who h1 {
   margin: 0;
-  font: 600 15px "Barlow Condensed", sans-serif;
+  font:
+    600 15px "Barlow Condensed",
+    sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .board-hud-who .affiliation {
-  font: 600 10px "DM Sans", sans-serif;
+  font:
+    600 10px "DM Sans",
+    sans-serif;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--accent-text, var(--accent-secondary));
@@ -1083,7 +1087,9 @@
   text-overflow: ellipsis;
 }
 .board-hud-sub {
-  font: 600 10px "DM Sans", sans-serif;
+  font:
+    600 10px "DM Sans",
+    sans-serif;
   letter-spacing: 0.6px;
   text-transform: uppercase;
   color: var(--muted);
@@ -1151,4 +1157,12 @@
     padding: 0;
     justify-content: center;
   }
+}
+.board-mode .board-ledger {
+  top: var(--hud-h, calc(env(safe-area-inset-top) + 58px));
+}
+/* Toasts and labels never block the controls underneath them. */
+.board-mode .game-body > .action-feedback,
+.board-mode .game-body > .day-transition {
+  pointer-events: none;
 }

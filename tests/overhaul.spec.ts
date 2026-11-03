@@ -186,14 +186,16 @@ test("all destinations fit 320/375/390/430 and desktop, including long names and
         expect(box.x).toBeGreaterThanOrEqual(0);
         expect(box.x + box.width).toBeLessThanOrEqual(width);
       }
-      await page.evaluate(() =>
-        window.scrollTo(0, document.documentElement.scrollHeight),
+    }
+    // The ledger's last item stays clear of the dock.
+    await openJournal(page);
+    {
+      const dock = page.getByRole("navigation", { name: "Main navigation" });
+      const menu = page.getByText("Game & save information", { exact: true });
+      await menu.scrollIntoViewIfNeeded();
+      expect((await menu.boundingBox())!.y + 44).toBeLessThanOrEqual(
+        (await dock.boundingBox())!.y,
       );
-      expect(
-        (await page
-          .getByText("Game & save information", { exact: true })
-          .boundingBox())!.y + 44,
-      ).toBeLessThanOrEqual((await dock.boundingBox())!.y);
     }
   }
 });

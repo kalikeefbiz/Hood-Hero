@@ -604,7 +604,7 @@ export function App() {
   return (
     <div
       className={`game-shell board-mode screen-${screen.toLowerCase()} ${screen !== "City" ? "ledger-open" : ""}`}
-      style={themeStyle(null)}
+      style={{ ...themeStyle(null), ["--hud-h" as string]: `${insets.top}px` }}
       data-theme={p.affiliation ?? "independent"}
     >
       <a className="skip-link" href="#main-content">

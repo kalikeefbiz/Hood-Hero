@@ -314,12 +314,12 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     await nav(page, "City");
     expect(
       await page
-        .locator(".game-header")
+        .locator(".board-top")
         .evaluate((el) => parseFloat(getComputedStyle(el).paddingTop)),
-    ).toBe(51);
+    ).toBe(47);
     expect(
       await page
-        .locator(".bottom-nav")
+        .locator(".board-dock")
         .evaluate((el) => parseFloat(getComputedStyle(el).paddingBottom)),
     ).toBe(34);
     await capture("06-city-safe-area-390");

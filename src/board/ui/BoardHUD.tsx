@@ -35,8 +35,20 @@ export function BoardHUD({
         aria-label={`${p.name}: your character`}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" strokeWidth="2" />
-          <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" strokeWidth="2" />
+          <circle
+            cx="12"
+            cy="8"
+            r="4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path
+            d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
         </svg>
       </button>
       <span

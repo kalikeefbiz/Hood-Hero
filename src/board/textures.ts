@@ -71,8 +71,7 @@ export function radialTexture() {
   return t;
 }
 
-const SIGN_FONT =
-  '"Barlow Condensed", "Avenir Next Condensed", "Arial Narrow", "Helvetica Neue", Impact, sans-serif';
+const SIGN_FONT = '"Barlow Condensed", sans-serif';
 
 type Cell = [number, number, number, number];
 /**
@@ -102,8 +101,14 @@ export class SignAtlas {
     this.texture = new THREE.CanvasTexture(this.canvas);
     this.texture.colorSpace = THREE.SRGBColorSpace;
     this.texture.anisotropy = 4;
-    // Redraw once web fonts are ready so signs use the game's typeface.
-    document.fonts?.ready.then(() => this.redraw()).catch(() => {});
+    // Load the two faces signs use once, then redraw with them. Drawing only
+    // with faces the game ships keeps the browser from chasing missing ones.
+    Promise.all([
+      document.fonts?.load(`700 40px "Barlow Condensed"`),
+      document.fonts?.load(`italic 700 40px "Barlow Condensed"`),
+    ])
+      .then(() => this.redraw())
+      .catch(() => {});
   }
   private alloc(
     key: string,
@@ -177,7 +182,7 @@ export class SignAtlas {
     return this.alloc(`tag:${text}:${color}:${crown}`, 1, (g, w, h) => {
       g.textAlign = "center";
       g.textBaseline = "middle";
-      g.font = `italic 800 44px ${SIGN_FONT}`;
+      g.font = `italic 700 44px ${SIGN_FONT}`;
       g.lineJoin = "round";
       g.strokeStyle = "rgba(20,20,20,0.9)";
       g.lineWidth = 8;

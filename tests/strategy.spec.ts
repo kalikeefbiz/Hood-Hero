@@ -74,7 +74,8 @@ test("actual local investment, contested map, autonomous decisions and persisted
   await shot(page, ".board-stage", "01-dynamic-map");
   const raw = await page.evaluate(
     () =>
-      JSON.parse(localStorage.getItem("blackhouse.hoodhero-lab.v1.auto")!).state,
+      JSON.parse(localStorage.getItem("blackhouse.hoodhero-lab.v1.auto")!)
+        .state,
   );
   expect(
     Object.values(raw.strategic.strategies).some((x: any) => x.history.length),
