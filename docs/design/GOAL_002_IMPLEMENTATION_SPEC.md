@@ -21,7 +21,7 @@ Build what the existing game actually supports; this is an **interface/asset ove
    - `downtown`: downtown towers, commerce/politics, docks, elevated police presence.
    - `rio`: Rio Gabriel, warm Eastside streets, lowrider culture.
    - `south`: Southside, central Chicago-inspired project building, worn streets.
-   - `resevoir`: **The Resevoir** (preserve this canonical spelling/key), Detroit-inspired boarded houses and vacant lots. NEVER substitute the old luxury-district concept.
+   - `reservoir`: **The Reservoir** (preserve this canonical spelling/key), Detroit-inspired boarded houses and vacant lots. NEVER substitute the old luxury-district concept.
    - `nawf`: The Nawf, Bronx-style bodegas, elevated train, Afro-Latino/Black culture; defaced fallen Mudgang memorial with purple 'Blip Gang' tag. No people wearing purple or brown gang-uniform clothing in the scene.
 5. **Game naming:** visible product name HOOD HERO. Stixx City remains canonical. BLACKHOUSE is publisher. `Syndicate` may remain in internal technical identifiers if renaming risks disruption; don't sweep-rename schema or package names.
 6. **Tone:** stronger authentic hood dialect for story, spoken situations and natural choices. Status labels, instructional microcopy, money, AP, risk, eligibility and consequences must remain immediately comprehensible. **Distinct voices, no repetitive 'AI tough-guy' slogans, no forced slang in every sentence.** No new canon or new gang leadership.
@@ -61,14 +61,14 @@ Inspect the current `src/ui/App.tsx`, `src/ui/CityMap.tsx`, `src/ui/style.css`, 
 
 ## Asset integration
 
-The supplied zip contains `assets/neighborhoods/{downtown,rio,south,resevoir,nawf}.webp`, each ~1448×1086 and 0.4–0.5 MB. On intake, copy into `public/assets/neighborhoods/` (or an equally appropriate app-owned path) and introduce a typed mapping from existing `ZoneId` to paths. With Vite/GitHub Pages, prefix asset URLs with `import.meta.env.BASE_URL` (do not hardcode `/assets` at the root; repo deploys under `/Hood-Hero/`). Use responsive CSS `object-fit`/`object-position`; lazy load below-the-fold images. Do not ship the huge approved UI reference image as a runtime asset.
+The supplied zip contains `assets/neighborhoods/{downtown,rio,south,reservoir,nawf}.webp`, each ~1448×1086 and 0.4–0.5 MB. On intake, copy into `public/assets/neighborhoods/` (or an equally appropriate app-owned path) and introduce a typed mapping from existing `ZoneId` to paths. With Vite/GitHub Pages, prefix asset URLs with `import.meta.env.BASE_URL` (do not hardcode `/assets` at the root; repo deploys under `/Hood-Hero/`). Use responsive CSS `object-fit`/`object-position`; lazy load below-the-fold images. Do not ship the huge approved UI reference image as a runtime asset.
 
 Extract palette into CSS custom properties or typed theme config; style all shared primitives consistently. The reference's tiny illegible copy is not a CSS font-size target. Reuse installed Barlow Condensed and DM Sans initially; let expressive typography emerge from composition/weight rather than applying a stock paintbrush font. Custom wordmark is deferred.
 
 ## Engineering guardrails and quality criteria
 
 1. Preserve the current typed action engine, NPC AI, incident progression, the five gangs and five neighborhoods, procedural world persistence, save key/schema, AP balance, money provenance, win/loss evaluators and all existing working flows. No gameplay economy changes disguised as design tweaks.
-2. Separate **presentational copy** from action type IDs; do not rename canonical enum keys, `ZoneId='resevoir'`, `FactionId` values, stable saved IDs, or test seeding contracts.
+2. Separate **presentational copy** from action type IDs; do not rename canonical enum keys, `ZoneId='reservoir'`, `FactionId` values, stable saved IDs, or test seeding contracts.
 3. Refactor `App.tsx` where meaningful into understandable components (`GameShell`, `Theme`, `HUD`, `BottomNav`, `ZonePreview`, `ActionCard`, `PersonCard`, `EventCard`, `Feedback`, `SaveControls`, etc.) but avoid architecture for architecture's sake. CODEx owns internal component cut decisions.
 4. Buttons and menus must always trigger real existing actions or real navigation. No placeholder functionality, fake 'locked' teaser buttons that imply an implemented M2 feature, hardcoded world data, synthetic progress, static faction colors, or unreadable disabled actions.
 5. Allow natural city/incident dialogue but make probability/requirements explicit. Example presentation-only labels: `Clock in` for `work` ($96 / 2 AP); `Pick up a gig` for `gig` ($38 / 1 AP); `Reach out` for `contact`; `Get put on` for `affiliate` subject to real 35 organization standing + 35 sponsor trust. Use actual costs from source definitions, not duplicated constants. 'The Chains' demand is stateful and may change; never hardcode $150 after negotiation.

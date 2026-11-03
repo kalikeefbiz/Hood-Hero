@@ -39,7 +39,7 @@ export function character(
       downtown: 0,
       rio: 0,
       south: 0,
-      resevoir: 0,
+      reservoir: 0,
       nawf: 0,
     },
     organizationStanding: {
@@ -150,7 +150,7 @@ export function canonicalCharacters(): Character[] {
 }
 // Ordinary residents and membership contacts, never additional major leaders.
 export function residents(): Character[] {
-  return (["downtown", "rio", "south", "resevoir", "nawf"] as ZoneId[]).flatMap(
+  return (["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[]).flatMap(
     (zone, i) => [
       character(
         `resident-${zone}`,
@@ -163,7 +163,7 @@ export function residents(): Character[] {
           traits: { loyalty: 65, ambition: 35, risk: 20, lawful: 80 },
         },
       ),
-      ...(zone === "resevoir" || zone === "nawf"
+      ...(zone === "reservoir" || zone === "nawf"
         ? [
             (zone === "nawf" ? "blips" : "blocks") as FactionId,
             ...(zone === "nawf" ? ["muds" as FactionId] : []),

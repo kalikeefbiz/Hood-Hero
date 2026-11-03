@@ -176,7 +176,7 @@ for (const faction of [
 test("all destinations fit 320/375/390/430 and desktop, including long names and every dock target", async ({
   page,
 }) => {
-  await seed(page, newGame("A long player name for testing", "resevoir"));
+  await seed(page, newGame("A long player name for testing", "reservoir"));
   for (const width of [320, 375, 390, 430, 1440]) {
     await page.setViewportSize({ width, height: 844 });
     for (const screen of ["City", "People", "Actions", "Set", "Wallet"]) {

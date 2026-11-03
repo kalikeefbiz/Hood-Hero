@@ -1,0 +1,669 @@
+/* ==========================================================================
+   Strategy board shell: the city is the screen; everything else floats on it.
+   ========================================================================== */
+.game-shell.board-mode {
+  --nav-h: calc(64px + env(safe-area-inset-bottom));
+  --sheet-h: 34vh;
+  display: block;
+  max-width: none;
+  min-height: 100vh;
+}
+.game-shell.board-mode.sheet-half {
+  --sheet-h: 46vh;
+}
+.game-shell.board-mode.sheet-full {
+  --sheet-h: calc(100vh - 150px);
+  --sheet-h: calc(100dvh - 150px);
+}
+.board-mode .desktop-brand {
+  display: none;
+}
+.board-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(120% 90% at 50% 0%, #4a3550, #15161b 70%);
+}
+.board-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.board-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+  cursor: grab;
+}
+.board-loading {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font:
+    600 15px "Barlow Condensed",
+    sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.board-flat {
+  position: absolute;
+  inset: 150px 12px auto;
+}
+.board-mode .game-body {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  pointer-events: none;
+}
+.board-mode .game-body > * {
+  pointer-events: auto;
+}
+
+/* --- Top: HUD + breadcrumb + lenses ------------------------------------------- */
+.board-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: env(safe-area-inset-top) 10px 6px;
+  background: linear-gradient(#0b0c0fee 55%, #0b0c0f00);
+}
+.board-top .hud-composition {
+  margin: 0;
+}
+.board-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+.board-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.board-crumbs ol {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+.board-crumbs ol::-webkit-scrollbar {
+  display: none;
+}
+.board-crumbs li + li::before {
+  content: "›";
+  margin: 0 4px 0 2px;
+  color: var(--muted);
+}
+.board-crumbs li button,
+.board-crumbs li span {
+  font:
+    600 16px/1 "Barlow Condensed",
+    sans-serif;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.board-crumbs li button {
+  min-height: 32px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+}
+.board-crumbs li span {
+  color: #f3efe6;
+}
+.board-up {
+  flex: 0 0 auto;
+  min-height: 34px;
+  width: 34px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 22px;
+  line-height: 1;
+  background: #1a1c20;
+}
+.board-toggles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.board-lenses {
+  display: inline-flex;
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #0d0f12d9;
+}
+.board-lenses button {
+  flex: 1;
+  min-height: 32px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font:
+    600 12px/1 "DM Sans",
+    sans-serif;
+}
+.board-lenses button[aria-pressed="true"] {
+  background: var(--accent-secondary);
+  color: #111;
+}
+.board-time {
+  min-height: 34px;
+  width: 40px;
+  padding: 0;
+  border-radius: 999px;
+  background: #0d0f12d9;
+  font-size: 16px;
+}
+
+/* --- District chips float just above the sheet ---------------------------------- */
+.board-mode .district-chips {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--sheet-h) + var(--nav-h) + 8px);
+  z-index: 14;
+  display: flex;
+  gap: 6px;
+  padding: 0 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  transition: bottom 0.25s ease;
+}
+.board-mode .district-chips::-webkit-scrollbar {
+  display: none;
+}
+.district-chips button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid #ffffff2a;
+  background: #121418e6;
+  color: #e7e3da;
+  font:
+    600 13px/1 "DM Sans",
+    sans-serif;
+  box-shadow: 0 4px 14px #0007;
+}
+.district-chips button[aria-pressed="true"] {
+  border-color: #fff3d6;
+  background: #2a2c31f2;
+}
+.chip-colors {
+  display: inline-flex;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.chip-colors i {
+  flex: 1;
+}
+.chip-contested {
+  color: #ff8a5a;
+  font-weight: 800;
+}
+
+/* --- Bottom sheet ----------------------------------------------------------------- */
+.board-mode .board-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--nav-h);
+  z-index: 15;
+  height: var(--sheet-h);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 14px 28px;
+  border-radius: 16px 16px 0 0;
+  background: #101114f2;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 -10px 30px #0009;
+  transition: height 0.25s ease;
+}
+.sheet-handle {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: block;
+  width: calc(100% + 28px);
+  margin: 0 -14px 4px;
+  min-height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(#101114, #101114e0);
+}
+.sheet-handle span {
+  display: block;
+  width: 42px;
+  height: 5px;
+  margin: 9px auto;
+  border-radius: 3px;
+  background: #ffffff55;
+}
+.board-mode .screen-heading {
+  margin-bottom: 10px;
+}
+.board-mode .screen-heading h2 {
+  font-size: 24px;
+}
+.board-mode .screen-heading .eyebrow {
+  margin-bottom: 2px;
+}
+.board-mode .bottom-nav {
+  left: 0;
+  right: 0;
+  z-index: 25;
+  height: var(--nav-h);
+  background: #0b0c0ff5;
+}
+.board-mode .bottom-nav button {
+  height: 64px;
+}
+.board-mode .city-layout.board-district {
+  grid-template-columns: 1fr;
+  margin-top: 12px;
+}
+
+/* --- Cards for blocks and places --------------------------------------------------- */
+.board-card {
+  border-top: 3px solid;
+  margin-bottom: 14px;
+}
+.board-card h3 {
+  margin: 4px 0 6px;
+  font-size: 28px;
+}
+.board-card > p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.board-facts {
+  color: var(--accent-text, var(--accent-secondary));
+  font-weight: 600;
+  font-size: 13px !important;
+}
+.board-place-list,
+.board-people ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.board-place-list button,
+.board-people button {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+}
+.board-place-list small,
+.board-people small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.board-people i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.board-people h4,
+.board-business h4 {
+  margin: 14px 0 0;
+  font:
+    600 18px "Barlow Condensed",
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.board-actions {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 4px;
+}
+.board-business-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.board-business-actions button {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+.board-business-actions small {
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--muted);
+}
+.board-street {
+  margin-top: 12px;
+}
+.board-planned {
+  margin-top: 12px !important;
+  padding: 10px 12px;
+  border: 1px dashed #ffffff33;
+  border-radius: 6px;
+  color: #d8d4cb;
+}
+.board-planned strong {
+  display: block;
+  font:
+    600 12px "DM Sans",
+    sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+/* --- Labels and pins positioned by the renderer ---------------------------------- */
+.board-label,
+.board-pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  opacity: 0;
+}
+.board-label {
+  pointer-events: none;
+  padding: 4px 9px 5px;
+  border-left: 3px solid #fff3d6;
+  background: rgba(12, 13, 16, 0.72);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.board-label strong {
+  display: block;
+  font:
+    600 17px/1 "Barlow Condensed",
+    sans-serif;
+  color: #f3efe6;
+}
+.board-label span {
+  display: block;
+  margin-top: 2px;
+  font:
+    600 9px/1.2 "DM Sans",
+    sans-serif;
+  letter-spacing: 1.2px;
+  color: #c9c4b8;
+}
+.board-pin {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: #fff;
+}
+.board-pin span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #f5ecd8;
+  background: #191c20ee;
+  font-size: 15px;
+  line-height: 1;
+  box-shadow: 0 4px 12px #0008;
+}
+.board-pin.planned span {
+  border-style: dashed;
+  border-color: #ffffff77;
+  opacity: 0.8;
+}
+.board-pin em {
+  display: none;
+  font:
+    600 10px/1.15 "DM Sans",
+    sans-serif;
+  font-style: normal;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #0d0f12d9;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-pin.near em,
+.board-pin.active em {
+  display: block;
+}
+.board-pin b {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--accent-secondary);
+  color: #111;
+  font:
+    700 11px/17px "DM Sans",
+    sans-serif;
+}
+.board-pin.owned span {
+  border-color: var(--accent-secondary);
+  background: var(--accent);
+}
+.board-pin.active span {
+  border-color: #fff3d6;
+  background: #fff3d6;
+}
+
+/* --- Wide screens: the sheet becomes a side panel -------------------------------------- */
+@media (min-width: 900px) {
+  .game-shell.board-mode,
+  .game-shell.board-mode.sheet-half,
+  .game-shell.board-mode.sheet-full {
+    --sheet-h: auto;
+  }
+  .board-mode .board-sheet {
+    top: 0;
+    left: auto;
+    width: 440px;
+    height: auto;
+    border-radius: 0;
+  }
+  .board-top {
+    right: 440px;
+  }
+  .board-mode .district-chips {
+    right: 440px;
+    bottom: calc(var(--nav-h) + 12px);
+  }
+  .board-mode .bottom-nav {
+    right: 440px;
+  }
+  .sheet-handle {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .board-mode .board-sheet,
+  .board-mode .district-chips {
+    transition: none;
+  }
+}
+
+/* --- Slim HUD ---------------------------------------------------------------------- */
+.board-hud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 4px 4px 4px 10px;
+  border: 1px solid #ffffff1f;
+  border-radius: 10px;
+  background: #121418e8;
+}
+.board-hud .day {
+  font:
+    italic 700 18px/1 "Barlow Condensed",
+    sans-serif;
+  letter-spacing: 0.5px;
+}
+.board-hud-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.1;
+}
+.board-hud-who b {
+  font:
+    600 15px "Barlow Condensed",
+    sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-hud-who .affiliation {
+  font:
+    600 10px "DM Sans",
+    sans-serif;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--accent-text, var(--accent-secondary));
+}
+.board-hud .ap,
+.board-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.board-hud small {
+  font:
+    600 9px "DM Sans",
+    sans-serif;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.board-hud .ap b,
+.board-stat strong {
+  margin-top: 2px;
+  font:
+    700 17px "Barlow Condensed",
+    sans-serif;
+}
+.board-hud .ap b {
+  color: var(--accent-text, var(--accent-secondary));
+}
+.board-hud-menu {
+  position: relative;
+}
+.board-hud-menu > button {
+  min-height: 38px;
+  width: 38px;
+  padding: 0;
+  font-size: 18px;
+}
+.board-hud-pop {
+  position: absolute;
+  right: 0;
+  top: 44px;
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #16181cf5;
+  border: 1px solid var(--line);
+  z-index: 30;
+}
+.board-hud-pop button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+}
+.board-hud-pop svg {
+  width: 16px;
+}
+@media (max-width: 360px) {
+  .board-stat:not(.cash-resource) {
+    display: none;
+  }
+}
+.board-hud-btn {
+  min-height: 38px;
+  width: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border-color: transparent;
+}
+.board-hud-btn svg {
+  width: 18px;
+  height: 18px;
+}
+@media (max-width: 400px) {
+  .board-hud {
+    gap: 7px;
+  }
+  .board-stat.stress-resource {
+    display: none;
+  }
+}
+.board-mode .screen-heading .eyebrow {
+  display: none;
+}
+/* The board keeps the legacy .city-map hook for tests, without its sizing. */
+.board-backdrop .board-stage.city-map {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-height: none;
+  aspect-ratio: auto;
+  margin: 0;
+}
+.board-sheet .timeline-day {
+  position: static;
+}
+.board-district-places h3 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}

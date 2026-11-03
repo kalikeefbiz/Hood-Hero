@@ -36,9 +36,9 @@ export const ZONES: Record<ZoneId, Zone> = {
     organizations: ["backstreet"],
     controller: "backstreet",
   },
-  resevoir: {
-    id: "resevoir",
-    name: "The Resevoir",
+  reservoir: {
+    id: "reservoir",
+    name: "The Reservoir",
     subtitle: "Westside",
     description:
       "Boarded houses, vacant lots and deep neighborhood roots. Block Boys have strong local support and a violent rivalry with the Angels.",

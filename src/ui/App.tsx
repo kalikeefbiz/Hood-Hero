@@ -61,8 +61,21 @@ import {
   SAVE_KEY,
   AUTO_KEY,
 } from "../persistence/SaveSystem";
-import { CityView } from "./CityView";
-import type { LandmarkTarget } from "../city3d/layout";
+import { BoardBackdrop } from "../board/ui/Board";
+import {
+  BlockSheet,
+  BoardControls,
+  DistrictChips,
+  DistrictPlaces,
+  PlaceSheet,
+} from "../board/ui/BoardPanels";
+import { deriveBoardView } from "../board/viewModel";
+import { BoardHUD } from "../board/ui/BoardHUD";
+import type { Focus, Lens, TimeOfDay } from "../board/BoardRenderer";
+import { locationBlock } from "../city3d/layout";
+import { locationById } from "../board/locations";
+import { StreetWork } from "./StreetWork";
+import { useMemo, useRef } from "react";
 import { NewRun } from "./NewRun";
 import { GameHUD } from "./GameHUD";
 import { ActionCard, money } from "./ActionCard";
@@ -144,7 +157,27 @@ export function App() {
     [focus, setFocus] = useState("mega"),
     [actionGroup, setGroup] = useState<ActionCategory>("Streets"),
     [activityFilter, setActivityFilter] = useState("All");
+  // Strategy board: what the camera is focused on, how the city is read.
+  const [board, setBoard] = useState<Focus>({
+    zone: null,
+    block: null,
+    place: null,
+  });
+  const [lens, setLens] = useState<Lens>("streets");
+  const [time, setTime] = useState<TimeOfDay>(() => {
+    try {
+      const t = localStorage.getItem("hoodhero-lab.time");
+      return t === "night" || t === "day" ? t : "dusk";
+    } catch {
+      return "dusk";
+    }
+  });
+  const [sheet, setSheet] = useState<"peek" | "half" | "full">("peek");
+  const [insets, setInsets] = useState({ top: 0, bottom: 0 });
+  const sheetRef = useRef<HTMLElement | null>(null);
+  const hudRef = useRef<HTMLDivElement | null>(null);
   const [hasSave, setHasSave] = useState(false);
+  const boardView = useMemo(() => (s ? deriveBoardView(s) : null), [s]);
   const [historyEncounterId, setHistoryEncounterId] = useState<string | null>(
     null,
   );
@@ -163,6 +196,25 @@ export function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [screen, !!s]);
+  useEffect(() => {
+    // Keep the board's focus inside the space the HUD and sheet leave free.
+    const measure = () => {
+      const top = hudRef.current?.getBoundingClientRect().bottom ?? 0;
+      const r = sheetRef.current?.getBoundingClientRect();
+      // On wide screens the sheet is a side panel and leaves the height free.
+      const bottom = r && r.left < 10 ? window.innerHeight - r.top : 0;
+      setInsets({ top: Math.max(0, top), bottom: Math.max(0, bottom) });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (sheetRef.current) ro.observe(sheetRef.current);
+    if (hudRef.current) ro.observe(hudRef.current);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [!!s, sheet, screen]);
   useEffect(() => {
     try {
       setHasSave(
@@ -187,6 +239,7 @@ export function App() {
     const next = newGame(name, home);
     setState(next);
     setSelected(home);
+    setBoard({ zone: null, block: null, place: null });
     setScreen("City");
     setHistoryEncounterId(null);
     setNotice("You’re home. Find work, check on Cuzzo, or see who’s around.");
@@ -389,27 +442,39 @@ export function App() {
     setScreen("People");
     window.scrollTo(0, 0);
   };
-  // Places in the 3D city route into the game's existing screens and systems.
-  const openFromCity = (target: LandmarkTarget, zone: ZoneId) => {
+  /** Move the board's focus; the City sheet follows it. */
+  const focusBoard = (f: Focus) => {
+    const place = f.place ? locationById(f.place) : null;
+    const next: Focus = place
+      ? {
+          zone: place.zone,
+          block: locationBlock(place)?.id ?? null,
+          place: place.id,
+        }
+      : f;
+    setBoard(next);
+    if (next.zone) setSelected(next.zone);
+    setScreen("City");
+    setHistoryEncounterId(null);
+    setSheet(next.place || next.block ? "half" : "peek");
+    sheetRef.current?.scrollTo({ top: 0 });
+  };
+  const showPolitics = (zone: ZoneId) => {
     setSelected(zone);
-    if (target.kind === "actions") {
-      setScreen("Actions");
-      setGroup(target.group);
-      window.scrollTo(0, 0);
-    } else if (target.kind === "wallet") {
-      setScreen("Finances");
-      window.scrollTo(0, 0);
-    } else if (target.kind === "people") meetLocals(zone);
-    else
-      requestAnimationFrame(() =>
-        document
-          .querySelector(".zone-details")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" }),
-      );
+    setSheet("full");
+    requestAnimationFrame(() =>
+      document
+        .querySelector(".zone-details")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
+  };
+  const openPeople = (id: string) => {
+    setFocus(id);
+    setScreen("People");
   };
   return (
     <div
-      className={`game-shell screen-${screen.toLowerCase()}`}
+      className={`game-shell board-mode screen-${screen.toLowerCase()} sheet-${screen === "City" ? sheet : "full"}`}
       style={themeStyle(null)}
       data-theme={p.affiliation ?? "independent"}
     >
@@ -433,15 +498,73 @@ export function App() {
           YOUR ROOTS / {s.zones[p.home].name}
         </span>
       </aside>
-      <div className="game-body">
-        <GameHUD
+      {boardView && (
+        <BoardBackdrop
           s={s}
-          selected={selected}
-          cinematic={screen === "City"}
-          save={save}
-          load={() => load(false)}
+          view={boardView}
+          focus={board}
+          onPick={(f) =>
+            f.zone
+              ? focusBoard(f)
+              : focusBoard({ zone: null, block: null, place: null })
+          }
+          lens={lens}
+          time={time}
+          insets={insets}
+          onInteract={() => screen !== "City" && setScreen("City")}
         />
-        <main className="main-content" id="main-content">
+      )}
+      <div className="game-body">
+        <div className="board-top" ref={hudRef}>
+          <BoardHUD s={s} save={save} load={() => load(false)} />
+          {screen === "City" && (
+            <BoardControls
+              s={s}
+              focus={board}
+              setFocus={focusBoard}
+              lens={lens}
+              setLens={setLens}
+              time={time}
+              setTime={(t) => {
+                setTime(t);
+                try {
+                  localStorage.setItem("hoodhero-lab.time", t);
+                } catch {
+                  /* preference only */
+                }
+              }}
+            />
+          )}
+        </div>
+        {screen === "City" && !board.place && !board.block && (
+          <DistrictChips s={s} focus={board} setFocus={focusBoard} />
+        )}
+        <main
+          className="main-content board-sheet"
+          id="main-content"
+          ref={sheetRef}
+        >
+          <button
+            className="sheet-handle"
+            aria-label={
+              screen !== "City"
+                ? "Back to the city"
+                : sheet === "full"
+                  ? "Show more city"
+                  : "Expand panel"
+            }
+            onClick={() => {
+              if (screen !== "City") {
+                setScreen("City");
+                return;
+              }
+              setSheet(
+                sheet === "peek" ? "half" : sheet === "half" ? "full" : "peek",
+              );
+            }}
+          >
+            <span aria-hidden="true" />
+          </button>
           {actionFeedback && (
             <div className="action-feedback" role="status" aria-live="polite">
               <small>YOUR MOVE</small>
@@ -453,7 +576,11 @@ export function App() {
               <p className="eyebrow">STIXX CITY / {screen.toUpperCase()}</p>
               <h2>
                 {screen === "City"
-                  ? "Know your city."
+                  ? board.place
+                    ? (locationById(board.place)?.name ?? "Know your city.")
+                    : board.zone
+                      ? s.zones[board.zone].name
+                      : "Stixx City"
                   : screen === "People"
                     ? "People remember."
                     : screen === "Actions"
@@ -600,6 +727,50 @@ export function App() {
           {screen !== "City" && toast}
           {screen === "City" && (
             <>
+              {board.place && boardView && (
+                <PlaceSheet
+                  s={s}
+                  view={boardView}
+                  placeId={board.place}
+                  renderAction={actionCard}
+                  renderStreet={() => (
+                    <StreetWork
+                      s={s}
+                      sell={(market) =>
+                        act({ type: "crime", actor: p.id, market })
+                      }
+                      connects={() => {
+                        setGroup("Connects");
+                        setScreen("Actions");
+                      }}
+                    />
+                  )}
+                  openPerson={openPeople}
+                  showPolitics={showPolitics}
+                  setState={setState}
+                  openStoryline={
+                    activeStory
+                      ? () => setState(openStoryline(s, activeStory.id))
+                      : undefined
+                  }
+                />
+              )}
+              {!board.place && board.block && boardView && (
+                <BlockSheet
+                  s={s}
+                  view={boardView}
+                  blockId={board.block}
+                  setFocus={focusBoard}
+                />
+              )}
+              {board.zone && !board.place && !board.block && boardView && (
+                <DistrictPlaces
+                  s={s}
+                  view={boardView}
+                  zone={board.zone}
+                  setFocus={focusBoard}
+                />
+              )}
               {activeStory && (
                 <section className="storylines" aria-label="Storylines">
                   <h3>Storylines</h3>
@@ -629,35 +800,7 @@ export function App() {
                 </section>
               )}
               {toast}
-              <div className="city-layout city-layout-3d">
-                <Panel className="map-panel">
-                  <div className="panel-title">
-                    <h3>Stixx City</h3>
-                    <span className="map-key">● Your home</span>
-                  </div>
-                  <CityView
-                    s={s}
-                    selected={selected}
-                    onSelect={setSelected}
-                    onOpen={openFromCity}
-                  />
-                  <ul className="map-legend" aria-label="Faction colors">
-                    {Object.values(s.factions).map((f) => (
-                      <li key={f.id}>
-                        <i
-                          style={{ background: THEMES[f.id].accent }}
-                          aria-hidden="true"
-                        />
-                        {f.name}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="caption">
-                    Select a neighborhood to read its politics. Street color
-                    shows who holds the blocks; split colors are shared
-                    presence, gray is unclaimed. Tap a place to act on it.
-                  </p>
-                </Panel>
+              <div className="city-layout board-district">
                 <div className="zone-details">
                   <Panel>
                     <span className="eyebrow">
@@ -665,8 +808,8 @@ export function App() {
                     </span>
                     <h3>{s.zones[selected].name}</h3>
                     <p>
-                      {selected === "resevoir"
-                        ? ZONES.resevoir.description
+                      {selected === "reservoir"
+                        ? ZONES.reservoir.description
                         : s.zones[selected].description}
                     </p>
                     <p className="control-label">

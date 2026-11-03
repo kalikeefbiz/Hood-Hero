@@ -56,7 +56,7 @@ function buyback() {
   return answer(s, "buyback");
 }
 describe("character-driven Chains playthroughs", () => {
-  it.each(["downtown", "rio", "south", "resevoir", "nawf"] as ZoneId[])(
+  it.each(["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[])(
     "A: promise, real buyback, reaction, and continued work from %s",
     (zone) => {
       let s = fresh(2026, zone);

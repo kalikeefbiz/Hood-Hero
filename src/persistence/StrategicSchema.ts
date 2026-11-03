@@ -4,7 +4,7 @@ const n = z.number().finite(),
   day = n.int().nonnegative(),
   id = z.string().min(1);
 const faction = z.enum(["angels", "backstreet", "blocks", "blips", "muds"]),
-  zone = z.enum(["downtown", "rio", "south", "resevoir", "nawf"]);
+  zone = z.enum(["downtown", "rio", "south", "reservoir", "nawf"]);
 const kind = z.enum([
   "economic",
   "community",

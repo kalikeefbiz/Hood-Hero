@@ -68,5 +68,5 @@ export function underlordReady() {
     target: "joker",
   });
   if (recruited.error) throw new Error(recruited.error);
-  return consolidate(recruited.state, ["downtown", "rio", "south", "resevoir"]);
+  return consolidate(recruited.state, ["downtown", "rio", "south", "reservoir"]);
 }

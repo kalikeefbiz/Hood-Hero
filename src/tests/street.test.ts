@@ -136,7 +136,7 @@ describe("complete inventory economy", () => {
     );
     expect(deserialize(serialize(s))).toEqual(s);
   });
-  it.each(["downtown", "rio", "south", "resevoir", "nawf"] as ZoneId[])(
+  it.each(["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[])(
     "%s has distinct local access; distant friendship does not unlock every market",
     (home) => {
       let s = newGame("Home", home);

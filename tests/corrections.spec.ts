@@ -6,7 +6,7 @@ import {
   storyline,
   storyAction,
 } from "./helpers";
-const key = "blackhouse.syndicate.v1.auto";
+const key = "blackhouse.hoodhero-lab.v1.auto";
 const state = (page: Page) =>
   page.evaluate((k) => JSON.parse(localStorage.getItem(k)!).state, key);
 async function nav(page: Page, name: string) {

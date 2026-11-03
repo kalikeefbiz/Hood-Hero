@@ -1,9 +1,9 @@
 import type { ZoneId } from "../core/GameState";
-import type { ActionCategory } from "../ui/ActionsHub";
+import type { LocationDef } from "../board/locations";
 
 // World layout for the 3D city board. It deliberately mirrors the existing
 // 2D CityMap (420 × 390 SVG units) so both views describe the same Stixx City:
-// The Nawf north, The Resevoir west, Downtown centre, Rio Gabriel east and
+// The Nawf north, The Reservoir west, Downtown centre, Rio Gabriel east and
 // Southside south, with the river winding from the southwest to the northeast.
 export const SVG_SCALE = 0.5;
 export const toWorld = (x: number, y: number): [number, number] => [
@@ -25,14 +25,14 @@ const rect = (x: number, y: number, w: number, h: number): DistrictRect => {
 // Same rectangles as CityMap.tsx.
 export const DISTRICTS: Record<ZoneId, DistrictRect> = {
   nawf: rect(120, 12, 170, 88),
-  resevoir: rect(12, 122, 135, 130),
+  reservoir: rect(12, 122, 135, 130),
   downtown: rect(160, 122, 100, 130),
   rio: rect(273, 122, 135, 130),
   south: rect(120, 274, 170, 100),
 };
 export const ZONE_ORDER: ZoneId[] = [
   "nawf",
-  "resevoir",
+  "reservoir",
   "downtown",
   "rio",
   "south",
@@ -116,236 +116,84 @@ export const AVENUES_X = [toWorld(153, 0)[0], toWorld(267, 0)[0]];
 export const AVENUES_Z = [toWorld(0, 110)[1], toWorld(0, 264)[1]];
 export const BOARD = { minX: -112, maxX: 112, minZ: -104, maxZ: 104 };
 
-export type LandmarkTarget =
-  | { kind: "actions"; group: ActionCategory }
-  | { kind: "people" }
-  | { kind: "wallet" }
-  | { kind: "politics" };
-export interface LandmarkDefinition {
+// Block grid per district, shared by the renderer, the board UI and tests.
+export const STREET = 3.2;
+export const DISTRICT_INSET = 1.2;
+export const BLOCK_SIZE: Record<ZoneId, number> = {
+  downtown: 11,
+  nawf: 11,
+  south: 12,
+  reservoir: 12,
+  rio: 11,
+};
+export interface BlockDef {
+  /** Stable id, e.g. "south.b3-1" (column-row). */
   id: string;
   zone: ZoneId;
-  name: string;
-  kind:
-    | "civic"
-    | "police"
-    | "work"
-    | "business"
-    | "community"
-    | "street"
-    | "transit"
-    | "home";
-  description: string;
-  /** Normalised position inside the district: 0..1 on each axis. */
-  at: [number, number];
-  target: LandmarkTarget;
-  targetLabel: string;
-  /** An existing BUSINESSES definition id, when this place is a business. */
-  business?: string;
-  /** An existing JOBS id, when this place hires. */
-  job?: string;
+  col: number;
+  row: number;
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
+  /** True when the river runs through it (promenade / docks, no buildings). */
+  waterfront: boolean;
 }
+const RIVER = riverPath();
+export function districtGrid(zone: ZoneId) {
+  const d = DISTRICTS[zone];
+  const W = d.maxX - d.minX - DISTRICT_INSET * 2,
+    D = d.maxZ - d.minZ - DISTRICT_INSET * 2,
+    size = BLOCK_SIZE[zone];
+  const nx = Math.max(1, Math.round((W + STREET) / (size + STREET))),
+    nz = Math.max(1, Math.round((D + STREET) / (size + STREET)));
+  const bw = (W - (nx - 1) * STREET) / nx,
+    bd = (D - (nz - 1) * STREET) / nz;
+  const blocks: BlockDef[] = [];
+  for (let i = 0; i < nx; i++)
+    for (let j = 0; j < nz; j++) {
+      const minX = d.minX + DISTRICT_INSET + i * (bw + STREET),
+        minZ = d.minZ + DISTRICT_INSET + j * (bd + STREET);
+      const cx = minX + bw / 2,
+        cz = minZ + bd / 2;
+      blocks.push({
+        id: `${zone}.b${i}-${j}`,
+        zone,
+        col: i,
+        row: j,
+        minX,
+        maxX: minX + bw,
+        minZ,
+        maxZ: minZ + bd,
+        waterfront:
+          distanceToPath(RIVER, cx, cz) < RIVER_WIDTH / 2 + Math.max(bw, bd) * 0.42,
+      });
+    }
+  const xs: number[] = [],
+    zs: number[] = [];
+  for (let i = 1; i < nx; i++)
+    xs.push(d.minX + DISTRICT_INSET + i * bw + (i - 0.5) * STREET);
+  for (let j = 1; j < nz; j++)
+    zs.push(d.minZ + DISTRICT_INSET + j * bd + (j - 0.5) * STREET);
+  return { blocks, nx, nz, bw, bd, streetsX: xs, streetsZ: zs };
+}
+export const ALL_BLOCKS: BlockDef[] = (
+  ["nawf", "reservoir", "downtown", "rio", "south"] as ZoneId[]
+).flatMap((z) => districtGrid(z).blocks);
+export const blockAt = (x: number, z: number) =>
+  ALL_BLOCKS.find(
+    (b) => x >= b.minX - 1.6 && x <= b.maxX + 1.6 && z >= b.minZ - 1.6 && z <= b.maxZ + 1.6,
+  ) ?? null;
+export const blockById = (id: string) => ALL_BLOCKS.find((b) => b.id === id);
 
-// Places are fictional and intentionally abstract. Each one routes to a game
-// system that already exists; none invents new rules.
-export const LANDMARKS: LandmarkDefinition[] = [
-  {
-    id: "city-hall",
-    zone: "downtown",
-    name: "Stixx City Hall",
-    kind: "civic",
-    description:
-      "Politicians, permits and the people who decide which blocks get attention.",
-    at: [0.3, 0.58],
-    target: { kind: "politics" },
-    targetLabel: "Read Downtown politics",
-  },
-  {
-    id: "central-precinct",
-    zone: "downtown",
-    name: "Central Precinct",
-    kind: "police",
-    description:
-      "The city’s heaviest police presence works out of this building.",
-    at: [0.72, 0.78],
-    target: { kind: "politics" },
-    targetLabel: "Check police presence",
-  },
-  {
-    id: "courier-depot",
-    zone: "downtown",
-    name: "Courier route depot",
-    kind: "business",
-    business: "courier",
-    description: "A licensed delivery route exposed to commercial demand.",
-    at: [0.74, 0.4],
-    target: { kind: "wallet" },
-    targetLabel: "View in Wallet",
-  },
-  {
-    id: "downtown-retail",
-    zone: "downtown",
-    name: "Downtown storefronts",
-    kind: "work",
-    job: "retail-downtown",
-    description:
-      "Retail counters along the commercial strip. They hire locals.",
-    at: [0.38, 0.86],
-    target: { kind: "actions", group: "Honest" },
-    targetLabel: "Look for honest work",
-  },
-  {
-    id: "the-towers",
-    zone: "south",
-    name: "The Towers",
-    kind: "home",
-    description: "Central project housing. Old loyalties live on every floor.",
-    at: [0.5, 0.42],
-    target: { kind: "people" },
-    targetLabel: "Meet local people",
-  },
-  {
-    id: "repair-counter",
-    zone: "south",
-    name: "Southside repair counter",
-    kind: "business",
-    business: "repair",
-    description: "A modest repair concession with steady overhead.",
-    at: [0.2, 0.74],
-    target: { kind: "wallet" },
-    targetLabel: "View in Wallet",
-  },
-  {
-    id: "back-street-corner",
-    zone: "south",
-    name: "Back Street corner",
-    kind: "street",
-    description: "Where word moves fastest on the Southside.",
-    at: [0.82, 0.72],
-    target: { kind: "actions", group: "Streets" },
-    targetLabel: "Open street moves",
-  },
-  {
-    id: "south-retail",
-    zone: "south",
-    name: "Corner market",
-    kind: "work",
-    job: "retail-south",
-    description: "A neighborhood shop that needs reliable hands.",
-    at: [0.62, 0.86],
-    target: { kind: "actions", group: "Honest" },
-    targetLabel: "Look for honest work",
-  },
-  {
-    id: "laundry",
-    zone: "resevoir",
-    name: "Resevoir laundry",
-    kind: "business",
-    business: "laundry",
-    description: "A neighborhood laundry lease with real local demand.",
-    at: [0.66, 0.68],
-    target: { kind: "wallet" },
-    targetLabel: "View in Wallet",
-  },
-  {
-    id: "warehouse",
-    zone: "resevoir",
-    name: "Westside warehouse",
-    kind: "work",
-    job: "warehouse",
-    description: "Deliveries sorted and moved. Applications open citywide.",
-    at: [0.22, 0.86],
-    target: { kind: "actions", group: "Honest" },
-    targetLabel: "Look for honest work",
-  },
-  {
-    id: "lot-court",
-    zone: "resevoir",
-    name: "The lot court",
-    kind: "community",
-    description: "A hoop on a vacant lot. Block Boys’ roots run through here.",
-    at: [0.5, 0.42],
-    target: { kind: "people" },
-    targetLabel: "Meet local people",
-  },
-  {
-    id: "resevoir-retail",
-    zone: "resevoir",
-    name: "Resevoir corner store",
-    kind: "work",
-    job: "retail-resevoir",
-    description: "Shelves to stock and customers who know your face.",
-    at: [0.82, 0.3],
-    target: { kind: "actions", group: "Honest" },
-    targetLabel: "Look for honest work",
-  },
-  {
-    id: "lowrider-garage",
-    zone: "rio",
-    name: "Lowrider garage",
-    kind: "community",
-    description: "Chrome, hydraulics and the people Gabriel’s Angels count on.",
-    at: [0.3, 0.6],
-    target: { kind: "people" },
-    targetLabel: "Meet local people",
-  },
-  {
-    id: "rio-mercado",
-    zone: "rio",
-    name: "Mercado on the river",
-    kind: "work",
-    job: "retail-rio",
-    description: "A family market with steady customers and long days.",
-    at: [0.66, 0.78],
-    target: { kind: "actions", group: "Honest" },
-    targetLabel: "Look for honest work",
-  },
-  {
-    id: "rio-mural",
-    zone: "rio",
-    name: "River wall mural",
-    kind: "street",
-    description: "The Eastside black market runs quieter than it looks.",
-    at: [0.78, 0.36],
-    target: { kind: "actions", group: "Streets" },
-    targetLabel: "Open street moves",
-  },
-  {
-    id: "nawf-bodega",
-    zone: "nawf",
-    name: "The bodega",
-    kind: "work",
-    job: "retail-nawf",
-    description: "Yellow awning, open late, hiring when trust allows.",
-    at: [0.3, 0.62],
-    target: { kind: "actions", group: "Honest" },
-    targetLabel: "Look for honest work",
-  },
-  {
-    id: "memorial",
-    zone: "nawf",
-    name: "The memorial wall",
-    kind: "community",
-    description:
-      "A Mudgang memorial, defaced in Blips purple. Residents want the feud to end.",
-    at: [0.16, 0.34],
-    target: { kind: "people" },
-    targetLabel: "Meet local people",
-  },
-  {
-    id: "el-station",
-    zone: "nawf",
-    name: "Nawf El station",
-    kind: "transit",
-    description: "Under the train tracks, the Nawf’s street economy moves.",
-    at: [0.7, 0.3],
-    target: { kind: "actions", group: "Streets" },
-    targetLabel: "Open street moves",
-  },
-];
-export const landmarkPosition = (l: LandmarkDefinition): [number, number] => {
+export const locationPosition = (l: Pick<LocationDef, "zone" | "at">): [number, number] => {
   const d = DISTRICTS[l.zone];
   return [
     d.minX + (d.maxX - d.minX) * l.at[0],
     d.minZ + (d.maxZ - d.minZ) * l.at[1],
   ];
+};
+export const locationBlock = (l: Pick<LocationDef, "zone" | "at">) => {
+  const [x, z] = locationPosition(l);
+  return blockAt(x, z);
 };

@@ -38,10 +38,10 @@
     "sha256": "c48019cace6cac81bf76c65f64254d1d0312897eb73641fd882f1f17f4f7151e",
     "destinationInRepo": "public/assets/neighborhoods/south.webp"
   },
-  "resevoir": {
-    "filename": "resevoir.webp",
-    "canonicalZone": "resevoir",
-    "description": "The Resevoir; Detroit-inspired older boarded homes, vacant lots, low-rise residential fabric; Block Boys",
+  "reservoir": {
+    "filename": "reservoir.webp",
+    "canonicalZone": "reservoir",
+    "description": "The Reservoir; Detroit-inspired older boarded homes, vacant lots, low-rise residential fabric; Block Boys",
     "sourceOriginal": "sunset_over_the_reservoir_neighborhood.png",
     "sizePx": [
       1448,
@@ -49,7 +49,7 @@
     ],
     "bytes": 488912,
     "sha256": "a8950a376284e54a1ba19aee33d86f78312332f0963fee419833da651d06dd2b",
-    "destinationInRepo": "public/assets/neighborhoods/resevoir.webp"
+    "destinationInRepo": "public/assets/neighborhoods/reservoir.webp"
   },
   "nawf": {
     "filename": "nawf.webp",

@@ -422,7 +422,7 @@ test("queued simultaneous encounters are acknowledged in sequence without duplic
 test("all homes and affiliation themes retain the City-only modal and normal navigation", async ({
   page,
 }) => {
-  const homes: ZoneId[] = ["downtown", "rio", "south", "resevoir", "nawf"];
+  const homes: ZoneId[] = ["downtown", "rio", "south", "reservoir", "nawf"];
   for (const [n, affiliation] of (
     [
       null,

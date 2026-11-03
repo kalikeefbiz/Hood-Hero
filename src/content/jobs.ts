@@ -14,7 +14,7 @@ export interface JobDefinition {
 // Weekday 0 = Monday. Commuting is included in the full shift's 2 AP.
 export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 export const JOBS: JobDefinition[] = [
-  ...(["downtown", "rio", "south", "resevoir", "nawf"] as ZoneId[]).map(
+  ...(["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[]).map(
     (location) => ({
       id: `retail-${location}`,
       name: "Neighborhood retail",
@@ -31,8 +31,8 @@ export const JOBS: JobDefinition[] = [
   {
     id: "warehouse",
     name: "Warehouse assistant",
-    employer: "resident-resevoir",
-    location: "resevoir",
+    employer: "resident-reservoir",
+    location: "reservoir",
     workdays: [0, 2, 4],
     wage: BALANCE.workIncome,
     minWork: 40,

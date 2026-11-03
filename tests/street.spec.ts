@@ -14,7 +14,7 @@ import {
 import { requestActivity, cooperation } from "../src/systems/CrewAgency";
 import { serialize } from "../src/persistence/SaveSystem";
 import type { GameState } from "../src/core/GameState";
-const key = "blackhouse.syndicate.v1.auto";
+const key = "blackhouse.hoodhero-lab.v1.auto";
 test.beforeEach(async ({ page }) => {
   if (process.env.PLAYWRIGHT_EXPECTED_COMMIT) {
     const r = await page.request.get(

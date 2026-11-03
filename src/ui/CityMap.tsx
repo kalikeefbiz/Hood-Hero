@@ -6,7 +6,7 @@ const locations: Record<
   { x: number; y: number; w: number; h: number }
 > = {
   nawf: { x: 120, y: 12, w: 170, h: 88 },
-  resevoir: { x: 12, y: 122, w: 135, h: 130 },
+  reservoir: { x: 12, y: 122, w: 135, h: 130 },
   downtown: { x: 160, y: 122, w: 100, h: 130 },
   rio: { x: 273, y: 122, w: 135, h: 130 },
   south: { x: 120, y: 274, w: 170, h: 100 },

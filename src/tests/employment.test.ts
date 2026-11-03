@@ -46,7 +46,7 @@ function finishScenes(s: GameState, response = "skip") {
   return s;
 }
 describe("employment commitments and survival", () => {
-  it.each(["south", "downtown", "rio", "resevoir", "nawf"] as ZoneId[])(
+  it.each(["south", "downtown", "rio", "reservoir", "nawf"] as ZoneId[])(
     "hiring and save round trip from %s",
     (home) => {
       let s = newGame("Worker", home);

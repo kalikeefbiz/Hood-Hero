@@ -19,7 +19,7 @@ import {
   loadGame,
 } from "../persistence/SaveSystem";
 import { BALANCE } from "../content/balance";
-const zones: ZoneId[] = ["downtown", "rio", "south", "resevoir", "nawf"];
+const zones: ZoneId[] = ["downtown", "rio", "south", "reservoir", "nawf"];
 function doAction(s: GameState, type: ActionType, target?: string, extra = {}) {
   const r = performAction(s, {
     type,
@@ -57,7 +57,7 @@ describe("world and canon", () => {
     expect(s.zones.downtown.controller).toBeNull();
     expect(s.zones.downtown.organizations).toEqual([]);
     expect(s.zones.nawf.organizations).toEqual(["blips", "muds"]);
-    expect(s.zones.resevoir.name).toBe("The Resevoir");
+    expect(s.zones.reservoir.name).toBe("The Reservoir");
   });
   it.each(zones)(
     "starts in %s while preserving incident participants and finances",
@@ -484,7 +484,7 @@ describe("constructed end condition fixtures", () => {
     s.characters.flacco.affiliation = "angels";
     for (const id of zones.slice(0, 3)) s.zones[id].controller = "angels";
     expect(evaluateEnd(s)).toBeNull();
-    s.zones.resevoir.controller = "angels";
+    s.zones.reservoir.controller = "angels";
     for (const id of zones.slice(0, 4)) {
       s.strategic.territories[id].controller = "angels";
       s.strategic.territories[id].controlSince = 1;

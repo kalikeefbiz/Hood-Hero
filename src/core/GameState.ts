@@ -1,5 +1,5 @@
 export type ID = string;
-export type ZoneId = "downtown" | "rio" | "south" | "resevoir" | "nawf";
+export type ZoneId = "downtown" | "rio" | "south" | "reservoir" | "nawf";
 export type FactionId = "angels" | "backstreet" | "blocks" | "blips" | "muds";
 export type Status = "active" | "arrested" | "dead" | "laying-low";
 export interface Wallet {

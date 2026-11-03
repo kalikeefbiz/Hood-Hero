@@ -1,7 +1,7 @@
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { dismissEncounter } from "./helpers";
-const key = "blackhouse.syndicate.v1.auto";
+const key = "blackhouse.hoodhero-lab.v1.auto";
 async function state(page: Page) {
   return page.evaluate((k) => JSON.parse(localStorage.getItem(k)!).state, key);
 }

@@ -2,7 +2,7 @@ import { z } from "zod";
 const id = z.string().min(1),
   n = z.number().finite().nonnegative(),
   i = n.int(),
-  zone = z.enum(["downtown", "rio", "south", "resevoir", "nawf"]),
+  zone = z.enum(["downtown", "rio", "south", "reservoir", "nawf"]),
   faction = z.enum(["angels", "backstreet", "blocks", "blips", "muds"]);
 export const streetSchema = z.object({
   arrears: n,

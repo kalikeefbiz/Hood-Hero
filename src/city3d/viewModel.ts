@@ -4,11 +4,9 @@ import {
   type GameState,
   type ZoneId,
 } from "../core/GameState";
-import { BUSINESSES } from "../content/strategy";
-import { jobDefinition } from "../content/jobs";
 import { THEMES } from "../ui/theme";
 import type { EffectKind } from "../systems/StrategicTypes";
-import { LANDMARKS, ZONE_ORDER } from "./layout";
+import { ZONE_ORDER } from "./layout";
 
 // A read-only projection of saved game state for the 3D city. The renderer
 // only ever sees this view, so inspecting the city cannot change the save.
@@ -39,17 +37,10 @@ export interface ZoneView {
   recent: { kind: EffectKind; tone: "calm" | "tension" }[];
   description: string;
 }
-export interface LandmarkStatus {
-  id: string;
-  owned: boolean;
-  employed: boolean;
-  status?: string;
-}
 export interface CityView {
   day: number;
   playerAccent: string;
   zones: Record<ZoneId, ZoneView>;
-  landmarks: Record<string, LandmarkStatus>;
   playerArrested: boolean;
 }
 
@@ -101,40 +92,10 @@ export function deriveCityView(s: GameState): CityView {
       description: z.description,
     };
   }
-  const jobs = new Set(
-    s.employment
-      .filter((e) => e.actor === p.id && e.status === "employed")
-      .map((e) => jobDefinition(e.jobId)?.id)
-      .filter(Boolean),
-  );
-  const landmarks: Record<string, LandmarkStatus> = {};
-  for (const l of LANDMARKS) {
-    const b = l.business
-      ? s.strategic.businesses.find(
-          (b) =>
-            b.definition === l.business &&
-            !["sold", "closed"].includes(b.status),
-        )
-      : undefined;
-    const d = l.business
-      ? BUSINESSES.find((d) => d.id === l.business)
-      : undefined;
-    landmarks[l.id] = {
-      id: l.id,
-      owned: !!b,
-      employed: !!l.job && jobs.has(l.job),
-      status: b
-        ? `Yours · ${b.status} · last day ${b.lastNet >= 0 ? "+" : "−"}$${Math.abs(b.lastNet)}`
-        : d
-          ? `For sale · $${d.cost.toLocaleString()} · needs ${d.legitimacy} legitimacy`
-          : undefined,
-    };
-  }
   return {
     day: s.day,
     playerAccent: THEMES[p.affiliation ?? "independent"].secondary,
     zones,
-    landmarks,
     playerArrested: p.status === "arrested",
   };
 }

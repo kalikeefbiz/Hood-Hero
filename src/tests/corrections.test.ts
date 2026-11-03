@@ -29,7 +29,7 @@ function action(
   return r.state;
 }
 describe("006.1 believable access and limited story access", () => {
-  it.each(["downtown", "rio", "south", "resevoir", "nawf"] as ZoneId[])(
+  it.each(["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[])(
     "%s starts with friends and public local employment, not every criminal phone number",
     (home) => {
       let s = newGame("Access", home);

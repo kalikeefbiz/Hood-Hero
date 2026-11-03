@@ -8,13 +8,13 @@ const id = z.string().min(1),
   n = z.number().finite(),
   nonnegative = n.nonnegative(),
   integer = nonnegative.int();
-const zone = z.enum(["downtown", "rio", "south", "resevoir", "nawf"]),
+const zone = z.enum(["downtown", "rio", "south", "reservoir", "nawf"]),
   faction = z.enum(["angels", "backstreet", "blocks", "blips", "muds"]);
 const zoneScores = z.object({
   downtown: n,
   rio: n,
   south: n,
-  resevoir: n,
+  reservoir: n,
   nawf: n,
 });
 const factionScores = z.object({
@@ -354,7 +354,9 @@ const schema = z.object({
     .enum(["legitimate-exit", "underlord", "arrested", "killed"])
     .nullable(),
 });
-export const SAVE_KEY = "blackhouse.syndicate.v1";
+// The strategy-board lab keeps its own slots so it can never touch saves from
+// the production game, even on the same web origin.
+export const SAVE_KEY = "blackhouse.hoodhero-lab.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
   return JSON.stringify({ format: "syndicate", version: 8, state: s });

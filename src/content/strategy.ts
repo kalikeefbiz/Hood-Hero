@@ -75,8 +75,8 @@ export const BUSINESSES = [
   },
   {
     id: "laundry",
-    name: "Resevoir laundry lease",
-    zone: "resevoir" as const,
+    name: "Reservoir laundry lease",
+    zone: "reservoir" as const,
     cost: 8500,
     revenue: 170,
     expenses: 105,

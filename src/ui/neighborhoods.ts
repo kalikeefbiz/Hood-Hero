@@ -22,9 +22,9 @@ export const NEIGHBORHOODS: Record<
     flavor: "Old loyalty. New ambition.",
     position: "50% 48%",
   },
-  resevoir: {
-    image: "resevoir.webp",
-    alt: "Boarded homes and vacant lots in The Resevoir at sunset",
+  reservoir: {
+    image: "reservoir.webp",
+    alt: "Boarded homes and vacant lots in The Reservoir at sunset",
     flavor: "Boarded houses. Deep roots.",
     position: "50% 55%",
   },
