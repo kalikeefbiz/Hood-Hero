@@ -1,0 +1,2601 @@
+{
+  "days": 180,
+  "campaigns": 18,
+  "replayCampaigns": 18,
+  "deterministic": true,
+  "results": [
+    {
+      "seed": 1,
+      "mode": "passive",
+      "days": 180,
+      "actions": {
+        "rest": 360
+      },
+      "wallet": {
+        "clean": 0,
+        "illicit": 0
+      },
+      "arrears": 3115,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 133,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3757,
+      "majorEvents": 3,
+      "saveBytes": 1468867,
+      "averageDayMs": 67,
+      "maxDayMs": 203
+    },
+    {
+      "seed": 1,
+      "mode": "business",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 105,
+        "work": 75,
+        "rest": 101,
+        "business": 1,
+        "maintain": 2
+      },
+      "wallet": {
+        "clean": 6864,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [
+        {
+          "name": "repair",
+          "status": "profitable",
+          "net": 37,
+          "condition": 81.5499999999996
+        }
+      ],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 4030,
+      "majorEvents": 6,
+      "saveBytes": 1646724,
+      "averageDayMs": 65,
+      "maxDayMs": 267
+    },
+    {
+      "seed": 1,
+      "mode": "political",
+      "days": 180,
+      "actions": {
+        "standing": 5,
+        "affiliate": 1,
+        "introduce": 1,
+        "support": 5,
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 97,
+        "work": 75,
+        "rest": 47,
+        "contact": 4,
+        "promote": 3,
+        "operation": 46
+      },
+      "wallet": {
+        "clean": 3523,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 70,
+      "advancementMissing": [
+        "Highest authority stage reached"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 144,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 1596,
+          "instability": 21,
+          "decisions": {
+            "recover": 6,
+            "expand": 9,
+            "economy": 18,
+            "contest": 3
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 282,
+          "instability": 27,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 5,
+            "contest": 6
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks",
+            "backstreet"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3940,
+      "majorEvents": 8,
+      "saveBytes": 1627415,
+      "averageDayMs": 71,
+      "maxDayMs": 268
+    },
+    {
+      "seed": 1,
+      "mode": "mixed",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 95,
+        "work": 69,
+        "rest": 92,
+        "acquire": 6,
+        "crime": 28
+      },
+      "wallet": {
+        "clean": 6471,
+        "illicit": 1338
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 14,
+          "instability": 0,
+          "decisions": {
+            "recover": 31,
+            "expand": 2,
+            "maintain": 1,
+            "economy": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "blocks"
+          ],
+          "contested": false
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3929,
+      "majorEvents": 18,
+      "saveBytes": 1608918,
+      "averageDayMs": 48,
+      "maxDayMs": 173
+    },
+    {
+      "seed": 1,
+      "mode": "custody",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 103,
+        "work": 74,
+        "rest": 99,
+        "business": 1,
+        "maintain": 2
+      },
+      "wallet": {
+        "clean": 6614,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [
+        {
+          "name": "repair",
+          "status": "struggling",
+          "net": -33,
+          "condition": 81.5499999999996
+        }
+      ],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 1,
+      "events": 4029,
+      "majorEvents": 8,
+      "saveBytes": 1644688,
+      "averageDayMs": 64,
+      "maxDayMs": 228
+    },
+    {
+      "seed": 1,
+      "mode": "changing-control",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 103,
+        "work": 77,
+        "rest": 102
+      },
+      "wallet": {
+        "clean": 8759,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 55,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 7,
+            "economy": 15,
+            "contest": 5,
+            "maintain": 7
+          },
+          "controls": 0
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 295,
+          "instability": 34,
+          "decisions": {
+            "economy": 30,
+            "expand": 5,
+            "maintain": 2,
+            "contest": 8
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 67,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 5,
+            "recover": 22,
+            "expand": 1
+          },
+          "controls": 1
+        },
+        {
+          "id": "muds",
+          "resources": 123,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 11,
+            "recover": 20
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": null,
+          "presence": [
+            "blocks",
+            "angels"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": "blips",
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [
+        {
+          "zone": "rio",
+          "day": 73,
+          "from": "angels",
+          "to": null,
+          "eventId": "event-1665"
+        },
+        {
+          "zone": "nawf",
+          "day": 148,
+          "from": null,
+          "to": "blips",
+          "eventId": "event-3353"
+        }
+      ],
+      "arrests": 0,
+      "events": 3986,
+      "majorEvents": 7,
+      "saveBytes": 1612827,
+      "averageDayMs": 56,
+      "maxDayMs": 325
+    },
+    {
+      "seed": 21,
+      "mode": "passive",
+      "days": 180,
+      "actions": {
+        "rest": 360
+      },
+      "wallet": {
+        "clean": 0,
+        "illicit": 0
+      },
+      "arrears": 3115,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3758,
+      "majorEvents": 3,
+      "saveBytes": 1495108,
+      "averageDayMs": 39,
+      "maxDayMs": 93
+    },
+    {
+      "seed": 21,
+      "mode": "business",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 105,
+        "work": 75,
+        "rest": 101,
+        "business": 1,
+        "maintain": 2
+      },
+      "wallet": {
+        "clean": 6722,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [
+        {
+          "name": "repair",
+          "status": "profitable",
+          "net": -105,
+          "condition": 81.5499999999996
+        }
+      ],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 4023,
+      "majorEvents": 6,
+      "saveBytes": 1644669,
+      "averageDayMs": 35,
+      "maxDayMs": 151
+    },
+    {
+      "seed": 21,
+      "mode": "political",
+      "days": 180,
+      "actions": {
+        "standing": 5,
+        "affiliate": 1,
+        "introduce": 1,
+        "support": 5,
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 97,
+        "work": 75,
+        "rest": 47,
+        "contact": 4,
+        "promote": 3,
+        "operation": 46
+      },
+      "wallet": {
+        "clean": 3523,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 70,
+      "advancementMissing": [
+        "Highest authority stage reached"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 144,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 1596,
+          "instability": 21,
+          "decisions": {
+            "recover": 6,
+            "expand": 9,
+            "economy": 18,
+            "contest": 3
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 282,
+          "instability": 27,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 5,
+            "contest": 6
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks",
+            "backstreet"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3942,
+      "majorEvents": 8,
+      "saveBytes": 1641458,
+      "averageDayMs": 40,
+      "maxDayMs": 143
+    },
+    {
+      "seed": 21,
+      "mode": "mixed",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 97,
+        "work": 70,
+        "rest": 95,
+        "acquire": 6,
+        "crime": 21
+      },
+      "wallet": {
+        "clean": 6679,
+        "illicit": 1481
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 71,
+          "instability": 0,
+          "decisions": {
+            "recover": 32,
+            "expand": 2,
+            "economy": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "blocks"
+          ],
+          "contested": false
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3923,
+      "majorEvents": 18,
+      "saveBytes": 1602019,
+      "averageDayMs": 40,
+      "maxDayMs": 161
+    },
+    {
+      "seed": 21,
+      "mode": "custody",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 103,
+        "work": 74,
+        "rest": 99,
+        "business": 1,
+        "maintain": 2
+      },
+      "wallet": {
+        "clean": 6609,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [
+        {
+          "name": "repair",
+          "status": "profitable",
+          "net": -38,
+          "condition": 81.5499999999996
+        }
+      ],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 1,
+      "events": 4022,
+      "majorEvents": 8,
+      "saveBytes": 1646019,
+      "averageDayMs": 42,
+      "maxDayMs": 182
+    },
+    {
+      "seed": 21,
+      "mode": "changing-control",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 103,
+        "work": 77,
+        "rest": 102
+      },
+      "wallet": {
+        "clean": 8759,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 54,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 7,
+            "economy": 15,
+            "contest": 5,
+            "maintain": 7
+          },
+          "controls": 0
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 295,
+          "instability": 34,
+          "decisions": {
+            "economy": 30,
+            "expand": 5,
+            "maintain": 2,
+            "contest": 8
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 67,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 5,
+            "recover": 22,
+            "expand": 1
+          },
+          "controls": 1
+        },
+        {
+          "id": "muds",
+          "resources": 123,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 11,
+            "recover": 20
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": null,
+          "presence": [
+            "blocks",
+            "angels"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": "blips",
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [
+        {
+          "zone": "rio",
+          "day": 73,
+          "from": "angels",
+          "to": null,
+          "eventId": "event-1663"
+        },
+        {
+          "zone": "nawf",
+          "day": 148,
+          "from": null,
+          "to": "blips",
+          "eventId": "event-3351"
+        }
+      ],
+      "arrests": 0,
+      "events": 3988,
+      "majorEvents": 7,
+      "saveBytes": 1612898,
+      "averageDayMs": 43,
+      "maxDayMs": 197
+    },
+    {
+      "seed": 2026,
+      "mode": "passive",
+      "days": 180,
+      "actions": {
+        "rest": 360
+      },
+      "wallet": {
+        "clean": 0,
+        "illicit": 0
+      },
+      "arrears": 3115,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3759,
+      "majorEvents": 3,
+      "saveBytes": 1466754,
+      "averageDayMs": 42,
+      "maxDayMs": 194
+    },
+    {
+      "seed": 2026,
+      "mode": "business",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 105,
+        "work": 75,
+        "rest": 101,
+        "business": 1,
+        "maintain": 2
+      },
+      "wallet": {
+        "clean": 6627,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [
+        {
+          "name": "repair",
+          "status": "struggling",
+          "net": -200,
+          "condition": 81.5499999999996
+        }
+      ],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 4003,
+      "majorEvents": 6,
+      "saveBytes": 1653071,
+      "averageDayMs": 49,
+      "maxDayMs": 186
+    },
+    {
+      "seed": 2026,
+      "mode": "political",
+      "days": 180,
+      "actions": {
+        "standing": 5,
+        "affiliate": 1,
+        "introduce": 1,
+        "support": 5,
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 97,
+        "work": 75,
+        "rest": 47,
+        "contact": 4,
+        "promote": 3,
+        "operation": 46
+      },
+      "wallet": {
+        "clean": 3523,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 70,
+      "advancementMissing": [
+        "Highest authority stage reached"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 144,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 1596,
+          "instability": 21,
+          "decisions": {
+            "recover": 6,
+            "expand": 9,
+            "economy": 18,
+            "contest": 3
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 282,
+          "instability": 27,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 5,
+            "contest": 6
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks",
+            "backstreet"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3940,
+      "majorEvents": 8,
+      "saveBytes": 1613465,
+      "averageDayMs": 35,
+      "maxDayMs": 88
+    },
+    {
+      "seed": 2026,
+      "mode": "mixed",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 95,
+        "work": 67,
+        "rest": 93,
+        "acquire": 7,
+        "crime": 30
+      },
+      "wallet": {
+        "clean": 6177,
+        "illicit": 1580
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 8,
+          "instability": 0,
+          "decisions": {
+            "recover": 31,
+            "expand": 2,
+            "economy": 3
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "blocks"
+          ],
+          "contested": false
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 0,
+      "events": 3927,
+      "majorEvents": 22,
+      "saveBytes": 1614104,
+      "averageDayMs": 37,
+      "maxDayMs": 114
+    },
+    {
+      "seed": 2026,
+      "mode": "custody",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 103,
+        "work": 74,
+        "rest": 99,
+        "business": 1,
+        "maintain": 2
+      },
+      "wallet": {
+        "clean": 6245,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [
+        {
+          "name": "repair",
+          "status": "profitable",
+          "net": -402,
+          "condition": 81.5499999999996
+        }
+      ],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 134,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 5,
+            "economy": 17,
+            "contest": 10,
+            "maintain": 2
+          },
+          "controls": 1
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 276,
+          "instability": 30,
+          "decisions": {
+            "economy": 29,
+            "expand": 5,
+            "maintain": 4,
+            "contest": 7
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 127,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 4,
+            "recover": 24
+          },
+          "controls": 0
+        },
+        {
+          "id": "muds",
+          "resources": 130,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 12,
+            "recover": 19
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": "angels",
+          "presence": [
+            "angels",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "angels",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": null,
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [],
+      "arrests": 1,
+      "events": 3990,
+      "majorEvents": 8,
+      "saveBytes": 1650927,
+      "averageDayMs": 20,
+      "maxDayMs": 48
+    },
+    {
+      "seed": 2026,
+      "mode": "changing-control",
+      "days": 180,
+      "actions": {
+        "apply": 1,
+        "acceptJob": 1,
+        "gig": 103,
+        "work": 77,
+        "rest": 102
+      },
+      "wallet": {
+        "clean": 8759,
+        "illicit": 0
+      },
+      "arrears": 0,
+      "authority": 0,
+      "advancementMissing": [
+        "Membership required"
+      ],
+      "businesses": [],
+      "factions": [
+        {
+          "id": "angels",
+          "resources": 55,
+          "instability": 0,
+          "decisions": {
+            "expand": 2,
+            "recover": 7,
+            "economy": 15,
+            "contest": 5,
+            "maintain": 7
+          },
+          "controls": 0
+        },
+        {
+          "id": "backstreet",
+          "resources": 283,
+          "instability": 26,
+          "decisions": {
+            "recover": 5,
+            "maintain": 1,
+            "expand": 7,
+            "economy": 23
+          },
+          "controls": 1
+        },
+        {
+          "id": "blocks",
+          "resources": 295,
+          "instability": 34,
+          "decisions": {
+            "economy": 30,
+            "expand": 5,
+            "maintain": 2,
+            "contest": 8
+          },
+          "controls": 1
+        },
+        {
+          "id": "blips",
+          "resources": 67,
+          "instability": 0,
+          "decisions": {
+            "maintain": 1,
+            "contest": 16,
+            "economy": 5,
+            "recover": 22,
+            "expand": 1
+          },
+          "controls": 1
+        },
+        {
+          "id": "muds",
+          "resources": 123,
+          "instability": 0,
+          "decisions": {
+            "maintain": 14,
+            "economy": 11,
+            "recover": 20
+          },
+          "controls": 0
+        }
+      ],
+      "territories": [
+        {
+          "id": "downtown",
+          "controller": null,
+          "presence": [
+            "backstreet",
+            "blocks"
+          ],
+          "contested": true
+        },
+        {
+          "id": "rio",
+          "controller": null,
+          "presence": [
+            "blocks",
+            "angels"
+          ],
+          "contested": true
+        },
+        {
+          "id": "south",
+          "controller": "backstreet",
+          "presence": [
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "resevoir",
+          "controller": "blocks",
+          "presence": [
+            "blocks",
+            "backstreet"
+          ],
+          "contested": false
+        },
+        {
+          "id": "nawf",
+          "controller": "blips",
+          "presence": [
+            "blips",
+            "muds"
+          ],
+          "contested": true
+        }
+      ],
+      "changes": [
+        {
+          "zone": "rio",
+          "day": 73,
+          "from": "angels",
+          "to": null,
+          "eventId": "event-1661"
+        },
+        {
+          "zone": "nawf",
+          "day": 148,
+          "from": null,
+          "to": "blips",
+          "eventId": "event-3339"
+        }
+      ],
+      "arrests": 0,
+      "events": 3969,
+      "majorEvents": 7,
+      "saveBytes": 1617822,
+      "averageDayMs": 19,
+      "maxDayMs": 47
+    }
+  ]
+}
