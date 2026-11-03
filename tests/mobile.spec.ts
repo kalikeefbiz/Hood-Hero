@@ -1,3 +1,4 @@
+import { openJournal } from "./journal";
 import { honest, connects, storyAction, storyline } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect } from "@playwright/test";
@@ -97,6 +98,7 @@ test("buyback resolves the incident and the ordinary loop remains playable", asy
   await action(page, "Buy back · $150");
   await dismissEncounter(page);
   await nav(page, "City");
+  await openJournal(page);
   await page.getByText("Completed storylines", { exact: true }).click();
   await expect(page.locator(".situation-history")).toContainText("resolved");
   await page.getByRole("button", { name: "End day" }).click();

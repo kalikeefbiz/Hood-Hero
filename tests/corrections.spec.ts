@@ -1,3 +1,4 @@
+import { openJournal } from "./journal";
 import { test, expect, type Page } from "@playwright/test";
 import {
   dismissEncounter,
@@ -175,6 +176,7 @@ test("active Chains lives in City; fulfillment leaves only completed history", a
   await expect(
     page.getByRole("region", { name: "Storylines", exact: true }),
   ).toHaveCount(0);
+  await openJournal(page);
   await page.getByText("Completed storylines", { exact: true }).click();
   await expect(page.locator(".situation-history")).toContainText("fulfilled");
   await shot(page, ".situation-history", "07-storyline-history");

@@ -1,3 +1,4 @@
+import { openJournal } from "./journal";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
@@ -93,6 +94,7 @@ test("all approved scenes load; every home starts independent and map selection 
         "independent",
       );
     }
+    await openJournal(page);
     await page.getByText("Game & save information", { exact: true }).click();
     await page.getByRole("button", { name: "New game menu" }).click();
   }
@@ -253,6 +255,7 @@ test("directional trust, witnessed events, activity filters and day grouping pre
     observedBy: ["player"],
   });
   await seed(page, s);
+  await openJournal(page);
   await expect(page.locator("main")).not.toContainText("PRIVATE NPC ONLY");
   await nav(page, "People");
   await expect(
@@ -262,7 +265,7 @@ test("directional trust, witnessed events, activity filters and day grouping pre
     page.getByRole("meter", { name: "Your trust in them" }),
   ).toHaveAttribute("aria-valuenow", "23");
   await expect(page.locator("main")).not.toContainText("PRIVATE NPC ONLY");
-  await nav(page, "City");
+  await openJournal(page);
   await expect(
     page.getByRole("heading", { name: "Day 01", exact: true }),
   ).toBeVisible();

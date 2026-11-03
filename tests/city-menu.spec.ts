@@ -239,7 +239,7 @@ test("City activity preserves visible history, reverse chronology, day groups, l
   await expect(feed.locator("article p").last()).toHaveText("History event 1");
   await expect(feed).not.toContainText("/ CITY");
   await nav(page, "People");
-  await nav(page, "City");
+  await nav(page, "Journal");
   await expect(
     page.getByRole("button", { name: "Your circle", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");

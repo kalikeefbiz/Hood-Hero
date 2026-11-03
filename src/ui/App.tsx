@@ -556,6 +556,51 @@ export function App() {
     setFocus(id);
     setScreen("People");
   };
+  // Run endings and custody are shown wherever the player is looking.
+  const alerts = (
+    <>
+      {s.end && (
+        <Panel className="ending">
+          <h3>
+            {s.end === "arrested"
+              ? "Your run ended: arrested"
+              : s.end === "killed"
+                ? "Your run ended: killed"
+                : `Victory: ${s.end}`}
+          </h3>
+          <p>
+            {s.strategic.ending
+              ? s.events.find((e) => e.id === s.strategic.ending?.eventId)?.text
+              : ""}{" "}
+            Your history remains available to inspect. Start a new life from the
+            game menu below.
+          </p>
+        </Panel>
+      )}
+      {p.status === "arrested" && (
+        <Panel>
+          <h3>In custody</h3>
+          <p>
+            Release day{" "}
+            {s.street.custody.find(
+              (r) => r.character === p.id && r.status === "held",
+            )?.releaseDay ?? "not defined"}
+            . Street actions and ordinary work are unavailable. Each day still
+            resolves living costs, employment, supplier obligations, crew and
+            city activity.
+          </p>
+          <button
+            onClick={() => {
+              setState(serveSentence(s));
+              setScreen("City");
+            }}
+          >
+            Serve remaining sentence
+          </button>
+        </Panel>
+      )}
+    </>
+  );
   return (
     <div
       className={`game-shell board-mode screen-${screen.toLowerCase()} ${screen !== "City" ? "ledger-open" : ""}`}
@@ -644,6 +689,7 @@ export function App() {
           {screen === "City" && (
             <BoardControls
               s={s}
+              endDay={endDay}
               focus={board}
               setFocus={focusBoard}
               lens={lens}
@@ -666,6 +712,7 @@ export function App() {
             !lookOpen && (
               <DistrictChips s={s} focus={board} setFocus={focusBoard} />
             )}
+          {screen === "City" && <div className="board-notice">{toast}</div>}
           {screen === "City" && !presented && (
             <div className="board-story-strip">
               {activeStory && (
@@ -762,47 +809,7 @@ export function App() {
         )}
         {screen === "City" && (
           <div className="board-inspector" ref={sheetRef}>
-            {s.end && (
-              <Panel className="ending">
-                <h3>
-                  {s.end === "arrested"
-                    ? "Your run ended: arrested"
-                    : s.end === "killed"
-                      ? "Your run ended: killed"
-                      : `Victory: ${s.end}`}
-                </h3>
-                <p>
-                  {s.strategic.ending
-                    ? s.events.find((e) => e.id === s.strategic.ending?.eventId)
-                        ?.text
-                    : ""}{" "}
-                  Your history remains available to inspect. Start a new life
-                  from the game menu below.
-                </p>
-              </Panel>
-            )}
-            {p.status === "arrested" && (
-              <Panel>
-                <h3>In custody</h3>
-                <p>
-                  Release day{" "}
-                  {s.street.custody.find(
-                    (r) => r.character === p.id && r.status === "held",
-                  )?.releaseDay ?? "not defined"}
-                  . Street actions and ordinary work are unavailable. Each day
-                  still resolves living costs, employment, supplier obligations,
-                  crew and city activity.
-                </p>
-                <button
-                  onClick={() => {
-                    setState(serveSentence(s));
-                    setScreen("City");
-                  }}
-                >
-                  Serve remaining sentence
-                </button>
-              </Panel>
-            )}
+            {alerts}
             {lookOpen ? (
               <AppearancePanel
                 appearance={presenceOf(s).appearance}
@@ -954,9 +961,6 @@ export function App() {
           </div>
         )}
         <div className="board-dock">
-          <button className="advance" onClick={endDay} disabled={!!s.end}>
-            End day <span>→</span>
-          </button>
           <nav className="bottom-nav" aria-label="Main navigation">
             {(Object.keys(nav) as Screen[]).map((item) => (
               <button
@@ -1009,6 +1013,15 @@ export function App() {
                 </h2>
               </div>
               <button
+                className="advance"
+                onClick={endDay}
+                disabled={!!s.end}
+                aria-label="End day"
+              >
+                <span className="advance-label">End day</span>{" "}
+                <span aria-hidden="true">→</span>
+              </button>
+              <button
                 className="ledger-close"
                 aria-label="Back to the city"
                 onClick={() => setScreen("City")}
@@ -1017,6 +1030,7 @@ export function App() {
               </button>
             </div>
             {toast}
+            {alerts}
             {screen === "Journal" && (
               <>
                 {activeStory && (

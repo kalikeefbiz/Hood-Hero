@@ -20,15 +20,24 @@ export function BoardHUD({
   return (
     <header className="board-hud" aria-label="Player status">
       <strong className="day">DAY {s.day.toString().padStart(2, "0")}</strong>
+      <div className="board-hud-who">
+        <h1>{p.name}</h1>
+        <span className="board-hud-sub">
+          <span className="home-label">{s.zones[p.home].name}</span> ·{" "}
+          <strong className="affiliation">
+            {p.affiliation ? s.factions[p.affiliation].name : "Independent"}
+          </strong>
+        </span>
+      </div>
       <button
-        className="board-hud-who"
+        className="board-hud-btn board-hud-look"
         onClick={onLook}
         aria-label={`${p.name}: your character`}
       >
-        <b>{p.name}</b>
-        <strong className="affiliation">
-          {p.affiliation ? s.factions[p.affiliation].name : "Independent"}
-        </strong>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" strokeWidth="2" />
+        </svg>
       </button>
       <span
         className="ap"

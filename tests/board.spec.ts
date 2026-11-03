@@ -18,7 +18,7 @@ async function seed(page: Page, state: GameState) {
   await dismissEncounter(page);
 }
 const crumbs = (page: Page) =>
-  page.getByRole("navigation", { name: "Board location" });
+  page.getByRole("group", { name: "Board location" });
 const places = (page: Page, zone: string) =>
   page.getByRole("region", { name: `Places in ${zone}` });
 const saved = (page: Page) =>

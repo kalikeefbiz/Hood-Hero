@@ -1,3 +1,4 @@
+import { openJournal } from "./journal";
 import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
@@ -109,6 +110,7 @@ test("true City modal, sequential questions, promise closure, queued fulfillment
   await expect(modal(page)).toContainText("This wasn’t authorized");
   await reply(page, "I’ll help you").click();
   await expect(modal(page)).toHaveCount(0);
+  await openJournal(page);
   await expect(
     page.getByRole("region", { name: "Your promises" }),
   ).toContainText("8 days remaining");
@@ -339,6 +341,7 @@ test("activity preserves chronology, true faction IDs, severity, private knowled
   });
   await seed(page, s);
   await expect(modal(page)).toHaveCount(0);
+  await openJournal(page);
   const feed = page.locator(".timeline");
   await expect(feed).not.toContainText("PRIVATE GANG PLAN");
   for (const factionId of Object.keys(s.factions) as FactionId[]) {

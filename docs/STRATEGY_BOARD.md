@@ -19,7 +19,7 @@ The 3D city is the game screen. The player is a **physical character on the boar
 - **Acting is being there.** Tapping a move makes your character **walk** to the place first. The existing action then runs, a result pops over the building, and your **location is saved**. "Go here" travels without acting. Movement has no AP or travel cost yet.
 - **Risk** comes from data the game already tracks: whose marks are on the block versus your affiliation, contested ground, police presence against your heat, notoriety, and home turf. It's informational for now.
 - **Your look:** tap your name in the HUD to change skin, hair, top, colors, build and chain. The figure on the board updates and the look is saved with your character.
-- **Lenses** (Streets · Influence · Police · Moves) and **time of day** (🌆/🌙/☀️). End day dims the city through night.
+- **Lenses** (Streets · Influence · Police · Moves) and **time of day** (🌆/🌙/☀️). **End day** sits beside the breadcrumb (and in the ledger header); the city dims through night as the day passes.
 - **Storylines** appear as a "!" marker over their place and as a pill under the breadcrumb.
 - **The ledger:** People, Actions, Set, Wallet and Journal (history, position, activity) open as a ledger over the city from the dock. They're for detail, not the main way to play.
 

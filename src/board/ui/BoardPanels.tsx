@@ -32,6 +32,7 @@ export const blockLabel = (id: string) => {
 /** Breadcrumb, lenses and time of day, floating over the city. */
 export function BoardControls({
   s,
+  endDay,
   focus,
   setFocus,
   lens,
@@ -40,6 +41,7 @@ export function BoardControls({
   setTime,
 }: {
   s: GameState;
+  endDay: () => void;
   focus: Focus;
   setFocus: (f: Focus) => void;
   lens: Lens;
@@ -72,7 +74,7 @@ export function BoardControls({
   const times: TimeOfDay[] = ["dusk", "night", "day"];
   return (
     <div className="board-controls">
-      <nav className="board-crumbs" aria-label="Board location">
+      <div className="board-crumbs" role="group" aria-label="Board location">
         {up && (
           <button
             className="board-up"
@@ -93,7 +95,16 @@ export function BoardControls({
             </li>
           ))}
         </ol>
-      </nav>
+        <button
+          className="advance board-end-day"
+          onClick={endDay}
+          disabled={!!s.end}
+          aria-label="End day"
+        >
+          <span className="advance-label">End day</span>{" "}
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
       {!place && (
         <div className="board-toggles">
           <div className="board-lenses" role="group" aria-label="Map lens">

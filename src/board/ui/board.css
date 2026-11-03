@@ -1024,3 +1024,131 @@
   width: auto;
   padding: 10px 14px;
 }
+.board-hud-who {
+  all: initial;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.1;
+  color: #f2f1ed;
+}
+.board-hud-who h1 {
+  margin: 0;
+  font: 600 15px "Barlow Condensed", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-hud-who .affiliation {
+  font: 600 10px "DM Sans", sans-serif;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--accent-text, var(--accent-secondary));
+}
+/* 44px touch targets everywhere on the board. */
+.district-chips button,
+.board-lenses button,
+.board-crumbs li button,
+.board-up,
+.board-time,
+.board-hud-btn,
+.board-story-strip button,
+.go-here,
+.swatch,
+.look-option {
+  min-height: 44px;
+}
+.board-up,
+.board-time,
+.swatch {
+  min-width: 44px;
+}
+.swatch {
+  height: 44px;
+  width: 44px;
+}
+.board-mode .board-dock .bottom-nav button {
+  min-height: 44px;
+}
+.board-notice .notice {
+  margin: 6px 0 0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #121418cc;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-hud-sub {
+  font: 600 10px "DM Sans", sans-serif;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-hud-sub .home-label {
+  font: inherit;
+}
+.board-dock {
+  gap: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+@media (max-width: 430px) {
+  .board-dock .advance {
+    width: 48px;
+    padding: 0;
+    justify-content: center;
+  }
+  .board-dock .advance .advance-label {
+    display: none;
+  }
+  .board-mode .board-dock .bottom-nav small {
+    font-size: 9px;
+    letter-spacing: 0;
+  }
+}
+/* The HUD stays usable while the ledger is open. */
+.board-top {
+  z-index: 26;
+}
+.board-mode .board-ledger {
+  top: calc(env(safe-area-inset-top) + 58px);
+  padding-top: 12px;
+}
+.board-mode.ledger-open .board-top {
+  background: #0b0c0f;
+  padding-bottom: 6px;
+}
+.board-end-day {
+  flex: 0 0 auto;
+  margin-left: auto;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 15px;
+}
+.board-crumbs ol {
+  flex: 1;
+  min-width: 0;
+}
+.board-mode .board-dock .bottom-nav {
+  grid-template-columns: repeat(6, minmax(44px, 1fr));
+}
+.ledger-head .advance {
+  margin-left: auto;
+}
+@media (max-width: 430px) {
+  .board-end-day .advance-label {
+    display: none;
+  }
+  .board-end-day {
+    width: 48px;
+    padding: 0;
+    justify-content: center;
+  }
+}
