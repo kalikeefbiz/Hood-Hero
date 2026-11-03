@@ -131,7 +131,7 @@ Screenshots in `docs/screenshots/goal-007` come from actual browser-rendered sta
 
 ## Validation and balance observations
 
-Final counts, campaign metrics and public build provenance are appended after verification. Initial failures are retained alongside final logs. Browser host libraries were installed into the user-owned Playwright bundle because system package installation requires unavailable root access; both actual engines execute. WebKit uses software scale 1 locally. Browser coverage does not substitute for a physical-iPhone creator playtest.
+Completed counts, campaign metrics and public build provenance follow below. Initial failures are retained alongside final logs. Browser host libraries were installed into the user-owned Playwright bundle because system package installation requires unavailable root access; both actual engines execute. WebKit uses software scale 1 locally. Browser coverage does not substitute for a physical-iPhone creator playtest.
 
 ## Remaining content limitations
 
@@ -166,3 +166,13 @@ Observed final organizational resources ranged from $8 to $1,596, within the $1,
 The default passive city deliberately retained its canonical controllers over these 180 days, although faction conditions and footholds changed. Controlled disruption and sustained organized-effect tests separately prove loss, recognition, recovery and four-zone victory. This evidence distinguishes inertia from permanent ownership, without introducing random daily map flipping or a new incident catalog.
 
 The final fixed Pages-path build (`/Hood-Hero/`) passed **52/52 additional Chromium/WebKit checks**, including all strategic scenarios, contact/navigation corrections, current-save continuation, inventory-backed sales, repayment, arrest/release, crew assistance and the four phone widths. Final screenshots were refreshed from that build. Full root, rerun, Pages-path and unit logs are retained separately.
+
+### Public deployment and actual play
+
+The established main-triggered preview workflow successfully deployed the unmerged GOAL 007 revision **`c475562706a8603b49ac8c1b61aa7c83b0e669f5`**: [deployment 41564351271](https://github.com/kalikeefbiz/Hood-Hero/actions/runs/41564351271). Main received only `.github/workflows/preview-goal-007.yml`; gameplay remained in PR #6. The public `build-info.json` reported GOAL 007 / schema 8 / that exact commit. The public index served `index-vApagxnn.js` and `index-CBYdM6DY.css`, matching the tested Pages build.
+
+**46/46 real public Chromium/WebKit checks passed**. Every test checked the deployed commit before playing. Coverage includes local investment, autonomous faction decisions, controlled resolver-driven takeover, advancement, actual successor recruitment/appointment and Underlord, business acquisition/income/sale and voluntary Legitimate Exit, Streets/Honest/Connects, introductions, storyline completion, supplier transactions and repayment, earned crew help, arrest/release and 320/375/390/430 layouts. Public live captures are prefixed `live-` in `docs/screenshots/goal-007`; additional regression captures are in its `regression` directory.
+
+The ordinary public merchandise journey finished on day 5, with $275 collected, $36 losses, $102 repaid and $190 cash remaining. Public custody checks arrested on day 24, released on day 26, charged $36 living costs, retained Loco's indefinite incarceration and continued the campaign. Both engines exercised these actual outcomes.
+
+Playable URL: **https://kalikeefbiz.github.io/Hood-Hero/**. Full public results and build/deployment metadata are retained in `docs/validation/GOAL_007_PUBLIC_FINAL.txt`, `GOAL_007_LIVE_BUILD.json` and `GOAL_007_DEPLOYMENT.json`. The preview is repinned to the final review revision after adding this verification evidence; those later changes contain documentation and captures only. Its current provenance is independently readable at the public `build-info.json` endpoint. GitHub CI runs independently; completed local and public results above are not claims about an unfinished remote CI run.
