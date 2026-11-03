@@ -1,3 +1,4 @@
+import { honest, connects, storyline, storyAction } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { newGame } from "../src/core/Simulation";
@@ -23,6 +24,8 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
+  if (name === "Actions")
+    await page.getByRole("button", { name: "Honest", exact: true }).click();
 }
 
 test("City centers the five state-backed neighborhoods and keeps actions in Actions", async ({
@@ -128,10 +131,10 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     page.getByRole("heading", { name: "Your position", exact: true }),
   ).toBeVisible();
   await nav(page, "Actions");
-  await expect(page.locator('[data-action="work"]')).toHaveCount(1);
+  await expect(page.locator('[data-action="apply"]').first()).toBeVisible();
   await expect(page.locator('[data-action="gig"]')).toHaveCount(1);
   await page
-    .getByRole("button", { name: "People", exact: true })
+    .getByRole("button", { name: "Connects", exact: true })
     .filter({ hasNot: page.locator("svg") })
     .click();
   await expect(page.locator('[data-action="contact"]')).toHaveCount(1);
@@ -161,7 +164,7 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
   });
 });
 
-test("story notification uses the active demand and opens its existing Actions location", async ({
+test("storyline uses the active demand and opens its existing City conversation", async ({
   page,
 }) => {
   const state = newGame("Morgan", "south");
@@ -170,18 +173,18 @@ test("story notification uses the active demand and opens its existing Actions l
   state.incidents["the-chains"].leadershipAware = true;
   await seed(page, state);
   const alert = page.getByRole("button", {
-    name: "Open The Chains in Actions",
+    name: "Open The Chains storyline",
     exact: true,
   });
   await expect(alert).toContainText("Demand $105");
   await expect(alert).toContainText("Leadership is considering its response");
   await alert.click();
   await expect(
-    page.getByRole("button", { name: "The Chains", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await expect(
-    page.getByRole("heading", { name: "Buy back · $105", exact: true }),
+    page.getByRole("dialog", { name: "Character encounter" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("dialog", { name: "Character encounter" }),
+  ).toContainText("$105");
   await expect(page.locator(".ap b")).toHaveText("2/2");
   for (const status of ["resolved", "abandoned", "missing"] as const) {
     if (status === "missing") {
@@ -195,7 +198,7 @@ test("story notification uses the active demand and opens its existing Actions l
     await expect(page.locator(".story-alert")).toHaveCount(0);
     await expect(page.locator(".city-map")).toBeVisible();
     if (status !== "missing") {
-      await page.getByText("Situation history", { exact: true }).click();
+      await page.getByText("Completed storylines", { exact: true }).click();
       await expect(page.locator(".situation-history")).toContainText(status);
       await expect(page.locator(".situation-history")).toContainText("sold");
     }

@@ -2,7 +2,6 @@ import { type GameState, player } from "../core/GameState";
 import { BALANCE } from "../content/balance";
 export function evaluateEnd(s: GameState): GameState["end"] {
   const p = player(s);
-  if (p.status === "arrested") return "arrested";
   if (p.status === "dead") return "killed";
   const lawful = s.assets.filter(
     (a) => a.owner === p.id && a.provenance === "clean",

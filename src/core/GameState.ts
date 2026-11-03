@@ -43,6 +43,7 @@ export interface Character {
   relationships: Record<ID, Relationship>;
   memories: Memory[];
   known: ID[];
+  connections: ID[];
   stress: number;
   notoriety: number;
   police: number;
@@ -142,7 +143,12 @@ export interface Commitment {
   beneficiary: ID;
   createdDay: number;
   dueDay: number;
-  kind: "errand" | "recover-property" | "employment-shift" | "crew-activity";
+  kind:
+    | "errand"
+    | "recover-property"
+    | "employment-shift"
+    | "crew-activity"
+    | "supplier-debt";
   employmentId?: ID;
   incidentId?: ID;
   status: CommitmentStatus;
@@ -206,7 +212,8 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
-  version: 5;
+  version: 7;
+  street: import("../systems/StreetTypes").StreetState;
   assignments: CrewAssignment[];
   crewOffers: CrewOffer[];
   day: number;

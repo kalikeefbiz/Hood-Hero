@@ -5,23 +5,41 @@ export default defineConfig({
   retries: 0,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
-    baseURL: `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
+    baseURL:
+      process.env.PLAYWRIGHT_PUBLIC_URL ||
+      `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
     trace: "retain-on-failure",
+    proxy:
+      process.env.PLAYWRIGHT_PUBLIC_URL && process.env.HTTPS_PROXY
+        ? { server: process.env.HTTPS_PROXY }
+        : undefined,
   },
   projects: [
     {
       name: "chromium-mobile",
       use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
     },
-    { name: "webkit-mobile", use: { ...devices["iPhone 13"] } },
-  ],
-  webServer: {
-    env: {
-      VITE_BASE_PATH:
-        process.env.PLAYWRIGHT_BASE_PATH || process.env.VITE_BASE_PATH || "/",
+    {
+      name: "webkit-mobile",
+      use: {
+        ...devices["iPhone 13"],
+        ...(process.env.WEBKIT_SOFTWARE_SCALE
+          ? { deviceScaleFactor: Number(process.env.WEBKIT_SOFTWARE_SCALE) }
+          : {}),
+      },
     },
-    command: "npm run preview -- --port 4173",
-    url: `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
-    reuseExistingServer: !process.env.CI,
-  },
+  ],
+  webServer: process.env.PLAYWRIGHT_PUBLIC_URL
+    ? undefined
+    : {
+        env: {
+          VITE_BASE_PATH:
+            process.env.PLAYWRIGHT_BASE_PATH ||
+            process.env.VITE_BASE_PATH ||
+            "/",
+        },
+        command: "npm run preview -- --port 4173",
+        url: `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
+        reuseExistingServer: !process.env.CI,
+      },
 });

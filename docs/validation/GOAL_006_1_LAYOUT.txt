@@ -1,0 +1,35 @@
+[WebServer] (node:23248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 2 workers
+
+(node:23267) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (4.8s)
+  ✓   2 [chromium-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (11.0s)
+  ✓   3 [chromium-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (7.7s)
+  ✓   4 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (1.8s)
+  ✓   5 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (2.6s)
+  ✓   6 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (2.6s)
+  ✓   7 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (2.0s)
+(node:23507) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   9 [webkit-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (6.2s)
+  ✓  10 [webkit-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (15.2s)
+  ✓   8 [chromium-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (25.0s)
+(node:23875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  12 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (5.3s)
+  ✓  13 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (3.2s)
+  ✓  11 [webkit-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (12.6s)
+  ✓  14 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (5.2s)
+  ✓  15 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (5.5s)
+  ✓  16 [webkit-mobile] › tests/review.spec.ts:9:1 › review captures and WCAG checks cover every M1 screen and faction palette (25.4s)
+
+  16 passed (1.4m)

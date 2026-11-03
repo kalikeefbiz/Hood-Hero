@@ -13,6 +13,11 @@ export function NarrativeNotifications({
   if (!unseen.length) return null;
   const event =
     unseen.filter((e) => e.importance === "critical").at(-1) ?? unseen.at(-1)!;
+  const encounter = s.encounters.find((e) => e.sourceEventId === event.id);
+  const speaker = encounter?.participants.find((id) => id !== s.playerId);
+  const speakerName = speaker
+    ? (s.characters[speaker].alias ?? s.characters[speaker].name)
+    : "this person";
   return (
     <section
       className="major-notification"
@@ -27,7 +32,9 @@ export function NarrativeNotifications({
       <p>{event.text}</p>
       <div className="notification-controls">
         {s.encounters.some((e) => e.sourceEventId === event.id) && (
-          <button onClick={() => view(event.id)}>Hear Cuzzo’s response</button>
+          <button onClick={() => view(event.id)}>
+            Hear {speakerName}’s response
+          </button>
         )}
         <button className="secondary" onClick={() => acknowledge(event.id)}>
           Acknowledge

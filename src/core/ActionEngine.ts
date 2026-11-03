@@ -1,4 +1,11 @@
 import {
+  marketAccess,
+  transactionError,
+  transactionChance,
+  transact,
+} from "../systems/StreetEconomy";
+import { addExposure } from "../systems/CriminalExposure";
+import {
   cash,
   clamp,
   player,
@@ -11,7 +18,13 @@ import { record } from "./EventLog";
 import { random } from "./Random";
 import { BALANCE } from "../content/balance";
 import { ITEMS, type ItemId } from "../content/economy";
-import { change, remember } from "../systems/Relationships";
+import {
+  change,
+  remember,
+  connect,
+  contactError,
+  introductionCandidates,
+} from "../systems/Relationships";
 import { earn, expense } from "../systems/Economy";
 import { resolveIncident } from "../systems/Incidents";
 import { syncEncounters } from "../systems/EncounterLifecycle";
@@ -161,12 +174,14 @@ export const ACTIONS = {
     outcomes: ["$38 clean income; +3 stress"],
   },
   crime: {
-    label: "Black-market opportunity",
+    label: "Street work transaction",
     ap: 1,
     risk: "High",
     description:
-      "An abstract illicit trade. Connections improve access; exposure has lasting costs.",
-    outcomes: ["$72 illicit income or a $20 loss; police and rival exposure"],
+      "Distribute merchandise you actually hold through a limited local market. Supplier balances remain owed.",
+    outcomes: [
+      "Actual sales or loss; inventory, supplier debt and exposure persist",
+    ],
   },
   buy: {
     label: "Buy item",
@@ -231,6 +246,7 @@ export interface Action {
   item?: ItemId;
   jobId?: ID;
   partner?: ID;
+  market?: import("./GameState").ZoneId;
 }
 export function validateAction(s: GameState, a: Action): string | null {
   if (!ACTIONS[a.type]) return "Unknown action";
@@ -300,6 +316,26 @@ export function validateAction(s: GameState, a: Action): string | null {
   if (targeted.includes(a.type) && (!t || t.id === c.id))
     return "Choose another person";
   if (t) {
+    const storyAccess =
+      a.type === "settlement" &&
+      i?.status === "active" &&
+      i.informed &&
+      i.organization === t.affiliation;
+    if (a.type !== "remove" && !storyAccess) {
+      const error = contactError(s, c.id, t.id);
+      if (error) return error;
+      if (
+        a.type === "socialize" &&
+        (t.relationships[c.id]?.trust ?? 0) < 15 &&
+        (t.relationships[c.id]?.affection ?? 0) < 15
+      )
+        return "Build a connection before inviting them to spend time together.";
+      if (
+        a.type === "introduce" &&
+        !introductionCandidates(s, c.id, t.id).length
+      )
+        return "No appropriate new introduction is available through this contact.";
+    }
     if (!c.known.includes(t.id)) return "You need an introduction";
     if (t.status !== "active" && a.type !== "remove")
       return "This person is unavailable";
@@ -353,17 +389,10 @@ export function validateAction(s: GameState, a: Action): string | null {
     c.possessions.includes(a.item)
   )
     return "Already owned";
-  if (
-    a.type === "crime" &&
-    c.organizationStanding.angels < 5 &&
-    c.neighborhoodStanding[c.home] < 5 &&
-    !c.known.some(
-      (id) =>
-        s.characters[id]?.affiliation &&
-        (s.characters[id].relationships[c.id]?.trust ?? 0) >= 20,
-    )
-  )
-    return "Build a trusted street connection or local standing first";
+  if (a.type === "crime") {
+    if (a.market && !s.zones[a.market]) return "Unknown market";
+    return transactionError(s, a.actor, a.market);
+  }
   if (
     ["recruit", "remove", "assign", "affiliate"].includes(a.type) &&
     c.id !== s.playerId
@@ -424,16 +453,8 @@ export function actionSuccessChance(s: GameState, a: Action): number | null {
         )
       : null;
   }
-  // Illicit trade checks success after its existing +9 stress cost.
   if (a.type === "crime")
-    return clamp(
-      0.65 +
-        c.skills.recovery / 500 -
-        clamp(c.stress + 9) / 600 +
-        (a.partner ? partnerContribution(s, a.partner) : 0),
-      0.1,
-      0.95,
-    );
+    return transactionChance(s, a.actor, a.market, a.partner);
   return null;
 }
 export function partnerContribution(s: GameState, id: string) {
@@ -454,6 +475,7 @@ export function resolveAction(s: GameState, a: Action) {
     t = a.target ? s.characters[a.target] : undefined,
     i = a.incidentId ? s.incidents[a.incidentId] : undefined;
   const successChance = actionSuccessChance(s, a);
+  if (a.type === "crime") return transact(s, a.actor, a.market, a.partner);
   if (c.id === s.playerId) s.ap -= ACTIONS[a.type].ap;
   else {
     c.lastActionDay = s.day;
@@ -492,18 +514,15 @@ export function resolveAction(s: GameState, a: Action) {
     }
     case "inquire":
     case "introduce": {
-      c.known = [
-        ...new Set([
-          ...c.known,
-          ...t!.known,
-          ...Object.values(s.characters)
-            .filter((x) => x.home === t!.home)
-            .map((x) => x.id),
-        ]),
-      ].filter((id) => id !== c.id);
+      if (a.type === "introduce")
+        for (const id of introductionCandidates(s, c.id, t!.id))
+          connect(s, c.id, id);
+      c.known = [...new Set([...c.known, ...t!.known])].filter(
+        (id) => id !== c.id,
+      );
       if (i) i.informed = true;
       change(t!, c.id, { trust: 4 });
-      text = `${t!.name} shared local contacts${i ? " and confirmed that the robbery was unauthorized. The property is held by the group, not a known individual" : ""}.`;
+      text = `${t!.name} ${a.type === "introduce" ? "made an appropriate introduction" : "shared what they know"}${i ? " and confirmed that the robbery was unauthorized. The property is held by the group, not a known individual" : ""}.`;
       break;
     }
     case "favor":
@@ -549,7 +568,7 @@ export function resolveAction(s: GameState, a: Action) {
       break;
     }
     case "recover": {
-      c.police = clamp(c.police + 18);
+      addExposure(s, c.id, c.home, 18);
       c.notoriety = clamp(c.notoriety + 12);
       c.stress = clamp(c.stress + 16);
       c.rivalThreat = clamp(c.rivalThreat + 16);
@@ -566,6 +585,9 @@ export function resolveAction(s: GameState, a: Action) {
       break;
     }
     case "gig": {
+      c.neighborhoodStanding[c.home] = clamp(
+        c.neighborhoodStanding[c.home] + 1,
+      );
       const amount = BALANCE.gigIncome;
       (s.employmentSearch[c.id] ??= { eligibleDay: 1 }).lastGigDay = s.day;
       earn(s, c, amount, "clean", "Local gig");
@@ -579,28 +601,6 @@ export function resolveAction(s: GameState, a: Action) {
       if (c.id === s.playerId) s.progression.jobs++;
       text = `${c.name} earned $${amount} in lawful pay from today's local gig.`;
       category = "money";
-      break;
-    }
-    case "crime": {
-      c.police = clamp(c.police + 12 + s.zones[c.home].police / 15);
-      c.notoriety = clamp(c.notoriety + 7);
-      c.rivalThreat = clamp(c.rivalThreat + 5);
-      c.stress = clamp(c.stress + 9);
-      if (random(s) < successChance!) {
-        earn(
-          s,
-          c,
-          BALANCE.illicitIncome,
-          "illicit",
-          "Black-market opportunity",
-        );
-        text = `${c.name} earned $${BALANCE.illicitIncome} in illicit proceeds. Exposure increased.`;
-      } else {
-        expense(s, c, Math.min(20, cash(c)), "Failed illicit opportunity");
-        text =
-          "The opportunity fell through. Money was lost and exposure increased.";
-      }
-      category = "risk";
       break;
     }
     case "buy": {
@@ -730,7 +730,23 @@ export function performAction(
     syncEncounters(next);
     return { state: next, error: null, event: next.events.at(-1) };
   }
+  const previousAccess = Object.values(state.zones)
+    .filter((z) => !marketAccess(state, state.playerId, z.id))
+    .map((z) => z.id);
   const event = resolveAction(next, a);
+  for (const z of Object.values(next.zones))
+    if (
+      !previousAccess.includes(z.id) &&
+      !marketAccess(next, next.playerId, z.id)
+    )
+      record(
+        next,
+        "city",
+        `Your local connections opened street work in ${z.name}. Check Actions for merchandise requirements, terms and risk.`,
+        [next.playerId],
+        [next.playerId],
+        { importance: "personal", title: "New market access" },
+      );
   progress(next);
   next.end = evaluateEnd(next);
   syncEncounters(next);

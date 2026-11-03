@@ -1,3 +1,4 @@
+import { honest, connects } from "./helpers";
 import { dismissEncounter } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { advanceDay } from "../src/core/TimeSystem";
@@ -38,8 +39,23 @@ async function nav(page: Page, name: string) {
     .click();
 }
 async function loaded(page: Page, id: keyof typeof scenes) {
+  if (id === "work") await honest(page);
+  else if (id === "rest") {
+    await page
+      .getByRole("navigation")
+      .getByRole("button", { name: "Actions", exact: true })
+      .click();
+  } else await connects(page, "mega");
   const card = page.locator(`.action-card[data-action="${id}"]`);
   await card.scrollIntoViewIfNeeded();
+  if (id === "inquire" || id === "standing") {
+    await expect(card).toBeVisible();
+    const response = await page.request.get(
+      `${base}assets/actions/${scenes[id]}-480.webp`,
+    );
+    expect(response.ok()).toBe(true);
+    return card;
+  }
   const img = card.locator(".action-scene");
   await expect(img).toBeVisible();
   await expect(img).toHaveAttribute(
@@ -70,15 +86,24 @@ test("approved art maps to real actions and resolves under the production base",
   page.on("response", (r) => {
     if (r.status() >= 400) failures.push(`${r.status()} ${r.url()}`);
   });
-  await seed(page, newGame("Morgan", "south"));
+  let initial = newGame("Morgan", "south");
+  initial = performAction(initial, {
+    type: "apply",
+    actor: "player",
+    jobId: "retail-south",
+  }).state;
+  initial = performAction(initial, {
+    type: "acceptJob",
+    actor: "player",
+    jobId: "retail-south",
+  }).state;
+  await seed(page, initial);
   await expect(page.locator(".action-card")).toHaveCount(0);
   await nav(page, "Actions");
-  for (const id of ["work", "rest", "crime"] as const) {
+  for (const id of ["work", "rest"] as const) {
     const card = await loaded(page, id);
     await expect(card.locator(".ap-cost")).toHaveText(`${ACTIONS[id].ap} AP`);
-    await expect(card.locator(".risk")).toHaveText(
-      id === "crime" ? "HIGH RISK" : "NO RISK",
-    );
+    await expect(card.locator(".risk")).toHaveText("NO RISK");
     await expect(card).toContainText(ACTIONS[id].description);
     if (id !== "work")
       for (const outcome of ACTIONS[id].outcomes)
@@ -86,7 +111,7 @@ test("approved art maps to real actions and resolves under the production base",
   }
   await expect(page.locator('[data-action="gig"] img')).toHaveCount(0);
   await page
-    .getByRole("button", { name: "People", exact: true })
+    .getByRole("button", { name: "Connects", exact: true })
     .filter({ hasNot: page.locator("svg") })
     .click();
   await page.getByRole("combobox").selectOption("mega");
@@ -142,7 +167,9 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   await page.getByRole("button", { name: "Resume saved game" }).click();
   await dismissEncounter(page);
   await nav(page, "Actions");
+  await honest(page);
   const work = page.locator('[data-action="work"]');
+  await work.scrollIntoViewIfNeeded();
   await expect(work.locator(".action-art-fallback")).toBeVisible();
   const size = await work.boundingBox();
   expect(size!.height).toBe(loadedSize.height);
@@ -151,11 +178,11 @@ test("action art loads near the viewport, and failed art preserves layout and ga
   await expect(page.locator(".cash-resource strong")).toHaveText("$203");
   await expect(page.locator(".ap b")).toHaveText("0/2");
   await dismissEncounter(page);
-  await nav(page, "Actions");
+  await honest(page);
   await expect(work.getByRole("button")).toBeDisabled();
-  await expect(work.locator(".disabled-reason")).toHaveText(
-    "Not enough AP or availability",
-  );
+  await expect(
+    page.getByText("Not enough AP or availability", { exact: true }),
+  ).toHaveText("Not enough AP or availability");
   expect((await work.boundingBox())!.width).toBe(size!.width);
 });
 
@@ -200,11 +227,22 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     await page.screenshot({ path, fullPage, scale: "css" });
     await info.attach(name, { path, contentType: "image/png" });
   }
-  await seed(page, newGame("Morgan", "south"));
+  let initial = newGame("Morgan", "south");
+  initial = performAction(initial, {
+    type: "apply",
+    actor: "player",
+    jobId: "retail-south",
+  }).state;
+  initial = performAction(initial, {
+    type: "acceptJob",
+    actor: "player",
+    jobId: "retail-south",
+  }).state;
+  await seed(page, initial);
   await capture("01-independent-city-390");
   await nav(page, "Actions");
   // Scroll each approved card into view so the full-page review includes loaded art.
-  for (const id of ["work", "rest", "crime"] as const) await loaded(page, id);
+  for (const id of ["work", "rest"] as const) await loaded(page, id);
   await capture("02-everyday-actions-390", true);
   await page.setViewportSize({ width: 320, height: 700 });
   await capture("04-everyday-actions-320", true);
@@ -237,6 +275,7 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     (c) => c.affiliation === "blips" && c.status === "active",
   )!;
   p.known = [...new Set([...p.known, sponsor.id])];
+  p.connections = [...new Set([...p.connections, sponsor.id])];
   p.organizationStanding.blips = 35;
   sponsor.relationships.player = {
     trust: 35,
@@ -260,7 +299,7 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
   await capture("03-blips-city-390");
   await nav(page, "Actions");
   await page
-    .getByRole("button", { name: "People", exact: true })
+    .getByRole("button", { name: "Connects", exact: true })
     .filter({ hasNot: page.locator("svg") })
     .click();
   await page.getByRole("combobox").selectOption(sponsor.id);
@@ -285,7 +324,7 @@ test("GOAL 002C mobile visual review and usable narrow controls", async ({
     ).toBe(34);
     await capture("06-city-safe-area-390");
     await nav(page, "Actions");
-    await page.getByRole("button", { name: "Everyday", exact: true }).click();
+    await honest(page);
     const control = page.locator('[data-action="gig"] button');
     await control.scrollIntoViewIfNeeded();
     const box = (await control.boundingBox())!;

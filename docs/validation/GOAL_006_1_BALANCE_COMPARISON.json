@@ -1,0 +1,96 @@
+{
+  "BEFORE": {
+    "schema": 6,
+    "strategies": {
+      "occasional": {
+        "meanHeat": 36.8,
+        "maxEarlyHeat": 24.6,
+        "maxHeat": 74.95,
+        "arrests": 1,
+        "cash": 592.63,
+        "profit": 287.13,
+        "debt": 12.75,
+        "defaults": 0,
+        "arrestedDays": 1.88,
+        "streetAP": 19,
+        "profitAfterAPBenchmark": -434.88,
+        "liquidNetChange": 454.88
+      },
+      "frequent": {
+        "meanHeat": 73.22,
+        "maxEarlyHeat": 83.75,
+        "maxHeat": 100,
+        "arrests": 2.63,
+        "cash": 146.88,
+        "profit": 272.75,
+        "debt": 12.75,
+        "defaults": 0,
+        "arrestedDays": 8.5,
+        "streetAP": 29.75,
+        "profitAfterAPBenchmark": -857.75,
+        "liquidNetChange": -1.25
+      },
+      "aggressive": {
+        "meanHeat": 75.01,
+        "maxEarlyHeat": 91.1,
+        "maxHeat": 98.61,
+        "arrests": 3.5,
+        "cash": 10,
+        "profit": 157,
+        "debt": 51,
+        "defaults": 0.38,
+        "arrestedDays": 11.25,
+        "streetAP": 31.25,
+        "profitAfterAPBenchmark": -1030.5,
+        "liquidNetChange": -226.25
+      }
+    }
+  },
+  "AFTER": {
+    "schema": 7,
+    "strategies": {
+      "occasional": {
+        "meanHeat": 5.97,
+        "maxEarlyHeat": 6.78,
+        "maxHeat": 13.33,
+        "arrests": 0,
+        "cash": 821.88,
+        "profit": 464.13,
+        "debt": 12.75,
+        "defaults": 0,
+        "arrestedDays": 0,
+        "streetAP": 20,
+        "profitAfterAPBenchmark": -295.88,
+        "liquidNetChange": 684.13
+      },
+      "frequent": {
+        "meanHeat": 40.01,
+        "maxEarlyHeat": 24.71,
+        "maxHeat": 77.05,
+        "arrests": 1.13,
+        "cash": 345.25,
+        "profit": 427.63,
+        "debt": 12.75,
+        "defaults": 0,
+        "arrestedDays": 1.63,
+        "streetAP": 41,
+        "profitAfterAPBenchmark": -1130.38,
+        "liquidNetChange": 205.88
+      },
+      "aggressive": {
+        "meanHeat": 53.8,
+        "maxEarlyHeat": 32.98,
+        "maxHeat": 95.44,
+        "arrests": 1.88,
+        "cash": 149.88,
+        "profit": 351.5,
+        "debt": 38.25,
+        "defaults": 0.25,
+        "arrestedDays": 3,
+        "streetAP": 47.38,
+        "profitAfterAPBenchmark": -1448.75,
+        "liquidNetChange": -41.25
+      }
+    }
+  }
+}

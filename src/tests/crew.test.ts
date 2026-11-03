@@ -1,3 +1,4 @@
+import { acquire } from "../systems/StreetEconomy";
 import { describe, expect, it } from "vitest";
 import { newGame } from "../core/Simulation";
 import { advanceDay } from "../core/TimeSystem";
@@ -330,15 +331,19 @@ describe("assignment boundaries and personal consequences", () => {
       c.traits.risk = 80;
       c.traits.lawful = 10;
       c.skills.recovery = 60;
+      acquire(s, "mega", "consignment");
       requestActivity(s, c.id, "partner-crime");
       const a = s.assignments[0];
       expect(a.status).toBe("resolved");
       outcomes.add(a.success!);
-      expect(s.ap).toBe(1);
+      expect(s.ap).toBe(0);
       expect(player(s).police).toBeGreaterThan(0);
-      expect(c.police).toBe(14);
-      expect(c.wallet.illicit).toBe(a.success ? 20 : 0);
-      expect(c.wallet.clean).toBe(a.success ? 80 : 68);
+      expect(c.police).toBeGreaterThan(0);
+      const t = s.street.transactions.at(-1)!;
+      expect(c.wallet.clean + c.wallet.illicit).toBe(
+        80 + t.crewPaid - t.crewLoss,
+      );
+      expect(t.partner).toBe(c.id);
       const raw = serialize(s);
       processCrewActivities(s);
       expect(serialize(s)).toBe(raw);

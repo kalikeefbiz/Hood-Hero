@@ -1,4 +1,12 @@
-import { openCrewConversation } from "../systems/EncounterLifecycle";
+import { ActionsHub, type ActionCategory } from "./ActionsHub";
+import { InventoryWallet } from "./InventoryWallet";
+import { accessStatus, contactError } from "../systems/Relationships";
+import { encounterDefinition } from "../systems/EncounterLifecycle";
+import { openSupplier } from "../content/streetEncounters";
+import {
+  openCrewConversation,
+  openStoryline,
+} from "../systems/EncounterLifecycle";
 import { availability, knownCapabilities } from "../systems/CrewAgency";
 import { useEffect, useState, type ReactNode } from "react";
 import {
@@ -9,7 +17,7 @@ import {
   cash,
 } from "../core/GameState";
 import { newGame } from "../core/Simulation";
-import { advanceDay } from "../core/TimeSystem";
+import { advanceDay, serveSentence } from "../core/TimeSystem";
 import {
   ACTIONS,
   availableActions,
@@ -27,7 +35,6 @@ import { EmploymentSummary } from "./EmploymentSummary";
 import { absenceWarning } from "../systems/Employment";
 import { CommitmentSummary } from "./CommitmentSummary";
 import { CharacterPortrait } from "./CharacterPortrait";
-import { ANGELS_TRIO, CHAIN_EVIDENCE, artURL } from "./characterArt";
 import {
   currentEncounter,
   dismissEncounter,
@@ -128,7 +135,7 @@ export function App() {
     [home, setHome] = useState<ZoneId>("south"),
     [selected, setSelected] = useState<ZoneId>("south"),
     [focus, setFocus] = useState("mega"),
-    [actionGroup, setGroup] = useState("Everyday"),
+    [actionGroup, setGroup] = useState<ActionCategory>("Streets"),
     [activityFilter, setActivityFilter] = useState("All");
   const [hasSave, setHasSave] = useState(false);
   const [historyEncounterId, setHistoryEncounterId] = useState<string | null>(
@@ -214,6 +221,10 @@ export function App() {
       setActionFeedback(result.error);
     } else {
       setState(result.state);
+      if (a.target && actionGroup === "Connects") {
+        setGroup("Streets");
+        setScreen("Actions");
+      }
       if (
         result.state.encounters.some(
           (e) => e.definitionId === "workplace" && e.status === "active",
@@ -234,24 +245,53 @@ export function App() {
       const crewResponse = s.encounters
         .find((e) => e.id === id)
         ?.definitionId.startsWith("crew-");
-      const reply = crewResponse
-        ? (result.state.events.slice(s.events.length).at(-1)?.text ??
-          (response === "details"
-            ? "They shared more about their plans."
-            : "Conversation concluded."))
-        : response === "promise"
-          ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded; recovery actions are in Actions → The Chains."
-          : response === "decline"
-            ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
-            : response === "delay"
-              ? "You asked for time to think. The situation continues; resume the conversation from City."
-              : response === "acknowledge"
-                ? "Outcome acknowledged. The city moves on; the history remains."
-                : s.encounters.find((e) => e.id === id)?.definitionId ===
-                    "workplace"
-                  ? (result.state.events.at(-1)?.text ??
-                    "Workplace choice recorded.")
-                  : "Cuzzo explains what happened.";
+      const streetResponse = s.encounters
+        .find((e) => e.id === id)
+        ?.definitionId.startsWith("street-");
+      const sourceEncounter = s.encounters.find((e) => e.id === id)!;
+      const actionResponse =
+        encounterDefinition(sourceEncounter)
+          .responses(s, sourceEncounter)
+          .find((r) => r.id === response)?.effect.type === "action";
+      const actionResult =
+        result.state.events
+          .slice(s.events.length)
+          .find((e) => e.category === "money") ??
+        result.state.events.slice(s.events.length).at(-1);
+      const reply = actionResponse
+        ? (actionResult?.text ?? "Action completed.")
+        : streetResponse
+          ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+            (response === "terms"
+              ? "Supplier terms clarified; no goods or debt accepted."
+              : "Supplier conversation concluded."))
+          : crewResponse
+            ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+              (response === "details"
+                ? "They shared more about their plans."
+                : "Conversation concluded."))
+            : response === "promise"
+              ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded. Return through City → Storylines."
+              : response === "decline"
+                ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
+                : response === "delay"
+                  ? "You asked for time to think. The situation continues; resume the conversation from City."
+                  : response === "acknowledge"
+                    ? "Outcome acknowledged. The city moves on; the history remains."
+                    : s.encounters.find((e) => e.id === id)?.definitionId ===
+                        "workplace"
+                      ? (result.state.events.at(-1)?.text ??
+                        "Workplace choice recorded.")
+                      : "Cuzzo explains what happened.";
+      const finished = result.state.encounters.find((e) => e.id === id);
+      if (
+        finished?.status === "acknowledged" &&
+        ["street-supplier", "crew-conversation"].includes(finished.definitionId)
+      ) {
+        setScreen("Actions");
+        setGroup("Streets");
+        setHistoryEncounterId(null);
+      }
       setNotice(reply);
       if (response !== "clarify") setActionFeedback(reply);
     }
@@ -288,7 +328,7 @@ export function App() {
   }
   function openPerson(id: string) {
     setFocus(id);
-    setGroup("People");
+    setGroup("Connects");
     setScreen("Actions");
   }
   const toast = (
@@ -336,51 +376,6 @@ export function App() {
       onAction={act}
     />
   );
-  const incidentTypes: ActionType[] = [
-    "negotiate",
-    "settlement",
-    "buyback",
-    "recover",
-    "favor",
-  ];
-  const socialTypes: ActionType[] = [
-    "contact",
-    "inquire",
-    "introduce",
-    "socialize",
-    "offer",
-    "transfer",
-    "standing",
-    "affiliate",
-  ];
-  let displayed = all.filter((a) =>
-    actionGroup === "Everyday"
-      ? [
-          "work",
-          "gig",
-          "rest",
-          "crime",
-          "apply",
-          "acceptJob",
-          "timeOff",
-          "resign",
-        ].includes(a.type)
-      : actionGroup === "The Chains"
-        ? incidentTypes.includes(a.type)
-          ? !a.target ||
-            (a.type === "settlement" && a.target === "pablo") ||
-            (a.type === "favor" && a.target === "mega")
-          : ["contact", "inquire"].includes(a.type) && a.target === "mega"
-        : a.target === person.id && socialTypes.includes(a.type),
-  );
-  displayed = displayed.filter((a) => {
-    if (actionGroup === "Everyday") return true;
-    if (actionGroup === "The Chains")
-      return (
-        ["contact", "inquire"].includes(a.type) || incident.status === "active"
-      );
-    return !["standing", "affiliate"].includes(a.type) || !!person.affiliation;
-  });
   return (
     <div
       className={`game-shell screen-${screen.toLowerCase()}`}
@@ -529,9 +524,7 @@ export function App() {
                   </button>
                 </div>
               ))}
-          {(screen === "City" || screen === "Actions") && (
-            <CommitmentSummary s={s} />
-          )}
+          {screen === "City" && <CommitmentSummary s={s} />}
           {s.end && (
             <Panel className="ending">
               <h3>
@@ -547,33 +540,58 @@ export function App() {
               </p>
             </Panel>
           )}
+          {p.status === "arrested" && (
+            <Panel>
+              <h3>In custody</h3>
+              <p>
+                Release day{" "}
+                {s.street.custody.find(
+                  (r) => r.character === p.id && r.status === "held",
+                )?.releaseDay ?? "not defined"}
+                . Street actions and ordinary work are unavailable. Each day
+                still resolves living costs, employment, supplier obligations,
+                crew and city activity.
+              </p>
+              <button
+                onClick={() => {
+                  setState(serveSentence(s));
+                  setScreen("City");
+                }}
+              >
+                Serve remaining sentence
+              </button>
+            </Panel>
+          )}
           {screen !== "City" && toast}
           {screen === "City" && (
             <>
               {activeStory && (
-                <button
-                  className="dispatch story-alert"
-                  aria-label={`Open ${activeStory.title} in Actions`}
-                  onClick={() => {
-                    setGroup("The Chains");
-                    setScreen("Actions");
-                  }}
-                >
-                  <span className="dispatch-icon" aria-hidden="true">
-                    <Icon name="message" />
-                  </span>
-                  <span>
-                    <span className="eyebrow">WORD ON THE BLOCK</span>
-                    <strong>{activeStory.title}</strong>
-                    <span className="story-status">
-                      Demand {money(activeStory.demand)} ·{" "}
-                      {activeStory.leadershipAware
-                        ? "Leadership is considering its response"
-                        : "Awaiting your help"}
+                <section className="storylines" aria-label="Storylines">
+                  <h3>Storylines</h3>
+                  <button
+                    className="dispatch story-alert"
+                    aria-label={`Open ${activeStory.title} storyline`}
+                    onClick={() => {
+                      setState(openStoryline(s, activeStory.id));
+                      setScreen("City");
+                    }}
+                  >
+                    <span className="dispatch-icon" aria-hidden="true">
+                      <Icon name="message" />
                     </span>
-                  </span>
-                  <Icon name="arrow" />
-                </button>
+                    <span>
+                      <span className="eyebrow">WORD ON THE BLOCK</span>
+                      <strong>{activeStory.title}</strong>
+                      <span className="story-status">
+                        Demand {money(activeStory.demand)} ·{" "}
+                        {activeStory.leadershipAware
+                          ? "Leadership is considering its response"
+                          : "Awaiting your help"}
+                      </span>
+                    </span>
+                    <Icon name="arrow" />
+                  </button>
+                </section>
               )}
               {toast}
               <div className="city-layout">
@@ -665,6 +683,7 @@ export function App() {
                   </Panel>
                 </div>
               </div>
+
               <EmploymentSummary s={s} />
               <Panel>
                 <div className="panel-title">
@@ -776,7 +795,9 @@ export function App() {
                   {person.alias && <small> / {person.alias}</small>}
                 </h3>
                 <p>{person.description}</p>
-                <p className="muted">{knownCapabilities(person)}</p>
+                {p.connections.includes(person.id) && (
+                  <p className="muted">{knownCapabilities(person)}</p>
+                )}
                 {s.crew.members.includes(person.id) && (
                   <button
                     className="secondary"
@@ -789,35 +810,36 @@ export function App() {
                   {person.status === "active"
                     ? person.availableDay > s.day
                       ? "Currently committed elsewhere."
-                      : "Available to contact."
+                      : `${accessStatus(s, p.id, person.id)}${contactError(s, p.id, person.id) ? " · " + contactError(s, p.id, person.id) : " · Available to contact"}`
                     : "Currently " + person.status + "."}
                 </p>
-                <Meter
-                  label="Their trust in you"
-                  value={person.relationships[p.id]?.trust ?? 0}
-                  description={band(person.relationships[p.id]?.trust ?? 0, [
-                    "Wary",
-                    "Acquainted",
-                    "Trusting",
-                    "Close",
-                  ])}
-                />
-                <Meter
-                  label="Your trust in them"
-                  value={p.relationships[person.id]?.trust ?? 0}
-                  description={band(p.relationships[person.id]?.trust ?? 0, [
-                    "Wary",
-                    "Acquainted",
-                    "Trusting",
-                    "Close",
-                  ])}
-                />
-                <p className="muted">
-                  Work {person.skills.work} · Social {person.skills.social} ·
-                  Recovery {person.skills.recovery}
-                </p>
+                {p.connections.includes(person.id) && (
+                  <>
+                    <Meter
+                      label="Their trust in you"
+                      value={person.relationships[p.id]?.trust ?? 0}
+                      description={band(
+                        person.relationships[p.id]?.trust ?? 0,
+                        ["Wary", "Acquainted", "Trusting", "Close"],
+                      )}
+                    />
+                    <Meter
+                      label="Your trust in them"
+                      value={p.relationships[person.id]?.trust ?? 0}
+                      description={band(
+                        p.relationships[person.id]?.trust ?? 0,
+                        ["Wary", "Acquainted", "Trusting", "Close"],
+                      )}
+                    />
+                    <p className="muted">
+                      Work {person.skills.work} · Social {person.skills.social}{" "}
+                      · Recovery {person.skills.recovery}
+                    </p>
+                  </>
+                )}
                 <button
                   className="primary"
+                  disabled={!!contactError(s, p.id, person.id)}
                   onClick={() => openPerson(person.id)}
                 >
                   Interact with {person.alias ?? person.name} →
@@ -853,127 +875,18 @@ export function App() {
             </div>
           )}
           {screen === "Actions" && (
-            <>
-              <div className="segmented" aria-label="Action categories">
-                {["Everyday", "The Chains", "People"].map((group) => (
-                  <button
-                    key={group}
-                    aria-pressed={actionGroup === group}
-                    className={actionGroup === group ? "active" : ""}
-                    onClick={() => setGroup(group)}
-                  >
-                    {group}
-                  </button>
-                ))}
-              </div>
-              {actionGroup === "Everyday" && <EmploymentSummary s={s} />}
-              {actionGroup === "The Chains" && (
-                <Panel className="situation">
-                  <div className="panel-title">
-                    <h3>The Chains</h3>
-                    <span className="status-chip">{incident.status}</span>
-                  </div>
-                  <p>
-                    {incident.status === "active"
-                      ? `Mega’s property is held jointly by Dizzy, Baby Canon and Joker. Current demand: ${money(incident.demand)}. ${incident.informed ? "The robbery was unauthorized." : "Speak to Cuzzo to understand the situation."}`
-                      : `Resolution: ${incident.resolution}. The owner’s history and everyone’s memories persist.`}
-                  </p>
-                  <div className="tags">
-                    <span>Owner: Mega</span>
-                    <span>
-                      {incident.escalation < 40
-                        ? "Tension: unsettled"
-                        : "Tension: escalating"}
-                    </span>
-                    {incident.leadershipAware && (
-                      <span>Leadership informed</span>
-                    )}
-                  </div>
-                  <p className="muted">
-                    No obligation to intervene. You can work, build
-                    relationships, or end the day at any time.
-                  </p>
-                </Panel>
-              )}
-              {actionGroup === "The Chains" && incident?.informed && (
-                <div className="story-evidence">
-                  <figure>
-                    <img
-                      src={artURL(CHAIN_EVIDENCE.path)}
-                      alt={CHAIN_EVIDENCE.alt}
-                      width={CHAIN_EVIDENCE.width}
-                      height={CHAIN_EVIDENCE.height}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.hidden = true;
-                      }}
-                    />
-                    <figcaption>
-                      Mega’s missing jewelry. Item reference; current custody
-                      follows the incident.
-                    </figcaption>
-                  </figure>
-                  <figure>
-                    <img
-                      src={artURL(ANGELS_TRIO.path)}
-                      alt={ANGELS_TRIO.alt}
-                      width={ANGELS_TRIO.width}
-                      height={ANGELS_TRIO.height}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.hidden = true;
-                      }}
-                    />
-                    <figcaption>
-                      Baby Canon · Joker · Dizzy. The three young Angels Mega
-                      identified.
-                    </figcaption>
-                  </figure>
-                </div>
-              )}
-              {actionGroup === "People" && (
-                <label className="person-selector">
-                  Contact
-                  <select
-                    value={focus}
-                    onChange={(e) => setFocus(e.target.value)}
-                  >
-                    {p.known
-                      .filter((id) => s.characters[id] && id !== p.id)
-                      .map((id) => (
-                        <option key={id} value={id}>
-                          {s.characters[id].alias ?? s.characters[id].name}
-                        </option>
-                      ))}
-                  </select>
-                  <small>
-                    They feel{" "}
-                    {band(person.relationships[p.id]?.trust ?? 0, [
-                      "wary",
-                      "acquainted",
-                      "trusting",
-                      "close",
-                    ])}{" "}
-                    toward you. Known contacts can be reached across zones.
-                  </small>
-                </label>
-              )}
-              <div className="action-grid">{displayed.map(actionCard)}</div>
-              {!displayed.length && (
-                <Panel>
-                  <p>
-                    No further interactions here right now. Everyday work, rest
-                    and the rest of the city are still available.
-                  </p>
-                  <button
-                    className="text-button"
-                    onClick={() => setGroup("Everyday")}
-                  >
-                    Find everyday opportunities →
-                  </button>
-                </Panel>
-              )}
-            </>
+            <ActionsHub
+              s={s}
+              category={actionGroup}
+              setCategory={setGroup}
+              focus={focus}
+              setFocus={setFocus}
+              act={act}
+              openSupplier={(id) => {
+                setState(openSupplier(s, id));
+                setScreen("City");
+              }}
+            />
           )}
           {screen === "Set" && (
             <>
@@ -1176,7 +1089,6 @@ export function App() {
           )}
           {screen === "Finances" && (
             <>
-              <EmploymentSummary s={s} />
               <Panel>
                 <p className="eyebrow">CASH ON HAND</p>
                 <h3 className="cash-total">{money(cash(p))}</h3>
@@ -1194,16 +1106,20 @@ export function App() {
                     <strong>{money(BALANCE.livingCost)}</strong>
                   </span>
                 </div>
-                <p>
-                  {ACTIONS.work.description} {ACTIONS.gig.description} Living
-                  expenses are charged as you advance each day.
-                </p>
+                <p>Living expenses are charged as you advance each day.</p>
                 <p className="muted">
                   Clean and illicit funds keep separate provenance. Purchases
                   use clean money first. Running short increases stress; it
                   never locks you out of work.
                 </p>
               </Panel>
+              <InventoryWallet
+                s={s}
+                open={(id) => {
+                  setState(openSupplier(s, id));
+                  setScreen("City");
+                }}
+              />
               <h3>Personal purchases</h3>
               <div className="action-grid">
                 {all.filter((a) => a.type === "buy").map(actionCard)}
@@ -1261,34 +1177,47 @@ export function App() {
                   ))}
               </Panel>
               <details className="panel situation-history">
-                <summary>Situation history</summary>
-                {Object.values(s.incidents).map((i) => (
-                  <div key={i.id}>
-                    <h3>
-                      {i.title} <span className="status-chip">{i.status}</span>
-                    </h3>
-                    <p>
-                      {i.status === "active"
-                        ? `Demand ${money(i.demand)} · ${i.leadershipAware ? "Leadership is considering its response" : "No leadership intervention yet"}`
-                        : `${i.resolution}. Life in The Stixx continues.`}
-                    </p>
-                    <details>
-                      <summary>Incident record</summary>
-                      {visibleEvents(s)
-                        .filter(
-                          (e) =>
-                            e.incidentId === i.id ||
-                            e.id === i.resolvedEventId ||
-                            i.interventions.some((x) => x.eventId === e.id),
-                        )
-                        .map((e) => (
-                          <p key={e.id}>
-                            <small>DAY {e.day}</small> · {e.text}
-                          </p>
-                        ))}
-                    </details>
-                  </div>
-                ))}
+                <summary>Completed storylines</summary>
+                {Object.values(s.incidents)
+                  .filter((i) => i.status !== "active")
+                  .map((i) => (
+                    <div key={i.id}>
+                      <h3>
+                        {i.title}{" "}
+                        <span className="status-chip">{i.status}</span>
+                      </h3>
+                      <p>
+                        {i.status === "active"
+                          ? `Demand ${money(i.demand)} · ${i.leadershipAware ? "Leadership is considering its response" : "No leadership intervention yet"}`
+                          : `${i.resolution}. Life in The Stixx continues.`}
+                      </p>
+                      <p>
+                        {s.commitments.find(
+                          (c) =>
+                            c.kind === "recover-property" &&
+                            c.incidentId === i.id,
+                        )?.status ??
+                          (i.interventions.some((x) => x.actor === p.id)
+                            ? "Resolved without a promise"
+                            : "Resolved without your involvement")}
+                      </p>
+                      <details>
+                        <summary>Incident record</summary>
+                        {visibleEvents(s)
+                          .filter(
+                            (e) =>
+                              e.incidentId === i.id ||
+                              e.id === i.resolvedEventId ||
+                              i.interventions.some((x) => x.eventId === e.id),
+                          )
+                          .map((e) => (
+                            <p key={e.id}>
+                              <small>DAY {e.day}</small> · {e.text}
+                            </p>
+                          ))}
+                      </details>
+                    </div>
+                  ))}
               </details>
               <details className="panel outcome-history">
                 <summary>
@@ -1308,7 +1237,17 @@ export function App() {
                           className="text-button"
                           onClick={() => replayReaction(e.id)}
                         >
-                          Revisit Cuzzo’s reaction
+                          Revisit{" "}
+                          {(() => {
+                            const id = s.encounters
+                              .find((x) => x.sourceEventId === e.id)
+                              ?.participants.find((id) => id !== p.id);
+                            return id
+                              ? (s.characters[id].alias ??
+                                  s.characters[id].name)
+                              : "this person";
+                          })()}
+                          ’s reaction
                         </button>
                       )}
                     </article>
@@ -1371,6 +1310,7 @@ export function App() {
               aria-current={screen === item ? "page" : undefined}
               onClick={() => {
                 setScreen(item);
+                if (item === "Actions") setGroup("Streets");
                 setHistoryEncounterId(null);
                 window.scrollTo(0, 0);
               }}

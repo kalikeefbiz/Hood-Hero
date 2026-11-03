@@ -1,3 +1,4 @@
+import { acquire, repay } from "./StreetEconomy";
 import {
   acceptCrewOffer,
   attendCrewActivity,
@@ -47,7 +48,24 @@ export function respondEncounter(
   const startEvent = state.events.length;
   let s = structuredClone(state);
   const effect = response.effect;
-  if (effect.type === "crew") {
+  if (effect.type === "street") {
+    const e = s.encounters.find((e) => e.id === id)!;
+    if (effect.choice === "acquire")
+      acquire(s, effect.supplier!, effect.arrangement!);
+    if (effect.choice === "repay")
+      repay(s, effect.agreementId!, effect.amount!);
+    e.selectedResponses.push({
+      id: responseId,
+      day: s.day,
+      eventIds: s.events.slice(startEvent).map((e) => e.id),
+    });
+    if (effect.choice !== "terms") {
+      e.status = "acknowledged";
+      e.followUpPending = false;
+    }
+    syncEncounters(s);
+    return { state: s, error: null };
+  } else if (effect.type === "crew") {
     const e = s.encounters.find((e) => e.id === id)!;
     if (effect.choice === "details") {
       e.selectedResponses.push({ id: responseId, day: s.day, eventIds: [] });

@@ -1,3 +1,5 @@
+import { advanceStreet } from "../systems/StreetEconomy";
+import { releaseEligible } from "../systems/Incarceration";
 import { processCrewActivities } from "../systems/CrewAgency";
 import { cash, clamp, player, type GameState } from "./GameState";
 import { record } from "./EventLog";
@@ -19,6 +21,8 @@ export function advanceDay(state: GameState): GameState {
   settleWorkplaceScenes(s);
   settleAttendance(s);
   s.day++;
+  releaseEligible(s);
+  advanceStreet(s);
   generateShifts(s);
   processCrewActivities(s);
   advanceNPCs(s);
@@ -36,6 +40,7 @@ export function advanceDay(state: GameState): GameState {
   const paid = Math.min(BALANCE.livingCost, cash(p));
   expense(s, p, paid, "Daily living expenses");
   if (paid < BALANCE.livingCost) {
+    s.street.arrears += BALANCE.livingCost - paid;
     p.stress = clamp(p.stress + 7);
     record(
       s,
@@ -64,5 +69,19 @@ export function advanceDay(state: GameState): GameState {
     { importance: "routine" },
   );
   syncEncounters(s);
+  return s;
+}
+
+export function serveSentence(state: GameState): GameState {
+  const r = state.street.custody.find(
+    (r) =>
+      r.character === state.playerId &&
+      r.status === "held" &&
+      r.releaseDay !== null,
+  );
+  if (!r || state.end) return state;
+  let s = state;
+  const releaseDay = r.releaseDay!;
+  while (s.day < releaseDay && !s.end) s = advanceDay(s);
   return s;
 }

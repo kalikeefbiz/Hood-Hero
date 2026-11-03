@@ -1,3 +1,4 @@
+import { heatDescription } from "../systems/CriminalExposure";
 import { type GameState, type ZoneId, player, cash } from "../core/GameState";
 import { BALANCE } from "../content/balance";
 import { Scene } from "./Scene";
@@ -126,7 +127,7 @@ export function GameHUD({
         <Stat label="Influence" value={Math.floor(p.influence)} icon="People" />
         <Stat label="Stress" value={Math.round(p.stress)} icon="pulse" />
         <Stat
-          label="Heat"
+          label={`Heat · ${heatDescription(p.police)}`}
           value={Math.round(p.police)}
           icon="heat"
           className="heat-resource"

@@ -1,3 +1,4 @@
+import { SUPPLIER_ENCOUNTER, SUPPLIER_REACTION } from "./streetEncounters";
 import { CREW_CONVERSATION, CREW_OFFER } from "./crewEncounters";
 import { WORKPLACE_ENCOUNTER } from "./workplaceEncounters";
 import type { EncounterDefinition, EncounterResponse } from "../core/Encounter";
@@ -67,7 +68,8 @@ function requestResponses(
       label: "Let me think. I’m not promising yet.",
       effect: { type: "delay" },
     });
-  } else {
+  }
+  if (incidentPromise(s, i.id) || i.informed) {
     for (const [id, type, label, target] of [
       ["negotiate", "negotiate", "Talk down the demand", undefined],
       ["buyback", "buyback", "Pay to return the chains", undefined],
@@ -92,6 +94,8 @@ function requestResponses(
   return responses;
 }
 export const ENCOUNTERS: EncounterDefinition[] = [
+  SUPPLIER_ENCOUNTER,
+  SUPPLIER_REACTION,
   WORKPLACE_ENCOUNTER,
   CREW_CONVERSATION,
   CREW_OFFER,

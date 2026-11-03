@@ -215,8 +215,8 @@ describe("actions, economy, AP and persistence", () => {
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
     raw.version = 99;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 5/);
-    raw.version = 5;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 7/);
+    raw.version = 7;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });
@@ -314,6 +314,7 @@ describe("living simulation and personal Set", () => {
   });
   it("gates affiliation through a member’s trust and organizational standing", () => {
     let s = fresh();
+    s = doAction(s, "introduce", "mega");
     expect(
       validateAction(s, {
         type: "affiliate",
@@ -416,10 +417,10 @@ describe("The Chains and automated playthroughs", () => {
   }, 20000);
 });
 describe("constructed end condition fixtures", () => {
-  it("evaluates arrest and death regardless of wealth", () => {
+  it("ordinary arrest continues the campaign; death ends it", () => {
     const s = fresh();
     player(s).status = "arrested";
-    expect(evaluateEnd(s)).toBe("arrested");
+    expect(evaluateEnd(s)).toBeNull();
     player(s).status = "dead";
     expect(evaluateEnd(s)).toBe("killed");
   });

@@ -1,0 +1,43 @@
+[WebServer] (node:10505) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 22 tests using 2 workers
+
+(node:10523) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   2 [chromium-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (5.5s)
+  ✓   3 [chromium-mobile] › tests/illustrated.spec.ts:106:1 › action art loads near the viewport, and failed art preserves layout and gameplay (3.6s)
+  ✓   1 [chromium-mobile] › tests/crew.spec.ts:43:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (13.2s)
+  ✓   5 [chromium-mobile] › tests/street.spec.ts:223:1 › seeded real-play arrest serves every day and releases into continued gameplay (7.6s)
+  ✓   6 [chromium-mobile] › tests/street.spec.ts:254:1 › default reaction and accumulated heat are rendered from real simulated consequences (3.1s)
+  ✓   7 [chromium-mobile] › tests/street.spec.ts:273:1 › crew-assisted street work uses an earned willing partner and actual inventory (1.7s)
+  ✓   8 [chromium-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 320px (994ms)
+  ✓   9 [chromium-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 375px (1.1s)
+  ✓  10 [chromium-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 390px (952ms)
+  ✓  11 [chromium-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 430px (1.0s)
+(node:10805) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+JOURNEY {"engine":"chromium-mobile","day":4,"cash":{"clean":0,"illicit":248},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":279,"owed":0,"paid":102,"losses":0,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-32","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-31"},{"id":"transaction-34","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-33"},{"id":"transaction-60","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-59"},{"id":"transaction-63","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-62"},{"id":"transaction-88","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-87"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-31","event-33","event-59","event-62","event-87","event-90"]}}
+  ✓   4 [chromium-mobile] › tests/street.spec.ts:134:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (22.2s)
+(node:10876) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  13 [webkit-mobile] › tests/employment.spec.ts:244:1 › employment competes with The Chains through actual AP, wages, attendance and promises (25.6s)
+  ✓  14 [webkit-mobile] › tests/illustrated.spec.ts:106:1 › action art loads near the viewport, and failed art preserves layout and gameplay (18.4s)
+  ✓  12 [webkit-mobile] › tests/crew.spec.ts:43:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (57.6s)
+  ✓  16 [webkit-mobile] › tests/street.spec.ts:223:1 › seeded real-play arrest serves every day and releases into continued gameplay (19.6s)
+  ✓  17 [webkit-mobile] › tests/street.spec.ts:254:1 › default reaction and accumulated heat are rendered from real simulated consequences (18.4s)
+JOURNEY {"engine":"webkit-mobile","day":4,"cash":{"clean":0,"illicit":248},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":279,"owed":0,"paid":102,"losses":0,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-32","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-31"},{"id":"transaction-34","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-33"},{"id":"transaction-60","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-59"},{"id":"transaction-63","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-62"},{"id":"transaction-88","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-87"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-31","event-33","event-59","event-62","event-87","event-90"]}}
+  ✓  15 [webkit-mobile] › tests/street.spec.ts:134:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (52.5s)
+  ✓  19 [webkit-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 320px (7.4s)
+  ✓  18 [webkit-mobile] › tests/street.spec.ts:273:1 › crew-assisted street work uses an earned willing partner and actual inventory (13.7s)
+  ✓  20 [webkit-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 375px (9.0s)
+  ✓  21 [webkit-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 390px (9.2s)
+  ✓  22 [webkit-mobile] › tests/street.spec.ts:293:3 › street inventory and supplier modal fit 430px (6.0s)
+
+  22 passed (2.6m)

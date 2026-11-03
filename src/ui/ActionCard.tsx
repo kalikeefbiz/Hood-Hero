@@ -28,11 +28,13 @@ export function ActionCard({
   action: a,
   onAction,
   compact = false,
+  sharedReasonId,
 }: {
   s: GameState;
   action: Action;
   onAction: (a: Action) => void;
   compact?: boolean;
+  sharedReasonId?: string;
 }) {
   const employment = currentEmployment(s);
   const job = a.jobId ? jobDefinition(a.jobId) : undefined;
@@ -98,7 +100,7 @@ export function ActionCard({
         <div className="tile-copy">
           <h3>{title}</h3>
           <p>{brief}</p>
-          {reason && (
+          {reason && !sharedReasonId && (
             <p className="disabled-reason" id={`${identity}-reason`}>
               {reason}
             </p>
@@ -110,7 +112,9 @@ export function ActionCard({
         <div className="tile-controls">
           <button
             disabled={!!reason}
-            aria-describedby={reason ? `${identity}-reason` : undefined}
+            aria-describedby={
+              reason ? (sharedReasonId ?? `${identity}-reason`) : undefined
+            }
             onClick={() => onAction(a)}
           >
             <span>{reason ? "Unavailable" : "Go"}</span>
@@ -183,13 +187,15 @@ export function ActionCard({
       </small>
       <button
         disabled={!!reason}
-        aria-describedby={reason ? `${identity}-reason` : undefined}
+        aria-describedby={
+          reason ? (sharedReasonId ?? `${identity}-reason`) : undefined
+        }
         onClick={() => onAction(a)}
       >
         {reason ? "Unavailable" : "Take action"}
         <Icon name="arrow" />
       </button>
-      {reason && (
+      {reason && !sharedReasonId && (
         <p className="disabled-reason" id={`${identity}-reason`}>
           {reason}
         </p>

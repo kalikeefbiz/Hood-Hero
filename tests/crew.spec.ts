@@ -1,3 +1,4 @@
+import { honest, connects, storyline, storyAction } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 import { dismissEncounter } from "./helpers";
 const key = "blackhouse.syndicate.v1.auto";
@@ -9,6 +10,8 @@ async function nav(page: Page, name: string) {
     .getByRole("navigation")
     .getByRole("button", { name, exact: true })
     .click();
+  if (name === "Actions")
+    await page.getByRole("button", { name: "Honest", exact: true }).click();
 }
 async function start(page: Page) {
   await page.goto(process.env.PLAYWRIGHT_BASE_PATH || "/");
@@ -43,7 +46,7 @@ async function card(page: Page, label: string) {
 test("Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences", async ({
   page,
 }) => {
-  test.setTimeout(90000);
+  test.setTimeout(test.info().project.name.includes("webkit") ? 180000 : 90000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await start(page);

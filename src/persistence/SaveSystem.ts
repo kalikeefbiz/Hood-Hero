@@ -1,3 +1,4 @@
+import { streetSchema } from "./StreetSchema";
 import { z } from "zod";
 import { JOBS } from "../content/jobs";
 import { ENCOUNTERS } from "../content/encounters";
@@ -61,6 +62,7 @@ const character = z.object({
     }),
   ),
   known: z.array(id),
+  connections: z.array(id),
   stress: n,
   notoriety: n,
   police: n,
@@ -75,7 +77,8 @@ const character = z.object({
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
 const schema = z.object({
-  version: z.literal(5),
+  version: z.literal(7),
+  street: streetSchema,
   day: integer.min(1),
   ap: integer.max(2),
   rng: integer.max(4294967295),
@@ -192,6 +195,7 @@ const schema = z.object({
         "recover-property",
         "employment-shift",
         "crew-activity",
+        "supplier-debt",
       ]),
       employmentId: id.optional(),
       status: z.enum([
@@ -351,7 +355,7 @@ const schema = z.object({
 export const SAVE_KEY = "blackhouse.syndicate.v1";
 export const AUTO_KEY = SAVE_KEY + ".auto";
 export function serialize(s: GameState): string {
-  return JSON.stringify({ format: "syndicate", version: 5, state: s });
+  return JSON.stringify({ format: "syndicate", version: 7, state: s });
 }
 export function deserialize(raw: string): GameState {
   let parsed: unknown;
@@ -365,22 +369,109 @@ export function deserialize(raw: string): GameState {
   const envelope = z
     .object({
       format: z.literal("syndicate"),
-      version: z.literal(5),
+      version: z.literal(7),
       state: schema,
     })
     .safeParse(parsed);
   if (!envelope.success)
     throw new Error(
-      "Incompatible or damaged save. Expected Hood Hero save version 5. Start a new test run from the new game menu.",
+      "Incompatible or damaged save. Expected Hood Hero save version 7. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
   const exists = (id: string) => !!s.characters[id];
+  const st = s.street;
+  const invalidStreet =
+    new Set(
+      [...st.lots, ...st.agreements, ...st.transactions, ...st.custody].map(
+        (x) => x.id,
+      ),
+    ).size !==
+      st.lots.length +
+        st.agreements.length +
+        st.transactions.length +
+        st.custody.length ||
+    st.lots.some(
+      (l) =>
+        !exists(l.owner) ||
+        !exists(l.supplier) ||
+        l.remaining +
+          l.lost +
+          st.transactions
+            .filter((t) => t.lotId === l.id)
+            .reduce((n, t) => n + t.sold, 0) !==
+          l.received ||
+        st.transactions
+          .filter((t) => t.lotId === l.id)
+          .reduce((n, t) => n + t.gross, 0) !== l.collected ||
+        st.transactions
+          .filter((t) => t.lotId === l.id)
+          .reduce((n, t) => n + t.lost, 0) !== l.lost ||
+        st.transactions
+          .filter((t) => t.lotId === l.id)
+          .reduce((n, t) => n + t.loss, 0) !== l.losses ||
+        st.transactions
+          .filter((t) => t.lotId === l.id)
+          .reduce((n, t) => n + t.crewPaid, 0) !== l.crewPaid ||
+        (l.agreementId
+          ? !st.agreements.some(
+              (a) =>
+                a.id === l.agreementId &&
+                a.lotId === l.id &&
+                a.balance === l.owed &&
+                a.repaid === l.paid &&
+                a.original === l.cost,
+            )
+          : l.owed !== 0 || l.paid !== l.cost),
+    ) ||
+    st.agreements.some(
+      (a) =>
+        !exists(a.supplier) ||
+        !exists(a.debtor) ||
+        a.original !== a.repaid + a.balance ||
+        (a.status === "fulfilled") !== (a.balance === 0) ||
+        !st.lots.some(
+          (l) =>
+            l.id === a.lotId &&
+            l.supplier === a.supplier &&
+            l.owner === a.debtor,
+        ) ||
+        !s.commitments.some(
+          (c) =>
+            c.id === a.commitmentId &&
+            c.kind === "supplier-debt" &&
+            c.actor === a.debtor &&
+            c.requester === a.supplier,
+        ) ||
+        !a.history.every((id) => s.events.some((e) => e.id === id)),
+    ) ||
+    st.transactions.some(
+      (t) =>
+        !exists(t.actor) ||
+        (t.partner && !exists(t.partner)) ||
+        !st.lots.some((l) => l.id === t.lotId && l.owner === t.actor) ||
+        !s.events.some((e) => e.id === t.eventId),
+    ) ||
+    st.custody.some(
+      (r) =>
+        !exists(r.character) ||
+        (r.releaseDay !== null &&
+          (r.releaseDay < r.arrestDay ||
+            !s.events.some((e) => e.id === r.eventId))),
+    ) ||
+    Object.keys(st.exposure).some((id) => !exists(id));
+  if (invalidStreet)
+    throw new Error("Save contains invalid street economy or custody records.");
   if (
     !exists(s.playerId) ||
     new Set(s.crew.members).size !== s.crew.members.length ||
     s.crew.members.length > s.crew.capacity ||
     !s.crew.members.every(exists) ||
-    Object.values(s.characters).some((c) => !c.known.every(exists)) ||
+    Object.values(s.characters).some(
+      (c) =>
+        !c.known.every(exists) ||
+        new Set(c.connections).size !== c.connections.length ||
+        !c.connections.every((id) => exists(id) && c.known.includes(id)),
+    ) ||
     Object.values(s.incidents).some(
       (i) =>
         !exists(i.victim) ||
