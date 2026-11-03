@@ -4,6 +4,10 @@ The City screen's 2D map becomes a living, explorable strategy board. You don't 
 
 The 2D map stays one tap away (**3D | Map**). It also loads automatically on devices without WebGL.
 
+![3D city at iPhone 13 size: overview, contested Nawf, Southside, an owned business, Downtown at night, full-screen Rio by day](review/city-3d/contact-sheet.png)
+
+Individual captures: [docs/review/city-3d](review/city-3d/).
+
 ## What you can do
 
 - **Explore.** Drag to move, pinch to zoom, twist with two fingers to turn. **Whole city** returns to the overview, and ⤢ opens a full-screen city on the phone.
@@ -52,6 +56,9 @@ Everything is procedural, so there are no model files to download. The renderer 
 - The shadow map is baked once per lighting change, not every frame.
 - The pixel ratio is capped at 1.5. Ambient animation runs at about 30 fps, and gestures get full frame rate.
 - Rendering stops when the board scrolls off screen or the tab is hidden.
+- One city is built per session. Leaving the City screen detaches it instead of destroying it, so coming back is instant (6.3 s → 0.66 s measured in software rendering).
+- Devices with no GPU acceleration get a lighter mode: Lambert shading, no shadows, and animation only while you touch the city.
+- `prefers-reduced-motion` gives a still city that moves only when you interact.
 - If WebGL fails, the 2D map takes over automatically.
 
 ## Files
@@ -68,6 +75,6 @@ No simulation rules, content, save schema or balance values changed.
 
 ## Known limits / next steps
 
-- Validated with software-rendered Chromium at iPhone 13 size. Physical iPhone frame rate still needs a real-device check.
+- Validated with software-rendered Chromium at iPhone 13 size: 178 unit tests and 66 e2e tests run, 65 passed. The other one is the review/WCAG capture test. Its accessibility checks passed, but it failed on a `favicon.ico` 404 that only the full Chromium build used here requests, and on its own time limit with software rendering. WebKit wasn't run here. Physical iPhone frame rate still needs a real-device check.
 - Places are fixed per district. A natural next step is letting businesses you buy, or territory changes, alter buildings (signage, boarded vs. open storefronts).
 - Time of day could follow the game day (for example, End Day plays a night-to-morning transition).
