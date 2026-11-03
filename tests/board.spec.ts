@@ -101,6 +101,12 @@ test("the player lives on the board: walks to places, acts there, and their loca
     page.getByRole("region", { name: "Nawf Community Center" }),
   ).toContainText("Coming to Stixx City");
 
+  // The details sidebar tucks away to show the whole board, and comes back.
+  await page.getByRole("button", { name: "Hide details" }).click();
+  await expect(page.locator(".board-inspector")).toHaveCount(0);
+  await page.getByRole("button", { name: "Show details" }).click();
+  await expect(page.locator(".board-inspector")).toBeVisible();
+
   // Your look is part of your character and survives saves.
   await page.getByRole("button", { name: /your character/ }).click();
   const look = page.getByRole("region", { name: "Your look" });

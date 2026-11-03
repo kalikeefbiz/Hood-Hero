@@ -190,6 +190,8 @@ export function App() {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const [personId, setPersonId] = useState<string | null>(null);
   const [lookOpen, setLookOpen] = useState(false);
+  // The details sidebar can be tucked away to see the whole board.
+  const [panelOpen, setPanelOpen] = useState(true);
   const [busy, setBusy] = useState(false);
   const [popups, setPopups] = useState<Popup[]>([]);
   const hudRef = useRef<HTMLDivElement | null>(null);
@@ -232,7 +234,16 @@ export function App() {
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [!!s, screen, board.place, board.block, board.zone, personId, lookOpen]);
+  }, [
+    !!s,
+    screen,
+    board.place,
+    board.block,
+    board.zone,
+    personId,
+    lookOpen,
+    panelOpen,
+  ]);
   useEffect(() => {
     try {
       setHasSave(
@@ -539,6 +550,7 @@ export function App() {
     setBoard(next);
     setPersonId(null);
     setLookOpen(false);
+    setPanelOpen(true);
     if (next.zone) setSelected(next.zone);
     setScreen("City");
     setHistoryEncounterId(null);
@@ -654,6 +666,7 @@ export function App() {
               });
             setPersonId(id);
             setLookOpen(false);
+            setPanelOpen(true);
             setScreen("City");
           }}
           playerAt={presenceOf(s).location}
@@ -684,6 +697,7 @@ export function App() {
             onLook={() => {
               setScreen("City");
               setLookOpen(true);
+              setPanelOpen(true);
             }}
           />
           {screen === "City" && (
@@ -712,7 +726,11 @@ export function App() {
             !lookOpen && (
               <DistrictChips s={s} focus={board} setFocus={focusBoard} />
             )}
-          {screen === "City" && <div className="board-notice">{toast}</div>}
+          {screen === "City" && (
+            <div className="board-notice" key={notice}>
+              {toast}
+            </div>
+          )}
           {screen === "City" && !presented && (
             <div className="board-story-strip">
               {activeStory && (
@@ -807,8 +825,24 @@ export function App() {
             />
           </Modal>
         )}
-        {screen === "City" && (
+        {screen === "City" && !panelOpen && (
+          <button
+            className="inspector-tab"
+            onClick={() => setPanelOpen(true)}
+            aria-label="Show details"
+          >
+            <span aria-hidden="true">‹</span> Details
+          </button>
+        )}
+        {screen === "City" && panelOpen && (
           <div className="board-inspector" ref={sheetRef}>
+            <button
+              className="inspector-close"
+              onClick={() => setPanelOpen(false)}
+              aria-label="Hide details"
+            >
+              ✕
+            </button>
             {alerts}
             {lookOpen ? (
               <AppearancePanel
