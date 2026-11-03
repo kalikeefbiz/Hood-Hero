@@ -71,7 +71,7 @@ test("actual local investment, contested map, autonomous decisions and persisted
   await dismissEncounter(page);
   await page.getByRole("button", { name: "End day" }).click();
   await dismissEncounter(page);
-  await shot(page, ".map-panel", "01-dynamic-map");
+  await shot(page, ".board-stage", "01-dynamic-map");
   const raw = await page.evaluate(
     () =>
       JSON.parse(localStorage.getItem("blackhouse.hoodhero-lab.v1.auto")!).state,

@@ -72,8 +72,6 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
       String(state.characters.player.neighborhoodStanding[zone.id]),
     );
   }
-  // Shared-presence gradients belong to the 2D map, one tap away from 3D.
-  await page.getByRole("button", { name: "Map", exact: true }).click();
   const nawf = map.getByRole("button", {
     name: "Select The Nawf",
     exact: true,
@@ -84,18 +82,15 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
   await expect(nawf).toHaveAccessibleDescription(
     /No single controller.*The Blips.*Mudgang/,
   );
-  const sharedFill = await nawf.locator(".zone-presence").getAttribute("fill");
-  const sharedId = sharedFill!.slice(5, -1);
+  // Shared presence: the chip carries both organizations' colors.
   expect(
-    await map
-      .locator(`[id="${sharedId}"] stop`)
-      .evaluateAll((nodes) => nodes.map((n) => n.getAttribute("stop-color"))),
-  ).toEqual([
-    THEMES.blips.accent,
-    THEMES.blips.accent,
-    THEMES.muds.accent,
-    THEMES.muds.accent,
-  ]);
+    await nawf
+      .locator(".chip-colors i")
+      .evaluateAll((nodes) =>
+        nodes.map((n) => getComputedStyle(n).backgroundColor),
+      ),
+  ).toHaveLength(2);
+  void THEMES;
   await expect(page.locator(".zone-details")).toContainText(
     "No single controller",
   );

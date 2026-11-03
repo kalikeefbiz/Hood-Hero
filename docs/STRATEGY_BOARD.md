@@ -1,0 +1,120 @@
+# Hood Hero Lab: the Stixx City strategy board
+
+This branch (`strategy-board`, forked from `stixx-3d-city`) makes the city the game's main screen. It's an isolated experiment:
+
+- **Code** lives on `strategy-board` in Hood-Hero and is mirrored to `main` in **Hood-Hero-Lab**. The production `main` is untouched.
+- **Playtest URL:** `https://kalikeefbiz.github.io/Hood-Hero-Lab/`, deployed by Hood-Hero-Lab's own `deploy-lab.yml`. Production's site and workflows are untouched.
+- **Saves** use `blackhouse.hoodhero-lab.v1` keys, so the lab can never read or overwrite production saves, even on the shared `github.io` origin.
+
+## How it plays
+
+The 3D city fills the screen. A slim HUD (day, AP, cash, heat, save/load) sits on top, the existing dock (City · People · Actions · Set · Wallet) on the bottom, and a bottom sheet in between. On wide screens the sheet becomes a side panel.
+
+The board has four levels, all on one camera:
+
+| Level | How you get there | The sheet shows |
+| --- | --- | --- |
+| **City** | start, breadcrumb, ‹ | storylines, word on the block, your position, activity |
+| **District** | tap a district or a chip | every place in the district (live first), then politics, police and standing (the existing panel) |
+| **Block** | tap a block while zoomed into its district | which organization's marks are on the block, police, the places on it |
+| **Place** | tap a pin or a place in the list | the place card: facts, **its real moves as action cards**, business controls, street work, people around, and a planned teaser |
+
+- **Gestures:** drag to pan, pinch to zoom, twist to turn, tap to select. The breadcrumb and ‹ zoom back out.
+- **Lenses** (Streets · Influence · Police · Moves) recolor blocks for strategy reading. Streets is the natural view: faction presence shows only as tags, banners, flags, crowds and lowriders, never as painted neighborhoods.
+- **Time of day** (🌆/🌙/☀️) is cosmetic.
+- People, Actions, Set and Wallet open in the full-height sheet over the city. Touching the city brings you back.
+
+Actions taken on the board are the game's existing actions (`performAction`, `businessAction`, `StreetWork`). Gameplay rules are unchanged.
+
+## Architecture
+
+```
+src/board/
+  locations.ts      LOCATION REGISTRY: ids, archetypes, links, status (the integration contract)
+  interactions.ts   place → existing actions / people / facts (pure, tested)
+  blocks.ts         block influence derived from saved territory (pure, tested)
+  viewModel.ts      BoardView: read-only projection of GameState for the renderer
+  BoardRenderer.ts  three.js scene, camera levels, input, lenses, dynamic layers
+  archetypes.ts     how each place type and each district's ordinary blocks are built
+  geo.ts            merged-geometry kit (one draw call per material per district)
+  textures.ts       facade textures + SignAtlas (every sign/tag/mural in one texture)
+  ui/Board.tsx      lazy stage + WebGL/2D fallback   ui/BoardStage.tsx  labels & pins
+  ui/BoardPanels.tsx breadcrumb, lenses, chips, Block/Place/District sheets
+  ui/BoardHUD.tsx   slim HUD                         ui/board.css       shell & sheet
+src/city3d/layout.ts  district rectangles (mirror the 2D map), river, block grid, block ids
+src/ui/App.tsx        board shell, focus state, sheet, place card routing
+```
+
+The data flow only goes one way: `GameState → deriveBoardView → BoardRenderer / panels`. The renderer never writes game state. Taps come back as `Focus { zone, block, place }`.
+
+## Integration points for Vesper and Codex
+
+### 1. Location registry (`src/board/locations.ts`)
+
+Every selectable place has a stable id, `"<zone>.<slug>"`, e.g. `south.towers` or `nawf.deli`. That's 40 places across five districts (9 of them planned), taken from the environment references.
+
+```ts
+links: {
+  job?: "retail-south"        // existing JOBS id → apply / accept / work / time off here
+  business?: "repair"         // existing BUSINESSES id → buy / maintain / sell here
+  items?: ["booze"]           // existing ITEMS sold here
+  gig?: true                  // existing `gig` action
+  street?: true               // existing StreetWork for this district's market
+  people?: true               // district residents gather here
+  rest?: true                 // `rest` when this is the player's home district
+  incident?: "the-chains"     // incident moves + storyline button while active
+  politics?: true             // opens the district politics panel
+}
+status: "live" | "planned"   // planned places show the `planned` teaser
+```
+
+**To make a planned place live** (gym, church, taqueria, community centers, The Spot, pawn shop, mission), add links in the registry. If you need a new system, add a new link key and one branch in `interactions.ts` (`placeActions` / `placeFacts`). The renderer doesn't need to change.
+
+**To add a place:** add an entry with a free block position. `src/tests/board.test.ts` checks unique ids, one place per block, distance from the river, and that links point to real content.
+
+**Ownership and NPCs:** `placeFacts` currently reports only what the game tracks: player businesses, jobs and incidents. When per-location ownership exists, return it from `placeFacts`, and add `owner` to `PlaceStatus` in `viewModel.ts` so the board can mark it.
+
+### 2. Block influence (`src/board/blocks.ts`)
+
+There's no block-level control in the simulation yet. `deriveBlocks` *presents* each district's saved faction presence as a number of blocks that radiate from each organization's anchor place. In The Nawf, Blips hold the west side of the avenue and Mudgang the east, with contested blocks where they meet. When real block control exists, replace `deriveBlocks` and keep the `BlockView` shape (`faction`, `strength`, `contested`, `police`, `locations`). Tags, banners, crowds and the lenses all follow it automatically. Block ids are `"<zone>.b<col>-<row>"`.
+
+### 3. Board API (`BoardRenderer`)
+
+`acquire(host)`, `setView(BoardView)`, `setFocus(Focus, fly)`, `setLens`, `setTimeOfDay`, `setInsets(top, bottom)`, `onPick`, plus overlay anchors for HTML labels. `window.__stixxBoard.debugState` exposes the camera and focus for automated checks.
+
+### 4. Custom models (GLB slots)
+
+Set `model: "assets/models/<file>.glb"` on a location. The board loads it lazily, scales it to the block and skips the procedural building. These are the assets that would most improve recognizability, in priority order:
+
+1. **Southside Towers**: the projects silhouette (sets the tone for Southside)
+2. **El station + elevated track segment** for The Nawf
+3. **Stixx City Hall** (dome) and **Central Precinct**
+4. **Corner store / bodega** shell with awning and sign panel, reusable for all five stores
+5. **Lowrider** and **police cruiser** (replaces instanced boxes)
+6. **Rowhouse** and **Reservoir house** modules (porch, boarded variants)
+7. **Port crane** and container stack
+8. **San Gabriel Mission** bell tower
+
+Keep each GLB under about 1–2 MB, with Draco or meshopt compression and KTX2 textures, for iPhone Safari.
+
+## Rendering notes (iPhone)
+
+- One city per session. Leaving the board detaches it rather than rebuilding, so shaders compile once.
+- Static geometry is merged per district. Cars, people, lamps and flags are instanced. All signage is one atlas (2 draw calls).
+- The shadow map is baked per lighting change. The pixel ratio is capped at 1.5. Ambient animation runs at about 30 fps and pauses when hidden.
+- Software renderers (no GPU) automatically use a lite mode: Lambert shading, no shadows, animation only while touched.
+- `prefers-reduced-motion` gives a still city.
+- No WebGL means the 2D map stands in as the board.
+
+## Other changes on this branch
+
+- **The Reservoir** is the canonical spelling everywhere, including zone ids (`reservoir`) and art filenames. Old test saves won't load, as agreed.
+- **Tests:** `src/tests/board.test.ts` covers the registry, influence derivation and place interactions. `tests/board.spec.ts` covers the board navigation flow on iPhone size.
+
+## Known limits / next steps
+
+- Validated with software-rendered Chromium at iPhone 13 size. Physical-device performance is the open question.
+- Planned places have no systems behind them yet.
+- Block influence is a presentation of district presence, not true block control.
+- Camera framing at the place level is tight in portrait. A "street view" angle per archetype would help.
+- Next art steps: the GLB slots above, bespoke Downtown towers, Rio side-street power lines and palms, and interior lights by time.

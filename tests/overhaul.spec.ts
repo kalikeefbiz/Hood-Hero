@@ -82,18 +82,12 @@ test("all approved scenes load; every home starts independent and map selection 
     await expect(page.locator(".cash-resource strong")).toHaveText("$125");
     await expect(page.locator(".ap b")).toHaveText("2/2");
     expect(await page.evaluate(() => scrollY)).toBe(0);
-    await expect(page.locator(".zone-hero img")).toHaveAttribute(
-      "src",
-      new RegExp(`${z.id}.webp$`),
-    );
+    await expect(page.locator(".zone-details h3")).toHaveText(z.name);
     for (const zone of Object.values(ZONES)) {
       await page
         .getByRole("button", { name: `Select ${zone.name}`, exact: true })
         .click();
-      await expect(page.locator(".zone-hero img")).toHaveAttribute(
-        "src",
-        new RegExp(`${zone.id}.webp$`),
-      );
+      await expect(page.locator(".zone-details h3")).toHaveText(zone.name);
       await expect(page.locator(".game-shell")).toHaveAttribute(
         "data-theme",
         "independent",
