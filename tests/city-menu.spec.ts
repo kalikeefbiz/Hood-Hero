@@ -72,6 +72,8 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
       String(state.characters.player.neighborhoodStanding[zone.id]),
     );
   }
+  // Shared-presence gradients belong to the 2D map, one tap away from 3D.
+  await page.getByRole("button", { name: "Map", exact: true }).click();
   const nawf = map.getByRole("button", {
     name: "Select The Nawf",
     exact: true,

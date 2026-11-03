@@ -61,7 +61,8 @@ import {
   SAVE_KEY,
   AUTO_KEY,
 } from "../persistence/SaveSystem";
-import { CityMap } from "./CityMap";
+import { CityView } from "./CityView";
+import type { LandmarkTarget } from "../city3d/layout";
 import { NewRun } from "./NewRun";
 import { GameHUD } from "./GameHUD";
 import { ActionCard, money } from "./ActionCard";
@@ -382,6 +383,30 @@ export function App() {
       onAction={act}
     />
   );
+  const meetLocals = (zone: ZoneId) => {
+    const local = p.known.find((id) => s.characters[id]?.home === zone);
+    if (local) setFocus(local);
+    setScreen("People");
+    window.scrollTo(0, 0);
+  };
+  // Places in the 3D city route into the game's existing screens and systems.
+  const openFromCity = (target: LandmarkTarget, zone: ZoneId) => {
+    setSelected(zone);
+    if (target.kind === "actions") {
+      setScreen("Actions");
+      setGroup(target.group);
+      window.scrollTo(0, 0);
+    } else if (target.kind === "wallet") {
+      setScreen("Finances");
+      window.scrollTo(0, 0);
+    } else if (target.kind === "people") meetLocals(zone);
+    else
+      requestAnimationFrame(() =>
+        document
+          .querySelector(".zone-details")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      );
+  };
   return (
     <div
       className={`game-shell screen-${screen.toLowerCase()}`}
@@ -604,13 +629,18 @@ export function App() {
                 </section>
               )}
               {toast}
-              <div className="city-layout">
+              <div className="city-layout city-layout-3d">
                 <Panel className="map-panel">
                   <div className="panel-title">
                     <h3>Stixx City</h3>
                     <span className="map-key">● Your home</span>
                   </div>
-                  <CityMap s={s} selected={selected} onSelect={setSelected} />
+                  <CityView
+                    s={s}
+                    selected={selected}
+                    onSelect={setSelected}
+                    onOpen={openFromCity}
+                  />
                   <ul className="map-legend" aria-label="Faction colors">
                     {Object.values(s.factions).map((f) => (
                       <li key={f.id}>
@@ -623,8 +653,9 @@ export function App() {
                     ))}
                   </ul>
                   <p className="caption">
-                    Select a neighborhood to read its politics. Split colors
-                    show shared presence; gray is unclaimed.
+                    Select a neighborhood to read its politics. Street color
+                    shows who holds the blocks; split colors are shared
+                    presence, gray is unclaimed. Tap a place to act on it.
                   </p>
                 </Panel>
                 <div className="zone-details">
@@ -686,13 +717,7 @@ export function App() {
                     />
                     <button
                       className="text-button"
-                      onClick={() => {
-                        const local = p.known.find(
-                          (id) => s.characters[id]?.home === selected,
-                        );
-                        if (local) setFocus(local);
-                        setScreen("People");
-                      }}
+                      onClick={() => meetLocals(selected)}
                     >
                       Meet local people →
                     </button>
