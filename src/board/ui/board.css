@@ -1,19 +1,11 @@
 /* ==========================================================================
-   Strategy board shell: the city is the screen; everything else floats on it.
+   Strategy board: the city is the screen; the player lives in it.
    ========================================================================== */
 .game-shell.board-mode {
-  --nav-h: calc(64px + env(safe-area-inset-bottom));
-  --sheet-h: 34vh;
+  --nav-h: calc(58px + env(safe-area-inset-bottom));
   display: block;
   max-width: none;
   min-height: 100vh;
-}
-.game-shell.board-mode.sheet-half {
-  --sheet-h: 46vh;
-}
-.game-shell.board-mode.sheet-full {
-  --sheet-h: calc(100vh - 150px);
-  --sheet-h: calc(100dvh - 150px);
 }
 .board-mode .desktop-brand {
   display: none;
@@ -173,121 +165,6 @@
   border-radius: 999px;
   background: #0d0f12d9;
   font-size: 16px;
-}
-
-/* --- District chips float just above the sheet ---------------------------------- */
-.board-mode .district-chips {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: calc(var(--sheet-h) + var(--nav-h) + 8px);
-  z-index: 14;
-  display: flex;
-  gap: 6px;
-  padding: 0 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  transition: bottom 0.25s ease;
-}
-.board-mode .district-chips::-webkit-scrollbar {
-  display: none;
-}
-.district-chips button {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 38px;
-  padding: 0 12px;
-  border-radius: 999px;
-  border: 1px solid #ffffff2a;
-  background: #121418e6;
-  color: #e7e3da;
-  font:
-    600 13px/1 "DM Sans",
-    sans-serif;
-  box-shadow: 0 4px 14px #0007;
-}
-.district-chips button[aria-pressed="true"] {
-  border-color: #fff3d6;
-  background: #2a2c31f2;
-}
-.chip-colors {
-  display: inline-flex;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-.chip-colors i {
-  flex: 1;
-}
-.chip-contested {
-  color: #ff8a5a;
-  font-weight: 800;
-}
-
-/* --- Bottom sheet ----------------------------------------------------------------- */
-.board-mode .board-sheet {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: var(--nav-h);
-  z-index: 15;
-  height: var(--sheet-h);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0 14px 28px;
-  border-radius: 16px 16px 0 0;
-  background: #101114f2;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 -10px 30px #0009;
-  transition: height 0.25s ease;
-}
-.sheet-handle {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  display: block;
-  width: calc(100% + 28px);
-  margin: 0 -14px 4px;
-  min-height: 26px;
-  padding: 0;
-  border: 0;
-  border-radius: 16px 16px 0 0;
-  background: linear-gradient(#101114, #101114e0);
-}
-.sheet-handle span {
-  display: block;
-  width: 42px;
-  height: 5px;
-  margin: 9px auto;
-  border-radius: 3px;
-  background: #ffffff55;
-}
-.board-mode .screen-heading {
-  margin-bottom: 10px;
-}
-.board-mode .screen-heading h2 {
-  font-size: 24px;
-}
-.board-mode .screen-heading .eyebrow {
-  margin-bottom: 2px;
-}
-.board-mode .bottom-nav {
-  left: 0;
-  right: 0;
-  z-index: 25;
-  height: var(--nav-h);
-  background: #0b0c0ff5;
-}
-.board-mode .bottom-nav button {
-  height: 64px;
-}
-.board-mode .city-layout.board-district {
-  grid-template-columns: 1fr;
-  margin-top: 12px;
 }
 
 /* --- Cards for blocks and places --------------------------------------------------- */
@@ -491,41 +368,6 @@
   background: #fff3d6;
 }
 
-/* --- Wide screens: the sheet becomes a side panel -------------------------------------- */
-@media (min-width: 900px) {
-  .game-shell.board-mode,
-  .game-shell.board-mode.sheet-half,
-  .game-shell.board-mode.sheet-full {
-    --sheet-h: auto;
-  }
-  .board-mode .board-sheet {
-    top: 0;
-    left: auto;
-    width: 440px;
-    height: auto;
-    border-radius: 0;
-  }
-  .board-top {
-    right: 440px;
-  }
-  .board-mode .district-chips {
-    right: 440px;
-    bottom: calc(var(--nav-h) + 12px);
-  }
-  .board-mode .bottom-nav {
-    right: 440px;
-  }
-  .sheet-handle {
-    display: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .board-mode .board-sheet,
-  .board-mode .district-chips {
-    transition: none;
-  }
-}
-
 /* --- Slim HUD ---------------------------------------------------------------------- */
 .board-hud {
   display: flex;
@@ -666,4 +508,519 @@
 .board-district-places h3 {
   margin: 0 0 4px;
   font-size: 22px;
+}
+/* --- District chips and story strip under the breadcrumb ----------------------------- */
+.board-top .district-chips,
+.board-story-strip {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.board-top .district-chips::-webkit-scrollbar,
+.board-story-strip::-webkit-scrollbar {
+  display: none;
+}
+.district-chips button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid #ffffff2a;
+  background: #121418e6;
+  color: #e7e3da;
+  font:
+    600 12px/1 "DM Sans",
+    sans-serif;
+}
+.district-chips button[aria-pressed="true"] {
+  border-color: #fff3d6;
+  background: #2a2c31f2;
+}
+.chip-colors {
+  display: inline-flex;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.chip-colors i {
+  flex: 1;
+}
+.chip-contested {
+  color: #ff8a5a;
+  font-weight: 800;
+}
+.board-story-strip button {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #121418e6;
+}
+.board-story-strip .story-alert {
+  border: 1px solid #e9be39;
+  color: #f5ecd8;
+}
+.board-story-strip .story-alert > span[aria-hidden] {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #e9be39;
+  color: #111;
+  font-weight: 800;
+}
+.board-story-strip .story-status {
+  color: var(--muted);
+}
+
+/* --- Inspector: what's selected on the board ---------------------------------------- */
+.board-inspector {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  bottom: calc(var(--nav-h) + 6px);
+  z-index: 15;
+  max-height: 44vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px #000a;
+}
+.board-inspector:empty {
+  display: none;
+}
+.board-inspector .panel,
+.board-inspector .board-card {
+  margin: 0;
+  background: #111316f0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.board-inspector .city-layout.board-district {
+  display: block;
+  margin: 0;
+}
+.inspector-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.inspector-title h3 {
+  margin: 2px 0 4px;
+}
+.go-here {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  color: #111;
+  font:
+    700 13px "DM Sans",
+    sans-serif;
+}
+.you-here {
+  font:
+    700 11px "DM Sans",
+    sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9bceb0;
+}
+.inspector-tiles {
+  display: flex !important;
+  gap: 8px !important;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+}
+.inspector-tiles > .action-card {
+  flex: 0 0 min(80%, 280px);
+  scroll-snap-align: start;
+  margin: 0;
+}
+
+/* --- Dock: End day + the ledger toolbar --------------------------------------------- */
+.board-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 25;
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  height: var(--nav-h);
+  padding: 6px 8px env(safe-area-inset-bottom);
+  background: #0b0c0ff2;
+  border-top: 1px solid #ffffff14;
+}
+.board-dock .advance {
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: 0 12px;
+  font-size: 16px;
+}
+.board-mode .board-dock .bottom-nav {
+  position: static;
+  flex: 1;
+  height: auto;
+  padding: 0;
+  background: none;
+  border: 0;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  box-shadow: none;
+}
+.board-mode .board-dock .bottom-nav button {
+  height: auto;
+  min-height: 0;
+  gap: 2px;
+  padding: 0;
+}
+.board-mode .board-dock .bottom-nav small {
+  font-size: 10px;
+}
+.board-mode .board-dock .bottom-nav svg {
+  width: 18px;
+  height: 18px;
+}
+.board-mode .bottom-nav .active::before {
+  display: none;
+}
+
+/* --- Ledger: the classic screens over the city --------------------------------------- */
+.board-mode .board-ledger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--nav-h);
+  z-index: 22;
+  overflow-y: auto;
+  padding: calc(env(safe-area-inset-top) + 66px) 14px 28px;
+  background: #0d0e11f7;
+}
+.ledger-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.ledger-head h2 {
+  margin: 0;
+  font-size: 26px;
+}
+.ledger-head .eyebrow {
+  margin: 0 0 2px;
+  font-size: 9px;
+  color: var(--muted);
+}
+.ledger-close {
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 16px;
+}
+.board-news {
+  position: fixed;
+  top: 170px;
+  left: 8px;
+  right: 8px;
+  z-index: 18;
+}
+.board-news:empty {
+  display: none;
+}
+.board-mode .action-feedback {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  top: calc(env(safe-area-inset-top) + 58px);
+  z-index: 30;
+  margin: 0;
+}
+.board-mode .day-transition {
+  position: fixed;
+  top: 40%;
+  left: 0;
+  right: 0;
+  z-index: 19;
+  text-align: center;
+}
+
+/* --- People, story markers and pop-ups in the world ---------------------------------- */
+.board-person,
+.board-story,
+.board-popup {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  will-change: transform;
+}
+.board-person {
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.board-person span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: inherit;
+  background: #f0e8d8;
+  color: #111;
+  font:
+    800 13px "Barlow Condensed",
+    sans-serif;
+}
+.board-person.stranger span {
+  background: #2a2c31;
+  color: #e7e3da;
+}
+.board-person.active span {
+  box-shadow: 0 0 0 3px #fff3d6;
+}
+.board-person em {
+  display: none;
+  font:
+    600 10px "DM Sans",
+    sans-serif;
+  font-style: normal;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #0d0f12d9;
+  color: #fff;
+  white-space: nowrap;
+}
+.board-person.near em,
+.board-person.active em {
+  display: block;
+}
+.board-story {
+  z-index: 4;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #111;
+  background: #e9be39;
+  color: #111;
+  font:
+    900 22px "Barlow Condensed",
+    sans-serif;
+}
+.board-story span {
+  display: block;
+  animation: story-bob 1.6s ease-in-out infinite;
+}
+@keyframes story-bob {
+  50% {
+    transform: translateY(-3px) scale(1.1);
+  }
+}
+.board-popup {
+  z-index: 5;
+  pointer-events: none;
+}
+.board-popup span {
+  display: block;
+  font:
+    800 26px "Barlow Condensed",
+    sans-serif;
+  text-shadow: 0 2px 6px #000;
+  animation: pop-rise 2.4s ease-out forwards;
+}
+.board-popup.tone-good span {
+  color: #9bceb0;
+}
+.board-popup.tone-bad span {
+  color: #ffab81;
+}
+.board-popup.tone-neutral span {
+  color: #fff3d6;
+}
+@keyframes pop-rise {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-44px);
+    opacity: 0;
+  }
+}
+
+/* --- Risk ---------------------------------------------------------------------------- */
+.risk-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 2px 0 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border-left: 4px solid;
+  background: #ffffff0d;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.risk-badge strong {
+  font:
+    700 12px "DM Sans",
+    sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.risk-safe {
+  border-color: #9bceb0;
+}
+.risk-safe strong {
+  color: #9bceb0;
+}
+.risk-watchful {
+  border-color: #e3c23a;
+}
+.risk-watchful strong {
+  color: #e3c23a;
+}
+.risk-tense {
+  border-color: #ff9a4a;
+}
+.risk-tense strong {
+  color: #ff9a4a;
+}
+.risk-hostile {
+  border-color: #ff4a4a;
+}
+.risk-hostile strong {
+  color: #ff6a6a;
+}
+
+/* --- Look editor --------------------------------------------------------------------- */
+.look-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 0;
+}
+.look-row legend {
+  width: 100%;
+  margin-bottom: 4px;
+  font:
+    600 10px "DM Sans",
+    sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.swatch {
+  width: 32px;
+  min-height: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #ffffff33;
+}
+.swatch[aria-pressed="true"] {
+  border-color: #fff3d6;
+  box-shadow: 0 0 0 2px #fff3d6;
+}
+.look-option {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.look-option[aria-pressed="true"] {
+  background: var(--accent-secondary);
+  color: #111;
+}
+.board-hud-who {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+/* --- Wide screens --------------------------------------------------------------------- */
+@media (min-width: 900px) {
+  .board-inspector {
+    left: auto;
+    right: 12px;
+    width: 420px;
+    max-height: calc(100vh - 200px);
+  }
+  .board-mode .board-ledger {
+    left: auto;
+    width: 560px;
+    border-left: 1px solid var(--line);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .board-story span,
+  .board-popup span {
+    animation: none;
+  }
+}
+.board-inspector .quick-moves .action-tile .tile-art {
+  height: 74px;
+}
+.board-inspector .quick-moves .action-tile h3 {
+  font-size: 20px;
+}
+.board-story-strip .story-alert strong {
+  font:
+    700 15px "Barlow Condensed",
+    sans-serif;
+  text-transform: uppercase;
+}
+.board-story-strip .story-status {
+  font-size: 11px;
+  white-space: nowrap;
+}
+.board-mode .action-feedback {
+  bottom: auto;
+  transform: none;
+  width: auto;
+  padding: 10px 14px;
 }

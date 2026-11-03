@@ -212,6 +212,8 @@ export interface Asset {
   recurringIncome: number;
 }
 export interface GameState {
+  /** Strategy-board lab: the player's physical presence in the city. */
+  presence?: import("../board/presence").Presence;
   version: 8;
   strategic: import("../systems/StrategicTypes").StrategicState;
   street: import("../systems/StreetTypes").StreetState;

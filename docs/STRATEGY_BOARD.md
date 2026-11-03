@@ -8,23 +8,20 @@ This branch (`strategy-board`, forked from `stixx-3d-city`) makes the city the g
 
 ## How it plays
 
-The 3D city fills the screen. A slim HUD (day, AP, cash, heat, save/load) sits on top, the existing dock (City · People · Actions · Set · Wallet) on the bottom, and a bottom sheet in between. On wide screens the sheet becomes a side panel.
+The 3D city is the game screen. The player is a **physical character on the board**, not an observer above it.
 
-The board has four levels, all on one camera:
-
-| Level | How you get there | The sheet shows |
-| --- | --- | --- |
-| **City** | start, breadcrumb, ‹ | storylines, word on the block, your position, activity |
-| **District** | tap a district or a chip | every place in the district (live first), then politics, police and standing (the existing panel) |
-| **Block** | tap a block while zoomed into its district | which organization's marks are on the block, police, the places on it |
-| **Place** | tap a pin or a place in the list | the place card: facts, **its real moves as action cards**, business controls, street work, people around, and a planned teaser |
-
-- **Gestures:** drag to pan, pinch to zoom, twist to turn, tap to select. The breadcrumb and ‹ zoom back out.
-- **Lenses** (Streets · Influence · Police · Moves) recolor blocks for strategy reading. Streets is the natural view: faction presence shows only as tags, banners, flags, crowds and lowriders, never as painted neighborhoods.
-- **Time of day** (🌆/🌙/☀️) is cosmetic.
-- People, Actions, Set and Wallet open in the full-height sheet over the city. Touching the city brings you back.
-
-Actions taken on the board are the game's existing actions (`performAction`, `businessAction`, `StreetWork`). Gameplay rules are unchanged.
+- **You start at home.** The camera flies into your home district, and your character stands at your home base (for example, Southside Towers).
+- **Explore:** drag to pan, pinch to zoom, twist to turn. The breadcrumb (Stixx City › district › block › place) and ‹ zoom back out. District chips jump between neighborhoods.
+- **Select** a district, block, place or person. A compact **inspector** shows what it is and what you can do *there*.
+  - **Place:** a risk reading, facts from saved state, the place's real moves as action tiles, business controls, street work, and who's around.
+  - **Person:** figures stand outside gathering places. Tap one for relationship and social moves.
+  - **District:** the existing politics panel plus every place in the district.
+- **Acting is being there.** Tapping a move makes your character **walk** to the place first. The existing action then runs, a result pops over the building, and your **location is saved**. "Go here" travels without acting. Movement has no AP or travel cost yet.
+- **Risk** comes from data the game already tracks: whose marks are on the block versus your affiliation, contested ground, police presence against your heat, notoriety, and home turf. It's informational for now.
+- **Your look:** tap your name in the HUD to change skin, hair, top, colors, build and chain. The figure on the board updates and the look is saved with your character.
+- **Lenses** (Streets · Influence · Police · Moves) and **time of day** (🌆/🌙/☀️). End day dims the city through night.
+- **Storylines** appear as a "!" marker over their place and as a pill under the breadcrumb.
+- **The ledger:** People, Actions, Set, Wallet and Journal (history, position, activity) open as a ledger over the city from the dock. They're for detail, not the main way to play.
 
 ## Architecture
 
@@ -40,9 +37,13 @@ src/board/
   textures.ts       facade textures + SignAtlas (every sign/tag/mural in one texture)
   ui/Board.tsx      lazy stage + WebGL/2D fallback   ui/BoardStage.tsx  labels & pins
   ui/BoardPanels.tsx breadcrumb, lenses, chips, Block/Place/District sheets
-  ui/BoardHUD.tsx   slim HUD                         ui/board.css       shell & sheet
+  presence.ts       PLAYER PRESENCE: saved location, trail, appearance, risk, arrival hooks
+  character.ts      the player's figure from parts; GLB slot for the future character creator
+  people.ts         where characters stand on the board (presentation)
+  bus.ts            lets the UI ask the lazy board to walk / pulse without importing three.js
+  ui/BoardHUD.tsx   slim HUD (tap your name for your look)   ui/board.css  board shell
 src/city3d/layout.ts  district rectangles (mirror the 2D map), river, block grid, block ids
-src/ui/App.tsx        board shell, focus state, sheet, place card routing
+src/ui/App.tsx        board shell, focus, inspector, walking actions, ledger
 ```
 
 The data flow only goes one way: `GameState → deriveBoardView → BoardRenderer / panels`. The renderer never writes game state. Taps come back as `Focus { zone, block, place }`.
@@ -74,15 +75,32 @@ status: "live" | "planned"   // planned places show the `planned` teaser
 
 **Ownership and NPCs:** `placeFacts` currently reports only what the game tracks: player businesses, jobs and incidents. When per-location ownership exists, return it from `placeFacts`, and add `owner` to `PlaceStatus` in `viewModel.ts` so the board can mark it.
 
-### 2. Block influence (`src/board/blocks.ts`)
+### 2. Player presence (`src/board/presence.ts`)
+
+`GameState.presence` (optional, saved in the lab's save format) is:
+
+```ts
+{ location: "nawf.bodega", zone: "nawf", arrivedDay: 4,
+  trail: [{ location: "south.food-mart", day: 3 }, …],   // last 12 stops
+  appearance: { skin, hair, hairColor, top, topColor, bottomColor, shoeColor, chain, build, model? } }
+```
+
+- `presenceOf(s)`: where the player is (old saves start at home base).
+- `moveTo(s, placeId)`: pure move. Records the trail, then runs **arrival hooks**.
+- `onArrival((state, placeId, risk) => nextState)`: **the integration point for location-based events** (run-ins in hostile turf, police stops, ambushes). Register a hook and the board doesn't change. None are registered yet.
+- `assessRisk(s, placeId)` → `{ level: safe|watchful|tense|hostile, score, reasons[], turf }`. Tune the weights, or feed it real block control later.
+- **Travel costs:** add them in `moveTo`/`actAt` when the design is settled. Today moving is free and instant in game time.
+- **Character creator:** extend `Appearance` (and `presenceSchema` in `SaveSystem.ts`). `character.ts` builds the figure from parts. Set `appearance.model` to a GLB (e.g. from Meshy) and the board loads it at the same height.
+
+### 3. Block influence (`src/board/blocks.ts`)
 
 There's no block-level control in the simulation yet. `deriveBlocks` *presents* each district's saved faction presence as a number of blocks that radiate from each organization's anchor place. In The Nawf, Blips hold the west side of the avenue and Mudgang the east, with contested blocks where they meet. When real block control exists, replace `deriveBlocks` and keep the `BlockView` shape (`faction`, `strength`, `contested`, `police`, `locations`). Tags, banners, crowds and the lenses all follow it automatically. Block ids are `"<zone>.b<col>-<row>"`.
 
-### 3. Board API (`BoardRenderer`)
+### 4. Board API (`BoardRenderer`)
 
-`acquire(host)`, `setView(BoardView)`, `setFocus(Focus, fly)`, `setLens`, `setTimeOfDay`, `setInsets(top, bottom)`, `onPick`, plus overlay anchors for HTML labels. `window.__stixxBoard.debugState` exposes the camera and focus for automated checks.
+`acquire(host)`, `setView(BoardView)`, `setFocus(Focus, fly)`, `setLens`, `setTimeOfDay`, `setInsets(top, bottom)`, `onPick`, `walkTo(placeId)`, `placeToken`, `setAppearance`, `setFigures`, `passDay`, plus overlay anchors for HTML labels. The UI reaches walking through `bus.ts` (`walkTo`, `pulseDay`). `window.__stixxBoard.debugState` exposes the camera and focus for automated checks.
 
-### 4. Custom models (GLB slots)
+### 5. Custom models (GLB slots)
 
 Set `model: "assets/models/<file>.glb"` on a location. The board loads it lazily, scales it to the block and skips the procedural building. These are the assets that would most improve recognizability, in priority order:
 
@@ -109,7 +127,7 @@ Keep each GLB under about 1–2 MB, with Draco or meshopt compression and KTX2 t
 ## Other changes on this branch
 
 - **The Reservoir** is the canonical spelling everywhere, including zone ids (`reservoir`) and art filenames. Old test saves won't load, as agreed.
-- **Tests:** `src/tests/board.test.ts` covers the registry, influence derivation and place interactions. `tests/board.spec.ts` covers the board navigation flow on iPhone size.
+- **Tests:** `src/tests/board.test.ts` covers the registry, influence derivation and place interactions. `tests/board.spec.ts` plays the board on an iPhone-size screen: walk, act, saved location and trail, risk, people, look, and the ledger. Legacy specs reach History, Your position and Activity through the Journal.
 
 ## Known limits / next steps
 
@@ -117,4 +135,5 @@ Keep each GLB under about 1–2 MB, with Draco or meshopt compression and KTX2 t
 - Planned places have no systems behind them yet.
 - Block influence is a presentation of district presence, not true block control.
 - Camera framing at the place level is tight in portrait. A "street view" angle per archetype would help.
+- Walking uses simple street-aligned paths, not full street routing. Characters other than you stand at gathering places rather than following schedules.
 - Next art steps: the GLB slots above, bespoke Downtown towers, Rio side-street power lines and palms, and interior lights by time.

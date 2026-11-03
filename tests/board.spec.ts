@@ -17,76 +17,117 @@ async function seed(page: Page, state: GameState) {
   await page.getByRole("button", { name: "Resume saved game" }).click();
   await dismissEncounter(page);
 }
-const crumbs = (page: Page) => page.getByRole("navigation", { name: "Board location" });
+const crumbs = (page: Page) =>
+  page.getByRole("navigation", { name: "Board location" });
 const places = (page: Page, zone: string) =>
   page.getByRole("region", { name: `Places in ${zone}` });
-async function shot(page: Page, info: import("@playwright/test").TestInfo, name: string) {
+const saved = (page: Page) =>
+  page.evaluate(
+    (key) => JSON.parse(localStorage.getItem(key)!).state,
+    AUTO_KEY,
+  );
+async function shot(
+  page: Page,
+  info: import("@playwright/test").TestInfo,
+  name: string,
+) {
   await page.waitForTimeout(2500);
   const path = info.outputPath(`${name}.png`);
   await page.screenshot({ path, scale: "css" });
   await info.attach(name, { path, contentType: "image/png" });
 }
 
-test("the board navigates city → district → block → place and acts through existing systems", async ({
+test("the player lives on the board: walks to places, acts there, and their location is saved", async ({
   page,
 }, info) => {
   test.setTimeout(240000);
-  const state = newGame("Morgan", "south");
-  await seed(page, state);
+  await seed(page, newGame("Morgan", "south"));
   await expect(page.locator(".board-canvas")).toBeVisible({ timeout: 30000 });
-  await expect(crumbs(page)).toContainText("Stixx City");
-  await shot(page, info, "01-city");
-
-  // District level: the sheet lists every place, live ones first.
-  await page.getByRole("button", { name: "Select Southside", exact: true }).click();
+  // The game opens on your home district.
   await expect(crumbs(page)).toContainText("Southside");
-  await expect(places(page, "Southside").getByRole("button")).toHaveCount(10);
   await expect(page.locator(".zone-details h3")).toHaveText("Southside");
-  await shot(page, info, "02-southside");
+  await expect(places(page, "Southside").getByRole("button")).toHaveCount(10);
+  await shot(page, info, "01-home-district");
 
-  // Place level: real actions on the place card.
-  await places(page, "Southside").getByRole("button", { name: /Southside Food Mart/ }).click();
+  // A place: risk, facts and its real moves as tiles.
+  await places(page, "Southside")
+    .getByRole("button", { name: /Southside Food Mart/ })
+    .click();
   const card = page.getByRole("region", { name: "Southside Food Mart" });
   await expect(card).toContainText("Hiring · Neighborhood retail");
-  await expect(crumbs(page)).toContainText("Block");
-  const moves = card.getByRole("group", { name: "Moves at Southside Food Mart" });
-  await expect(moves.locator(".action-card")).not.toHaveCount(0);
-  await shot(page, info, "03-food-mart");
-  await moves.locator('[data-action="buy"]').first().getByRole("button").first().click();
-  await expect(page.locator(".action-feedback")).toBeVisible();
+  await expect(card.getByLabel(/Risk here/)).toContainText("Safe");
+  await shot(page, info, "02-food-mart");
+  // Acting walks the player there, runs the existing action, and saves where they are.
+  await card
+    .getByRole("group", { name: "Moves at Southside Food Mart" })
+    .locator('[data-action="buy"]')
+    .first()
+    .getByRole("button", { name: /Go/ })
+    .click();
+  await expect(page.locator(".action-feedback")).toBeVisible({
+    timeout: 20000,
+  });
+  await expect(card).toContainText("You're here");
+  await expect
+    .poll(async () => (await saved(page)).presence?.location)
+    .toBe("south.food-mart");
 
-  // The home base offers rest; the storyline is reachable from the Towers.
-  await crumbs(page).getByRole("button", { name: "Southside" }).click();
-  await places(page, "Southside").getByRole("button", { name: /Southside Towers/ }).click();
-  await expect(page.getByRole("region", { name: "Southside Towers" })).toContainText("Your home turf");
-
-  // Lenses and the divided Nawf.
+  // Travel without acting: hostile ground reads as risk, and the trail is kept.
   await crumbs(page).getByRole("button", { name: "Stixx City" }).click();
-  await page.getByRole("button", { name: "Select The Nawf", exact: true }).click();
-  await page.getByRole("button", { name: "Influence", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Influence", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await shot(page, info, "04-nawf-influence");
-  await page.getByRole("button", { name: "Streets", exact: true }).click();
-  await places(page, "The Nawf").getByRole("button", { name: /Nawf Barbershop/ }).click();
-  const barber = page.getByRole("region", { name: "Nawf Barbershop" });
-  await expect(barber.getByRole("heading", { name: "Around here" })).toBeVisible();
+  await page
+    .getByRole("button", { name: "Select The Nawf", exact: true })
+    .click();
+  await places(page, "The Nawf")
+    .getByRole("button", { name: /Nawf Bodega/ })
+    .click();
+  const bodega = page.getByRole("region", { name: "Nawf Bodega" });
+  await expect(bodega.getByLabel(/Risk here/)).toContainText(
+    /Tense|Watchful|Hostile/,
+  );
+  await bodega.getByRole("button", { name: "Go here" }).click();
+  await expect(bodega).toContainText("You're here", { timeout: 20000 });
+  const after = await saved(page);
+  expect(after.presence.location).toBe("nawf.bodega");
+  expect(after.presence.trail.at(-1).location).toBe("south.food-mart");
+  await shot(page, info, "03-in-the-nawf");
 
-  // A planned place is honest about it.
+  // People stand in the world; a planned place is honest about it.
   await crumbs(page).getByRole("button", { name: "The Nawf" }).click();
-  await places(page, "The Nawf").getByRole("button", { name: /Nawf Community Center/ }).click();
-  await expect(page.getByRole("region", { name: "Nawf Community Center" })).toContainText("Coming to Stixx City");
+  await expect(page.locator(".board-person")).not.toHaveCount(0);
+  await places(page, "The Nawf")
+    .getByRole("button", { name: /Nawf Community Center/ })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Nawf Community Center" }),
+  ).toContainText("Coming to Stixx City");
 
-  // Existing screens open over the city and the dock still works.
-  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("button", { name: "Wallet", exact: true }).click();
+  // Your look is part of your character and survives saves.
+  await page.getByRole("button", { name: /your character/ }).click();
+  const look = page.getByRole("region", { name: "Your look" });
+  await look.getByRole("button", { name: "afro", exact: true }).click();
+  await look.getByRole("button", { name: "Done" }).click();
+  await expect
+    .poll(async () => (await saved(page)).presence?.appearance.hair)
+    .toBe("afro");
+  await shot(page, info, "04-new-look");
+
+  // The classic screens are a ledger over the city.
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Wallet", exact: true })
+    .click();
   await expect(page.locator(".business-panel")).toBeVisible();
   await page.getByRole("button", { name: "Back to the city" }).click();
   await expect(crumbs(page)).toBeVisible();
 });
 
-test("lab saves never touch production keys and The Reservoir is spelled right", async ({ page }) => {
-  const state = newGame("Morgan", "reservoir");
-  await seed(page, state);
-  await expect(page.getByRole("button", { name: "Select The Reservoir", exact: true })).toBeVisible();
+test("lab saves never touch production keys and The Reservoir is spelled right", async ({
+  page,
+}) => {
+  await seed(page, newGame("Morgan", "reservoir"));
+  await expect(
+    page.getByRole("button", { name: "Select The Reservoir", exact: true }),
+  ).toBeVisible();
   const keys = await page.evaluate(() => Object.keys(localStorage));
   expect(keys).toContain(AUTO_KEY);
   expect(keys.some((k) => k.startsWith("blackhouse.syndicate"))).toBe(false);

@@ -77,7 +77,28 @@ const character = z.object({
   rivalThreat: n,
 });
 const consequence = z.object({ trust: n, respect: n, grievance: n });
+import { BUILDS, HAIR, TOPS } from "../board/presence";
+// Strategy-board lab: where the player physically is and how they look.
+const presenceSchema = z.object({
+  location: z.string().min(1),
+  zone,
+  arrivedDay: integer.min(1),
+  trail: z.array(z.object({ location: z.string(), day: integer.min(1) })).max(12),
+  appearance: z.object({
+    skin: z.string(),
+    hair: z.enum(HAIR),
+    hairColor: z.string(),
+    top: z.enum(TOPS),
+    topColor: z.string(),
+    bottomColor: z.string(),
+    shoeColor: z.string(),
+    chain: z.boolean(),
+    build: z.enum(BUILDS),
+    model: z.string().optional(),
+  }),
+});
 const schema = z.object({
+  presence: presenceSchema.optional(),
   version: z.literal(8),
   street: streetSchema,
   strategic: strategicSchema,

@@ -44,6 +44,7 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     "Actions",
     "Set",
     "Wallet",
+    "Journal",
   ]);
   await expect(
     dock.getByRole("button", { name: "City", exact: true }),
@@ -114,16 +115,11 @@ test("City centers the five state-backed neighborhoods and keeps actions in Acti
     "data-theme",
     "independent",
   );
-  const activity = page.getByRole("region", { name: "Activity", exact: true });
-  expect(
-    await activity.evaluate(
-      (el) =>
-        !!(
-          document.querySelector(".zone-details")!.compareDocumentPosition(el) &
-          Node.DOCUMENT_POSITION_FOLLOWING
-        ),
-    ),
-  ).toBe(true);
+  // The board is the City; history and standing live in the Journal.
+  await nav(page, "Journal");
+  await expect(
+    page.getByRole("region", { name: "Activity", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Your position", exact: true }),
   ).toBeVisible();
@@ -195,6 +191,7 @@ test("storyline uses the active demand and opens its existing City conversation"
     await expect(page.locator(".story-alert")).toHaveCount(0);
     await expect(page.locator(".city-map")).toBeVisible();
     if (status !== "missing") {
+      await nav(page, "Journal");
       await page.getByText("Completed storylines", { exact: true }).click();
       await expect(page.locator(".situation-history")).toContainText(status);
       await expect(page.locator(".situation-history")).toContainText("sold");
@@ -224,6 +221,7 @@ test("City activity preserves visible history, reverse chronology, day groups, l
     observedBy: ["mega"],
   });
   await seed(page, state);
+  await nav(page, "Journal");
   await expect(page.locator("main")).not.toContainText("PRIVATE NPC ONLY");
   const feed = page.locator(".timeline");
   await expect(feed.locator("article")).toHaveCount(80);

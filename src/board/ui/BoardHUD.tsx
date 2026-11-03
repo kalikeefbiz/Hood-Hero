@@ -9,21 +9,27 @@ export function BoardHUD({
   s,
   save,
   load,
+  onLook,
 }: {
   s: GameState;
   save: () => void;
   load: () => void;
+  onLook: () => void;
 }) {
   const p = player(s);
   return (
     <header className="board-hud" aria-label="Player status">
       <strong className="day">DAY {s.day.toString().padStart(2, "0")}</strong>
-      <span className="board-hud-who">
+      <button
+        className="board-hud-who"
+        onClick={onLook}
+        aria-label={`${p.name}: your character`}
+      >
         <b>{p.name}</b>
         <strong className="affiliation">
           {p.affiliation ? s.factions[p.affiliation].name : "Independent"}
         </strong>
-      </span>
+      </button>
       <span
         className="ap"
         aria-label={`Action points ${s.ap} of ${BALANCE.dailyAP}`}

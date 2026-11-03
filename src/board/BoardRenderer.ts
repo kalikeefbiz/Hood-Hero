@@ -43,6 +43,8 @@ import {
 } from "./geo";
 import { facadeTextures, radialTexture, SignAtlas } from "./textures";
 import type { BoardView } from "./viewModel";
+import { buildFigure, loadFigureModel } from "./character";
+import { DEFAULT_APPEARANCE, type Appearance } from "./presence";
 
 export type TimeOfDay = "dusk" | "night" | "day";
 export type Lens = "streets" | "influence" | "police" | "opportunity";
@@ -296,6 +298,18 @@ export class BoardRenderer {
   };
   private trainZ = 0;
   private dynamic = new THREE.Group();
+  // Player piece and people on the board.
+  private token = new THREE.Group();
+  private tokenRing!: THREE.MeshBasicMaterial;
+  private tokenWalk: {
+    path: [number, number][];
+    t: number;
+    total: number;
+    done: () => void;
+  } | null = null;
+  private figures = new THREE.Group();
+  private tokenBody = new THREE.Group();
+  private appearanceKey = "";
   private focusLayer = new THREE.Group();
   private animated: ((t: number, dt: number) => void)[] = [];
   private dynamicAnimated: ((t: number, dt: number) => void)[] = [];
@@ -388,7 +402,8 @@ export class BoardRenderer {
     w.__stixxBuildMs = performance.now() - t0;
     // Exposed for the inspect-runtime workflow and automated checks.
     w.__stixxBoard = this;
-    this.scene.add(this.dynamic, this.focusLayer);
+    this.scene.add(this.dynamic, this.focusLayer, this.figures);
+    this.buildToken();
     this.setTimeOfDay("dusk");
     this.bindInput(el);
     document.addEventListener("visibilitychange", this.onVisibility);
@@ -527,6 +542,109 @@ export class BoardRenderer {
     }
     this.renderer.shadowMap.needsUpdate = true;
     this.wake();
+  }
+  /** Where a place's front door is: the piece and people stand here. */
+  static frontOf(placeId: string): [number, number] {
+    const l = LOCATIONS.find((l) => l.id === placeId)!;
+    const [x, z] = locationPosition(l);
+    const b = locationBlock(l);
+    return [x, b && !b.waterfront ? b.maxZ + 1.3 : z + 3];
+  }
+  /** Put the player's piece somewhere without animating. */
+  placeToken(placeId: string | null) {
+    if (!placeId) return;
+    const [x, z] = BoardRenderer.frontOf(placeId);
+    this.token.position.set(x, 0, z);
+    this.tokenWalk = null;
+    this.wake();
+  }
+  /** Walk the player's piece along the streets to a place; resolves on arrival. */
+  walkTo(placeId: string): Promise<void> {
+    const [tx, tz] = BoardRenderer.frontOf(placeId);
+    const fx = this.token.position.x,
+      fz = this.token.position.z;
+    if (Math.hypot(tx - fx, tz - fz) < 0.5 || this.reducedMotion) {
+      this.placeToken(placeId);
+      return Promise.resolve();
+    }
+    const path: [number, number][] = [
+      [fx, fz],
+      [fx, tz],
+      [tx, tz],
+    ];
+    let total = 0;
+    for (let i = 1; i < path.length; i++)
+      total += Math.hypot(
+        path[i][0] - path[i - 1][0],
+        path[i][1] - path[i - 1][1],
+      );
+    return new Promise((resolve) => {
+      this.tokenWalk = { path, t: 0, total, done: resolve };
+      this.wake();
+    });
+  }
+  /** World position (for HTML overlays) of a person standing at a place. */
+  personSpot(placeId: string, slot: number): THREE.Vector3 {
+    const [x, z] = BoardRenderer.frontOf(placeId);
+    const ox = ((slot % 3) - 1) * 1.7 + 1.4,
+      oz = Math.floor(slot / 3) * 1.3 + 0.4;
+    return new THREE.Vector3(x + ox, 1.7, z + oz);
+  }
+  /** Characters standing at places: one figure each, in their colors. */
+  setFigures(
+    list: { id: string; placeId: string; slot: number; color: string }[],
+  ) {
+    this.clear(this.figures);
+    if (!list.length) return;
+    const geo = new THREE.CapsuleGeometry(0.26, 0.66, 3, 8).translate(
+      0,
+      0.58,
+      0,
+    );
+    const mesh = new THREE.InstancedMesh(geo, this.plainMat, list.length);
+    list.forEach((f, i) => {
+      const v = this.personSpot(f.placeId, f.slot);
+      mesh.setMatrixAt(i, placed(v.x, CURB, v.z));
+      mesh.setColorAt(i, col(f.color));
+    });
+    this.figures.add(mesh);
+    this.wake();
+  }
+  /** A quick night-and-back pulse when the day ends. */
+  passDay() {
+    const keep = this.time;
+    this.timeApplied = false;
+    this.setTimeOfDay("night");
+    window.setTimeout(() => {
+      this.timeApplied = false;
+      this.setTimeOfDay(keep);
+    }, 1400);
+  }
+  /** Rebuild the player's figure from the character's appearance. */
+  setAppearance(a: Appearance) {
+    const key = JSON.stringify(a);
+    if (key === this.appearanceKey) return;
+    this.appearanceKey = key;
+    this.clear(this.tokenBody);
+    this.tokenBody.add(buildFigure(a));
+    if (a.model)
+      void loadFigureModel(`${import.meta.env.BASE_URL}${a.model}`)
+        .then((m) => {
+          if (this.appearanceKey !== key) return;
+          this.clear(this.tokenBody);
+          this.tokenBody.add(m);
+          this.wake();
+        })
+        .catch(() => {});
+    this.wake();
+  }
+  /** Face the direction of travel. */
+  private faceToward(dx: number, dz: number) {
+    if (Math.abs(dx) + Math.abs(dz) > 0.001)
+      this.tokenBody.rotation.y = Math.atan2(dx, dz);
+  }
+  setTokenColor(hex: string) {
+    this.tokenRing.color.set(hex);
   }
   overview() {
     this.setFocus({ zone: this.focus.zone, block: null, place: null }, false);
@@ -1684,6 +1802,62 @@ export class BoardRenderer {
       });
   }
 
+  private buildToken() {
+    this.setAppearance(DEFAULT_APPEARANCE);
+    this.tokenRing = new THREE.MeshBasicMaterial({
+      color: "#fff3d6",
+      transparent: true,
+      opacity: 0.9,
+      toneMapped: false,
+      depthWrite: false,
+    });
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.75, 1.05, 32).rotateX(-Math.PI / 2),
+      this.tokenRing,
+    );
+    ring.position.y = 0.32;
+    const marker = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.32, 0),
+      new THREE.MeshBasicMaterial({ color: "#fff3d6", toneMapped: false }),
+    );
+    marker.position.y = 2.7;
+    this.tokenBody.scale.setScalar(0.85);
+    this.token.add(this.tokenBody, ring, marker);
+    this.token.position.set(0, 0, 60);
+    this.scene.add(this.token);
+    this.animated.push((t, dt) => {
+      marker.position.y = 2.7 + Math.sin(t * 3) * 0.18;
+      marker.rotation.y += dt * 2;
+      this.tokenRing.opacity = 0.6 + 0.3 * Math.sin(t * 4);
+      const w = this.tokenWalk;
+      if (!w) return;
+      w.t = Math.min(w.total, w.t + dt * Math.max(14, w.total / 1.4));
+      let d = w.t;
+      for (let i = 1; i < w.path.length; i++) {
+        const [ax, az] = w.path[i - 1],
+          [bx, bz] = w.path[i];
+        const l = Math.hypot(bx - ax, bz - az);
+        if (d <= l || i === w.path.length - 1) {
+          const f = l ? Math.min(1, d / l) : 1;
+          this.token.position.set(
+            ax + (bx - ax) * f,
+            Math.abs(Math.sin(w.t * 2.2)) * 0.12,
+            az + (bz - az) * f,
+          );
+          this.faceToward(bx - ax, bz - az);
+          break;
+        }
+        d -= l;
+      }
+      if (w.t >= w.total) {
+        this.tokenWalk = null;
+        this.token.position.y = 0;
+        this.tokenBody.rotation.y = 0;
+        w.done();
+      }
+    });
+  }
+
   // ---- camera & input ------------------------------------------------------------
   private flyTo(x: number, z: number, d: number, yaw = this.yaw) {
     this.flight = {
@@ -1896,7 +2070,10 @@ export class BoardRenderer {
     }
     this.frame = requestAnimationFrame(this.tick);
     const active =
-      now - this.lastActive < 1200 || this.pointers.size > 0 || !!this.flight;
+      now - this.lastActive < 1200 ||
+      this.pointers.size > 0 ||
+      !!this.flight ||
+      !!this.tokenWalk;
     if (!active && (this.lite || this.reducedMotion)) {
       this.running = false;
       cancelAnimationFrame(this.frame);

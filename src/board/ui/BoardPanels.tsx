@@ -7,6 +7,17 @@ import { THEMES } from "../../ui/theme";
 import { ZONE_ORDER, blockById } from "../../city3d/layout";
 import { KIND_ICON, KIND_LABEL, LOCATIONS, locationById } from "../locations";
 import { placeActions, placeFacts, placePeople } from "../interactions";
+import { availableActions, validateAction } from "../../core/ActionEngine";
+import {
+  assessRisk,
+  presenceOf,
+  HAIR,
+  TOPS,
+  BUILDS,
+  SKIN_TONES,
+  type Appearance,
+  type Risk,
+} from "../presence";
 import type { BoardView } from "../viewModel";
 import type { Focus, Lens, TimeOfDay } from "../BoardRenderer";
 
@@ -254,6 +265,8 @@ export function PlaceSheet({
   showPolitics,
   setState,
   openStoryline,
+  goHere,
+  busy,
 }: {
   s: GameState;
   view: BoardView;
@@ -264,6 +277,8 @@ export function PlaceSheet({
   showPolitics: (zone: ZoneId) => void;
   setState: (s: GameState) => void;
   openStoryline?: () => void;
+  goHere: () => void;
+  busy: boolean;
 }) {
   const l = locationById(placeId);
   if (!l) return null;
@@ -304,7 +319,17 @@ export function PlaceSheet({
         {KIND_LABEL[l.kind]}
         {holder ? ` · ${holder} turf` : ""}
       </p>
-      <h3>{l.name}</h3>
+      <div className="inspector-title">
+        <h3>{l.name}</h3>
+        {presenceOf(s).location === l.id ? (
+          <span className="you-here">You're here</span>
+        ) : (
+          <button className="go-here" onClick={goHere} disabled={busy}>
+            Go here
+          </button>
+        )}
+      </div>
+      <RiskBadge risk={assessRisk(s, l.id)} />
       <p>{l.description}</p>
       {facts.map((f) => (
         <p className="board-facts" key={f}>
@@ -320,7 +345,7 @@ export function PlaceSheet({
         )}
       {actions.length > 0 && (
         <div
-          className="board-actions"
+          className="board-actions inspector-tiles quick-moves"
           aria-label={`Moves at ${l.name}`}
           role="group"
         >
@@ -464,6 +489,245 @@ export function DistrictPlaces({
           );
         })}
       </ul>
+    </section>
+  );
+}
+
+const RISK_LABEL: Record<Risk["level"], string> = {
+  safe: "Safe",
+  watchful: "Watchful",
+  tense: "Tense",
+  hostile: "Hostile",
+};
+/** How exposed you'd be here: turf, contest, police vs heat, notoriety. */
+export function RiskBadge({
+  risk,
+  compact = false,
+}: {
+  risk: Risk;
+  compact?: boolean;
+}) {
+  return (
+    <div
+      className={`risk-badge risk-${risk.level} ${compact ? "compact" : ""}`}
+      aria-label={`Risk here: ${RISK_LABEL[risk.level]}`}
+    >
+      <strong>{RISK_LABEL[risk.level]}</strong>
+      {!compact && risk.reasons[0] && (
+        <span>{risk.reasons.slice(0, 2).join(" ")}</span>
+      )}
+    </div>
+  );
+}
+
+/** A person on the board: who they are to you and what you can do together. */
+export function PersonInspector({
+  s,
+  personId,
+  renderAction,
+  openProfile,
+}: {
+  s: GameState;
+  personId: string;
+  renderAction: (a: import("../../core/ActionEngine").Action) => ReactNode;
+  openProfile: (id: string) => void;
+}) {
+  const c = s.characters[personId];
+  if (!c) return null;
+  const p = s.characters[s.playerId];
+  const known = p.known.includes(c.id);
+  const rel = c.relationships[p.id];
+  const moves = availableActions(s)
+    .filter((a) => a.target === c.id)
+    .sort(
+      (a, b) => Number(!!validateAction(s, a)) - Number(!!validateAction(s, b)),
+    )
+    .slice(0, 6);
+  return (
+    <section
+      className="panel board-card person-card"
+      aria-label={c.alias ?? c.name}
+      style={{
+        borderTopColor: c.affiliation
+          ? THEMES[c.affiliation].accent
+          : "#A8ADB3",
+      }}
+    >
+      <p className="eyebrow">
+        {s.zones[c.home].name} ·{" "}
+        {c.affiliation ? s.factions[c.affiliation].name : "Independent"}
+      </p>
+      <div className="inspector-title">
+        <h3>{known ? (c.alias ?? c.name) : "Someone from around here"}</h3>
+        {known && (
+          <button className="go-here" onClick={() => openProfile(c.id)}>
+            Profile
+          </button>
+        )}
+      </div>
+      <p>
+        {known
+          ? c.description
+          : "You haven't been introduced. Ask around, or get someone you know to vouch for you."}
+      </p>
+      {known && rel && (
+        <p className="board-facts">
+          Trust {Math.round(rel.trust)} · Respect {Math.round(rel.respect)}
+          {rel.grievance > 10
+            ? ` · Grievance ${Math.round(rel.grievance)}`
+            : ""}
+        </p>
+      )}
+      {moves.length > 0 && (
+        <div
+          className="board-actions inspector-tiles quick-moves"
+          role="group"
+          aria-label={`Moves with ${c.alias ?? c.name}`}
+        >
+          {moves.map((a) => renderAction(a))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** The player's own card: where they stand and what that means. */
+export function PresenceCard({
+  s,
+  onFind,
+  onLook,
+}: {
+  s: GameState;
+  onFind: () => void;
+  onLook: () => void;
+}) {
+  const pr = presenceOf(s);
+  const l = locationById(pr.location)!;
+  const risk = assessRisk(s, pr.location);
+  return (
+    <section
+      className="panel board-card presence-card"
+      aria-label="Your whereabouts"
+    >
+      <p className="eyebrow">You are at</p>
+      <div className="inspector-title">
+        <h3>{l.name}</h3>
+        <button className="go-here" onClick={onFind}>
+          Find me
+        </button>
+      </div>
+      <p className="muted">
+        {s.zones[l.zone].name} · since day {pr.arrivedDay}
+        {pr.trail.length
+          ? ` · came from ${locationById(pr.trail[pr.trail.length - 1].location)?.name}`
+          : ""}
+      </p>
+      <RiskBadge risk={risk} />
+      <button className="text-button" onClick={onLook}>
+        Change your look →
+      </button>
+    </section>
+  );
+}
+
+const TOP_COLORS = [
+  "#2b2f36",
+  "#d8d2c4",
+  "#7a1f2b",
+  "#3a5a7a",
+  "#2f5a3a",
+  "#c9a04a",
+  "#5a2a6a",
+  "#cd7935",
+];
+const BOTTOM_COLORS = ["#3a4a6a", "#2a2a2a", "#6a5a44", "#8a8f94", "#4a3a2c"];
+const HAIR_COLORS = [
+  "#1c1612",
+  "#3a2416",
+  "#6a4428",
+  "#b08a5a",
+  "#d9d2c4",
+  "#8e51cb",
+];
+/** First pass of character customization: drives the figure on the board. */
+export function AppearancePanel({
+  appearance,
+  onChange,
+  onClose,
+}: {
+  appearance: Appearance;
+  onChange: (a: Appearance) => void;
+  onClose: () => void;
+}) {
+  const set = <K extends keyof Appearance>(k: K, v: Appearance[K]) =>
+    onChange({ ...appearance, [k]: v });
+  const swatches = (
+    label: string,
+    list: string[],
+    key: "skin" | "topColor" | "bottomColor" | "hairColor",
+  ) => (
+    <fieldset className="look-row">
+      <legend>{label}</legend>
+      {list.map((c) => (
+        <button
+          key={c}
+          aria-label={`${label} ${c}`}
+          aria-pressed={appearance[key] === c}
+          className="swatch"
+          style={{ background: c }}
+          onClick={() => set(key, c)}
+        />
+      ))}
+    </fieldset>
+  );
+  const options = <T extends string>(
+    label: string,
+    list: readonly T[],
+    key: "hair" | "top" | "build",
+  ) => (
+    <fieldset className="look-row">
+      <legend>{label}</legend>
+      {list.map((o) => (
+        <button
+          key={o}
+          aria-pressed={appearance[key] === o}
+          className="look-option"
+          onClick={() => set(key, o as Appearance[typeof key])}
+        >
+          {o}
+        </button>
+      ))}
+    </fieldset>
+  );
+  return (
+    <section className="panel board-card look-panel" aria-label="Your look">
+      <div className="inspector-title">
+        <h3>Your look</h3>
+        <button className="go-here" onClick={onClose}>
+          Done
+        </button>
+      </div>
+      <p className="muted">
+        How you show up on the streets. A full character creator will replace
+        this.
+      </p>
+      {swatches("Skin", SKIN_TONES, "skin")}
+      {options("Hair", HAIR, "hair")}
+      {swatches("Hair color", HAIR_COLORS, "hairColor")}
+      {options("Top", TOPS, "top")}
+      {swatches("Top color", TOP_COLORS, "topColor")}
+      {swatches("Pants", BOTTOM_COLORS, "bottomColor")}
+      {options("Build", BUILDS, "build")}
+      <fieldset className="look-row">
+        <legend>Chain</legend>
+        <button
+          className="look-option"
+          aria-pressed={appearance.chain}
+          onClick={() => set("chain", !appearance.chain)}
+        >
+          {appearance.chain ? "On" : "Off"}
+        </button>
+      </fieldset>
     </section>
   );
 }
