@@ -1,0 +1,79 @@
+
+> syndicate@0.1.0 test:e2e
+> playwright test tests/strategy.spec.ts tests/city-menu.spec.ts tests/corrections.spec.ts tests/street.spec.ts --workers=2 --timeout=90000
+
+[WebServer] (node:29564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 52 tests using 2 workers
+
+(node:29582) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29581) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation (3.5s)
+  ✓   2 [chromium-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (4.7s)
+  ✓   3 [chromium-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (2.0s)
+  ✓   4 [chromium-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (3.5s)
+  ✓   5 [chromium-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (9.7s)
+  ✓   6 [chromium-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (7.7s)
+  ✓   7 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (1.6s)
+  ✓   8 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (1.8s)
+  ✓   9 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (2.0s)
+  ✓  10 [chromium-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (1.8s)
+  ✓  12 [chromium-mobile] › tests/strategy.spec.ts:96:1 › simulation-resolved control change and council succession progression (2.1s)
+  ✓  11 [chromium-mobile] › tests/strategy.spec.ts:49:1 › actual local investment, contested map, autonomous decisions and persisted continuation (3.4s)
+  ✓  13 [chromium-mobile] › tests/strategy.spec.ts:118:1 › earned affiliation authority restriction and advancement use existing sponsorship (1.9s)
+  ✓  15 [chromium-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 320px (1.4s)
+  ✓  14 [chromium-mobile] › tests/strategy.spec.ts:144:1 › business acquisition, real operating income, sale, and voluntary retirement (4.1s)
+  ✓  16 [chromium-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 375px (2.1s)
+  ✓  17 [chromium-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 390px (1.9s)
+  ✓  18 [chromium-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 430px (1.9s)
+CUSTODY {"engine":"chromium-mobile","arrestDay":24,"releaseDay":26,"cashBefore":291,"cashAfter":255,"debtAfter":0,"loco":"arrested","campaignEnd":null}
+  ✓  20 [chromium-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay (9.7s)
+  ✓  21 [chromium-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences (4.5s)
+  ✓  22 [chromium-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory (1.6s)
+  ✓  23 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px (979ms)
+  ✓  24 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px (1.0s)
+  ✓  25 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px (1.0s)
+  ✓  26 [chromium-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px (1.0s)
+JOURNEY {"engine":"chromium-mobile","day":5,"cash":{"clean":0,"illicit":190},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":275,"owed":0,"paid":102,"losses":36,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-33","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-32"},{"id":"transaction-35","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-34"},{"id":"transaction-57","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-56"},{"id":"transaction-59","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-58"},{"id":"transaction-80","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-79"},{"id":"transaction-82","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-81"},{"id":"transaction-103","day":5,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-102"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-32","event-34","event-56","event-58","event-79","event-81","event-102","event-105"]}}
+(node:30040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  19 [chromium-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (21.7s)
+(node:30072) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  28 [webkit-mobile] › tests/city-menu.spec.ts:167:1 › storyline uses the active demand and opens its existing City conversation (6.9s)
+  ✓  27 [webkit-mobile] › tests/city-menu.spec.ts:31:1 › City centers the five state-backed neighborhoods and keeps actions in Actions (8.5s)
+  ✓  29 [webkit-mobile] › tests/city-menu.spec.ts:208:1 › City activity preserves visible history, reverse chronology, day groups, limits and filters (4.0s)
+  ✓  30 [webkit-mobile] › tests/corrections.spec.ts:54:1 › Actions separate Streets, Honest and Connects; completed reach-out returns to Streets (6.4s)
+  ✓  32 [webkit-mobile] › tests/corrections.spec.ts:162:1 › active Chains lives in City; fulfillment leaves only completed history (10.0s)
+  ✓  31 [webkit-mobile] › tests/corrections.spec.ts:104:1 › known suspects and leaders need real introductions; access and inventory survive reload (14.9s)
+  ✓  33 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 320px (3.6s)
+  ✓  34 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 375px (4.5s)
+  ✓  35 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 390px (4.6s)
+  ✓  36 [webkit-mobile] › tests/corrections.spec.ts:189:3 › all three categories and inventory fit 430px (4.8s)
+  ✓  37 [webkit-mobile] › tests/strategy.spec.ts:49:1 › actual local investment, contested map, autonomous decisions and persisted continuation (8.1s)
+  ✓  38 [webkit-mobile] › tests/strategy.spec.ts:96:1 › simulation-resolved control change and council succession progression (5.4s)
+  ✓  39 [webkit-mobile] › tests/strategy.spec.ts:118:1 › earned affiliation authority restriction and advancement use existing sponsorship (4.2s)
+  ✓  41 [webkit-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 320px (4.0s)
+  ✓  40 [webkit-mobile] › tests/strategy.spec.ts:144:1 › business acquisition, real operating income, sale, and voluntary retirement (8.7s)
+  ✓  42 [webkit-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 375px (4.4s)
+  ✓  43 [webkit-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 390px (4.3s)
+  ✓  44 [webkit-mobile] › tests/strategy.spec.ts:178:3 › strategy, organization and businesses fit 430px (4.1s)
+CUSTODY {"engine":"webkit-mobile","arrestDay":24,"releaseDay":26,"cashBefore":291,"cashAfter":255,"debtAfter":0,"loco":"arrested","campaignEnd":null}
+  ✓  46 [webkit-mobile] › tests/street.spec.ts:240:1 › seeded real-play arrest serves every day and releases into continued gameplay (11.7s)
+  ✓  47 [webkit-mobile] › tests/street.spec.ts:293:1 › default reaction and accumulated heat are rendered from real simulated consequences (7.0s)
+  ✓  48 [webkit-mobile] › tests/street.spec.ts:313:1 › crew-assisted street work uses an earned willing partner and actual inventory (2.4s)
+JOURNEY {"engine":"webkit-mobile","day":5,"cash":{"clean":0,"illicit":190},"lot":{"id":"lot-3","category":"nightgoods","owner":"player","supplier":"mega","zone":"south","received":6,"remaining":0,"lost":0,"cost":102,"expectedGross":282,"collected":275,"owed":0,"paid":102,"losses":36,"crewPaid":0,"dueDay":7,"acquiredDay":1,"arrangement":"consignment","status":"settled","agreementId":"agreement-6"},"transactions":[{"id":"transaction-8","day":1,"lotId":"lot-3","market":"south","actor":"player","sold":2,"lost":0,"gross":94,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-7"},{"id":"transaction-33","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"none","eventId":"event-32"},{"id":"transaction-35","day":2,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-34"},{"id":"transaction-57","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":0,"lost":0,"gross":0,"loss":18,"crewPaid":0,"crewLoss":0,"outcome":"money-loss","eventId":"event-56"},{"id":"transaction-59","day":3,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":46,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-58"},{"id":"transaction-80","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-79"},{"id":"transaction-82","day":4,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"partial","eventId":"event-81"},{"id":"transaction-103","day":5,"lotId":"lot-3","market":"south","actor":"player","sold":1,"lost":0,"gross":45,"loss":0,"crewPaid":0,"crewLoss":0,"outcome":"sale","eventId":"event-102"}],"agreement":{"id":"agreement-6","lotId":"lot-3","supplier":"mega","debtor":"player","original":102,"repaid":102,"balance":0,"dueDay":7,"status":"fulfilled","commitmentId":"commitment-5","history":["event-4","event-7","event-32","event-34","event-56","event-58","event-79","event-81","event-102","event-105"]}}
+  ✓  45 [webkit-mobile] › tests/street.spec.ts:143:1 › supplier to inventory to multiple real sales and repayment through normal mobile controls (27.3s)
+  ✓  49 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 320px (3.6s)
+  ✓  50 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 375px (4.3s)
+  ✓  51 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 390px (4.1s)
+  ✓  52 [webkit-mobile] › tests/street.spec.ts:330:3 › street inventory and supplier modal fit 430px (2.8s)
+
+  52 passed (2.3m)

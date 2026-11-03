@@ -1,0 +1,57 @@
+
+> syndicate@0.1.0 build
+> tsc -b && vite build && node scripts/build-info.mjs
+
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 201 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                      0.63 kB │ gzip:   0.39 kB
+dist/assets/barlow-condensed-vietnamese-600-normal-CNlPk46_.woff     6.08 kB
+dist/assets/barlow-condensed-vietnamese-700-normal-DhIzd8Tb.woff     6.10 kB
+dist/assets/barlow-condensed-vietnamese-700-italic-5nF77AAc.woff     6.32 kB
+dist/assets/dm-sans-latin-ext-400-normal-BtiwyxMk.woff2              7.36 kB
+dist/assets/dm-sans-latin-ext-600-normal-4vooXBpG.woff2              7.42 kB
+dist/assets/barlow-condensed-vietnamese-700-normal-DYeBwlKR.woff2    7.64 kB
+dist/assets/barlow-condensed-vietnamese-600-normal-A5AYRdjN.woff2    7.70 kB
+dist/assets/barlow-condensed-vietnamese-700-italic-CIM4raJp.woff2    7.79 kB
+dist/assets/dm-sans-latin-ext-400-normal-BjWJ59Pq.woff               9.98 kB
+dist/assets/dm-sans-latin-ext-600-normal-DRtaDpgU.woff              10.02 kB
+dist/assets/barlow-condensed-latin-ext-600-normal-Clv9cIcR.woff     11.97 kB
+dist/assets/barlow-condensed-latin-ext-700-normal-BIHFfxf0.woff     11.99 kB
+dist/assets/barlow-condensed-latin-ext-700-italic-BL4pfkGS.woff     12.79 kB
+dist/assets/dm-sans-latin-600-normal-Aqo67rzb.woff2                 14.14 kB
+dist/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2                 14.20 kB
+dist/assets/barlow-condensed-latin-ext-600-normal-18ESti3H.woff2    14.52 kB
+dist/assets/barlow-condensed-latin-ext-700-normal-CwuXbfVR.woff2    14.64 kB
+dist/assets/barlow-condensed-latin-ext-700-italic-CbhzQEkf.woff2    15.10 kB
+dist/assets/dm-sans-latin-600-normal-BmdmIIQ2.woff                  18.32 kB
+dist/assets/dm-sans-latin-400-normal-BwCSEQnW.woff                  18.36 kB
+dist/assets/barlow-condensed-latin-700-normal-Dmwat-ge.woff         18.82 kB
+dist/assets/barlow-condensed-latin-600-normal-BFJEwTuo.woff         18.89 kB
+dist/assets/barlow-condensed-latin-700-italic-B90Hg2GM.woff         20.76 kB
+dist/assets/barlow-condensed-latin-600-normal-DepVgxBB.woff2        22.31 kB
+dist/assets/barlow-condensed-latin-700-normal-v1xN8_Wq.woff2        22.44 kB
+dist/assets/barlow-condensed-latin-700-italic-DjyOzRJ7.woff2        23.80 kB
+dist/assets/patina-tcrKVhE-.png                                    107.69 kB
+dist/assets/index-DD9_UUZw.css                                      74.71 kB │ gzip:  15.22 kB
+dist/assets/index-VseYwaNC.js                                      524.51 kB │ gzip: 163.71 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.73s

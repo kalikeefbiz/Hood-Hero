@@ -23,8 +23,8 @@ test.beforeEach(async ({ page }) => {
     expect(r.ok()).toBe(true);
     const info = await r.json();
     expect(info.commit).toBe(process.env.PLAYWRIGHT_EXPECTED_COMMIT);
-    expect(info.milestone).toBe("GOAL 006.1");
-    expect(info.saveSchema).toBe(7);
+    expect(info.milestone).toBe("GOAL 007");
+    expect(info.saveSchema).toBe(8);
   }
 });
 async function state(page: Page) {

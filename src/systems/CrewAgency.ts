@@ -1,3 +1,4 @@
+import { applyInfluence } from "./Territory";
 import { saleLot, transactionChance } from "./StreetEconomy";
 import {
   cash,
@@ -441,6 +442,20 @@ export function resolveAssignment(s: GameState, a: CrewAssignment) {
       ? shareInformation(s, a)
       : `${c.name}: “I asked around, but couldn't confirm anything. I'll keep my eyes open.”`;
   if (a.success) {
+    applyInfluence(s, {
+      actor: c.id,
+      participants: [p.id],
+      faction: c.affiliation === p.affiliation ? p.affiliation : null,
+      zone: c.home,
+      kind:
+        a.activity === "work" || a.activity === "partner-gig"
+          ? "economic"
+          : "community",
+      magnitude: 1,
+      cause: `${c.name}'s completed Set commitment supported local ties.`,
+    });
+    if (p.affiliation && c.affiliation === p.affiliation)
+      s.strategic.contributions[p.affiliation] += 5;
     a.experience = Math.min(
       1,
       Math.max(0, CREW_BALANCE.growthCap - c.skills[a.skill]),

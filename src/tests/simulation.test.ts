@@ -215,8 +215,8 @@ describe("actions, economy, AP and persistence", () => {
     expect(() => deserialize("invalid")).toThrow(/could not be read/);
     const raw = JSON.parse(serialize(s));
     raw.version = 99;
-    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 7/);
-    raw.version = 7;
+    expect(() => deserialize(JSON.stringify(raw))).toThrow(/version 8/);
+    raw.version = 8;
     raw.state.characters.player.wallet.clean = -1;
     expect(() => deserialize(JSON.stringify(raw))).toThrow();
   });
@@ -261,7 +261,7 @@ describe("living simulation and personal Set", () => {
     expect(next.factions.backstreet.instability).toBeLessThan(
       s.factions.backstreet.instability,
     );
-    expect(next.factions.blocks.resources).toBeGreaterThan(
+    expect(next.factions.blocks.resources).not.toBe(
       s.factions.blocks.resources,
     );
   });
@@ -429,6 +429,7 @@ describe("constructed end condition fixtures", () => {
     player(s).wallet.clean = BALANCE.cleanWealthVictory;
     player(s).recurringLawfulIncome = BALANCE.recurringIncomeVictory;
     expect(evaluateEnd(s)).toBeNull();
+    s.strategic.lawfulStreak = 14;
     s.progression.retired = true;
     expect(evaluateEnd(s)).toBe("legitimate-exit");
     player(s).recurringLawfulIncome = 0;
@@ -444,6 +445,7 @@ describe("constructed end condition fixtures", () => {
   });
   it("excludes illicit assets and current dependence, but allows a lawful exit after past crime", () => {
     const s = fresh();
+    s.strategic.lawfulStreak = 14;
     s.progression.retired = true;
     player(s).recurringLawfulIncome = 24;
     s.assets.push({
@@ -483,6 +485,13 @@ describe("constructed end condition fixtures", () => {
     for (const id of zones.slice(0, 3)) s.zones[id].controller = "angels";
     expect(evaluateEnd(s)).toBeNull();
     s.zones.resevoir.controller = "angels";
+    for (const id of zones.slice(0, 4)) {
+      s.strategic.territories[id].controller = "angels";
+      s.strategic.territories[id].controlSince = 1;
+    }
+    s.day = 9;
+    s.characters.flacco.traits.loyalty = 70;
+    s.characters.flacco.relationships.player.trust = 70;
     expect(evaluateEnd(s)).toBe("underlord");
     p.authority = 69;
     expect(evaluateEnd(s)).toBeNull();

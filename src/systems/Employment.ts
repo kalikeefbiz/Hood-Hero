@@ -1,3 +1,4 @@
+import { applyInfluence } from "./Territory";
 import { clamp, type Employment, type GameState } from "../core/GameState";
 import { record } from "../core/EventLog";
 import { random } from "../core/Random";
@@ -220,6 +221,14 @@ export function workShift(s: GameState, actor: string) {
     "clean",
     `Scheduled shift · ${jobDefinition(e.jobId).name}`,
   );
+  applyInfluence(s, {
+    actor,
+    faction: null,
+    zone: e.location,
+    kind: "economic",
+    magnitude: 0.5,
+    cause: `${c.name} supported lawful trade through scheduled employment.`,
+  });
   c.stress = clamp(c.stress + 8);
   c.skills.work = clamp(c.skills.work + 1);
   c.legitimacy = clamp(c.legitimacy + 3);

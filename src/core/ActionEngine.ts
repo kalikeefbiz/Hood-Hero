@@ -1,3 +1,6 @@
+import { applyInfluence } from "../systems/Territory";
+import { STRATEGY_BALANCE } from "../content/strategy";
+import { finalizeEnding } from "../systems/EndConditions";
 import {
   marketAccess,
   transactionError,
@@ -32,7 +35,7 @@ import { evaluatePromises } from "../systems/Commitments";
 import { requestActivity, requestError } from "../systems/CrewAgency";
 import { recoverySupport } from "../systems/Crew";
 import { progress } from "../systems/Progression";
-import { evaluateEnd } from "../systems/EndConditions";
+
 import {
   currentEmployment,
   shiftToday,
@@ -561,7 +564,11 @@ export function resolveAction(s: GameState, a: Action) {
     case "buyback": {
       const paid = expense(s, c, i!.demand, "Property buyback")!;
       // Group custody and group payment are retained; no invented individual holder.
-      s.factions[i!.organization].resources += paid.clean + paid.illicit;
+      s.factions[i!.organization].resources = clamp(
+        s.factions[i!.organization].resources + paid.clean + paid.illicit,
+        0,
+        STRATEGY_BALANCE.resourceCap,
+      );
       resolveIncident(s, i!, "buyback", c.id);
       text = `${c.name} paid $${i!.demand} to settle the demand.`;
       category = "money";
@@ -650,6 +657,7 @@ export function resolveAction(s: GameState, a: Action) {
     case "affiliate":
       c.affiliation = t!.affiliation as FactionId;
       c.authority = 10;
+      if (c.id === s.playerId) s.strategic.membershipDay = s.day;
       change(t!, c.id, { respect: 5 });
       text = `${t!.name} sponsored ${c.name} into ${s.factions[c.affiliation].name}. Your Set remains a personal crew.`;
       break;
@@ -657,6 +665,29 @@ export function resolveAction(s: GameState, a: Action) {
       c.stress = clamp(c.stress - 14);
       text = `${c.name} took a quiet afternoon. Stress eased.`;
       break;
+  }
+  if (
+    c.id === s.playerId &&
+    ["standing", "offer", "socialize", "gig", "work"].includes(a.type)
+  ) {
+    const zone = t?.home ?? c.home;
+    const faction = a.type === "standing" ? (t?.affiliation ?? null) : null;
+    applyInfluence(s, {
+      actor: c.id,
+      participants: t ? [t.id] : [],
+      faction,
+      zone,
+      kind:
+        a.type === "gig"
+          ? "economic"
+          : a.type === "standing"
+            ? "support"
+            : "community",
+      magnitude: a.type === "standing" ? 1.5 : 0.3,
+      cause: `${c.name}'s ${a.type} activity supported local ${faction ? "organizational ties" : "civilian life"}.`,
+    });
+    if (c.id === s.playerId && faction && c.affiliation === faction)
+      s.strategic.contributions[faction] += 2;
   }
   const e = record(
     s,
@@ -699,7 +730,7 @@ export function resolveAction(s: GameState, a: Action) {
   }
   if (c.id === s.playerId) {
     progress(s);
-    s.end = evaluateEnd(s);
+    finalizeEnding(s);
   }
   return e;
 }
@@ -748,7 +779,7 @@ export function performAction(
         { importance: "personal", title: "New market access" },
       );
   progress(next);
-  next.end = evaluateEnd(next);
+  finalizeEnding(next);
   syncEncounters(next);
   return { state: next, error: null, event };
 }

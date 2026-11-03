@@ -32,6 +32,7 @@ export function addExposure(
   weight = B.actionExposure,
   significant = weight >= B.significantExposure,
 ) {
+  if (id === s.playerId) s.strategic.lastCrimeDay = s.day;
   const c = s.characters[id],
     x = exposure(s, id);
   x.recent.push({ day: s.day, zone, weight });

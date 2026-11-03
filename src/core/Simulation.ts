@@ -1,3 +1,4 @@
+import { syncTerritory, newStrategy } from "../systems/Territory";
 import { newStreetState } from "../systems/StreetEconomy";
 import { type GameState, type ZoneId } from "./GameState";
 import { ZONES } from "../content/city";
@@ -26,7 +27,8 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     },
   );
   const s: GameState = {
-    version: 7,
+    version: 8,
+    strategic: newStrategy({ zones: ZONES, factions: FACTIONS }),
     street: newStreetState(),
     day: 1,
     ap: BALANCE.dailyAP,
@@ -54,6 +56,7 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     progression: { cleanEarned: 0, illicitEarned: 0, jobs: 0, retired: false },
     end: null,
   };
+  for (const z of Object.values(s.zones)) syncTerritory(s, z.id);
   initializeRelationships(s);
   openingIncident(s);
   syncEncounters(s);

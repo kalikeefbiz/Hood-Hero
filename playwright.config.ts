@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+const port = process.env.PLAYWRIGHT_PORT || "4173";
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
@@ -7,7 +8,7 @@ export default defineConfig({
   use: {
     baseURL:
       process.env.PLAYWRIGHT_PUBLIC_URL ||
-      `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
+      `http://127.0.0.1:${port}${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
     trace: "retain-on-failure",
     proxy:
       process.env.PLAYWRIGHT_PUBLIC_URL && process.env.HTTPS_PROXY
@@ -38,8 +39,8 @@ export default defineConfig({
             process.env.VITE_BASE_PATH ||
             "/",
         },
-        command: "npm run preview -- --port 4173",
-        url: `http://127.0.0.1:4173${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
+        command: `npm run preview -- --port ${port}`,
+        url: `http://127.0.0.1:${port}${process.env.PLAYWRIGHT_BASE_PATH || "/"}`,
         reuseExistingServer: !process.env.CI,
       },
 });

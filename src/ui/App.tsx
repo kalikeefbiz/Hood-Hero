@@ -1,3 +1,9 @@
+import {
+  NeighborhoodStrategy,
+  OrganizationPanel,
+  BusinessPanel,
+  RetirementPanel,
+} from "./StrategyPanels";
 import { ActionsHub, type ActionCategory } from "./ActionsHub";
 import { InventoryWallet } from "./InventoryWallet";
 import { accessStatus, contactError } from "../systems/Relationships";
@@ -379,7 +385,7 @@ export function App() {
   return (
     <div
       className={`game-shell screen-${screen.toLowerCase()}`}
-      style={themeStyle(p.affiliation)}
+      style={themeStyle(null)}
       data-theme={p.affiliation ?? "independent"}
     >
       <a className="skip-link" href="#main-content">
@@ -535,6 +541,10 @@ export function App() {
                     : `Victory: ${s.end}`}
               </h3>
               <p>
+                {s.strategic.ending
+                  ? s.events.find((e) => e.id === s.strategic.ending?.eventId)
+                      ?.text
+                  : ""}{" "}
                 Your history remains available to inspect. Start a new life from
                 the game menu below.
               </p>
@@ -634,6 +644,12 @@ export function App() {
                         ? s.factions[s.zones[selected].controller!].name
                         : "No single controller"}
                     </p>
+                    <NeighborhoodStrategy
+                      key={selected}
+                      s={s}
+                      zone={selected}
+                      onChange={setState}
+                    />
                     <div className="tags">
                       {s.zones[selected].organizations.length ? (
                         s.zones[selected].organizations.map((f) => (
@@ -890,6 +906,7 @@ export function App() {
           )}
           {screen === "Set" && (
             <>
+              <OrganizationPanel s={s} onChange={setState} />
               <Panel>
                 <div className="panel-title">
                   <h3>A personal crew.</h3>
@@ -1120,6 +1137,8 @@ export function App() {
                   setScreen("City");
                 }}
               />
+              <BusinessPanel s={s} onChange={setState} />
+              <RetirementPanel s={s} onChange={setState} />
               <h3>Personal purchases</h3>
               <div className="action-grid">
                 {all.filter((a) => a.type === "buy").map(actionCard)}
