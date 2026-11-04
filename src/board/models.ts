@@ -17,6 +17,18 @@ export const MODEL_FILES = {
   policeCruiser: "assets/models/police-cruiser.glb",
 } as const;
 
+/** A GLTFLoader that reads the board's meshopt geometry and KTX2 textures. */
+export async function boardGltfLoader() {
+  const [{ GLTFLoader }, { MeshoptDecoder }, ktx] = await Promise.all([
+    import("three/examples/jsm/loaders/GLTFLoader.js"),
+    import("three/examples/jsm/libs/meshopt_decoder.module.js"),
+    ktx2Loader(),
+  ]);
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  if (ktx) loader.setKTX2Loader(ktx as Parameters<typeof loader.setKTX2Loader>[0]);
+  return loader;
+}
+
 /** One mesh + material, normalised for instancing (cars) or placement. */
 export interface ModelPiece {
   geometry: THREE.BufferGeometry;

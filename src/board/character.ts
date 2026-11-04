@@ -202,9 +202,8 @@ export function buildFigure(a: Appearance): THREE.Group {
 
 /** Load a GLB figure and fit it to the board's figure height. */
 export async function loadFigureModel(url: string): Promise<THREE.Group> {
-  const { GLTFLoader } =
-    await import("three/examples/jsm/loaders/GLTFLoader.js");
-  const gltf = await new GLTFLoader().loadAsync(url);
+  const { boardGltfLoader } = await import("./models");
+  const gltf = await (await boardGltfLoader()).loadAsync(url);
   const root = new THREE.Group();
   root.add(gltf.scene);
   const box = new THREE.Box3().setFromObject(gltf.scene);

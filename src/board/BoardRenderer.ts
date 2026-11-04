@@ -44,6 +44,12 @@ import {
 import { facadeTextures, radialTexture, SignAtlas } from "./textures";
 import type { BoardView } from "./viewModel";
 import { buildFigure, loadFigureModel } from "./character";
+import {
+  hasCharacterModel,
+  spawnCharacter,
+  type CharacterInstance,
+  type Motion,
+} from "./characterModels";
 import { DEFAULT_APPEARANCE, type Appearance } from "./presence";
 import {
   MODEL_FILES,
@@ -610,27 +616,57 @@ export class BoardRenderer {
     const [x, z] = BoardRenderer.frontOf(placeId);
     const ox = ((slot % 3) - 1) * 1.7 + 1.4,
       oz = Math.floor(slot / 3) * 1.3 + 0.4;
-    return new THREE.Vector3(x + ox, 1.7, z + oz);
+    // Pins sit above a full-height character model's head (1.9).
+    return new THREE.Vector3(x + ox, 2.3, z + oz);
   }
   /** Characters standing at places: one figure each, in their colors. */
+  private characters = new Map<string, CharacterInstance>();
+  private figureGen = 0;
   setFigures(
     list: { id: string; placeId: string; slot: number; color: string }[],
   ) {
     this.clear(this.figures);
-    if (!list.length) return;
+    this.characters.clear();
+    const gen = ++this.figureGen;
+    // Named characters with a rigged model stand in person; everyone else is
+    // a capsule in the crowd layer.
+    const crowd = list.filter((f) => !hasCharacterModel(f.id));
+    for (const f of list.filter((f) => hasCharacterModel(f.id)))
+      void spawnCharacter(f.id).then((c) => {
+        if (!c || gen !== this.figureGen) return;
+        const v = this.personSpot(f.placeId, f.slot);
+        c.root.position.set(v.x, CURB, v.z);
+        c.root.name = `character:${f.id}`;
+        this.figures.add(c.root);
+        this.characters.set(f.id, c);
+        this.renderer.shadowMap.needsUpdate = true;
+        this.wake();
+      });
+    if (!crowd.length) return;
     const geo = new THREE.CapsuleGeometry(0.26, 0.66, 3, 8).translate(
       0,
       0.58,
       0,
     );
-    const mesh = new THREE.InstancedMesh(geo, this.plainMat, list.length);
-    list.forEach((f, i) => {
+    const mesh = new THREE.InstancedMesh(geo, this.plainMat, crowd.length);
+    crowd.forEach((f, i) => {
       const v = this.personSpot(f.placeId, f.slot);
       mesh.setMatrixAt(i, placed(v.x, CURB, v.z));
       mesh.setColorAt(i, col(f.color));
     });
     this.figures.add(mesh);
     this.wake();
+  }
+  /**
+   * Play a clip on a named character's model ("stand", "walk", "run", or any
+   * clip added to CHARACTER_MODELS later). Returns false if they have none.
+   */
+  characterMotion(id: string, motion: Motion) {
+    const c = this.characters.get(id);
+    if (!c) return false;
+    c.play(motion);
+    this.wake();
+    return true;
   }
   /** A quick night-and-back pulse when the day ends. */
   passDay() {
@@ -825,6 +861,7 @@ export class BoardRenderer {
     this.buildRiver();
     for (const zone of ZONE_ORDER) this.buildDistrict(zone);
     this.buildSetPieces();
+    this.animated.push((_, dt) => this.characters.forEach((c) => c.update(dt)));
     this.buildFiller();
     this.buildStreetFurniture();
     this.buildTraffic();
@@ -1548,6 +1585,8 @@ export class BoardRenderer {
   private clear(group: THREE.Group) {
     for (const child of [...group.children]) {
       group.remove(child);
+      // Rigged characters share geometry and textures with a cached template.
+      if (child.userData.sharedModel) continue;
       child.traverse((o) => {
         const m = o as THREE.Mesh;
         if (m.geometry && !sharedModelGeometry.has(m.geometry))
