@@ -113,12 +113,19 @@ Set `model: "assets/models/<file>.glb"` on a location. The board measures the fo
 | `corner-bodega.glb` | Rio Gabriel Bodega, Southside Food Mart, Lil Jay's Market, Nawf Bodega |
 | `lowrider.glb` | Three lowriders cruising Rio Gabriel's inner streets |
 | `police-cruiser.glb` | Every patrol car (count still follows district police pressure) |
+| `brick-corner.glb` | Designer Drop, The Spot, Reservoir Laundry (from studio art) |
+| `bungalow.glb` | Reservoir homes (from studio art, `modelFit.scale` 0.62) |
+| `boarded-house.glb` | Boarded house (from studio art) |
+| `el-deli.glb` | Nawf Deli & Grocery (from studio art) |
+| `nawf-projects.glb` | Nawf Projects (from studio art) |
+
+Studio art goes straight into image-to-3D (15 credits). What converts best: one isolated building, three-quarter view from slightly above, plain background, full roof visible, doors closed. Open roll-up doors and see-through interiors come back hollow (the first garage attempt was dropped for this).
 
 Recipe that kept the cost to 18 credits a model: a `nano-banana-2-lite` concept image (3 credits, single object, three-quarter view, white background), then `image-to-3d --model-type smart-topology --ai-model meshy-t2.5 --target-polycount 2500–5000 --texture-resolution 2k --enable-pbr false` (15), then `gltf-transform optimize --texture-compress webp --texture-size 1024`. Meshy cars face −X; `asVehicle` turns them to the board's +X.
 
 **Still procedural**, in priority order:
 
-1. **Stixx City Hall** (dome) and **Central Precinct**
+1. **Stixx City Hall** (dome), **Central Precinct**, and the **auto repair garage** (needs a closed-door image)
 2. **Rowhouse** and **Reservoir house** modules (porch, boarded variants)
 3. **Port crane** and container stack
 4. **San Gabriel Mission** bell tower

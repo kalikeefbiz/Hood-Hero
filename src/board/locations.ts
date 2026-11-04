@@ -191,6 +191,7 @@ export const LOCATIONS: LocationDef[] = [
     floors: 6,
     links: { job: "retail-downtown", items: ["clothing", "music"] },
     status: "live",
+    model: "assets/models/brick-corner.glb",
   }),
   L({
     id: "downtown.the-spot",
@@ -206,6 +207,7 @@ export const LOCATIONS: LocationDef[] = [
     floors: 4,
     links: {},
     status: "planned",
+    model: "assets/models/brick-corner.glb",
     planned: "Nightlife, networking and high-stakes meets.",
   }),
 
@@ -468,6 +470,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#a69683", "#3a9a8a", "#e8f5f2", "#1e5a52"],
     links: { business: "laundry" },
     status: "live",
+    model: "assets/models/brick-corner.glb",
   }),
   L({
     id: "reservoir.warehouse",
@@ -526,6 +529,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "blocks",
     links: { street: true },
     status: "live",
+    model: "assets/models/boarded-house.glb",
   }),
   L({
     id: "reservoir.homes",
@@ -538,6 +542,8 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#b9b2a2", "#3678c6", "#f0e6d8", "#2a2a2a"],
     links: { people: true, rest: true },
     status: "live",
+    model: "assets/models/bungalow.glb",
+    modelFit: { scale: 0.62 },
   }),
   L({
     id: "reservoir.pawn",
@@ -614,6 +620,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "muds",
     links: { items: ["necessities", "smokes", "booze"] },
     status: "live",
+    model: "assets/models/el-deli.glb",
   }),
   L({
     id: "nawf.projects",
@@ -627,6 +634,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#8a4a36", "#3a3a3a", "#f0e6d8", "#2a2a2a"],
     links: { people: true, rest: true },
     status: "live",
+    model: "assets/models/nawf-projects.glb",
   }),
   L({
     id: "nawf.court",
