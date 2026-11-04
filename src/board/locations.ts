@@ -115,6 +115,8 @@ export interface LocationDef {
     trackGap?: number;
     offset?: [number, number];
   };
+  /** Extra GLBs placed in the same footprint (e.g. a crane beside the docks). */
+  companions?: (NonNullable<LocationDef["modelFit"]> & { model: string })[];
 }
 
 const L = (d: LocationDef) => d;
@@ -165,6 +167,11 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#7d7a72", "#c4772e", "#2b3036", "#f0d29a"],
     links: { gig: true },
     status: "live",
+    model: "assets/models/containers.glb",
+    modelFit: { scale: 0.55, offset: [-2, 1.5] },
+    companions: [
+      { model: "assets/models/port-crane.glb", height: 10, offset: [2.4, -1.5] },
+    ],
   }),
   L({
     id: "downtown.courier",
@@ -368,6 +375,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "backstreet",
     links: { street: true },
     status: "live",
+    model: "assets/models/vacant-lot.glb",
   }),
   L({
     id: "south.food-mart",
@@ -426,6 +434,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "backstreet",
     links: { people: true },
     status: "live",
+    model: "assets/models/basketball-court.glb",
   }),
   L({
     id: "south.community-center",
@@ -531,6 +540,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "blocks",
     links: { people: true },
     status: "live",
+    model: "assets/models/basketball-court.glb",
   }),
   L({
     id: "reservoir.boarded-house",
@@ -589,6 +599,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "blocks",
     links: { politics: true },
     status: "live",
+    model: "assets/models/tower-lot.glb",
   }),
 
   // ---------------- The Nawf: Blips vs Mudgang ----------------
@@ -665,6 +676,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "blips",
     links: { people: true },
     status: "live",
+    model: "assets/models/basketball-court.glb",
   }),
   L({
     id: "nawf.barbershop",

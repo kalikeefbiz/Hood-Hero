@@ -52,7 +52,15 @@ import {
   sharedModelGeometry,
   sharedModelMaterial,
   type ModelPiece,
+  useModelRenderer,
 } from "./models";
+import {
+  SET_PIECES,
+  TINTED,
+  planSetPieces,
+  planUnderpass,
+  type SetPiecePlacement,
+} from "./setPieces";
 
 export type TimeOfDay = "dusk" | "night" | "day";
 export type Lens = "streets" | "influence" | "police" | "opportunity";
@@ -376,7 +384,11 @@ export class BoardRenderer {
       antialias: dpr < 1.5,
       powerPreference: "high-performance",
     });
-    this.lite = isSoftwareRenderer(this.renderer);
+    // `?fullgl` forces the full board on software GL (screenshots, checks).
+    this.lite =
+      isSoftwareRenderer(this.renderer) &&
+      !new URLSearchParams(location.search).has("fullgl");
+    useModelRenderer(this.renderer);
     this.reducedMotion =
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
     if (this.lite) dpr = 1;
@@ -812,6 +824,7 @@ export class BoardRenderer {
     this.scene.add(ground);
     this.buildRiver();
     for (const zone of ZONE_ORDER) this.buildDistrict(zone);
+    this.buildSetPieces();
     this.buildFiller();
     this.buildStreetFurniture();
     this.buildTraffic();
@@ -924,6 +937,33 @@ export class BoardRenderer {
     const trainZ =
       zone === "nawf" ? d.minZ + (d.maxZ - d.minZ) * 0.33 : Number.NaN;
     if (zone === "nawf") this.trainZ = trainZ;
+    const underTrain = (b: BlockDef) =>
+      zone === "nawf" &&
+      Math.abs((b.minZ + b.maxZ) / 2 - trainZ) < (b.maxZ - b.minZ) / 2 + 1;
+    // Set pieces dress the blocks no named place uses. The software-GL
+    // fallback keeps the procedural filler: it cannot afford the triangles.
+    const plan = this.lite
+      ? []
+      : planSetPieces(
+          zone,
+          grid.blocks.filter(
+            (b) =>
+              !b.waterfront &&
+              !LOCATIONS.some((l) => locationBlock(l)?.id === b.id),
+          ),
+          underTrain,
+        );
+    this.setPieces.push(...plan);
+    if (zone === "nawf" && !this.lite) {
+      const station = LOCATIONS.find((l) => l.id === "nawf.el-station");
+      const sb = station ? locationBlock(station) : null;
+      const u = planUnderpass(
+        grid.blocks,
+        trainZ,
+        sb ? (sb.minX + sb.maxX) / 2 : 0,
+      );
+      if (u) this.setPieces.push(u);
+    }
     for (const b of grid.blocks) {
       k.block = b.id;
       const cx = (b.minX + b.maxX) / 2,
@@ -945,6 +985,18 @@ export class BoardRenderer {
           windows: false,
         });
       let exclude: Rect | null = null;
+      const pieces = plan.filter((p) => p.block === b.id);
+      if (pieces.length)
+        exclude = pieces.reduce<Rect>(
+          (u, p) => ({
+            minX: Math.min(u.minX, p.rect.minX),
+            maxX: Math.max(u.maxX, p.rect.maxX),
+            minZ: Math.min(u.minZ, p.rect.minZ),
+            maxZ: Math.max(u.maxZ, p.rect.maxZ),
+          }),
+          { ...pieces[0].rect },
+        );
+      if (pieces.some((p) => p.piece === "elUnderpass")) continue;
       for (const l of here) {
         if (l.model) {
           // Measure the procedural footprint on a scratch kit, then let the
@@ -963,8 +1015,8 @@ export class BoardRenderer {
       }
       const fullyUsed =
         exclude &&
-        exclude.maxX - exclude.minX >= b.maxX - b.minX - 0.1 &&
-        exclude.maxZ - exclude.minZ >= b.maxZ - b.minZ - 0.1;
+        exclude.maxX - exclude.minX >= b.maxX - b.minX - 0.7 &&
+        exclude.maxZ - exclude.minZ >= b.maxZ - b.minZ - 0.7;
       if (!fullyUsed && !b.waterfront)
         fillBlock(
           k,
@@ -993,37 +1045,96 @@ export class BoardRenderer {
     }
     this.addKit(k);
   }
+  /** One instanced mesh per set piece, however many lots use it. */
+  private buildSetPieces() {
+    const groups = new Map<keyof typeof SET_PIECES, SetPiecePlacement[]>();
+    for (const p of this.setPieces)
+      groups.set(p.piece, [...(groups.get(p.piece) ?? []), p]);
+    const tints = ["#ffffff", "#f4e4cc", "#e2eee6", "#f2d8d6", "#dde5f4", "#efe6c2"];
+    for (const [id, list] of groups)
+      void loadModelPiece(SET_PIECES[id], this.lite).then((piece) => {
+        if (!piece) return;
+        const size = piece.geometry.boundingBox!.getSize(new THREE.Vector3());
+        const mesh = new THREE.InstancedMesh(
+          piece.geometry,
+          piece.material,
+          list.length,
+        );
+        const m = new THREE.Matrix4(),
+          q = new THREE.Quaternion(),
+          up = new THREE.Vector3(0, 1, 0);
+        list.forEach((p, i) => {
+          const w = p.rect.maxX - p.rect.minX,
+            d = p.rect.maxZ - p.rect.minZ;
+          // The underpass is stretched to the block and to the El's deck
+          // height (5.7) so the train runs straight across it.
+          const scale =
+            id === "elUnderpass"
+              ? new THREE.Vector3(w / size.x, 5.75 / size.y, d / size.z)
+              : new THREE.Vector3().setScalar(
+                  Math.min(w / size.x, d / size.z) * 0.94,
+                );
+          q.setFromAxisAngle(up, p.yaw);
+          m.compose(
+            new THREE.Vector3(
+              (p.rect.minX + p.rect.maxX) / 2,
+              CURB,
+              (p.rect.minZ + p.rect.maxZ) / 2,
+            ),
+            q,
+            scale,
+          );
+          mesh.setMatrixAt(i, m);
+          if (TINTED.has(id))
+            mesh.setColorAt(i, col(tints[hash(p.block + i) % tints.length]));
+        });
+        mesh.castShadow = mesh.receiveShadow = !this.lite;
+        mesh.name = `set:${id}`;
+        mesh.computeBoundingSphere();
+        this.scene.add(mesh);
+        if (id === "elUnderpass") this.dropTrackGap("set:elUnderpass");
+        this.renderer.shadowMap.needsUpdate = true;
+        this.wake();
+      });
+  }
   /** Optional GLB replacement for a location (see LocationDef.model). */
   private loadModel(l: LocationDef, rect: Rect) {
-    void loadModelPiece(l.model!, this.lite).then((piece) => {
+    this.placeModel(l.model!, rect, l.modelFit, `model:${l.id}`);
+    l.companions?.forEach((c, i) =>
+      this.placeModel(c.model, rect, c, `model:${l.id}:${i}`),
+    );
+  }
+  private placeModel(
+    path: string,
+    rect: Rect,
+    fitOpts: LocationDef["modelFit"],
+    name: string,
+  ) {
+    void loadModelPiece(path, this.lite).then((piece) => {
       if (!piece) return;
       const size = piece.geometry.boundingBox!.getSize(new THREE.Vector3());
-      const yaw = l.modelFit?.yaw ?? 0;
+      const yaw = fitOpts?.yaw ?? 0;
       const turned = Math.abs(Math.sin(yaw)) > 0.5;
       const sx = turned ? size.z : size.x,
         sz = turned ? size.x : size.z;
-      const fit = l.modelFit?.height
-        ? l.modelFit.height / (size.y || 1)
+      const fit = fitOpts?.height
+        ? fitOpts.height / (size.y || 1)
         : Math.min(
             (rect.maxX - rect.minX) / (sx || 1),
             (rect.maxZ - rect.minZ) / (sz || 1),
-          ) * (l.modelFit?.scale ?? 0.92);
+          ) * (fitOpts?.scale ?? 0.92);
       const mesh = new THREE.Mesh(piece.geometry, piece.material);
       mesh.scale.setScalar(fit);
       mesh.rotation.y = yaw;
       mesh.position.set(
-        (rect.minX + rect.maxX) / 2 + (l.modelFit?.offset?.[0] ?? 0),
-        CURB + (l.modelFit?.y ?? 0),
-        (rect.minZ + rect.maxZ) / 2 + (l.modelFit?.offset?.[1] ?? 0),
+        (rect.minX + rect.maxX) / 2 + (fitOpts?.offset?.[0] ?? 0),
+        CURB + (fitOpts?.y ?? 0),
+        (rect.minZ + rect.maxZ) / 2 + (fitOpts?.offset?.[1] ?? 0),
       );
       mesh.castShadow = mesh.receiveShadow = !this.lite;
-      mesh.name = `model:${l.id}`;
+      mesh.name = name;
       this.scene.add(mesh);
-      if (l.archetype === "station" && this.stationDeck) {
-        this.scene.remove(this.stationDeck);
-        this.stationDeck.geometry.dispose();
-        this.stationDeck = null;
-      }
+      this.dropTrackGap(name);
       this.renderer.shadowMap.needsUpdate = true;
       this.wake();
     });
@@ -1037,19 +1148,23 @@ export class BoardRenderer {
       to = d.maxX + 14,
       deck = 5.2,
       steel = col("#3b3f45");
-    // A GLB station brings its own deck: that stretch of track is built
-    // separately and removed once the model arrives (it stays if it fails).
+    // A GLB station or underpass brings its own deck: those stretches of
+    // track are built separately and removed once the model arrives (they
+    // stay if it fails).
+    const gaps: { key: string; from: number; to: number }[] = [];
     const station = LOCATIONS.find(
       (l) => l.archetype === "station" && l.zone === "nawf" && l.model,
     );
-    const gap = station?.modelFit?.trackGap
-      ? (() => {
-          const b = locationBlock(station);
-          const cx = b ? (b.minX + b.maxX) / 2 : 0;
-          const half = station.modelFit!.trackGap! / 2;
-          return [cx - half, cx + half] as const;
-        })()
-      : null;
+    if (station?.modelFit?.trackGap) {
+      const b = locationBlock(station);
+      const cx = b ? (b.minX + b.maxX) / 2 : 0;
+      const half = station.modelFit.trackGap / 2;
+      gaps.push({ key: `model:${station.id}`, from: cx - half, to: cx + half });
+    }
+    for (const p of this.setPieces)
+      if (p.piece === "elUnderpass")
+        gaps.push({ key: "set:elUnderpass", from: p.rect.minX, to: p.rect.maxX });
+    gaps.sort((a, b) => a.from - b.from);
     const span = (kk: Kit, a: number, b: number) => {
       box(kk, {
         x: (a + b) / 2,
@@ -1073,18 +1188,20 @@ export class BoardRenderer {
           windows: false,
         });
     };
-    if (gap) {
-      span(k, from, gap[0]);
-      span(k, gap[1], to);
+    let at = from;
+    for (const g of gaps) {
+      span(k, at, g.from);
       const gk = kit(6);
-      span(gk, gap[0], gap[1]);
-      this.stationDeck = new THREE.Mesh(gk.plain.build(), this.plainMat);
-      this.stationDeck.castShadow = this.stationDeck.receiveShadow =
-        !this.lite;
-      this.scene.add(this.stationDeck);
-    } else span(k, from, to);
+      span(gk, g.from, g.to);
+      const deck = new THREE.Mesh(gk.plain.build(), this.plainMat);
+      deck.castShadow = deck.receiveShadow = !this.lite;
+      this.scene.add(deck);
+      this.trackGaps.set(g.key, deck);
+      at = g.to;
+    }
+    span(k, at, to);
     for (let x = from + 2; x < to; x += 6) {
-      if (gap && x > gap[0] - 0.5 && x < gap[1] + 0.5) continue;
+      if (gaps.some((g) => x > g.from - 0.5 && x < g.to + 0.5)) continue;
       for (const side of [-1.3, 1.3])
         box(k, {
           x,
@@ -1311,8 +1428,16 @@ export class BoardRenderer {
     return k.plain.build();
   }
   private vehicles = new Map<string, ModelPiece>();
-  /** Track deck under a GLB station; dropped once the station model loads. */
-  private stationDeck: THREE.Mesh | null = null;
+  /** Track decks under GLB structures; each is dropped once its model loads. */
+  private trackGaps = new Map<string, THREE.Mesh>();
+  private setPieces: SetPiecePlacement[] = [];
+  private dropTrackGap(key: string) {
+    const deck = this.trackGaps.get(key);
+    if (!deck) return;
+    this.scene.remove(deck);
+    deck.geometry.dispose();
+    this.trackGaps.delete(key);
+  }
   /**
    * Swap a GLB vehicle into an instanced car layer once it loads. The layer
    * starts with the procedural box car, so the board never waits on a file.

@@ -6,7 +6,8 @@ import * as THREE from "three";
  * version stays on screen, so a missing model never breaks the board.
  *
  * Generated with Meshy (image-to-3D, Smart Topology, ~2.5–5k triangles, one
- * 512px WebP base-color map each) — see docs/STRATEGY_BOARD.md.
+ * KTX2 base-color map each: 1024px landmarks, 512px set pieces, 256px cars) —
+ * see docs/STRATEGY_BOARD.md.
  */
 export const MODEL_FILES = {
   southsideTowers: "assets/models/southside-towers.glb",
@@ -24,6 +25,30 @@ export interface ModelPiece {
 
 const cache = new Map<string, Promise<ModelPiece | null>>();
 
+/*
+ * Model textures are KTX2 (Basis ETC1S). The phone's GPU keeps them
+ * compressed (ASTC/ETC2), about an eighth of the memory of a plain image.
+ * The transcoder lives in public/basis/ and needs the renderer to pick the
+ * format the device supports.
+ */
+let renderer: THREE.WebGLRenderer | null = null;
+let ktx2: Promise<unknown> | null = null;
+export function useModelRenderer(r: THREE.WebGLRenderer) {
+  renderer = r;
+}
+function ktx2Loader() {
+  if (!ktx2 && renderer) {
+    const r = renderer;
+    ktx2 = import("three/examples/jsm/loaders/KTX2Loader.js").then(
+      ({ KTX2Loader }) =>
+        new KTX2Loader()
+          .setTranscoderPath(`${import.meta.env.BASE_URL}basis/`)
+          .detectSupport(r),
+    );
+  }
+  return ktx2;
+}
+
 /** Every geometry handed out here is shared; renderers must not dispose it. */
 export const sharedModelGeometry = new WeakSet<THREE.BufferGeometry>();
 export const sharedModelMaterial = new WeakSet<THREE.Material>();
@@ -40,11 +65,22 @@ export function loadModelPiece(
   const key = `${path}|${lite}`;
   let p = cache.get(key);
   if (!p) {
-    p = import("three/examples/jsm/loaders/GLTFLoader.js")
+    p = Promise.all([
+      import("three/examples/jsm/loaders/GLTFLoader.js"),
+      import("three/examples/jsm/libs/meshopt_decoder.module.js"),
+      ktx2Loader(),
+    ])
       .then(
-        ({ GLTFLoader }) =>
+        ([{ GLTFLoader }, { MeshoptDecoder }, ktx]) =>
           new Promise<ModelPiece | null>((resolve) => {
-            new GLTFLoader().load(
+            // Geometry is meshopt-compressed and quantized (about half the
+            // download); textures are KTX2.
+            const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+            if (ktx)
+              loader.setKTX2Loader(
+                ktx as Parameters<typeof loader.setKTX2Loader>[0],
+              );
+            loader.load(
               `${import.meta.env.BASE_URL}${path}`,
               (gltf) => {
                 let found: THREE.Mesh | null = null;
@@ -55,7 +91,7 @@ export function loadModelPiece(
                 });
                 if (!found) return resolve(null);
                 const mesh = found as THREE.Mesh;
-                const geometry = mesh.geometry.clone();
+                const geometry = toFloat(mesh.geometry);
                 geometry.applyMatrix4(mesh.matrixWorld);
                 geometry.computeBoundingBox();
                 const bb = geometry.boundingBox!;
@@ -83,6 +119,24 @@ export function loadModelPiece(
     cache.set(key, p);
   }
   return p;
+}
+
+/**
+ * Quantized attributes (int16, normalized) cannot hold world-space values, so
+ * copy every attribute to float before baking the node transform in.
+ */
+function toFloat(src: THREE.BufferGeometry) {
+  const g = new THREE.BufferGeometry();
+  g.setIndex(src.index ? src.index.clone() : null);
+  for (const [name, a] of Object.entries(src.attributes)) {
+    const attr = a as THREE.BufferAttribute | THREE.InterleavedBufferAttribute;
+    const n = attr.itemSize,
+      out = new Float32Array(attr.count * n);
+    for (let i = 0; i < attr.count; i++)
+      for (let c = 0; c < n; c++) out[i * n + c] = attr.getComponent(i, c);
+    g.setAttribute(name, new THREE.BufferAttribute(out, n));
+  }
+  return g;
 }
 
 /**

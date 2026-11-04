@@ -104,44 +104,39 @@ There's no block-level control in the simulation yet. `deriveBlocks` *presents* 
 
 Set `model: "assets/models/<file>.glb"` on a location. The board measures the footprint the procedural building would use, places the GLB there (the rest of the block still fills in), and loads it lazily; until it arrives, or if it fails, nothing breaks. `modelFit` tunes the fit: `height` (scale to a world height instead of the footprint), `scale`, `yaw`, `y`, `offset`, and `trackGap` for a station that brings its own stretch of El track. Vehicles live in `src/board/models.ts` (`MODEL_FILES`) and are swapped into the instanced traffic and police layers.
 
-**In the game now** (Meshy image-to-3D, Smart Topology, 2.5–5k triangles, one 512px WebP texture each, 110–300 KB):
+**Formats.** Every GLB is meshopt-compressed geometry plus one KTX2 (Basis ETC1S) base-color texture: 1024px for landmarks, 512px for everything else, 256px for cars. iPhones keep KTX2 compressed on the GPU (ASTC), about 1.4 MB for a 1024 texture and 0.35 MB for a 512, so all 40 models need roughly 25 MB of texture memory. The loader (`models.ts`) reads both formats through the transcoder in `public/basis/`. Download for the full set is about 7 MB.
+
+**Pipeline** (tools in a scratch folder, not the repo): Meshy `image-to-3d --model-type smart-topology --ai-model meshy-t2.5 --target-polycount 2500–5000 --texture-resolution 2k --enable-pbr false` (15 credits), then a glTF Transform script using `ktx2-encoder` (resize, ETC1S quality 200, mipmaps), then `gltf-transform meshopt`. Studio art sheets are cropped one structure per image first. Chain-link fences come back from Meshy as solid walls; for courts and lots, the vertical triangles near the edges are stripped.
+
+**Places with a model** (`LocationDef.model`, fitted to the procedural footprint; `modelFit` tunes height, scale, yaw, offset and `trackGap`; `companions` adds more GLBs in the same footprint):
 
 | File | Used for |
 | --- | --- |
-| `southside-towers.glb` | Southside Towers (`modelFit.height` 17) |
-| `el-station.glb` | Nawf Ave station; replaces its stretch of the El |
+| `southside-towers.glb` | Southside Towers |
+| `el-station.glb` | Nawf Ave station (replaces its stretch of the El) |
 | `corner-bodega.glb` | Rio Gabriel Bodega, Southside Food Mart, Lil Jay's Market, Nawf Bodega |
-| `lowrider.glb` | Three lowriders cruising Rio Gabriel's inner streets |
-| `police-cruiser.glb` | Every patrol car (count still follows district police pressure) |
-| `brick-corner.glb` | Designer Drop, The Spot, Reservoir Laundry (from studio art) |
-| `bungalow.glb` | Reservoir homes (from studio art, `modelFit.scale` 0.62) |
-| `boarded-house.glb` | Boarded house (from studio art) |
-| `el-deli.glb` | Nawf Deli & Grocery (from studio art) |
-| `nawf-projects.glb` | Nawf Projects (from studio art) |
-| `auto-garage.glb` | Rio Gabriel Auto Repair, Southside Auto Repair |
-| `city-hall.glb` | Stixx City Hall |
-| `precinct.glb` | Central Precinct |
-| `rowhouses.glb` | Rowhouses (Southside) |
-| `church.glb` | The Church (Southside) |
-| `mission.glb` | San Gabriel Mission (`modelFit.yaw` turns the bell gable to the street) |
-| `community-center.glb` | Southside and Nawf community centers |
+| `brick-corner.glb` | Designer Drop, The Spot, Reservoir Laundry |
+| `bungalow.glb` | Reservoir homes |
+| `boarded-house.glb` | Boarded house |
+| `el-deli.glb` | Nawf Deli & Grocery |
+| `nawf-projects.glb` | Nawf Projects |
+| `auto-garage.glb` | Both auto repair shops |
+| `city-hall.glb`, `precinct.glb` | Stixx City Hall, Central Precinct |
+| `rowhouses.glb`, `church.glb` | Southside Rowhouses, The Church |
+| `mission.glb`, `courtyard.glb` | San Gabriel Mission, Courtyard apartments |
+| `community-center.glb` | Both community centers |
 | `warehouse.glb` | Westside warehouse, Courier route depot |
-| `courtyard.glb` | Courtyard apartments (Rio Gabriel) |
-| `small-storefront.glb` | Nawf Barbershop, both liquor stores, La Esquina Taqueria, Pawn Shop |
+| `small-storefront.glb` | Barbershop, both liquor stores, taqueria, pawn shop |
+| `basketball-court.glb` | The Court (Southside, Nawf), The lot court |
+| `vacant-lot.glb` | The Lot |
+| `tower-lot.glb` | The water tower |
+| `containers.glb` + `port-crane.glb` | Port of Stixx |
 
-Every texture is 512px WebP (about 1.4 MB of GPU memory each, ~30 MB for the set), sized for older iPhones; re-export from the Meshy originals at 1024 if a closer camera ever needs it.
+Vehicles (`MODEL_FILES`): `lowrider.glb` (three cruise Rio), `police-cruiser.glb` (every patrol car).
 
-Studio art goes straight into image-to-3D (15 credits). What converts best: one isolated building, three-quarter view from slightly above, plain background, full roof visible, doors closed. Open roll-up doors and see-through interiors come back hollow (the first garage attempt was dropped for this).
+**Set pieces** (`setPieces.ts`): generic lots that dress the blocks no named place uses, drawn as one instanced mesh per piece, so repeats cost no extra memory. Each district has its own weighted pool and guaranteed signature pieces (Rio: taco lot, palm park; Southside: liquor corner; Reservoir: storefront church; Downtown: transit plaza and a parking garage), and the Nawf's El gets an underpass stretch. Placement is seeded per district, so the city is the same every session; houses and walk-ups are tinted per instance. Pieces: gas station, basketball court, pocket park, vacant lot, strip mall, fast food, car wash, walk-up, shotgun house, parking lot, taco lot, palm park, liquor corner, storefront church, parking garage, transit plaza, El underpass. The software-GL fallback skips set pieces and keeps box cars; `?fullgl` forces the full board there for screenshots.
 
-Recipe that kept the cost to 18 credits a model: a `nano-banana-2-lite` concept image (3 credits, single object, three-quarter view, white background), then `image-to-3d --model-type smart-topology --ai-model meshy-t2.5 --target-polycount 2500–5000 --texture-resolution 2k --enable-pbr false` (15), then `gltf-transform optimize --texture-compress webp --texture-size 512`. Meshy cars face −X; `asVehicle` turns them to the board's +X.
-
-**Still procedural**, in priority order:
-
-1. **Port crane** and container stack (Port of Stixx)
-2. **Water tower**, **street market** stalls, **memorial wall**, **Gabriel's Angels mural** wall
-3. **Player character** (rig + walk cycle; confirm rigging works before spending on variants)
-
-Keep each GLB under about 1–2 MB for iPhone Safari.
+**Next art**: player character (rig + walk cycle), Reservoir house variants for the residential lots, and Downtown signature towers.
 
 ## Rendering notes (iPhone)
 
