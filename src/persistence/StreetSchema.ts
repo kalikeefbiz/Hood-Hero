@@ -27,6 +27,8 @@ export const streetSchema = z.object({
       acquiredDay: i,
       arrangement: z.enum(["cash", "consignment"]),
       status: z.enum(["held", "distributed", "lost", "settled"]),
+      transferred: i.optional(),
+      sourceLotId: id.optional(),
       agreementId: id.optional(),
     }),
   ),
@@ -40,7 +42,20 @@ export const streetSchema = z.object({
       repaid: n,
       balance: n,
       dueDay: i,
-      status: z.enum(["pending", "overdue", "fulfilled"]),
+      status: z.enum(["pending", "overdue", "fulfilled", "disputed"]),
+      reserve: n.optional(),
+      createdDay: i.optional(),
+      quantity: i.optional(),
+      collections: z
+        .array(
+          z.object({
+            day: i,
+            notoriety: n.max(100),
+            result: z.enum(["paid", "refused"]),
+            eventId: id,
+          }),
+        )
+        .optional(),
       commitmentId: id,
       history: z.array(id),
     }),

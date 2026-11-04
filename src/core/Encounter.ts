@@ -1,6 +1,8 @@
 import type { Action } from "./ActionEngine";
 import type { EncounterInstance, GameState } from "./GameState";
 export type EncounterEffect =
+  | { type: "quanny"; choice: string }
+  | { type: "danger"; choice: import("../systems/Danger").StreetResponse }
   | {
       type: "street";
       choice: string;

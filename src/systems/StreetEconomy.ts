@@ -65,13 +65,15 @@ export function newStreetState(): StreetState {
 }
 export function suppliers(s: GameState) {
   // Reuse actual street contacts; lawful residents and Justice do not become dealers.
-  return Object.values(s.characters).filter(
-    (c) =>
-      c.id !== s.playerId &&
-      !!c.affiliation &&
-      c.traits.lawful < 65 &&
-      c.status === "active",
-  );
+  return Object.values(s.characters)
+    .filter(
+      (c) =>
+        c.id !== s.playerId &&
+        !!c.affiliation &&
+        c.traits.lawful < 65 &&
+        c.status === "active",
+    )
+    .sort((a, b) => Number(a.id === "quanny") - Number(b.id === "quanny"));
 }
 export function marketAccess(
   s: GameState,
@@ -586,7 +588,14 @@ export function repay(s: GameState, agreementId: string, amount: number) {
 }
 export function advanceStreet(s: GameState) {
   for (const a of s.street.agreements) {
-    if (a.status !== "pending" || !a.balance || s.day <= a.dueDay) continue;
+    // NPC debts are collected face to face; a missed player visit is not NPC refusal.
+    if (
+      a.debtor !== s.playerId ||
+      a.status !== "pending" ||
+      !a.balance ||
+      s.day <= a.dueDay
+    )
+      continue;
     a.status = "overdue";
     const n = s.characters[a.supplier],
       p = s.characters[a.debtor];

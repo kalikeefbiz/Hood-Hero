@@ -4,7 +4,7 @@ import { artURL, characterArt, type Expression } from "./characterArt";
 export function CharacterPortrait({
   s,
   id,
-  expression = "confident",
+  expression = id === "quanny" ? "neutral" : "confident",
   className = "",
 }: {
   s: GameState;
@@ -38,7 +38,14 @@ function PortraitImage({
     c = s.characters[id],
     art = characterArt(s, id, expression);
   return (
-    <div className={`character-portrait ${className}`}>
+    <div
+      className={`character-portrait ${className}`}
+      style={
+        id === "quanny" && art
+          ? { aspectRatio: `${art.width} / ${art.height}` }
+          : undefined
+      }
+    >
       {art && !failed ? (
         <img
           src={artURL(art.path)}

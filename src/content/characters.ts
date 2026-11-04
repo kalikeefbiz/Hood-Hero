@@ -59,6 +59,48 @@ export function character(
 export function canonicalCharacters(): Character[] {
   return [
     character(
+      "quanny",
+      "Quanny",
+      "reservoir",
+      "blocks",
+      "18. Certified Blocc Boys hitter from the Reservoir, Westside. His personal set is Splash Gang, entirely Blocc Boys. Hotheaded, calculating, unforgiving, ambitious and money-motivated. Knows Mega and Panic (Rick/Ricky) by reputation: cordial, not close or intimidated. Panic is incarcerated for murder.",
+      {
+        traits: { loyalty: 90, ambition: 90, risk: 92, lawful: 8 },
+        skills: { social: 65, work: 45, recovery: 92 },
+        notoriety: 72,
+        influence: 55,
+        authority: 45,
+        wallet: { clean: 80, illicit: 800 },
+        organizationStanding: {
+          angels: 0,
+          backstreet: 0,
+          blocks: 70,
+          blips: 0,
+          muds: 0,
+        },
+        neighborhoodStanding: {
+          downtown: 0,
+          rio: 0,
+          south: 0,
+          reservoir: 65,
+          nawf: 0,
+        },
+        goals: ["income", "status", "loyalty"],
+      },
+    ),
+    character(
+      "mr-lewis",
+      "Mr. Lewis",
+      "reservoir",
+      null,
+      "Respected lifelong Westside resident. Owns Lil Jay's Market, purchased after its previous owners left Stixx City.",
+      {
+        traits: { loyalty: 80, ambition: 40, risk: 15, lawful: 90 },
+        influence: 50,
+        goals: ["stability", "income"],
+      },
+    ),
+    character(
       "loco",
       "Cristian Santiago",
       "rio",
@@ -150,34 +192,34 @@ export function canonicalCharacters(): Character[] {
 }
 // Ordinary residents and membership contacts, never additional major leaders.
 export function residents(): Character[] {
-  return (["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[]).flatMap(
-    (zone, i) => [
-      character(
-        `resident-${zone}`,
-        ["Alex", "Sam", "Robin", "Drew", "Taylor"][i],
-        zone,
-        null,
-        "Local resident looking for steady work and reliable people.",
-        {
-          skills: { social: 45, work: 60, recovery: 15 },
-          traits: { loyalty: 65, ambition: 35, risk: 20, lawful: 80 },
-        },
-      ),
-      ...(zone === "reservoir" || zone === "nawf"
-        ? [
-            (zone === "nawf" ? "blips" : "blocks") as FactionId,
-            ...(zone === "nawf" ? ["muds" as FactionId] : []),
-          ].map((f) =>
-            character(
-              `contact-${f}`,
-              `${f === "blocks" ? "Block Boys" : f === "blips" ? "Blips" : "Mudgang"} contact`,
-              zone,
-              f,
-              "An ordinary member who can sponsor a membership request.",
-              { goals: ["loyalty", "income"] },
-            ),
-          )
-        : []),
-    ],
-  );
+  return (
+    ["downtown", "rio", "south", "reservoir", "nawf"] as ZoneId[]
+  ).flatMap((zone, i) => [
+    character(
+      `resident-${zone}`,
+      ["Alex", "Sam", "Robin", "Drew", "Taylor"][i],
+      zone,
+      null,
+      "Local resident looking for steady work and reliable people.",
+      {
+        skills: { social: 45, work: 60, recovery: 15 },
+        traits: { loyalty: 65, ambition: 35, risk: 20, lawful: 80 },
+      },
+    ),
+    ...(zone === "reservoir" || zone === "nawf"
+      ? [
+          (zone === "nawf" ? "blips" : "blocks") as FactionId,
+          ...(zone === "nawf" ? ["muds" as FactionId] : []),
+        ].map((f) =>
+          character(
+            `contact-${f}`,
+            `${f === "blocks" ? "Block Boys" : f === "blips" ? "Blips" : "Mudgang"} contact`,
+            zone,
+            f,
+            "An ordinary member who can sponsor a membership request.",
+            { goals: ["loyalty", "income"] },
+          ),
+        )
+      : []),
+  ]);
 }

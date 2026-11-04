@@ -1,3 +1,18 @@
+import {
+  change,
+  relationship as relationshipOf,
+} from "../systems/Relationships";
+import { validateConsignments } from "../systems/Consignment";
+import { STREET_BALANCE } from "../content/street";
+import {
+  quannySchema,
+  newQuannyState,
+  QUANNY_HOME,
+} from "../systems/QuannyState";
+import { canonicalCharacters } from "../content/characters";
+import { validateQuanny } from "../systems/Quanny";
+import { dangerSchema, newDangerState } from "../systems/DangerState";
+import { validateDangerReferences } from "../systems/Danger";
 import { strategicSchema } from "./StrategicSchema";
 import { streetSchema } from "./StreetSchema";
 import { z } from "zod";
@@ -83,7 +98,9 @@ const presenceSchema = z.object({
   location: z.string().min(1),
   zone,
   arrivedDay: integer.min(1),
-  trail: z.array(z.object({ location: z.string(), day: integer.min(1) })).max(12),
+  trail: z
+    .array(z.object({ location: z.string(), day: integer.min(1) }))
+    .max(12),
   appearance: z.object({
     skin: z.string(),
     hair: z.enum(HAIR),
@@ -99,6 +116,8 @@ const presenceSchema = z.object({
 });
 const schema = z.object({
   presence: presenceSchema.optional(),
+  quanny: quannySchema.default(newQuannyState),
+  danger: dangerSchema.default(() => newDangerState()),
   version: z.literal(8),
   street: streetSchema,
   strategic: strategicSchema,
@@ -247,6 +266,7 @@ const schema = z.object({
     z.object({
       id,
       definitionId: id,
+      dangerSceneId: id.optional(),
       crewOfferId: id.optional(),
       sourceEventId: id.optional(),
       incidentId: id.optional(),
@@ -403,6 +423,44 @@ export function deserialize(raw: string): GameState {
       "Incompatible or damaged save. Expected Hood Hero save version 8. Start a new test run from the new game menu.",
     );
   const s: GameState = envelope.data.state;
+  const addQuanny = !s.characters.quanny;
+  // Additive v8 migration: older Lab saves retain every existing character and record.
+  for (const c of canonicalCharacters().filter((c) =>
+    ["quanny", "mr-lewis"].includes(c.id),
+  ))
+    s.characters[c.id] ??= c;
+  if (addQuanny) {
+    const q = s.characters.quanny;
+    q.known = [
+      "mega",
+      ...Object.values(s.characters)
+        .filter(
+          (c) => c.id !== q.id && c.id !== s.playerId && c.home === q.home,
+        )
+        .map((c) => c.id),
+    ];
+    q.connections = q.known.filter((id) => id !== "mega");
+    for (const id of q.connections) {
+      relationshipOf(q, id);
+      change(q, id, {
+        trust: s.characters[id].affiliation === q.affiliation ? 27 : 8,
+        respect: s.characters[id].influence / 5,
+      });
+    }
+    relationshipOf(q, "mega").respect = 35;
+  }
+  if (
+    s.quanny.met &&
+    !s.quanny.knownLocation &&
+    (s.quanny.business === "open" ||
+      s.street.agreements.some(
+        (a) => a.debtor === "quanny" && a.supplier === s.playerId,
+      ))
+  )
+    s.quanny.knownLocation = QUANNY_HOME;
+  validateDangerReferences(s);
+  validateQuanny(s);
+  validateConsignments(s);
   const exists = (id: string) => !!s.characters[id];
   const st = s.street;
   const strategy = s.strategic;
@@ -458,8 +516,20 @@ export function deserialize(raw: string): GameState {
       (l) =>
         !exists(l.owner) ||
         !exists(l.supplier) ||
+        (l.sourceLotId !== undefined &&
+          !st.lots.some(
+            (source) =>
+              source.id === l.sourceLotId &&
+              source.owner === l.supplier &&
+              (source.transferred ?? 0) >= l.received,
+          )) ||
+        (l.transferred ?? 0) !==
+          st.lots
+            .filter((child) => child.sourceLotId === l.id)
+            .reduce((n, child) => n + child.received, 0) ||
         l.remaining +
           l.lost +
+          (l.transferred ?? 0) +
           st.transactions
             .filter((t) => t.lotId === l.id)
             .reduce((n, t) => n + t.sold, 0) !==
@@ -491,6 +561,17 @@ export function deserialize(raw: string): GameState {
       (a) =>
         !exists(a.supplier) ||
         !exists(a.debtor) ||
+        (a.createdDay !== undefined &&
+          a.reserve !== (a.status === "pending" ? a.balance : 0)) ||
+        a.collections?.some(
+          (c) => c.day > s.day || !s.events.some((e) => e.id === c.eventId),
+        ) ||
+        (a.createdDay !== undefined &&
+          (a.createdDay > s.day ||
+            a.dueDay !== a.createdDay + STREET_BALANCE.deadline ||
+            !st.lots.some(
+              (l) => l.id === a.lotId && l.received === a.quantity,
+            ))) ||
         a.original !== a.repaid + a.balance ||
         (a.status === "fulfilled") !== (a.balance === 0) ||
         !st.lots.some(

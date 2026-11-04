@@ -1,0 +1,86 @@
+{
+  "character": "quanny",
+  "preparation": {
+    "source": "User-supplied expression sheet; source remains outside game assets",
+    "sourceSize": [
+      1143,
+      1280
+    ],
+    "operation": "Crop only, then WebP encoding; no resizing, retouching or generation",
+    "format": "WebP",
+    "quality": 90,
+    "method": 6
+  },
+  "assets": [
+    {
+      "expression": "neutral",
+      "path": "public/assets/characters/quanny/quanny-neutral.webp",
+      "crop": [
+        4,
+        5,
+        374,
+        586
+      ],
+      "width": 370,
+      "height": 581,
+      "bytes": 42256,
+      "sha256": "e864f4deb99983e96d1a6b1e19013e56f641644a9ebde4754c551e7e71149832"
+    },
+    {
+      "expression": "talking",
+      "path": "public/assets/characters/quanny/quanny-talking.webp",
+      "crop": [
+        384,
+        5,
+        758,
+        586
+      ],
+      "width": 374,
+      "height": 581,
+      "bytes": 41368,
+      "sha256": "fcd16b6d0c67bb726f29cbbf2fb3f1e8219837230de6b38ed3fe1280d19f13cb"
+    },
+    {
+      "expression": "disappointed",
+      "path": "public/assets/characters/quanny/quanny-disappointed.webp",
+      "crop": [
+        766,
+        5,
+        1138,
+        586
+      ],
+      "width": 372,
+      "height": 581,
+      "bytes": 43990,
+      "sha256": "1ae38ea690c2b5ac2a269d250020d98c1d81cfa7dd95548f6038f9c7a8a96892"
+    },
+    {
+      "expression": "pleased",
+      "path": "public/assets/characters/quanny/quanny-pleased.webp",
+      "crop": [
+        384,
+        645,
+        758,
+        1225
+      ],
+      "width": 374,
+      "height": 580,
+      "bytes": 40374,
+      "sha256": "d9baf08df28ce3bb8605b736a698980dafbb587a0f0010411ee2af97131ba21c"
+    },
+    {
+      "expression": "thinking",
+      "path": "public/assets/characters/quanny/quanny-thinking.webp",
+      "crop": [
+        767,
+        645,
+        1138,
+        1225
+      ],
+      "width": 371,
+      "height": 580,
+      "bytes": 41886,
+      "sha256": "a3cbd2d11cb59b1c50538320e7b5aa70ad1da26a78185bb7f88a8030a2ff91b2"
+    }
+  ]
+}

@@ -17,7 +17,7 @@ The 3D city is the game screen. The player is a **physical character on the boar
   - **Person:** figures stand outside gathering places. Tap one for relationship and social moves.
   - **District:** the existing politics panel plus every place in the district.
 - **Acting is being there.** Tapping a move makes your character **walk** to the place first. The existing action then runs, a result pops over the building, and your **location is saved**. "Go here" travels without acting. Movement has no AP or travel cost yet.
-- **Risk** comes from data the game already tracks: whose marks are on the block versus your affiliation, contested ground, police presence against your heat, notoriety, and home turf. It's informational for now.
+- **Risk** comes from data the game already tracks: whose marks are on the block versus your affiliation, contested ground, police presence against your heat, notoriety, and home turf. It remains a coarse public reading; GOAL 008 adds private contextual danger behind it.
 - **Your look:** tap your name in the HUD to change skin, hair, top, colors, build and chain. The figure on the board updates and the look is saved with your character.
 - **Lenses** (Streets · Influence · Police · Moves) and **time of day** (🌆/🌙/☀️). **End day** sits beside the breadcrumb (and in the ledger header); the city dims through night as the day passes.
 - **Storylines** appear as a "!" marker over their place and as a pill under the breadcrumb.
@@ -87,7 +87,7 @@ status: "live" | "planned"   // planned places show the `planned` teaser
 
 - `presenceOf(s)`: where the player is (old saves start at home base).
 - `moveTo(s, placeId)`: pure move. Records the trail, then runs **arrival hooks**.
-- `onArrival((state, placeId, risk) => nextState)`: **the integration point for location-based events** (run-ins in hostile turf, police stops, ambushes). Register a hook and the board doesn't change. None are registered yet.
+- `onArrival((state, placeId, risk) => nextState)`: **the integration point for location-based events** (run-ins in hostile turf, police stops, ambushes). Register a hook and the board doesn't change. GOAL 008 runs built-in bounded danger exposure before optional extension hooks.
 - `assessRisk(s, placeId)` → `{ level: safe|watchful|tense|hostile, score, reasons[], turf }`. Tune the weights, or feed it real block control later.
 - **Travel costs:** add them in `moveTo`/`actAt` when the design is settled. Today moving is free and instant in game time.
 - **Character creator:** extend `Appearance` (and `presenceSchema` in `SaveSystem.ts`). `character.ts` builds the figure from parts. Set `appearance.model` to a GLB (e.g. from Meshy) and the board loads it at the same height.
@@ -162,3 +162,8 @@ Vehicles (`MODEL_FILES`): `lowrider.glb` (three cruise Rio), `police-cruiser.glb
 - Camera framing at the place level is tight in portrait. A "street view" angle per archetype would help.
 - Walking uses simple street-aligned paths, not full street routing. Characters other than you stand at gathering places rather than following schedules.
 - Next art steps: the GLB slots above, bespoke Downtown towers, Rio side-street power lines and palms, and interior lights by time.
+
+
+## GOAL 008 gameplay integration
+
+See [GOAL_008_REPORT.md](GOAL_008_REPORT.md) for the living danger slice, state contracts, exposure budgets, recognition rules, treatment and manual-save/death behavior. `moveTo` now performs bounded arrival exposure; `performActionAt` lets an arrival encounter interrupt the intended action; accepted activities and day advancement also expose physical presence. `GameState.danger` holds private conflict/recognition/history state and a saved seeded RNG. Renderer and camera code remain unchanged. Menu/camera reads never roll danger.

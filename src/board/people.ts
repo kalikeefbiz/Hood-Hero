@@ -1,3 +1,4 @@
+import { quannyLocation, QUANNY_HOME } from "../systems/QuannyState";
 import { player, type GameState } from "../core/GameState";
 import { THEMES } from "../ui/theme";
 import { LOCATIONS } from "./locations";
@@ -31,7 +32,16 @@ export function boardPeople(s: GameState): BoardPerson[] {
       .slice(0, 8);
     const used = new Map<string, number>();
     residents.forEach((c, i) => {
-      const place = spots[i % spots.length];
+      const place =
+        LOCATIONS.find(
+          (l) =>
+            l.id ===
+            (c.id === "quanny"
+              ? quannyLocation(s)
+              : c.id === "mr-lewis"
+                ? QUANNY_HOME
+                : ""),
+        ) ?? spots[i % spots.length];
       const slot = used.get(place.id) ?? 0;
       used.set(place.id, slot + 1);
       out.push({

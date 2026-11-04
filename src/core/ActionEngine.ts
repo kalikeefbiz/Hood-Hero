@@ -1,3 +1,12 @@
+import { openQuanny, quannyError, quannyConversation } from "../systems/Quanny";
+import {
+  expose,
+  hospitalStay,
+  streetConversation,
+  streetLocation,
+  witnessIdentity,
+} from "../systems/Danger";
+import { moveTo, presenceOf } from "../board/presence";
 import { applyInfluence } from "../systems/Territory";
 import { STRATEGY_BALANCE } from "../content/strategy";
 import { finalizeEnding } from "../systems/EndConditions";
@@ -49,6 +58,14 @@ import {
   jobOpportunities,
 } from "../systems/Employment";
 export const ACTIONS = {
+  quanny: {
+    label: "Talk business with Quanny",
+    ap: 0,
+    risk: "Social",
+    description:
+      "Meet Quanny at his location to discuss business, collection or your shared history.",
+    outcomes: ["A persistent conversation"],
+  },
   apply: {
     label: "Apply for work",
     ap: 1,
@@ -258,6 +275,10 @@ export function validateAction(s: GameState, a: Action): string | null {
     i = a.incidentId ? s.incidents[a.incidentId] : undefined;
   if (!c) return "Unknown actor";
   if (s.end) return "This run has ended";
+  if (c.id === s.playerId && hospitalStay(s))
+    return "You are recovering in hospital.";
+  if (c.id === s.playerId && (streetConversation(s) || quannyConversation(s)))
+    return "Finish the street encounter before taking another action.";
   if (c.status !== "active") return "Actor is not active";
   if (
     c.id === s.playerId
@@ -301,6 +322,10 @@ export function validateAction(s: GameState, a: Action): string | null {
     return "Partner participation requires an active shared assignment";
   if (a.type === "gig" && searchState(s, a.actor).lastGigDay === s.day)
     return "Today's local gig is complete. More opportunities tomorrow.";
+  if (a.type === "quanny")
+    return a.actor === s.playerId && a.target === "quanny"
+      ? quannyError(s)
+      : "Player conversation only.";
   const targeted: ActionType[] = [
     "contact",
     "inquire",
@@ -478,6 +503,10 @@ export function resolveAction(s: GameState, a: Action) {
     t = a.target ? s.characters[a.target] : undefined,
     i = a.incidentId ? s.incidents[a.incidentId] : undefined;
   const successChance = actionSuccessChance(s, a);
+  if (a.type === "quanny") {
+    openQuanny(s);
+    return;
+  }
   if (a.type === "crime") return transact(s, a.actor, a.market, a.partner);
   if (c.id === s.playerId) s.ap -= ACTIONS[a.type].ap;
   else {
@@ -757,6 +786,7 @@ export function performAction(
     const error = requestError(state, a.target, crewActivity);
     if (error) return { state, error };
     requestActivity(next, a.target, crewActivity);
+    expose(next, presenceOf(next).location, "activity", String(state.ap));
     progress(next);
     syncEncounters(next);
     return { state: next, error: null, event: next.events.at(-1) };
@@ -778,6 +808,39 @@ export function performAction(
         [next.playerId],
         { importance: "personal", title: "New market access" },
       );
+  if (a.actor === next.playerId) {
+    const location = presenceOf(next).location;
+    if (a.type === "affiliate" && a.target && event)
+      witnessIdentity(
+        next,
+        a.target,
+        a.actor,
+        event.id,
+        location,
+        "sponsorship",
+        true,
+      );
+    if (a.type === "crime") {
+      const zone = next.street.transactions.at(-1)?.market ?? player(next).home;
+      const actual = streetLocation(zone);
+      const previous = presenceOf(next);
+      if (actual)
+        next.presence = {
+          ...previous,
+          location: actual,
+          zone,
+          arrivedDay: next.day,
+          trail:
+            previous.location === actual
+              ? previous.trail
+              : [
+                  ...previous.trail,
+                  { location: previous.location, day: previous.arrivedDay },
+                ].slice(-12),
+        };
+    }
+    expose(next, presenceOf(next).location, "activity", String(state.ap));
+  }
   progress(next);
   finalizeEnding(next);
   syncEncounters(next);
@@ -790,6 +853,8 @@ export function availableActions(s: GameState): Action[] {
   const list: Action[] = (["work", "gig", "rest", "crime"] as ActionType[]).map(
     (type) => ({ type, actor: p.id }),
   );
+  if (s.quanny.met)
+    list.unshift({ type: "quanny", actor: p.id, target: "quanny" });
   if (currentEmployment(s)) {
     list.push(
       { type: "timeOff", actor: p.id },
@@ -827,4 +892,14 @@ export function availableActions(s: GameState): Action[] {
   const priority = (a: Action) =>
     a.type === "acceptJob" ? 2 : a.type === "apply" ? 1 : 0;
   return list.sort((a, b) => priority(b) - priority(a));
+}
+
+/** The board travels before resolving an action; an arrival encounter can interrupt it. */
+export function performActionAt(state: GameState, a: Action, location: string) {
+  const error = validateAction(state, a);
+  if (error) return { state, error };
+  const arrived = moveTo(state, location);
+  if (presenceOf(arrived).location !== location)
+    return { state: arrived, error: "You cannot travel right now." };
+  return performAction(arrived, a);
 }

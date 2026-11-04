@@ -19,6 +19,8 @@ export interface MerchandiseLot {
   acquiredDay: number;
   arrangement: "cash" | "consignment";
   status: "held" | "distributed" | "lost" | "settled";
+  transferred?: number;
+  sourceLotId?: string;
   agreementId?: string;
 }
 export interface SupplierAgreement {
@@ -30,7 +32,16 @@ export interface SupplierAgreement {
   repaid: number;
   balance: number;
   dueDay: number;
-  status: "pending" | "overdue" | "fulfilled";
+  status: "pending" | "overdue" | "fulfilled" | "disputed";
+  reserve?: number;
+  createdDay?: number;
+  quantity?: number;
+  collections?: {
+    day: number;
+    notoriety: number;
+    result: "paid" | "refused";
+    eventId: string;
+  }[];
   commitmentId: string;
   history: string[];
 }

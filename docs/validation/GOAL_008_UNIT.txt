@@ -1,0 +1,39 @@
+
+> syndicate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /workspace/Hood-Hero-Lab
+
+ ✓ src/tests/employment.test.ts (20 tests) 10023ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 1  2613ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 7  2393ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 21  2354ms
+   ✓ employment commitments and survival > 30+ day strategies and deterministic replay seed 2026  2325ms
+ ✓ src/tests/crew.test.ts (22 tests) 5420ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 1: independent lives, occasional offers, real appointments, save/load and bounded growth  960ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 7: independent lives, occasional offers, real appointments, save/load and bounded growth  875ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 21: independent lives, occasional offers, real appointments, save/load and bounded growth  872ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 83: independent lives, occasional offers, real appointments, save/load and bounded growth  850ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 2026: independent lives, occasional offers, real appointments, save/load and bounded growth  832ms
+   ✓ autonomous offers and extended seeded campaigns > 60 days seed 5099: independent lives, occasional offers, real appointments, save/load and bounded growth  810ms
+ ✓ src/tests/simulation.test.ts (44 tests) 2463ms
+   ✓ The Chains and automated playthroughs > has no fixed turn limit and no arbitrary defeat timer  1878ms
+ ✓ src/tests/encounters.test.ts (20 tests) 871ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a fulfilled story over 40 further days, including reload  331ms
+   ✓ correction: conversations conclude independently of storylines > does not reopen a broken story over 40 further days, including reload  382ms
+ ✓ src/tests/corrections.test.ts (11 tests) 468ms
+   ✓ 006.1 routine, accumulated and significant exposure > low-scrutiny arrest is possible, but never fixed by action count  370ms
+ ✓ src/tests/actionOdds.test.ts (3 tests) 452ms
+ ✓ src/tests/danger.test.ts (21 tests) 684ms
+   ✓ contextual street life > ordinary civilians can cross contested neighborhoods without automatic violence  501ms
+ ✓ src/tests/street.test.ts (15 tests) 265ms
+ ✓ src/tests/strategy.test.ts (36 tests) 312ms
+ ✓ src/tests/presence.test.ts (3 tests) 45ms
+ ✓ src/tests/board.test.ts (8 tests) 43ms
+ ✓ src/tests/actionArt.test.ts (2 tests) 6ms
+
+ Test Files  12 passed (12)
+      Tests  205 passed (205)
+   Start at  02:12:27
+   Duration  24.53s (transform 473ms, setup 0ms, collect 1.74s, tests 21.05s, environment 1ms, prepare 522ms)

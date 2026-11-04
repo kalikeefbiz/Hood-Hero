@@ -1,0 +1,9 @@
+import base from "/workspace/Hood-Hero-Lab/playwright.config";
+export default {
+  ...base,
+  testDir: "/workspace/Hood-Hero-Lab/tests",
+  webServer: base.webServer ? { ...base.webServer, cwd: "/workspace/Hood-Hero-Lab" } : undefined,
+  outputDir: "/workspace/Hood-Hero-Lab/test-results/goal-008-reduced-motion",
+  reporter: [["list"]],
+  use: { ...base.use, reducedMotion: "reduce" },
+};

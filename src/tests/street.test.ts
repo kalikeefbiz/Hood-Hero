@@ -1,3 +1,4 @@
+import { streetConversation } from "../systems/Danger";
 import { describe, it, expect } from "vitest";
 import { newGame } from "../core/Simulation";
 import { advanceDay, serveSentence } from "../core/TimeSystem";
@@ -26,6 +27,13 @@ function act(
   type: Parameters<typeof performAction>[1]["type"],
   target?: string,
 ) {
+  if (streetConversation(s))
+    s = respondEncounter(
+      s,
+      s.encounters.find((e) => e.dangerSceneId === streetConversation(s)!.id)!
+        .id,
+      "listen",
+    ).state;
   const r = performAction(s, { actor: s.playerId, type, target });
   expect(r.error).toBeNull();
   return r.state;

@@ -1,3 +1,5 @@
+import { KnownCharacterLocation } from "./KnownCharacterLocation";
+import { hospitalStay, streetConversation } from "../systems/Danger";
 import {
   NeighborhoodStrategy,
   OrganizationPanel,
@@ -22,12 +24,17 @@ import {
   player,
   cash,
 } from "../core/GameState";
-import { newGame } from "../core/Simulation";
-import { advanceDay, serveSentence } from "../core/TimeSystem";
+import { newGame, enterGameplay } from "../core/Simulation";
+import {
+  advanceDay,
+  recoverInHospital,
+  serveSentence,
+} from "../core/TimeSystem";
 import {
   ACTIONS,
   availableActions,
   performAction,
+  performActionAt,
   validateAction,
   type Action,
   type ActionType,
@@ -265,7 +272,7 @@ export function App() {
   function start() {
     window.scrollTo(0, 0);
     setActionFeedback(null);
-    const next = newGame(name, home);
+    const next = enterGameplay(newGame(name, home));
     setState(next);
     setSelected(home);
     setBoard({ zone: home, block: null, place: null });
@@ -276,9 +283,10 @@ export function App() {
   function load(resume = false) {
     setActionFeedback(null);
     try {
-      const next = resume
+      const saved = resume
         ? loadGame(localStorage, AUTO_KEY) || loadGame(localStorage)
         : loadGame(localStorage) || loadGame(localStorage, AUTO_KEY);
+      const next = saved && enterGameplay(saved);
       if (next) {
         window.scrollTo(0, 0);
         setState(next);
@@ -305,13 +313,14 @@ export function App() {
   }
   function act(a: Action, at?: string) {
     if (!s) return;
-    const result = performAction(s, a);
+    const result = at ? performActionAt(s, a, at) : performAction(s, a);
     if (result.error) {
+      if (result.state !== s) setState(result.state);
       setNotice(result.error);
       setActionFeedback(result.error);
     } else {
       // On the board, acting somewhere means being there.
-      const next = at ? moveTo(result.state, at) : result.state;
+      const next = result.state;
       setState(next);
       if (at) {
         const diff = cash(player(next)) - cash(player(s));
@@ -336,7 +345,9 @@ export function App() {
       }
       if (
         result.state.encounters.some(
-          (e) => e.definitionId === "workplace" && e.status === "active",
+          (e) =>
+            ["workplace", "living-danger", "quanny"].includes(e.definitionId) &&
+            e.status === "active",
         )
       )
         setScreen("City");
@@ -367,31 +378,42 @@ export function App() {
           .slice(s.events.length)
           .find((e) => e.category === "money") ??
         result.state.events.slice(s.events.length).at(-1);
-      const reply = actionResponse
-        ? (actionResult?.text ?? "Action completed.")
-        : streetResponse
-          ? (result.state.events.slice(s.events.length).at(-1)?.text ??
-            (response === "terms"
-              ? "Supplier terms clarified; no goods or debt accepted."
-              : "Supplier conversation concluded."))
-          : crewResponse
-            ? (result.state.events.slice(s.events.length).at(-1)?.text ??
-              (response === "details"
-                ? "They shared more about their plans."
-                : "Conversation concluded."))
-            : response === "promise"
-              ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded. Return through City → Storylines."
-              : response === "decline"
-                ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
-                : response === "delay"
-                  ? "You asked for time to think. The situation continues; resume the conversation from City."
-                  : response === "acknowledge"
-                    ? "Outcome acknowledged. The city moves on; the history remains."
-                    : s.encounters.find((e) => e.id === id)?.definitionId ===
-                        "workplace"
-                      ? (result.state.events.at(-1)?.text ??
-                        "Workplace choice recorded.")
-                      : "Cuzzo explains what happened.";
+      const dangerResponse = sourceEncounter.definitionId === "living-danger";
+      const quannyResponse = sourceEncounter.definitionId === "quanny";
+      const reply = quannyResponse
+        ? (result.state.events
+            .slice(s.events.length)
+            .filter((e) => e.observedBy.includes(s.playerId))
+            .at(-1)?.text ?? "Your conversation with Quanny continues.")
+        : dangerResponse
+          ? (result.state.danger.scenes.find(
+              (x) => x.id === sourceEncounter.dangerSceneId,
+            )?.outcome ?? "The conversation ended.")
+          : actionResponse
+            ? (actionResult?.text ?? "Action completed.")
+            : streetResponse
+              ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+                (response === "terms"
+                  ? "Supplier terms clarified; no goods or debt accepted."
+                  : "Supplier conversation concluded."))
+              : crewResponse
+                ? (result.state.events.slice(s.events.length).at(-1)?.text ??
+                  (response === "details"
+                    ? "They shared more about their plans."
+                    : "Conversation concluded."))
+                : response === "promise"
+                  ? "Cuzzo: ‘I’m counting on you.’ Your promise is recorded. Return through City → Storylines."
+                  : response === "decline"
+                    ? "Cuzzo: ‘Alright. I heard you. I’ll figure out what I can do.’ No promise was made."
+                    : response === "delay"
+                      ? "You asked for time to think. The situation continues; resume the conversation from City."
+                      : response === "acknowledge"
+                        ? "Outcome acknowledged. The city moves on; the history remains."
+                        : s.encounters.find((e) => e.id === id)
+                              ?.definitionId === "workplace"
+                          ? (result.state.events.at(-1)?.text ??
+                            "Workplace choice recorded.")
+                          : "Cuzzo explains what happened.";
       const finished = result.state.encounters.find((e) => e.id === id);
       if (
         finished?.status === "acknowledged" &&
@@ -400,6 +422,15 @@ export function App() {
         setScreen("Actions");
         setGroup("Streets");
         setHistoryEncounterId(null);
+      }
+      // Reuse the existing read-only outcome view so Quanny's terminal reaction is visible.
+      // The encounter is already completed; closing this view performs no simulation action.
+      if (
+        finished?.status === "acknowledged" &&
+        sourceEncounter.participants[0] === "quanny"
+      ) {
+        setHistoryEncounterId(id);
+        setScreen("City");
       }
       setNotice(reply);
       if (response !== "clarify") setActionFeedback(reply);
@@ -493,7 +524,7 @@ export function App() {
   };
   /** The player walks to the place first, then the existing action runs. */
   async function actAt(a: Action, placeId: string) {
-    if (busy) return;
+    if (busy || !s || s.end || hospitalStay(s) || streetConversation(s)) return;
     setBusy(true);
     try {
       await walkTo(placeId);
@@ -503,7 +534,7 @@ export function App() {
     act(a, placeId);
   }
   async function goHere(placeId: string) {
-    if (busy || !s) return;
+    if (busy || !s || s.end || hospitalStay(s) || streetConversation(s)) return;
     setBusy(true);
     try {
       await walkTo(placeId);
@@ -585,8 +616,28 @@ export function App() {
               ? s.events.find((e) => e.id === s.strategic.ending?.eventId)?.text
               : ""}{" "}
             Your history remains available to inspect. Start a new life from the
-            game menu below.
+            game menu below. Manual Load still restores your chosen checkpoint,
+            including one saved before death.
           </p>
+        </Panel>
+      )}
+      {hospitalStay(s) && !s.end && (
+        <Panel>
+          <h3>Recovering in hospital</h3>
+          <p>
+            Discharge on day {hospitalStay(s)!.releaseDay}. Treatment $
+            {hospitalStay(s)!.bill}; ${hospitalStay(s)!.paid} paid. Any unpaid
+            treatment is included in arrears. Your jobs, debts, relationships
+            and the city continue while you recover.
+          </p>
+          <button
+            onClick={() => {
+              setState(recoverInHospital(s));
+              setScreen("City");
+            }}
+          >
+            Complete hospital recovery
+          </button>
         </Panel>
       )}
       {p.status === "arrested" && (
@@ -1209,6 +1260,7 @@ export function App() {
                     {person.alias && <small> / {person.alias}</small>}
                   </h3>
                   <p>{person.description}</p>
+                  <KnownCharacterLocation s={s} id={person.id} />
                   {p.connections.includes(person.id) && (
                     <p className="muted">{knownCapabilities(person)}</p>
                   )}

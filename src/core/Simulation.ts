@@ -1,6 +1,10 @@
+import { beginQuanny } from "../systems/Quanny";
+import { presenceOf } from "../board/presence";
+import { newQuannyState } from "../systems/QuannyState";
+import { newDangerState } from "../systems/DangerState";
 import { syncTerritory, newStrategy } from "../systems/Territory";
 import { newStreetState } from "../systems/StreetEconomy";
-import { type GameState, type ZoneId } from "./GameState";
+import { player, type GameState, type ZoneId } from "./GameState";
 import { ZONES } from "../content/city";
 import { FACTIONS } from "../content/factions";
 import {
@@ -28,6 +32,8 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
   );
   const s: GameState = {
     version: 8,
+    quanny: newQuannyState(),
+    danger: newDangerState(seed),
     strategic: newStrategy({ zones: ZONES, factions: FACTIONS }),
     street: newStreetState(),
     day: 1,
@@ -36,7 +42,16 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
     nextId: 1,
     playerId: "player",
     characters: Object.fromEntries(
-      [p, ...canonicalCharacters(), ...residents()].map((c) => [c.id, c]),
+      [
+        p,
+        ...canonicalCharacters().filter(
+          (c) => !["quanny", "mr-lewis"].includes(c.id),
+        ),
+        ...residents(),
+        ...canonicalCharacters().filter((c) =>
+          ["quanny", "mr-lewis"].includes(c.id),
+        ),
+      ].map((c) => [c.id, c]),
     ),
     zones: structuredClone(ZONES),
     factions: structuredClone(FACTIONS),
@@ -59,6 +74,21 @@ export function newGame(name: string, home: ZoneId, seed = 2026): GameState {
   for (const z of Object.values(s.zones)) syncTerritory(s, z.id);
   initializeRelationships(s);
   openingIncident(s);
+  syncEncounters(s);
+  return s;
+}
+
+/** The player has entered/resumed gameplay. World construction and board inspection stay read-only. */
+export function enterGameplay(state: GameState): GameState {
+  if (
+    state.quanny.met ||
+    state.end ||
+    player(state).status !== "active" ||
+    presenceOf(state).zone !== "reservoir"
+  )
+    return state;
+  const s = structuredClone(state);
+  if (!beginQuanny(s, presenceOf(s).location, "gameplay")) return state;
   syncEncounters(s);
   return s;
 }

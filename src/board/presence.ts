@@ -1,3 +1,6 @@
+import { quannyConversation } from "../systems/QuannyState";
+import { expose, hospitalStay, streetConversation } from "../systems/Danger";
+import { syncEncounters } from "../systems/EncounterLifecycle";
 import {
   player,
   type FactionId,
@@ -101,7 +104,7 @@ const arrivalHooks: ArrivalHook[] = [];
 /**
  * Register a system that reacts to the player arriving somewhere (ambushes,
  * police stops, run-ins). Hooks receive the state after the move and return
- * the next state. None are registered in this environment pass.
+ * the next state. Core danger exposure runs before optional extension hooks.
  */
 export function onArrival(hook: ArrivalHook) {
   arrivalHooks.push(hook);
@@ -111,12 +114,20 @@ export function onArrival(hook: ArrivalHook) {
 /** Move the player to a place. Pure: returns a new state. */
 export function moveTo(s: GameState, location: string): GameState {
   const l = locationById(location);
-  if (!l) return s;
+  if (
+    !l ||
+    s.end ||
+    player(s).status !== "active" ||
+    hospitalStay(s) ||
+    streetConversation(s) ||
+    quannyConversation(s)
+  )
+    return s;
   const prev = presenceOf(s);
   if (prev.location === location)
     return s.presence ? s : { ...s, presence: prev };
   const next: GameState = {
-    ...s,
+    ...structuredClone(s),
     presence: {
       ...prev,
       location,
@@ -128,6 +139,8 @@ export function moveTo(s: GameState, location: string): GameState {
       ].slice(-12),
     },
   };
+  expose(next, location, "arrival");
+  syncEncounters(next);
   const risk = assessRisk(next, location);
   return arrivalHooks.reduce(
     (state, hook) => hook(state, location, risk),
@@ -192,7 +205,10 @@ export function assessRisk(s: GameState, location: string): Risk {
   else if (police >= 70)
     reasons.push({ w: 6, text: "Police are everywhere here." });
   if (p.notoriety > 40)
-    reasons.push({ w: p.notoriety * 0.2, text: "People recognize you." });
+    reasons.push({
+      w: p.notoriety * 0.2,
+      text: "Your public reputation may draw attention.",
+    });
   if (p.home === l.zone)
     reasons.push({ w: -8, text: "Home turf: you know these streets." });
   const score = Math.max(0, Math.round(reasons.reduce((n, r) => n + r.w, 0)));

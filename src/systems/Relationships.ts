@@ -85,6 +85,27 @@ export function initializeRelationships(s: GameState) {
         id.startsWith("contact-"),
     );
   }
+  // Cordial awareness of Mega's established name is not friendship or player protection.
+  const q = s.characters.quanny;
+  if (q) {
+    if (!q.known.includes("mega")) q.known.push("mega");
+    q.relationships.mega = {
+      trust: 10,
+      respect: 35,
+      affection: 0,
+      grievance: 0,
+      history: [],
+    };
+    // The authored introduction, not shared home or membership, establishes personal recognition.
+    q.known = q.known.filter((id) => id !== s.playerId);
+    q.connections = q.connections.filter((id) => id !== s.playerId);
+    s.characters[s.playerId].known = s.characters[s.playerId].known.filter(
+      (id) => id !== "quanny",
+    );
+    s.characters[s.playerId].connections = s.characters[
+      s.playerId
+    ].connections.filter((id) => id !== "quanny");
+  }
   const p = s.characters[s.playerId];
   for (const c of chars)
     if (c.id !== p.id && !p.connections.includes(c.id))

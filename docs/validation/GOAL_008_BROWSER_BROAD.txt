@@ -1,0 +1,282 @@
+[WebServer] (node:8229) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 84 tests using 2 workers
+
+(node:8251) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   2 [chromium-mobile] › tests/board.spec.ts:130:1 › lab saves never touch production keys and The Reservoir is spelled right (6.7s)
+  ✓   1 [chromium-mobile] › tests/board.spec.ts:40:1 › the player lives on the board: walks to places, acts there, and their location is saved (40.9s)
+  ✓   3 [chromium-mobile] › tests/crew.spec.ts:46:1 › Flacco cooperation, paid work, refusal, natural second recruitment and saved consequences (1.0m)
+  ✓   5 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 320px (11.2s)
+  ✓   6 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 375px (10.8s)
+  ✓   7 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 390px (11.4s)
+  ✓   8 [chromium-mobile] › tests/crew.spec.ts:198:3 › crew dialogue and Set fit 430px (10.9s)
+  ✓   9 [chromium-mobile] › tests/danger.spec.ts:48:1 › board street conversation: choices, persistent grievance, menus cannot reroll, reload (20.8s)
+  ✓  10 [chromium-mobile] › tests/danger.spec.ts:100:1 › a recognized war member can be injured directly; recovery advances city time and preserves consequences (6.8s)
+  ✓  11 [chromium-mobile] › tests/danger.spec.ts:152:1 › terminal conflict death ends activity and manual load can restore the earlier checkpoint (3.8s)
+  ✘   4 [chromium-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting (2.1m)
+(node:8583) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✘  13 [chromium-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown (31.3s)
+(node:8664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  14 [chromium-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload (16.9s)
+  ✓  15 [chromium-mobile] › tests/employment.spec.ts:258:1 › employment competes with The Chains through actual AP, wages, attendance and promises (58.9s)
+  ✘  16 [chromium-mobile] › tests/encounters.spec.ts:74:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume (19.8s)
+(node:8819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  17 [chromium-mobile] › tests/encounters.spec.ts:176:1 › refusing, postponing, Escape and backdrop leave no accidental obligation or daily reopening (22.3s)
+  ✘  12 [chromium-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough (3.1m)
+(node:8927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✘  19 [chromium-mobile] › tests/encounters.spec.ts:211:3 › 40 days after broken: one storyline reaction while independent offers continue (1.1m)
+  ✘  18 [chromium-mobile] › tests/encounters.spec.ts:211:3 › 40 days after fulfilled: one storyline reaction while independent offers continue (1.3m)
+
+
+  1) [chromium-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'End day' })
+        - locator resolved to <button aria-label="End day" class="advance board-end-day">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      21 | }
+      22 | async function day(page: Page) {
+    > 23 |   await page.getByRole("button", { name: "End day" }).click();
+         |                                                       ^
+      24 |   await dismissEncounter(page);
+      25 | }
+      26 | async function snap(page: Page, name: string) {
+        at day (/workspace/Hood-Hero-Lab/tests/crew.spec.ts:23:55)
+        at /workspace/Hood-Hero-Lab/tests/crew.spec.ts:184:11
+
+    Error Context: test-results/goal-008-reduced-motion/crew-independent-offer-ins-bea02--while-the-NPC-keeps-acting-chromium-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/crew-independent-offer-ins-bea02--while-the-NPC-keeps-acting-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/goal-008-reduced-motion/crew-independent-offer-ins-bea02--while-the-NPC-keeps-acting-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough
+
+    Test timeout of 180000ms exceeded.
+
+    Error: locator.click: Test timeout of 180000ms exceeded.
+    Call log:
+      - waiting for getByRole('navigation').getByRole('button', { name: 'Actions', exact: true })
+        - locator resolved to <button class="" aria-label="Actions">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+      15 |     .getByRole("navigation")
+      16 |     .getByRole("button", { name, exact: true })
+    > 17 |     .click();
+         |      ^
+      18 |   if (name === "Actions")
+      19 |     await page.getByRole("button", { name: "Honest", exact: true }).click();
+      20 | };
+        at nav (/workspace/Hood-Hero-Lab/tests/employment.spec.ts:17:6)
+        at /workspace/Hood-Hero-Lab/tests/employment.spec.ts:133:13
+
+    attachment #1: 01-job-search (image/png) ───────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-hire-scheduled--00424--day-employment-playthrough-chromium-mobile/attachments/01-job-search-1e6a708dc8801adda6bb28726f8b0c0ee0506698.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 02-hired-schedule (image/png) ───────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-hire-scheduled--00424--day-employment-playthrough-chromium-mobile/attachments/02-hired-schedule-04b2d2b701dd5a51cdad49ead5c25e5a605a729b.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 03-first-wages (image/png) ──────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-hire-scheduled--00424--day-employment-playthrough-chromium-mobile/attachments/03-first-wages-7647c84917f1d850237f36383e40cb8d7584a946.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/goal-008-reduced-motion/employment-hire-scheduled--00424--day-employment-playthrough-chromium-mobile/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-hire-scheduled--00424--day-employment-playthrough-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/goal-008-reduced-motion/employment-hire-scheduled--00424--day-employment-playthrough-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.all: Test timeout of 30000ms exceeded.
+
+      184 |   await capture(page, "07-hiring-restriction");
+      185 |   await nav(page, "Actions");
+    > 186 |   for (const b of await page.locator('[data-action="apply"] button').all())
+          |                                                                      ^
+      187 |     await expect(b).toBeDisabled();
+      188 |   await click(page, "gig");
+      189 |   expect((await state(page)).progression.cleanEarned).toBe(38);
+        at /workspace/Hood-Hero-Lab/tests/employment.spec.ts:186:70
+
+    attachment #1: 05-scheduled-choice (image/png) ─────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-chromium-mobile/attachments/05-scheduled-choice-e6faa9569889bdfc77f02fd7c48b1b283beec9cb.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 06-termination (image/png) ──────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-chromium-mobile/attachments/06-termination-cad9a707d8e4e168523567d68a4be5324e571b3f.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 07-hiring-restriction (image/png) ───────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-chromium-mobile/attachments/07-hiring-restriction-1d1b4a2dc335b54409e4a5dc07f33e73311b0ef0.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/goal-008-reduced-motion/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-chromium-mobile/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/goal-008-reduced-motion/employment-absence-warning-8ee84-e-and-gigs-survive-cooldown-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium-mobile] › tests/encounters.spec.ts:74:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.action-feedback')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.action-feedback') with timeout 5000ms
+      - waiting for locator('.action-feedback')
+
+
+      118 |     "pending",
+      119 |   );
+    > 120 |   await expect(page.locator(".action-feedback")).toBeVisible();
+          |                                                  ^
+      121 |   await expect(page.locator(".action-feedback")).toHaveCount(0, {
+      122 |     timeout: 7000,
+      123 |   });
+        at /workspace/Hood-Hero-Lab/tests/encounters.spec.ts:120:50
+
+    attachment #1: 01-modal-over-city (image/png) ──────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/encounters-true-City-modal-43ffa-fillment-history-and-Resume-chromium-mobile/attachments/01-modal-over-city-2399c04faff05db065c062f528483f2c85271d9e.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 02-contextual-exchange (image/png) ──────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/encounters-true-City-modal-43ffa-fillment-history-and-Resume-chromium-mobile/attachments/02-contextual-exchange-d950e10e2cd25ac855ffc8b3922dbb75dbfd861d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/goal-008-reduced-motion/encounters-true-City-modal-43ffa-fillment-history-and-Resume-chromium-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/encounters-true-City-modal-43ffa-fillment-history-and-Resume-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/goal-008-reduced-motion/encounters-true-City-modal-43ffa-fillment-history-and-Resume-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium-mobile] › tests/encounters.spec.ts:211:3 › 40 days after fulfilled: one storyline reaction while independent offers continue
+
+    Test was interrupted.
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByRole('dialog', { name: 'Character encounter', exact: true }).getByRole('button', { name: 'Can\'t make it' })
+        - locator resolved to <button class="encounter-response">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - performing click action
+
+
+      66 |   const e = (await saved(page)).encounters.find((e) => e.status === "active");
+      67 |   if (e?.definitionId === "crew-offer")
+    > 68 |     await reply(page, "Can't make it").click();
+         |                                        ^
+      69 | }
+      70 | async function endDay(page: Page) {
+      71 |   await page.getByRole("button", { name: "End day" }).click();
+        at declineCrewOffer (/workspace/Hood-Hero-Lab/tests/encounters.spec.ts:68:40)
+        at /workspace/Hood-Hero-Lab/tests/encounters.spec.ts:254:7
+
+    Error Context: test-results/goal-008-reduced-motion/encounters-40-days-after-f-d1547-independent-offers-continue-chromium-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/encounters-40-days-after-f-d1547-independent-offers-continue-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/goal-008-reduced-motion/encounters-40-days-after-f-d1547-independent-offers-continue-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium-mobile] › tests/encounters.spec.ts:211:3 › 40 days after broken: one storyline reaction while independent offers continue
+
+    Test was interrupted.
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByRole('button', { name: 'End day' })
+        - locator resolved to <button aria-label="End day" class="advance board-end-day">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      69 | }
+      70 | async function endDay(page: Page) {
+    > 71 |   await page.getByRole("button", { name: "End day" }).click();
+         |                                                       ^
+      72 | }
+      73 |
+      74 | test("true City modal, sequential questions, promise closure, queued fulfillment, history and Resume", async ({
+        at endDay (/workspace/Hood-Hero-Lab/tests/encounters.spec.ts:71:55)
+        at /workspace/Hood-Hero-Lab/tests/encounters.spec.ts:253:13
+
+    attachment #1: 06-broken-promise-once (image/png) ──────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/encounters-40-days-after-b-6bea0-independent-offers-continue-chromium-mobile/attachments/06-broken-promise-once-b140ba7f7eea23ad93c4a16b9e802c2ccdb16eee.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/goal-008-reduced-motion/encounters-40-days-after-b-6bea0-independent-offers-continue-chromium-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/goal-008-reduced-motion/encounters-40-days-after-b-6bea0-independent-offers-continue-chromium-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/goal-008-reduced-motion/encounters-40-days-after-b-6bea0-independent-offers-continue-chromium-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium-mobile] › tests/crew.spec.ts:133:1 › independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting
+    [chromium-mobile] › tests/employment.spec.ts:90:1 › hire, scheduled wages, save and a thirty-day employment playthrough
+    [chromium-mobile] › tests/employment.spec.ts:154:1 › absence warning can be cancelled; repeated absences fire and gigs survive cooldown
+    [chromium-mobile] › tests/encounters.spec.ts:74:1 › true City modal, sequential questions, promise closure, queued fulfillment, history and Resume
+  2 interrupted
+    [chromium-mobile] › tests/encounters.spec.ts:211:3 › 40 days after fulfilled: one storyline reaction while independent offers continue
+    [chromium-mobile] › tests/encounters.spec.ts:211:3 › 40 days after broken: one storyline reaction while independent offers continue
+  65 did not run
+  13 passed (6.7m)

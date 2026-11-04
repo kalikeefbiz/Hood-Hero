@@ -1,6 +1,6 @@
 import type { GameState } from "../core/GameState";
 export type Expression =
-  "concerned" | "confident" | "proposing" | "strategizing";
+  "neutral" | "concerned" | "confident" | "proposing" | "strategizing";
 interface Illustration {
   path: string;
   alt: string;
@@ -13,8 +13,31 @@ const mega = (name: string, alt: string, width: number): Illustration => ({
   width,
   height: 1280,
 });
+const quanny = (
+  name: string,
+  alt: string,
+  width: number,
+  height = 581,
+): Illustration => ({
+  path: `assets/characters/quanny/quanny-${name}.webp`,
+  alt,
+  width,
+  height,
+});
 // Explicit canonical mapping: manifest baby-canon is the simulation's stable babycanon ID.
 export const CHARACTER_ART = {
+  quanny: {
+    neutral: quanny("neutral", "Quanny, neutral", 370),
+    proposing: quanny("talking", "Quanny, talking and explaining", 374),
+    concerned: quanny("disappointed", "Quanny, disappointed", 372),
+    confident: quanny("pleased", "Quanny, confident and pleased", 374, 580),
+    strategizing: quanny(
+      "thinking",
+      "Quanny, thinking and calculating",
+      371,
+      580,
+    ),
+  },
   mega: {
     concerned: mega(
       "mega-concerned-no-chain",
@@ -78,19 +101,19 @@ export const artURL = (path: string, base = import.meta.env.BASE_URL) =>
 export function characterArt(
   s: GameState,
   id: string,
-  expression: Expression = "confident",
+  expression: Expression = id === "quanny" ? "neutral" : "confident",
 ): Illustration | null {
+  if (id === "quanny") return CHARACTER_ART.quanny[expression];
   if (id === "mega") {
+    const pose = expression === "neutral" ? "confident" : expression;
     const possession = s.properties.chains?.possession;
     const hasChain =
       possession?.kind === "character" && possession.id === "mega";
     if (!hasChain)
-      return expression === "concerned"
+      return pose === "concerned"
         ? CHARACTER_ART.mega.concerned
         : CHARACTER_ART.mega.missing;
-    return CHARACTER_ART.mega[
-      expression === "concerned" ? "confident" : expression
-    ];
+    return CHARACTER_ART.mega[pose === "concerned" ? "confident" : pose];
   }
   if (id === "babycanon" || id === "joker" || id === "dizzy")
     return CHARACTER_ART[id];

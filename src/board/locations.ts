@@ -518,10 +518,11 @@ export const LOCATIONS: LocationDef[] = [
     archetype: "storefront",
     sign: "LIL JAY'S MARKET",
     description:
-      "Groceries, cold beer, lotto. Shelves to stock and customers who know your face.",
+      "Mr. Lewis’s corner store. Groceries, cold beer, lotto. Shelves to stock and customers who know your face.",
     at: [0.82, 0.86],
     palette: ["#9e8a7c", "#e3c23a", "#e3c23a", "#b0202a"],
     links: {
+      people: true,
       job: "retail-reservoir",
       items: ["necessities", "smokes", "booze"],
     },

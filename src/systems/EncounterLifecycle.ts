@@ -1,3 +1,4 @@
+import { resolveStreetScene } from "./Danger";
 import { expireCrewOffers } from "./CrewAgency";
 import type { EncounterInstance, GameState } from "../core/GameState";
 import { ENCOUNTERS } from "../content/encounters";
@@ -85,6 +86,19 @@ export function openEncounter(state: GameState, id: string): GameState {
 export function dismissEncounter(state: GameState, id: string): GameState {
   const s = structuredClone(state),
     e = s.encounters.find((e) => e.id === id);
+  if (e && e.status === "active" && e.dangerSceneId) {
+    const scene = s.danger.scenes.find((x) => x.id === e.dangerSceneId)!;
+    const start = s.events.length;
+    resolveStreetScene(s, scene, "leave");
+    e.status = "acknowledged";
+    e.selectedResponses.push({
+      id: "leave",
+      day: s.day,
+      eventIds: s.events.slice(start).map((x) => x.id),
+    });
+    syncEncounters(s);
+    return s;
+  }
   if (e && e.status === "active") {
     e.status = "pending";
     e.deferred = true;

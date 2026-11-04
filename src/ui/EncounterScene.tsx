@@ -3,6 +3,7 @@ import type { EncounterInstance, GameState } from "../core/GameState";
 import { encounterDefinition, responseError } from "../systems/Encounters";
 import { incidentPromise } from "../systems/Commitments";
 import { ACTIONS, actionSuccessChance } from "../core/ActionEngine";
+import { quannyExpression } from "./quannyExpression";
 import { CharacterPortrait } from "./CharacterPortrait";
 import { money } from "./ActionCard";
 import { themeStyle } from "./theme";
@@ -27,6 +28,7 @@ export function EncounterScene({
     resultEvents = last?.eventIds
       .map((id) => s.events.find((x) => x.id === id))
       .filter((x) => x?.observedBy.includes(s.playerId));
+  const quannyOutcome = historical && c.id === "quanny" && !!last;
   const concerned =
     promise?.status === "broken" ||
     (!promise && s.incidents[e.incidentId ?? ""]?.status === "active");
@@ -54,7 +56,7 @@ export function EncounterScene({
           onClick={() => dismiss(e.id)}
           aria-label="Close conversation"
         >
-          Close ×
+          {d.id === "living-danger" && !historical ? "Walk away ×" : "Close ×"}
         </button>
       </div>
       <div
@@ -68,7 +70,10 @@ export function EncounterScene({
             s={s}
             id={c.id}
             expression={
-              d.expression?.(s, e) ?? (concerned ? "concerned" : "confident")
+              c.id === "quanny"
+                ? quannyExpression(s, e)
+                : (d.expression?.(s, e) ??
+                  (concerned ? "concerned" : "confident"))
             }
           />
           <div className="encounter-copy">
@@ -86,8 +91,14 @@ export function EncounterScene({
                 {Math.round(c.relationships[s.playerId]?.trust ?? 0)}
               </p>
             )}
-            <p className="dialogue">“{d.dialogue(s, e)}”</p>
-            {source && (
+            {quannyOutcome ? (
+              resultEvents?.length ? (
+                <p className="dialogue">{resultEvents.at(-1)?.text}</p>
+              ) : null
+            ) : (
+              <p className="dialogue">“{d.dialogue(s, e)}”</p>
+            )}
+            {source && !quannyOutcome && (
               <p className="encounter-fact">
                 DAY {source.day} · {source.text}
               </p>
@@ -104,7 +115,7 @@ export function EncounterScene({
                 )}
               </p>
             )}
-            {last && resultEvents?.length && !source ? (
+            {last && resultEvents?.length && !source && !quannyOutcome ? (
               <p className="encounter-result" role="status">
                 {resultEvents.at(-1)?.text}
               </p>

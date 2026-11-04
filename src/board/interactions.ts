@@ -1,3 +1,9 @@
+import {
+  quannyLocation,
+  QUANNY_HOME,
+  quannyCollectionInstruction,
+} from "../systems/QuannyState";
+import { receivable } from "../systems/Consignment";
 import { player, type GameState } from "../core/GameState";
 import { availableActions, type Action } from "../core/ActionEngine";
 import { currentEmployment } from "../systems/Employment";
@@ -18,6 +24,7 @@ export function placeActions(s: GameState, l: LocationDef): Action[] {
     job = currentEmployment(s);
   const out: Action[] = [];
   for (const a of availableActions(s)) {
+    if (a.type === "quanny" && l.id === quannyLocation(s)) out.push(a);
     if (links.job) {
       if (
         (a.type === "apply" || a.type === "acceptJob") &&
@@ -51,10 +58,17 @@ export function placeActions(s: GameState, l: LocationDef): Action[] {
 
 /** People who live in this place's district, known contacts first. */
 export function placePeople(s: GameState, l: LocationDef) {
-  if (!l.links.people) return [];
+  if (!l.links.people && l.id !== quannyLocation(s)) return [];
   const p = player(s);
   return Object.values(s.characters)
-    .filter((c) => c.id !== p.id && c.home === l.zone && c.status !== "dead")
+    .filter(
+      (c) =>
+        c.id !== p.id &&
+        c.home === l.zone &&
+        c.status !== "dead" &&
+        (c.id !== "quanny" || l.id === quannyLocation(s)) &&
+        (c.id !== "mr-lewis" || l.id === QUANNY_HOME),
+    )
     .sort(
       (a, b) =>
         Number(p.known.includes(b.id)) - Number(p.known.includes(a.id)) ||
@@ -73,6 +87,19 @@ export function placePeople(s: GameState, l: LocationDef) {
 /** Read-only facts about the place drawn from saved state. */
 export function placeFacts(s: GameState, l: LocationDef): string[] {
   const facts: string[] = [];
+  if (l.id === QUANNY_HOME && s.quanny.met) {
+    const a = receivable(s, "quanny");
+    if (a)
+      facts.push(
+        `${quannyCollectionInstruction(s, a.dueDay)} $${a.balance} owed.`,
+      );
+    if (
+      s.street.agreements.some(
+        (a) => a.debtor === "quanny" && a.status === "disputed",
+      )
+    )
+      facts.push("A refused consignment remains in your shared history.");
+  }
   const job = currentEmployment(s);
   if (l.links.job) {
     const d = jobDefinition(l.links.job);

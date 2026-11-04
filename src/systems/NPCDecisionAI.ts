@@ -17,6 +17,7 @@ function decide(s: GameState, c: Character): Action | null {
         o.actor === c.id &&
         o.status === "pending" &&
         o.kind !== "employment-shift" &&
+        o.kind !== "supplier-debt" &&
         o.kind !== "recover-property" &&
         (o.kind !== "crew-activity" || o.dueDay === s.day),
     )
@@ -26,7 +27,17 @@ function decide(s: GameState, c: Character): Action | null {
   const options: { action: Action; score: number }[] = [];
   const add = (action: Action, score: number) => {
     if (!validateAction(s, action))
-      options.push({ action, score: score + random(s) * 5 });
+      options.push({
+        action,
+        score:
+          score +
+          random(
+            action.target && ["quanny", "mr-lewis"].includes(action.target)
+              ? s.quanny
+              : s,
+          ) *
+            5,
+      });
   };
   add(
     { actor: c.id, type: "gig" },
@@ -62,11 +73,25 @@ function decide(s: GameState, c: Character): Action | null {
   return options[0]?.action ?? null;
 }
 export function advanceNPCs(s: GameState) {
-  for (const c of Object.values(s.characters)) {
+  for (const c of Object.values(s.characters).sort(
+    (a, b) =>
+      Number(["quanny", "mr-lewis"].includes(a.id)) -
+      Number(["quanny", "mr-lewis"].includes(b.id)),
+  )) {
     if (c.id === s.playerId) continue;
-    considerCrewOffer(s, c);
-    if (c.agency.lastAssignmentDay === s.day) continue;
-    const action = decide(s, c);
-    if (action) resolveAction(s, action);
+    const authored = ["quanny", "mr-lewis"].includes(c.id),
+      previousRng = s.rng;
+    if (authored) s.rng = s.quanny.rng;
+    try {
+      considerCrewOffer(s, c);
+      if (c.agency.lastAssignmentDay === s.day) continue;
+      const action = decide(s, c);
+      if (action) resolveAction(s, action);
+    } finally {
+      if (authored) {
+        s.quanny.rng = s.rng;
+        s.rng = previousRng;
+      }
+    }
   }
 }

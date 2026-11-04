@@ -170,7 +170,10 @@ export const SUPPLIER_REACTION: EncounterDefinition = {
         (e) =>
           e.commitmentId &&
           s.commitments.some(
-            (c) => c.id === e.commitmentId && c.kind === "supplier-debt",
+            (c) =>
+              c.id === e.commitmentId &&
+              c.kind === "supplier-debt" &&
+              c.actor === s.playerId,
           ) &&
           ["major", "critical"].includes(e.importance ?? "") &&
           !s.acknowledgedEvents.includes(e.id),

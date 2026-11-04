@@ -1,3 +1,4 @@
+import { KnownCharacterLocation } from "./KnownCharacterLocation";
 import { MERCHANDISE } from "../content/street";
 import type { GameState } from "../core/GameState";
 import { player } from "../core/GameState";
@@ -184,6 +185,7 @@ export function ActionsHub({
               REACH OUT / {accessStatus(s, p.id, c.id).toUpperCase()}
             </p>
             <h3>{c.alias ?? c.name}</h3>
+            <KnownCharacterLocation s={s} id={c.id} />
             <p>
               {s.zones[c.home].name} ·{" "}
               {c.affiliation ? s.factions[c.affiliation].name : "Independent"}

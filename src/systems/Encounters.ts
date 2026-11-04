@@ -1,3 +1,5 @@
+import { resolveQuanny } from "./Quanny";
+import { hospitalStay, resolveStreetScene } from "./Danger";
 import { acquire, repay } from "./StreetEconomy";
 import {
   acceptCrewOffer,
@@ -24,6 +26,8 @@ export function responseError(
   r: EncounterResponse,
 ): string | null {
   if (s.end) return "This run has ended";
+  if (hospitalStay(s))
+    return "Recover in hospital before taking part in conversations.";
   if (!encounterDefinition(e).eligible(s, e))
     return "This conversation is no longer available";
   if (e.status !== "active") return "Open the conversation first";
@@ -48,7 +52,29 @@ export function respondEncounter(
   const startEvent = state.events.length;
   let s = structuredClone(state);
   const effect = response.effect;
-  if (effect.type === "street") {
+  if (effect.type === "quanny") {
+    const e = s.encounters.find((x) => x.id === id)!;
+    resolveQuanny(s, e, effect.choice);
+    e.selectedResponses.push({
+      id: responseId,
+      day: s.day,
+      eventIds: s.events.slice(startEvent).map((e) => e.id),
+    });
+    syncEncounters(s);
+    return { state: s, error: null };
+  } else if (effect.type === "danger") {
+    const e = s.encounters.find((x) => x.id === id)!;
+    const scene = s.danger.scenes.find((x) => x.id === e.dangerSceneId)!;
+    resolveStreetScene(s, scene, effect.choice);
+    e.status = "acknowledged";
+    e.selectedResponses.push({
+      id: responseId,
+      day: s.day,
+      eventIds: s.events.slice(startEvent).map((x) => x.id),
+    });
+    syncEncounters(s);
+    return { state: s, error: null };
+  } else if (effect.type === "street") {
     const e = s.encounters.find((e) => e.id === id)!;
     if (effect.choice === "acquire")
       acquire(s, effect.supplier!, effect.arrangement!);

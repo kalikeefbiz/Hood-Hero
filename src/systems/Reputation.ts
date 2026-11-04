@@ -18,7 +18,11 @@ export function advancePressure(s: GameState) {
       random(s) < ongoingArrestChance(s, c.id)
     ) {
       arrest(s, c.id, "accumulated criminal exposure", score > 80 ? 2 : 1);
-    } else if (c.rivalThreat > 70 && random(s) < (c.rivalThreat - 65) / 240) {
+    } else if (
+      c.id !== s.playerId &&
+      c.rivalThreat > 70 &&
+      random(s) < (c.rivalThreat - 65) / 240
+    ) {
       c.status = "dead";
       record(
         s,

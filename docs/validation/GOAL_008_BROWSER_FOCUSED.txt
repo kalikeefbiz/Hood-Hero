@@ -1,0 +1,29 @@
+[WebServer] (node:9147) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:9165) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   1 [chromium-mobile] › tests/board.spec.ts:40:1 › the player lives on the board: walks to places, acts there, and their location is saved (30.4s)
+  ✓   2 [chromium-mobile] › tests/board.spec.ts:130:1 › lab saves never touch production keys and The Reservoir is spelled right (2.7s)
+  ✓   3 [chromium-mobile] › tests/danger.spec.ts:49:1 › board street conversation: choices, persistent grievance, menus cannot reroll, reload (13.5s)
+  ✓   4 [chromium-mobile] › tests/danger.spec.ts:101:1 › a recognized war member can be injured directly; recovery advances city time and preserves consequences (2.7s)
+  ✓   5 [chromium-mobile] › tests/danger.spec.ts:153:1 › terminal conflict death ends activity and manual load can restore the earlier checkpoint (2.1s)
+  ✓   6 [chromium-mobile] › tests/danger.spec.ts:198:1 › a meaningful Wallet activity opens a contextual street conversation on the City board (4.4s)
+  ✓   7 [chromium-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload (12.0s)
+  ✓   8 [chromium-mobile] › tests/strategy.spec.ts:97:1 › simulation-resolved control change and council succession progression (8.1s)
+(node:9347) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓   9 [webkit-mobile] › tests/board.spec.ts:40:1 › the player lives on the board: walks to places, acts there, and their location is saved (20.9s)
+  ✓  10 [webkit-mobile] › tests/board.spec.ts:130:1 › lab saves never touch production keys and The Reservoir is spelled right (3.4s)
+  ✓  11 [webkit-mobile] › tests/danger.spec.ts:49:1 › board street conversation: choices, persistent grievance, menus cannot reroll, reload (9.8s)
+  ✓  12 [webkit-mobile] › tests/danger.spec.ts:101:1 › a recognized war member can be injured directly; recovery advances city time and preserves consequences (5.3s)
+  ✓  13 [webkit-mobile] › tests/danger.spec.ts:153:1 › terminal conflict death ends activity and manual load can restore the earlier checkpoint (3.6s)
+  ✓  14 [webkit-mobile] › tests/danger.spec.ts:198:1 › a meaningful Wallet activity opens a contextual street conversation on the City board (5.1s)
+  ✓  15 [webkit-mobile] › tests/employment.spec.ts:203:1 › workplace scene consequence, skip, close and no replay across tabs or reload (11.4s)
+  ✓  16 [webkit-mobile] › tests/strategy.spec.ts:97:1 › simulation-resolved control change and council succession progression (6.8s)
+
+  16 passed (2.4m)

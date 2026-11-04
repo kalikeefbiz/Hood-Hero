@@ -163,6 +163,7 @@ export interface Commitment {
 export interface EncounterInstance {
   id: ID;
   definitionId: string;
+  dangerSceneId?: ID;
   crewOfferId?: ID;
   sourceEventId?: ID;
   incidentId?: ID;
@@ -213,6 +214,8 @@ export interface Asset {
 }
 export interface GameState {
   /** Strategy-board lab: the player's physical presence in the city. */
+  quanny: import("../systems/QuannyState").QuannyState;
+  danger: import("../systems/DangerState").DangerState;
   presence?: import("../board/presence").Presence;
   version: 8;
   strategic: import("../systems/StrategicTypes").StrategicState;
