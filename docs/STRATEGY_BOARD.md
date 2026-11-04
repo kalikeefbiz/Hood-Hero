@@ -104,7 +104,7 @@ There's no block-level control in the simulation yet. `deriveBlocks` *presents* 
 
 Set `model: "assets/models/<file>.glb"` on a location. The board measures the footprint the procedural building would use, places the GLB there (the rest of the block still fills in), and loads it lazily; until it arrives, or if it fails, nothing breaks. `modelFit` tunes the fit: `height` (scale to a world height instead of the footprint), `scale`, `yaw`, `y`, `offset`, and `trackGap` for a station that brings its own stretch of El track. Vehicles live in `src/board/models.ts` (`MODEL_FILES`) and are swapped into the instanced traffic and police layers.
 
-**In the game now** (Meshy image-to-3D, Smart Topology, 2.5–5k triangles, one 1024px WebP texture each, 160–370 KB):
+**In the game now** (Meshy image-to-3D, Smart Topology, 2.5–5k triangles, one 512px WebP texture each, 110–300 KB):
 
 | File | Used for |
 | --- | --- |
@@ -118,18 +118,28 @@ Set `model: "assets/models/<file>.glb"` on a location. The board measures the fo
 | `boarded-house.glb` | Boarded house (from studio art) |
 | `el-deli.glb` | Nawf Deli & Grocery (from studio art) |
 | `nawf-projects.glb` | Nawf Projects (from studio art) |
+| `auto-garage.glb` | Rio Gabriel Auto Repair, Southside Auto Repair |
+| `city-hall.glb` | Stixx City Hall |
+| `precinct.glb` | Central Precinct |
+| `rowhouses.glb` | Rowhouses (Southside) |
+| `church.glb` | The Church (Southside) |
+| `mission.glb` | San Gabriel Mission (`modelFit.yaw` turns the bell gable to the street) |
+| `community-center.glb` | Southside and Nawf community centers |
+| `warehouse.glb` | Westside warehouse, Courier route depot |
+| `courtyard.glb` | Courtyard apartments (Rio Gabriel) |
+| `small-storefront.glb` | Nawf Barbershop, both liquor stores, La Esquina Taqueria, Pawn Shop |
+
+Every texture is 512px WebP (about 1.4 MB of GPU memory each, ~30 MB for the set), sized for older iPhones; re-export from the Meshy originals at 1024 if a closer camera ever needs it.
 
 Studio art goes straight into image-to-3D (15 credits). What converts best: one isolated building, three-quarter view from slightly above, plain background, full roof visible, doors closed. Open roll-up doors and see-through interiors come back hollow (the first garage attempt was dropped for this).
 
-Recipe that kept the cost to 18 credits a model: a `nano-banana-2-lite` concept image (3 credits, single object, three-quarter view, white background), then `image-to-3d --model-type smart-topology --ai-model meshy-t2.5 --target-polycount 2500–5000 --texture-resolution 2k --enable-pbr false` (15), then `gltf-transform optimize --texture-compress webp --texture-size 1024`. Meshy cars face −X; `asVehicle` turns them to the board's +X.
+Recipe that kept the cost to 18 credits a model: a `nano-banana-2-lite` concept image (3 credits, single object, three-quarter view, white background), then `image-to-3d --model-type smart-topology --ai-model meshy-t2.5 --target-polycount 2500–5000 --texture-resolution 2k --enable-pbr false` (15), then `gltf-transform optimize --texture-compress webp --texture-size 512`. Meshy cars face −X; `asVehicle` turns them to the board's +X.
 
 **Still procedural**, in priority order:
 
-1. **Stixx City Hall** (dome), **Central Precinct**, and the **auto repair garage** (needs a closed-door image)
-2. **Rowhouse** and **Reservoir house** modules (porch, boarded variants)
-3. **Port crane** and container stack
-4. **San Gabriel Mission** bell tower
-5. **Player character** (rig + walk cycle; confirm rigging works before spending on variants)
+1. **Port crane** and container stack (Port of Stixx)
+2. **Water tower**, **street market** stalls, **memorial wall**, **Gabriel's Angels mural** wall
+3. **Player character** (rig + walk cycle; confirm rigging works before spending on variants)
 
 Keep each GLB under about 1–2 MB for iPhone Safari.
 

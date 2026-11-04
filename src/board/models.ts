@@ -6,7 +6,7 @@ import * as THREE from "three";
  * version stays on screen, so a missing model never breaks the board.
  *
  * Generated with Meshy (image-to-3D, Smart Topology, ~2.5–5k triangles, one
- * 1024px WebP base-color map each) — see docs/STRATEGY_BOARD.md.
+ * 512px WebP base-color map each) — see docs/STRATEGY_BOARD.md.
  */
 export const MODEL_FILES = {
   southsideTowers: "assets/models/southside-towers.glb",

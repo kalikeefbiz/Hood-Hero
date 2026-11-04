@@ -134,6 +134,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#d8cfbd", "#4f8a7a", "#1d2a3a", "#f1e6c8"],
     links: { politics: true },
     status: "live",
+    model: "assets/models/city-hall.glb",
     planned: "Petitions, permits and political favors.",
   }),
   L({
@@ -149,6 +150,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#5e6b78", "#2a4f9a", "#14213d", "#e8eefc"],
     links: { politics: true },
     status: "live",
+    model: "assets/models/precinct.glb",
     planned: "Bail, custody visits and heat management.",
   }),
   L({
@@ -176,6 +178,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#9c9a92", "#3d6b8a", "#1e2b38", "#f5f0e0"],
     links: { business: "courier" },
     status: "live",
+    model: "assets/models/warehouse.glb",
   }),
   L({
     id: "downtown.designer-drop",
@@ -241,6 +244,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "angels",
     links: { items: ["booze", "smokes"] },
     status: "live",
+    model: "assets/models/small-storefront.glb",
   }),
   L({
     id: "rio.auto",
@@ -255,6 +259,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "angels",
     links: { people: true },
     status: "live",
+    model: "assets/models/auto-garage.glb",
     planned: "Vehicles, upgrades and parts.",
   }),
   L({
@@ -270,6 +275,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#e9c9a0", "#b8342e", "#f4e3c0", "#b8342e"],
     links: {},
     status: "planned",
+    model: "assets/models/small-storefront.glb",
     planned: "Meals, meetups and Angels gossip.",
   }),
   L({
@@ -298,6 +304,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#e3b98f", "#7a5a3a", "#f5f1e6", "#2a2a2a"],
     links: { people: true, rest: true },
     status: "live",
+    model: "assets/models/courtyard.glb",
   }),
   L({
     id: "rio.mission",
@@ -310,6 +317,9 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#ead7b4", "#9a4a2e", "#f5f1e6", "#2a2a2a"],
     links: {},
     status: "planned",
+    model: "assets/models/mission.glb",
+    // The bell gable comes out facing west; turn it to the street.
+    modelFit: { yaw: Math.PI / 2 },
     planned: "Community standing and sanctuary.",
   }),
 
@@ -343,6 +353,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "backstreet",
     links: { people: true, rest: true },
     status: "live",
+    model: "assets/models/rowhouses.glb",
   }),
   L({
     id: "south.the-lot",
@@ -386,6 +397,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "backstreet",
     links: { items: ["booze"] },
     status: "live",
+    model: "assets/models/small-storefront.glb",
   }),
   L({
     id: "south.auto-repair",
@@ -399,6 +411,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#9a8e80", "#c83d45", "#f2f2f2", "#b0202a"],
     links: { business: "repair" },
     status: "live",
+    model: "assets/models/auto-garage.glb",
   }),
   L({
     id: "south.court",
@@ -426,6 +439,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#b9b2a2", "#3a3a3a", "#e8e2d4", "#2a2a2a"],
     links: {},
     status: "planned",
+    model: "assets/models/community-center.glb",
     planned: "Training, programs and community events.",
   }),
   L({
@@ -454,6 +468,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#8c8577", "#5a4030", "#f5f1e6", "#2a2a2a"],
     links: {},
     status: "planned",
+    model: "assets/models/church.glb",
     planned: "Community guidance, standing and cover.",
   }),
 
@@ -484,6 +499,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#8a8578", "#3678c6", "#1e2b38", "#e8eefc"],
     links: { job: "warehouse" },
     status: "live",
+    model: "assets/models/warehouse.glb",
   }),
   L({
     id: "reservoir.lil-jays",
@@ -557,6 +573,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#8d9a9a", "#e3c23a", "#1c1c1c", "#e3c23a"],
     links: {},
     status: "planned",
+    model: "assets/models/small-storefront.glb",
     planned: "Resale and recovered goods.",
   }),
   L({
@@ -661,6 +678,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#6e3b2f", "#2a4f9a", "#1c1c1c", "#f2f2f2"],
     links: { people: true },
     status: "live",
+    model: "assets/models/small-storefront.glb",
     planned: "Grooming, style and introductions.",
   }),
   L({
@@ -701,6 +719,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#9b5a3e", "#8e51cb", "#e8e2d4", "#5a2a8a"],
     links: {},
     status: "planned",
+    model: "assets/models/community-center.glb",
     planned: "Programs, events and peace talks.",
   }),
 ];
