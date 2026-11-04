@@ -26,6 +26,14 @@ export const CHARACTER_MODELS: Record<string, CharacterModel> = {
       run: "assets/models/characters/mega-run.glb",
     },
   },
+  // Not in the game data yet: appears once a character with this id exists.
+  quanny: {
+    model: "assets/models/characters/quanny.glb",
+    clips: {
+      walk: "assets/models/characters/quanny-walk.glb",
+      run: "assets/models/characters/quanny-run.glb",
+    },
+  },
 };
 
 export type Motion = "stand" | string;
