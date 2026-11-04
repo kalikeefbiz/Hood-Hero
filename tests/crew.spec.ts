@@ -133,7 +133,9 @@ test("Flacco cooperation, paid work, refusal, natural second recruitment and sav
 test("independent offer: inspect, accept, attend, decline and expire while the NPC keeps acting", async ({
   page,
 }) => {
-  test.setTimeout(120000);
+  // Plays up to 40 days on the software renderer; it already ran ~117s of a
+  // 120s budget before the GLB models, so give it real headroom.
+  test.setTimeout(180000);
   await start(page);
   const modal = page.getByRole("dialog", { name: "Character encounter" });
   let accepted = false,

@@ -101,6 +101,20 @@ export interface LocationDef {
   planned?: string;
   /** Optional GLB that replaces the procedural building (public/ path). */
   model?: string;
+  /**
+   * How the GLB sits in the procedural footprint. By default it is scaled to
+   * fit the footprint; `height` scales to a world height instead (e.g. to line
+   * a station up with the elevated track). Offsets are in world units.
+   */
+  modelFit?: {
+    height?: number;
+    scale?: number;
+    yaw?: number;
+    y?: number;
+    /** Station only: width of elevated track the model replaces. */
+    trackGap?: number;
+    offset?: [number, number];
+  };
 }
 
 const L = (d: LocationDef) => d;
@@ -210,6 +224,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "angels",
     links: { job: "retail-rio", items: ["necessities", "smokes"] },
     status: "live",
+    model: "assets/models/corner-bodega.glb",
   }),
   L({
     id: "rio.liquor",
@@ -311,6 +326,8 @@ export const LOCATIONS: LocationDef[] = [
     faction: "backstreet",
     links: { people: true, rest: true, incident: "the-chains" },
     status: "live",
+    model: "assets/models/southside-towers.glb",
+    modelFit: { height: 17 },
   }),
   L({
     id: "south.rowhouses",
@@ -352,6 +369,7 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#8c5442", "#c83d45", "#f5efe3", "#b0202a"],
     links: { job: "retail-south", items: ["necessities", "smokes"] },
     status: "live",
+    model: "assets/models/corner-bodega.glb",
   }),
   L({
     id: "south.liquor",
@@ -480,6 +498,7 @@ export const LOCATIONS: LocationDef[] = [
       items: ["necessities", "smokes", "booze"],
     },
     status: "live",
+    model: "assets/models/corner-bodega.glb",
   }),
   L({
     id: "reservoir.lot-court",
@@ -562,6 +581,9 @@ export const LOCATIONS: LocationDef[] = [
     palette: ["#6c5a48", "#3a3f45", "#1f6a3a", "#f5f5f5"],
     links: { street: true },
     status: "live",
+    model: "assets/models/el-station.glb",
+    // Deck top sits at ~60% of the model height: 9.5 lines it up with the El.
+    modelFit: { height: 9.5, offset: [0, -2.6], trackGap: 9.6 },
   }),
   L({
     id: "nawf.bodega",
@@ -577,6 +599,7 @@ export const LOCATIONS: LocationDef[] = [
     faction: "blips",
     links: { job: "retail-nawf", items: ["necessities", "smokes"] },
     status: "live",
+    model: "assets/models/corner-bodega.glb",
   }),
   L({
     id: "nawf.deli",

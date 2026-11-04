@@ -1313,6 +1313,8 @@
 /* Notices fade after a moment so the board stays clear. */
 .board-notice {
   animation: notice-fade 5s ease forwards;
+  /* A status line, never a target: taps go through to the story strip. */
+  pointer-events: none;
 }
 @keyframes notice-fade {
   0%,

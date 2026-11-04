@@ -45,6 +45,14 @@ import { facadeTextures, radialTexture, SignAtlas } from "./textures";
 import type { BoardView } from "./viewModel";
 import { buildFigure, loadFigureModel } from "./character";
 import { DEFAULT_APPEARANCE, type Appearance } from "./presence";
+import {
+  MODEL_FILES,
+  asVehicle,
+  loadModelPiece,
+  sharedModelGeometry,
+  sharedModelMaterial,
+  type ModelPiece,
+} from "./models";
 
 export type TimeOfDay = "dusk" | "night" | "day";
 export type Lens = "streets" | "influence" | "police" | "opportunity";
@@ -221,6 +229,8 @@ const rectLoop = (
   [a, d],
 ];
 
+/** Length of a board car (the procedural box car and every GLB vehicle). */
+const CAR_LENGTH = 1.5;
 function isSoftwareRenderer(r: THREE.WebGLRenderer) {
   try {
     const gl = r.getContext();
@@ -937,8 +947,13 @@ export class BoardRenderer {
       let exclude: Rect | null = null;
       for (const l of here) {
         if (l.model) {
-          this.loadModel(l, b);
-          exclude = { minX: b.minX, maxX: b.maxX, minZ: b.minZ, maxZ: b.maxZ };
+          // Measure the procedural footprint on a scratch kit, then let the
+          // GLB occupy exactly that space so the rest of the block still fills.
+          exclude = buildLocation(kit(1), this.atlas, l, b, {
+            trainZ,
+            scene: () => {},
+          });
+          this.loadModel(l, exclude);
           continue;
         }
         exclude = buildLocation(k, this.atlas, l, b, {
@@ -979,35 +994,39 @@ export class BoardRenderer {
     this.addKit(k);
   }
   /** Optional GLB replacement for a location (see LocationDef.model). */
-  private loadModel(l: LocationDef, b: BlockDef) {
-    void import("three/examples/jsm/loaders/GLTFLoader.js").then(
-      ({ GLTFLoader }) => {
-        new GLTFLoader().load(
-          `${import.meta.env.BASE_URL}${l.model}`,
-          (gltf) => {
-            const root = gltf.scene;
-            const size = new THREE.Box3()
-              .setFromObject(root)
-              .getSize(new THREE.Vector3());
-            const fit =
-              Math.min(
-                (b.maxX - b.minX) / (size.x || 1),
-                (b.maxZ - b.minZ) / (size.z || 1),
-              ) * 0.9;
-            root.scale.setScalar(fit);
-            const [x, z] = locationPosition(l);
-            root.position.set(x, CURB, z);
-            root.traverse((o) => {
-              const m = o as THREE.Mesh;
-              if (m.isMesh) m.castShadow = m.receiveShadow = true;
-            });
-            this.scene.add(root);
-            this.renderer.shadowMap.needsUpdate = true;
-            this.wake();
-          },
-        );
-      },
-    );
+  private loadModel(l: LocationDef, rect: Rect) {
+    void loadModelPiece(l.model!, this.lite).then((piece) => {
+      if (!piece) return;
+      const size = piece.geometry.boundingBox!.getSize(new THREE.Vector3());
+      const yaw = l.modelFit?.yaw ?? 0;
+      const turned = Math.abs(Math.sin(yaw)) > 0.5;
+      const sx = turned ? size.z : size.x,
+        sz = turned ? size.x : size.z;
+      const fit = l.modelFit?.height
+        ? l.modelFit.height / (size.y || 1)
+        : Math.min(
+            (rect.maxX - rect.minX) / (sx || 1),
+            (rect.maxZ - rect.minZ) / (sz || 1),
+          ) * (l.modelFit?.scale ?? 0.92);
+      const mesh = new THREE.Mesh(piece.geometry, piece.material);
+      mesh.scale.setScalar(fit);
+      mesh.rotation.y = yaw;
+      mesh.position.set(
+        (rect.minX + rect.maxX) / 2 + (l.modelFit?.offset?.[0] ?? 0),
+        CURB + (l.modelFit?.y ?? 0),
+        (rect.minZ + rect.maxZ) / 2 + (l.modelFit?.offset?.[1] ?? 0),
+      );
+      mesh.castShadow = mesh.receiveShadow = !this.lite;
+      mesh.name = `model:${l.id}`;
+      this.scene.add(mesh);
+      if (l.archetype === "station" && this.stationDeck) {
+        this.scene.remove(this.stationDeck);
+        this.stationDeck.geometry.dispose();
+        this.stationDeck = null;
+      }
+      this.renderer.shadowMap.needsUpdate = true;
+      this.wake();
+    });
   }
   private buildElevatedTrain(
     k: Kit,
@@ -1018,28 +1037,54 @@ export class BoardRenderer {
       to = d.maxX + 14,
       deck = 5.2,
       steel = col("#3b3f45");
-    box(k, {
-      x: (from + to) / 2,
-      z,
-      w: to - from,
-      d: 3.2,
-      h: 0.5,
-      y: deck,
-      color: steel,
-      windows: false,
-    });
-    for (const side of [-1.5, 1.5])
-      box(k, {
-        x: (from + to) / 2,
-        z: z + side,
-        w: to - from,
-        d: 0.15,
-        h: 0.45,
-        y: deck + 0.5,
-        color: col("#565b62"),
+    // A GLB station brings its own deck: that stretch of track is built
+    // separately and removed once the model arrives (it stays if it fails).
+    const station = LOCATIONS.find(
+      (l) => l.archetype === "station" && l.zone === "nawf" && l.model,
+    );
+    const gap = station?.modelFit?.trackGap
+      ? (() => {
+          const b = locationBlock(station);
+          const cx = b ? (b.minX + b.maxX) / 2 : 0;
+          const half = station.modelFit!.trackGap! / 2;
+          return [cx - half, cx + half] as const;
+        })()
+      : null;
+    const span = (kk: Kit, a: number, b: number) => {
+      box(kk, {
+        x: (a + b) / 2,
+        z,
+        w: b - a,
+        d: 3.2,
+        h: 0.5,
+        y: deck,
+        color: steel,
         windows: false,
       });
-    for (let x = from + 2; x < to; x += 6)
+      for (const side of [-1.5, 1.5])
+        box(kk, {
+          x: (a + b) / 2,
+          z: z + side,
+          w: b - a,
+          d: 0.15,
+          h: 0.45,
+          y: deck + 0.5,
+          color: col("#565b62"),
+          windows: false,
+        });
+    };
+    if (gap) {
+      span(k, from, gap[0]);
+      span(k, gap[1], to);
+      const gk = kit(6);
+      span(gk, gap[0], gap[1]);
+      this.stationDeck = new THREE.Mesh(gk.plain.build(), this.plainMat);
+      this.stationDeck.castShadow = this.stationDeck.receiveShadow =
+        !this.lite;
+      this.scene.add(this.stationDeck);
+    } else span(k, from, to);
+    for (let x = from + 2; x < to; x += 6) {
+      if (gap && x > gap[0] - 0.5 && x < gap[1] + 0.5) continue;
       for (const side of [-1.3, 1.3])
         box(k, {
           x,
@@ -1051,6 +1096,7 @@ export class BoardRenderer {
           color: steel,
           windows: false,
         });
+    }
     const train = new THREE.Group(),
       tk = kit(5);
     for (let c = 0; c < 3; c++) {
@@ -1264,6 +1310,42 @@ export class BoardRenderer {
     });
     return k.plain.build();
   }
+  private vehicles = new Map<string, ModelPiece>();
+  /** Track deck under a GLB station; dropped once the station model loads. */
+  private stationDeck: THREE.Mesh | null = null;
+  /**
+   * Swap a GLB vehicle into an instanced car layer once it loads. The layer
+   * starts with the procedural box car, so the board never waits on a file.
+   */
+  private vehicle(
+    file: string,
+    cars: THREE.InstancedMesh,
+    onReady?: (v: ModelPiece) => void,
+  ) {
+    // The software-GL fallback keeps the 12-triangle box cars: a dozen moving
+    // 2.5k-triangle models every frame is what it can least afford.
+    if (this.lite) return;
+    const apply = (v: ModelPiece) => {
+      if (!cars.parent) return;
+      const old = cars.geometry;
+      cars.geometry = v.geometry;
+      cars.material = v.material;
+      if (!sharedModelGeometry.has(old)) old.dispose();
+      const white = new THREE.Color(1, 1, 1);
+      for (let i = 0; i < cars.count; i++) cars.setColorAt(i, white);
+      if (cars.instanceColor) cars.instanceColor.needsUpdate = true;
+      onReady?.(v);
+      this.wake();
+    };
+    const ready = this.vehicles.get(file);
+    if (ready) return apply(ready);
+    void loadModelPiece(file, this.lite).then((p) => {
+      if (!p) return;
+      const v = this.vehicles.get(file) ?? asVehicle(p, CAR_LENGTH);
+      this.vehicles.set(file, v);
+      apply(v);
+    });
+  }
   private buildTraffic() {
     const movers: Mover[] = [];
     const r = rng(77);
@@ -1291,6 +1373,32 @@ export class BoardRenderer {
     ];
     movers.forEach((_, i) => cars.setColorAt(i, col(pick(r, colors))));
     this.scene.add(cars);
+    // Rio Gabriel's lowriders cruise the inner streets, low and slow.
+    const rio = DISTRICTS.rio,
+      rs = this.streets.rio;
+    const cruise = loop(
+      rectLoop(
+        rs.xs[0] ?? rio.minX + 4,
+        rs.zs[0] ?? rio.minZ + 4,
+        rs.xs[rs.xs.length - 1] ?? rio.maxX - 4,
+        rs.zs[rs.zs.length - 1] ?? rio.maxZ - 4,
+      ),
+    );
+    const lows: Mover[] = Array.from({ length: 3 }, (_, i) => ({
+      ...cruise,
+      t: (cruise.total / 3) * i,
+      speed: 2.4,
+    }));
+    const lowriders = new THREE.InstancedMesh(
+      this.carGeometry(),
+      this.plainMat,
+      lows.length,
+    );
+    lows.forEach((_, i) =>
+      lowriders.setColorAt(i, col(["#9a1a24", "#b8902a", "#3a2a6a"][i])),
+    );
+    this.scene.add(lowriders);
+    this.vehicle(MODEL_FILES.lowrider, lowriders);
     const tmp = { x: 0, z: 0, heading: 0 };
     this.animated.push((_, dt) => {
       movers.forEach((m, i) => {
@@ -1299,6 +1407,15 @@ export class BoardRenderer {
         cars.setMatrixAt(i, placed(tmp.x, 0, tmp.z, 1, 1, 1, tmp.heading));
       });
       cars.instanceMatrix.needsUpdate = true;
+      lows.forEach((m, i) => {
+        m.t += m.speed * dt;
+        sample(m, tmp);
+        lowriders.setMatrixAt(
+          i,
+          placed(tmp.x, 0, tmp.z, 1, 1, 1, tmp.heading),
+        );
+      });
+      lowriders.instanceMatrix.needsUpdate = true;
     });
   }
 
@@ -1308,13 +1425,15 @@ export class BoardRenderer {
       group.remove(child);
       child.traverse((o) => {
         const m = o as THREE.Mesh;
-        m.geometry?.dispose();
+        if (m.geometry && !sharedModelGeometry.has(m.geometry))
+          m.geometry.dispose();
         const mat = m.material as THREE.Material | undefined;
         if (mat && !Array.isArray(mat) && !this.isShared(mat)) mat.dispose();
       });
     }
   }
   private isShared(m: THREE.Material) {
+    if (sharedModelMaterial.has(m)) return true;
     return [
       this.facadeMat,
       this.plainMat,
@@ -1574,6 +1693,10 @@ export class BoardRenderer {
       toneMapped: false,
     });
     const bar = new THREE.BoxGeometry(0.16, 0.12, 0.26);
+    let barY = 0.82;
+    this.vehicle(MODEL_FILES.policeCruiser, cars, (v) => {
+      barY = v.geometry.boundingBox!.max.y - 0.05;
+    });
     const reds = new THREE.InstancedMesh(bar, red, units.length);
     const blues = new THREE.InstancedMesh(bar.clone(), blue, units.length);
     const glowMat = new THREE.MeshBasicMaterial({
@@ -1608,7 +1731,7 @@ export class BoardRenderer {
           i,
           placed(
             tmp.x - 0.1 * c + 0.14 * s,
-            0.82,
+            barY,
             tmp.z + 0.1 * s + 0.14 * c,
             1,
             1,
@@ -1620,7 +1743,7 @@ export class BoardRenderer {
           i,
           placed(
             tmp.x - 0.1 * c - 0.14 * s,
-            0.82,
+            barY,
             tmp.z + 0.1 * s - 0.14 * c,
             1,
             1,

@@ -102,18 +102,29 @@ There's no block-level control in the simulation yet. `deriveBlocks` *presents* 
 
 ### 5. Custom models (GLB slots)
 
-Set `model: "assets/models/<file>.glb"` on a location. The board loads it lazily, scales it to the block and skips the procedural building. These are the assets that would most improve recognizability, in priority order:
+Set `model: "assets/models/<file>.glb"` on a location. The board measures the footprint the procedural building would use, places the GLB there (the rest of the block still fills in), and loads it lazily; until it arrives, or if it fails, nothing breaks. `modelFit` tunes the fit: `height` (scale to a world height instead of the footprint), `scale`, `yaw`, `y`, `offset`, and `trackGap` for a station that brings its own stretch of El track. Vehicles live in `src/board/models.ts` (`MODEL_FILES`) and are swapped into the instanced traffic and police layers.
 
-1. **Southside Towers**: the projects silhouette (sets the tone for Southside)
-2. **El station + elevated track segment** for The Nawf
-3. **Stixx City Hall** (dome) and **Central Precinct**
-4. **Corner store / bodega** shell with awning and sign panel, reusable for all five stores
-5. **Lowrider** and **police cruiser** (replaces instanced boxes)
-6. **Rowhouse** and **Reservoir house** modules (porch, boarded variants)
-7. **Port crane** and container stack
-8. **San Gabriel Mission** bell tower
+**In the game now** (Meshy image-to-3D, Smart Topology, 2.5–5k triangles, one 1024px WebP texture each, 160–370 KB):
 
-Keep each GLB under about 1–2 MB, with Draco or meshopt compression and KTX2 textures, for iPhone Safari.
+| File | Used for |
+| --- | --- |
+| `southside-towers.glb` | Southside Towers (`modelFit.height` 17) |
+| `el-station.glb` | Nawf Ave station; replaces its stretch of the El |
+| `corner-bodega.glb` | Rio Gabriel Bodega, Southside Food Mart, Lil Jay's Market, Nawf Bodega |
+| `lowrider.glb` | Three lowriders cruising Rio Gabriel's inner streets |
+| `police-cruiser.glb` | Every patrol car (count still follows district police pressure) |
+
+Recipe that kept the cost to 18 credits a model: a `nano-banana-2-lite` concept image (3 credits, single object, three-quarter view, white background), then `image-to-3d --model-type smart-topology --ai-model meshy-t2.5 --target-polycount 2500–5000 --texture-resolution 2k --enable-pbr false` (15), then `gltf-transform optimize --texture-compress webp --texture-size 1024`. Meshy cars face −X; `asVehicle` turns them to the board's +X.
+
+**Still procedural**, in priority order:
+
+1. **Stixx City Hall** (dome) and **Central Precinct**
+2. **Rowhouse** and **Reservoir house** modules (porch, boarded variants)
+3. **Port crane** and container stack
+4. **San Gabriel Mission** bell tower
+5. **Player character** (rig + walk cycle; confirm rigging works before spending on variants)
+
+Keep each GLB under about 1–2 MB for iPhone Safari.
 
 ## Rendering notes (iPhone)
 
